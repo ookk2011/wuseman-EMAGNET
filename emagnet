@@ -453,30 +453,30 @@ fi
 
 copyfiles() {
    printf "Moving all emagnet files into $EMAGNETBACKUP/all-files\n"
-   cp /home/wuseman/ownCloud/WWW/emagnet/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/ &> /dev/null
+   cp $EMAGNETHOME/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/ &> /dev/null
    sleep 0.5
    printf "Moving all emagnet email-files files into $EMAGNETBACKUP/email-files\n"
-   cp /home/wuseman/ownCloud/WWW/emagnet/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
+   cp $EMAGNETHOME/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
    sleep 0.5
    printf "Moving all emagnet password-files files into $EMAGNETBACKUP/password-files\n-\n"
-   cp /home/wuseman/ownCloud/WWW/emagnet/incoming/*/password-files/* $EMAGNETARCHIVE/password-files  &> /dev/null
+   cp $EMAGNETHOME/incoming/*/password-files/* $EMAGNETARCHIVE/password-files  &> /dev/null
    sleep 0.5
 
 }
 
 mergelogs() {
   printf "Merging all daily emagnet logs to $EMAGNETBACKUP/emagnet.log\n"
-  cat /home/wuseman/ownCloud/WWW/emagnet/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log  2> /dev/null 
+  cat $EMAGNETLOGS/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log  2> /dev/null 
      sleep 0.5
   printf "Merging all daily emails-from-pastebin logs to $EMAGNETBACKUP/emagnet.log\n"
-  cat /home/wuseman/ownCloud/WWW/emagnet/incoming/*/logs/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt 2> /dev/null
+  cat $EMAGNETLOGS/incoming/*/logs/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt 2> /dev/null
      sleep 0.5
   printf "Merging all daily passwords-from-pastebin logs to $EMAGNETBACKUP/emagnet.log\n"
-  cat /home/wuseman/ownCloud/WWW/emagnet/incoming/*/logs/emails-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
+  cat $EMAGNETLOGS/incoming/*/emails-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
      sleep 0.5
   printf "Merging all daily pastebin-urls.txt to $EMAGNETBACKUP/emagnet.log\n"
      sleep 0.5
-  cat /home/wuseman/ownCloud/WWW/emagnet/incoming/*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
+  cat $EMAGNETLOGS//*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
   printf "\n\n"
   printf "%60s\n" | tr ' ' '='
   printf "All files and logs has been moved to emagnet/archive\n"
