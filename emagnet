@@ -77,8 +77,8 @@ source $CONF
 mustbefilled() {
 if [[ -z $EMAGNET ]]; then echo "You must set a path where emagnet should store it files, aborted..";exit 0;fi
 if [[ -z $EMAGNETHOME ]]; then sed -i "43d" $CONF; sed -i '43 i EMAGNETHOME=$EMAGNET\/emagnet\/incoming\/$(date +%Y-%m-%d)' $CONF;fi
-if [[ -z $EMAGNETLOGS ]]; then sed -i "44d" $CONF; sed -i '44 i EMAGNETLOGS=$EMAGNETHOME/logs' $CONF;fi
-if [[ -z $EMAGNETARCHIVE ]]; then sed -i "50d" $CONF;sed -i '50 i EMAGNETARCHIVE=$EMAGNET/archive/emagnet-archive' $CONF;fi
+if [[ -z $EMAGNETLOGS ]]; then sed -i "44d" $CONF; sed -i '44 i EMAGNETLOGS=$EMAGNET/logs' $CONF;fi
+if [[ -z $EMAGNETARCHIVE ]]; then sed -i "50d" $CONF;sed -i '50 i EMAGNETARCHIVE=$EMAGNET/archive' $CONF;fi
 if [[ -z $EMAGNETPW ]]; then sed -i "46d" $CONF;sed -i '46 i EMAGNETPW=$EMAGNETHOME\/password-files' $CONF;fi
 if [[ -z $EMAGNETALL ]]; then sed -i "47d" $CONF;sed -i '47 i EMAGNETALL=$EMAGNETALL=$EMAGNETHOME\/all-files' $CONF;fi
 if [[ -z $EMAGNETCRAP ]]; then sed -i "48d" $CONF; sed -i '48i EMAGNETCRAP=$EMAGNETHOME\/.pastebin' $CONF;fi
@@ -100,6 +100,7 @@ if [[ ! -d $EMAGNETTEMP ]]; then mkdir -p $EMAGNETTEMP &> /dev/null;fi
 if [[ ! -d $EMAGNETCRAP ]]; then mkdir -p $EMAGNETCRAP &> /dev/null;fi
 if [[ ! -d $EMAGNETALL ]]; then mkdir -p $EMAGNETALL &> /dev/null;fi
 if [[ ! -d $EMAGNETARCHIVE ]]; then mkdir -p $EMAGNETARCHIVE &> /dev/null;fi
+if [[ ! -d $EMAGNETLOGS ]]; then mkdir -p $EMAGNETLOGS &> /dev/null;fi
 }
 
 ######################################################################
@@ -117,13 +118,13 @@ if [[ -z $TIME ]]; then
      read -p "How often do you want to download new uploads from pastebin: (Default 10): " timepastebin
  if [[ -n $timepastebin ]];then sed -i '19d' /etc/emagnet.conf;sed -i "19i TIME=" /etc/emagnet.conf;
     sed -i "s/TIME=/TIME=$timepastebin/g" /etc/emagnet.conf;printf "Refresh time has been set to: $timepastebin seconds"
-   echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $LOGS2/emagnet.log
+   echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
  else 
     sed -i '19d' /etc/emagnet.conf;
     sed -i "19i TIME=" /etc/emagnet.conf;
     sed -i "s/TIME=/TIME=10/g" /etc/emagnet.conf
    printf "Refresh time has been set to: 10 seconds\n\n"; sleep 2
-   echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $LOGS2/emagnet.log
+   echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
  fi
 fi
 }
@@ -436,7 +437,7 @@ for (( ; ; )); do clear;banner;countdown;clear;banner;clear;banner;analyz;clear;
 ######################################################################
 safety() {
 if [[ -z $MYIP ]]; then myyyyip="$(curl -s https://nr1.nu/i/ | sed -n '121p')"; sed -i '26d' /etc/emagnet.conf;sed -i "26i MYIP=" /etc/emagnet.conf; sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
-echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $LOGS2/emagnet.log;fi
+echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log;fi
 }
 
 #####################################################################
