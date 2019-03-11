@@ -4,6 +4,17 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
+### Frequently Asked Question
+
+- Q: Why not just use curl to fetch the urls and use tor for change ip everytime we get a temp ban in 20minutes?
+
+- A: Cause then we must complete a captcha and we get href="https://www.cloudflare.com/5xx-error-landing?utm_source=iuam as response. 
+
+For everyone that wanna use curl from a non-tor ip, then you can the oneliner below:
+
+      curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw\/g' 
+
+
 ### GET STARTED
 
   You can copy and paste below code in your shell 
