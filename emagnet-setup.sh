@@ -63,10 +63,10 @@ EOF
 
 requirements() {
 echo ""
-printf "+=====================================================================+\n"
-printf "#                                                                     #\n"
-printf "#     Checking if required packages for emagnet is installed          #\n"
-printf "#                                                                     #\n"
+printf "+====================================================================+\n"
+printf "#                                                                    #\n"
+printf "#     Checking if required packages for emagnet is installed         #\n"
+printf "#                                                                    #\n"
 
 DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
 
