@@ -10,7 +10,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 - A: Cause then we must complete a captcha and we get href="https://www.cloudflare.com/5xx-error-landing?utm_source=iuam as response. 
 
-For everyone that wanna use curl from a non-tor ip, then you can the oneliner below:
+For everyone that wanna use curl from a non-tor ip, then you can use the oneliner below:
 
       curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw\/g' 
 
