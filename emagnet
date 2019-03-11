@@ -221,7 +221,7 @@ done
 for temailfiles in $TEMAILFILES; do
   if [[ $TEMAILFILES -eq "0" ]]; then
     printf "Files With Atleast One Email Address%s%s........................[\e[1;31m00\e[0m]\n"
-  else
+elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
 elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
   fi
 done
@@ -339,10 +339,11 @@ pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
 ################################################################################################
 # This is for check if emagnet has banned us by reading the index.html file from pastebin      #
 ################################################################################################
-if [[ -n $(cat /tmp/.emagnet | grep 'security check') ]]; then
-  echo "Pastebin.com asking emagnet for accept the re-captcha."
-  echo "Open your browser, go to https://pastebin.com and enter the re-captcha"
-  echo "and then you will be able to continue, if this wont help - Wait for a while"
+cat /tmp/.emagnet|grep 'security check' &> /dev/null
+if [[ "$?" -eq "0" ]]; then
+  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
+  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
+  printf "and then you will be able to continue, if this wont help - Wait for a while\n\n"
   exit
 fi
 
