@@ -242,23 +242,29 @@ read -p "Set time in seconds for how often you want to download
 new uploads from pastebin (Default: 10 Seconds): " o
 
 if [[ $o -lt "9" ]]; then
-
-#          printf "\nBy updating emagnet in 10s or less you will get ip-banned\nunless you setup your own script that is able to control\nthe refresh time X times before changing IP..\n\n"
+if [[ -z $o ]]; then
+#wwww          printf "\nBy updating emagnet in 10s or less you will get ip-banned\nunless you setup your own script that is able to control\nthe refresh time X times before changing IP..\n\n"
 read -p "Are you REALLY sure you want to set 10 seconds (YES/no): " rlysure
+else
+#          printf "\nBy updating emagnet in 10s or less you will get ip-banned\nunless you setup your own script that is able to control\nthe refresh time X times before changing IP..\n\n"
+read -p "Are you REALLY sure you want to set $o seconds (YES/no): " rlysure
+fi
  case $rlysure in
    YES)
-        sed -i "s/TIME=.*/TIME=$o/g" $CONF
+        sed -i '19d' $CONF
+        sed -i "19 i TIME=$o" $CONF
         printf "\n\e[1;31mYou has been warned, expect a ban within ~2minutes!\n\e[0m"
         printf "\nConfig file has updated the refresh time to $o seconds\n\n"
 #        printf "%70s\n\n" | tr ' ' '='
-        printf "Successfully generated /etc/emagnet.conf, have fun!"
+        printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
         printf "Execute \e[1;32m./emagnet.sh -f\e[0m to grab some passwords:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/; break ;;
 
-    *)  printf "\nSet a number between 10 and 3600 is recommended..\n"; continue ;;
+    *)  printf "\nSet a number between 10 and 3600 is recommended..\n\n"; continue ;;
  esac
 fi
-    sed -i "s/TIME=.*/TIME=$o/g" $CONF
+    sed -i "19d" $CONF
+    sed -i "19i TIME=$o" $CONF
     printf "\nRefresh time has been set to: $o seconds..\n\n"
 #    printf "%70s\n\n" | tr ' ' '='
     printf "Successfully created /etc/emagnet.conf\n"
