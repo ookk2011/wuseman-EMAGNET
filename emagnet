@@ -187,42 +187,40 @@ TPASSWORDS=$(cat $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt|wc -l)
 printf "                             STATS\n\n"
 
 for totalfiles in $TOTALFILES; do
-  if [[ $TOTALFILES -eq "0" ]]; then
-    printf "Total files%s%s ................................................[\e[1;31m00\e[0m]\n"
+  if [[ $TOTALFILES -lt "10" ]]; then
+    printf "Total files%s%s ................................................[\e[1;31m0$TOTALFILES\e[0m]\n"
   else
     printf "Total files%s%s ................................................[\e[1;32m$TOTALFILES\e[0m]\n"
   fi
 done
 
 for temails in $TEMAILS; do
-  if [[ $TEMAILS -eq "0" ]]; then
-    printf "Total email-addresses %s%s......................................[\e[1;31m00\e[0m]\n"
+  if [[ $TEMAILS -lt "10" ]]; then
+    printf "Total email-addresses %s%s......................................[\e[1;31m0$TEMAILS\e[0m]\n"
   else
     printf "Total email-addresses %s%s......................................[\e[1;32m$TEMAILS\e[0m]\n"
   fi
 done
 
 for tpasswords in $TPASSWORDS; do
-  if [[ $TPASSWORDS -eq "0" ]]; then
-    printf "Total Passwords Found %s%s......................................[\e[1;31m00\e[0m]\n"
+  if [[ $TPASSWORDS -lt "10" ]]; then
+    printf "Total Passwords Found %s%s......................................[\e[1;31m0$TPASSWORDS\e[0m]\n"
   else
     printf "Total Passwords Found %s%s......................................[\e[1;32m$TPASSWORDS\e[0m]\n"
   fi
 done
 
 for tpasswordsfiles in $TPASSWORDFILES; do
-  if [[ $TPASSWORDFILES -eq "0" ]]; then
-    printf "Files With Atleast One Password %s%s............................[\e[1;31m00\e[0m]\n"
+  if [[ $TPASSWORDFILES -lt "10" ]]; then
+    printf "Files With Atleast One Password %s%s............................[\e[1;31m0$TPASSWORDFILES\e[0m]\n"
   else
-    printf "Files With Atleast One Password %s%s............................[\e[1;32m$TEMAILFILES\e[0m]\n"
+    printf "Files With Atleast One Password %s%s............................[\e[1;32m$TPASSWORDFILES\e[0m]\n"
   fi
 done
 
 for temailfiles in $TEMAILFILES; do
-  if [[ $TEMAILFILES -eq "0" ]]; then
+  if [[ $TEMAILFILES -lt "10" ]]; then
     printf "Files With Atleast One Email Address%s%s........................[\e[1;31m00\e[0m]\n"
-elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
-elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
   fi
 done
 echo ""
