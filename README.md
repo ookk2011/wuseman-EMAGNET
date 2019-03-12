@@ -20,7 +20,7 @@ For everyone that wanna use curl from a non-tor ip, then you can use the oneline
     chmod +x emagnet-curl.sh
     bash emagnet-curl.sh 
     
-And you will download lastest top 10 uploaded files from pastebin
+And you will download lastest uploaded files from pastebin
 ### GET STARTED
 
   You can copy and paste below code in your shell 
