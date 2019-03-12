@@ -525,7 +525,7 @@ echo -e ""
 
 fi
 fi
-              while :; do clear;banner;countdown;clear;banner;sleep 1.0; clear;banner;analyz;clear;banner;emagnet2;sleep 2; mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null; done ;;
+              while :; do clear;banner;countdown;clear;banner;clear;banner;analyz;clear;banner;emagnet2;sleep 2; mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null; done ;;
        k|\-kill) SESSIONS="$(for emagnet in $(ps aux | grep emagnet | awk '{print $2}');do kill $emagnet &> /dev/null ;echo "Emagnet has been killed.";done | wc -l)"
                  echo "Killed $SESSIONS emagnet sessions, why? :/" ;;
        n|\-netcat)
