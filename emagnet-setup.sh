@@ -230,7 +230,7 @@ settime() {
 while true; do
 echo "+====================================================================+"
 echo "#                                                                    #"
-echo "#      By updating emagnet in 10 sseconds or less you will get       #"
+echo "#      By updating emagnet in 10 seconds or less you will get       #"
 echo "#   banned unless you setup your own script that is able to change   #"
 echo "#             your ip after X downloads on pastebin                  #"
 echo "#                                                                    #"
