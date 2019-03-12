@@ -14,7 +14,7 @@ For everyone that wanna use curl from a non-tor ip, then you can use the oneline
 
     cat << EOF > emagnet-curl.sh
     #!/bin/bash
-    curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw\//g' > /tmp/.emagnet
+    curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw/g' > /tmp/.emagnet
     while read line; do wget $line; done < /tmp/.emagnet
     EOF
     chmod +x emagnet-curl.sh
