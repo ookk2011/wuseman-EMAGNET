@@ -16,10 +16,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 ### EMAGNET WIKI
 
 - [ABOUT](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
-_How everything started-_
+_How everything started._
 
 - [FAQ](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
-_Find your leaked visa card and get answers on why we not using TOR with emagnet, if it has been leaked._
+_How to grab your visa card if it has been leaked. Also get answers why we not using TOR._
 
 - [TIPS & TRICKS](https://github.com/wuseman/EMAGNET/wiki) - 
 _How To Find your facebook credenticals, if it has been leaked._
