@@ -15,13 +15,13 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ### EMAGNET WIKI
 
-- [ABOUT](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
-_How everything started._
+- [ABOUT](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
+_How everything started-_
 
 - [FAQ](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
-_Find your leaked visa card, if it has been leaked._
+_Find your leaked visa card and get answers on why we not using TOR with emagnet, if it has been leaked._
 
-- [TIPS & TRICKS](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
+- [TIPS & TRICKS](https://github.com/wuseman/EMAGNET/wiki) - 
 _How To Find your facebook credenticals, if it has been leaked._
 
 ### REQUIREMENTS
@@ -44,7 +44,3 @@ for yourself! Read the history about emagnet [here](https://github.com/wuseman/E
 _wuseman cannot be held as responsible for users actions regardless of what damage a user can achieve with the information/data emagnet might collect for any user(s). All users that  gathering information or data via emagnet is 100% responsible for their own actions, emagnet has been developed for a legal purpose._
 
 #### END!
-
-
-
-
