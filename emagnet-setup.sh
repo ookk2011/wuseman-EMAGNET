@@ -286,14 +286,14 @@ echo "+====================================================================+"
 
 read -p "Your current cpu has $(nproc) threads, want me to set $(nproc) threads: (y/N): " threads
 if [[ $threads = "y" ]]; then
-  sed -i '75d' $CONF
-  sed -i "75 i THREADS=" $CONF
+  sed -i '72d' $CONF
+  sed -i "72 i THREADS=" $CONF
   sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF
   printf "\nConfig file has been updated, cpu threads has been set to use $(nproc) threads\n\n"
 else
   read -p "How many threads do you want to use (Eg: 2): " threadstouse
-  sed -i '75d' $CONF
-  sed -i "75 i THREADS=" $CONF
+  sed -i '72d' $CONF
+  sed -i "72 i THREADS=" $CONF
   sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
   printf "\nConfig file has been updated, cpu threads has been set to $threadstouse threads. \n\n"
 fi
