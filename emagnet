@@ -288,7 +288,7 @@ sleep $IDLETIME
 }
 
 banned() {
-printf " %8s Pastebin.com has blocked [\e[1;31m$MYIP\e[0m] temporary\n"
+printf " %8s Pastebin.com has blocked [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] temporary\n"
 source /etc/emagnet.conf
 for (( ; ; )); do
 wait_time=$IDLETIME
@@ -378,6 +378,8 @@ elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
    printf "%18s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
    printf "%18s[\e[1;32m$it\e[0m] - Email Adresses Found\n\n"
 
+#if [[ $(env |grep DESKTOP|cut -d= -f2) = "KDE" ]]; then 
+#fi
 ################################################################################
 #  | If we are not banned and we get 0 emails then we have 0                 | #
 #  | passwords also since without mail we wont find any passwords and        | #
@@ -402,6 +404,7 @@ elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
 # // We will let the user know how many mail addresses we found
    printf "%18s[\e[1;31m00\e[0m] - Passwords Found\n\n"
    printf "%18s[\e[1;32m$it\e[0m] - Email Adresses Found\n\n"
+
 # // We use sleep 5 here to increase the time before we download new files
 # // from pastebin and also so the user will have time to see what we found
    sleep 5
@@ -410,6 +413,7 @@ else
 # // We will let the user know that nothing were found
    printf "%15s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n"
    printf "%15s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
+
    sleep 1.2;
 fi
 }
