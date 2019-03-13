@@ -4,23 +4,6 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
-### Frequently Asked Question
-
-- Q: Why not just use curl to fetch the urls and use tor for change ip everytime we get a temp ban in 20minutes?
-
-- A: Cause then we must complete a captcha and we get href="https://www.cloudflare.com/5xx-error-landing?utm_source=iuam as response. 
-
-For everyone that wanna use curl from a non-tor ip, then you can use the oneliner below, just copy and paste in your shell:
-
-    cat << EOF > emagnet-curl.sh
-    #!/bin/bash
-    curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw/g' > /tmp/.emagnet
-    while read line; do wget $line; done < /tmp/.emagnet
-    EOF
-    chmod +x emagnet-curl.sh
-    bash emagnet-curl.sh 
-    
-And you will download latest uploaded files from pastebin
 ### GET STARTED
 
   You can copy and paste below code in your shell 
@@ -33,13 +16,9 @@ And you will download latest uploaded files from pastebin
 ### REQUIREMENTS
 
 - _Parallel_ - Find more info about _parallel_ [here.](https://www.gnu.org/software/parallel/)
-
 - _Wget_     - Find more info about _wget_ [here.](https://www.gnu.org/software/wget/)
-
 - _Curl_    - Find more info about _curl_ [here.](https://github.com/curl/curl)
-
 - _Lynx_     - Find more info about _lynx_ [here.](https://lynx.browser.org/)
-
 - _Elinks_   - Find more info about _elinks_ [here.](http://elinks.or.cz/)
 
 ### CONTACT 
