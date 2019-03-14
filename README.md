@@ -4,23 +4,6 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
-### Frequently Asked Question
-
-- Q: Why not just use curl to fetch the urls and use tor for change ip everytime we get a temp ban in 20minutes?
-
-- A: Cause then we must complete a captcha and we get href="https://www.cloudflare.com/5xx-error-landing?utm_source=iuam as response. 
-
-For everyone that wanna use curl from a non-tor ip, then you can use the oneliner below, just copy and paste in your shell:
-
-    cat << EOF > emagnet-curl.sh
-    #!/bin/bash
-    curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw/g' > /tmp/.emagnet
-    while read line; do wget $line; done < /tmp/.emagnet
-    EOF
-    chmod +x emagnet-curl.sh
-    bash emagnet-curl.sh 
-    
-And you will download latest uploaded files from pastebin
 ### GET STARTED
 
   You can copy and paste below code in your shell 
@@ -30,16 +13,23 @@ And you will download latest uploaded files from pastebin
     
  ![Screenshot](https://nr1.nu/emagnet-howto.gif)
 
+### EMAGNET WIKI
+
+- [ABOUT](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
+_How everything started._
+
+- [FAQ](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
+_How to grab your visa card if it has been leaked. Also get answers why we not using TOR._
+
+- [TIPS & TRICKS](https://github.com/wuseman/EMAGNET/wiki) - 
+_How To Find your facebook credenticals, if it has been leaked._
+
 ### REQUIREMENTS
 
 - _Parallel_ - Find more info about _parallel_ [here.](https://www.gnu.org/software/parallel/)
-
 - _Wget_     - Find more info about _wget_ [here.](https://www.gnu.org/software/wget/)
-
 - _Curl_    - Find more info about _curl_ [here.](https://github.com/curl/curl)
-
 - _Lynx_     - Find more info about _lynx_ [here.](https://lynx.browser.org/)
-
 - _Elinks_   - Find more info about _elinks_ [here.](http://elinks.or.cz/)
 
 ### CONTACT 
@@ -51,11 +41,6 @@ for yourself! Read the history about emagnet [here](https://github.com/wuseman/E
 
 ### NOTICE
 
-**I cannot be responsible for the user's actions regardless of what damage a user can achieve with the information/data emagnet might collect for any user(s). All users who are 
-using emagnet for gathering or store information/data is 100% responsible for their own actions, emagnet has been developed for a legal purpose.**
+_wuseman cannot be held as responsible for users actions regardless of what damage a user can achieve with the information/data emagnet might collect for any user(s). All users that  gathering information or data via emagnet is 100% responsible for their own actions, emagnet has been developed for a legal purpose._
 
 #### END!
-
-
-
-
