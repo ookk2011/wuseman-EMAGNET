@@ -177,7 +177,7 @@ fi
 
 
 stats() {
-banner 
+banner
 TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
 TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
 TPASSWORDFILES=$(grep -raEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
@@ -315,6 +315,16 @@ emagnet2() {
 elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
 
 ################################################################################################
+# This is for check if emagnet has banned us by reading the index.html file from pastebin      #
+################################################################################################
+if [[ -n $(cat /tmp/.emagnet|grep 'security check') ]]; then
+  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
+  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
+  printf "and then you will be able to continue, if this wont help - Wait for a while\n\n"
+  exit
+fi
+
+################################################################################################
 # Moved pastebin-urls to here insted, we can rather echo them after we downloaded them directly#
 ################################################################################################
 # // Create a new line when we gather new urls, removed the old line so we can shorter the code a bit
@@ -333,17 +343,6 @@ it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| wc 
 p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<'| grep -v '>')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>')
-
-################################################################################################
-# This is for check if emagnet has banned us by reading the index.html file from pastebin      #
-################################################################################################
-if [[ -n $(cat /tmp/.emagnet|grep 'security check') ]]; then 
-  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
-  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
-  printf "and then you will be able to continue, if this wont help - Wait for a while\n\n"
-  exit
-fi
-
 
 if [[ ! -s /tmp/.emagnet ]]; then
    elinks -dump $PASTEBIN > /tmp/.emagnet
@@ -445,51 +444,55 @@ echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use
 #####################################################################
 ### MERGE ALL FILES INTO ARCHIVE DIR
 #####################################################################
-mergeem() {
 banner
+mergeem() {
 createbdirs() {
 if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then
    mkdir -p $EMAGNETARCHIVE/{all-files,email-files,password-files,logs}
 fi
 }
 
-copyfiles() {
-   printf "Moving all emagnet files into $EMAGNETBACKUP/all-files\n"
-   cp $EMAGNETHOME/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/ &> /dev/null
-   sleep 0.5
-   printf "Moving all emagnet email-files files into $EMAGNETBACKUP/email-files\n"
-   cp $EMAGNETHOME/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
-   sleep 0.5
-   printf "Moving all emagnet password-files files into $EMAGNETBACKUP/password-files\n-\n"
-   cp $EMAGNETHOME/incoming/*/password-files/* $EMAGNETARCHIVE/password-files  &> /dev/null
-   sleep 0.5
-
+copy_files() {
+echo -n "Copying emagnet files into archive/all-files $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
+cp -rn $EMAGNET/incoming/*/all-files/*  $EMAGNETARCHIVE/all-files/ &> /dev/null
+cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
+cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files  &> /dev/null
 }
 
-mergelogs() {
-  printf "Merging all daily emagnet logs to $EMAGNETBACKUP/emagnet.log\n"
-  cat $EMAGNETLOGS/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log  2> /dev/null 
-     sleep 0.5
-  printf "Merging all daily emails-from-pastebin logs to $EMAGNETBACKUP/emagnet.log\n"
-  cat $EMAGNETLOGS/incoming/*/logs/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt 2> /dev/null
-     sleep 0.5
-  printf "Merging all daily passwords-from-pastebin logs to $EMAGNETBACKUP/emagnet.log\n"
-  cat $EMAGNETLOGS/incoming/*/emails-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
-     sleep 0.5
-  printf "Merging all daily pastebin-urls.txt to $EMAGNETBACKUP/emagnet.log\n"
-     sleep 0.5
-  cat $EMAGNETLOGS//*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
-  printf "\n\n"
-  printf "%60s\n" | tr ' ' '='
-  printf "All files and logs has been moved to emagnet/archive\n"
-  printf "%60s\n" | tr ' ' '='
-}
+merge_logs() {
+######################################################################
+# Merge logs from incoming dirs into archive.........................#
+######################################################################
+echo -n "Merging emagnet.log $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
+cat $EMAGNET/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log &> /dev/null
 
+echo -n "Merging emails-from-pastebin.txt $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
+cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt  2> /dev/null 
+
+echo -n "Merging passwords-from-pastebin.txt $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
+cat $EMAGNET/incoming/*/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
+
+echo -n "Merging pastebin-urls.txt $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
+cat $EMAGNET/incoming/*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
+
+
+printf "\nLogs has been successfully merged into $EMAGNETARCHIVE\n\n"
+
+
+#createbdirs;copyfiles;mergelogs
+
+read -p "Wipe incoming directories (y/n): " cleanup
+if [[ $cleanup = "y" ]]; then
+   rm -rf $EMAGNET/incoming/
+   printf "\nSuccessfully \e[1;31mwiped\e[0m incoming directories..\n\n"
+else
+   printf "\nAborted.\n\n"
+fi
+}
 createbdirs
-copyfiles
-mergelogs
+copy_files
+merge_logs
 }
-
 
 ######################################################################
 #### Check so everything is OK before we running emagnet........:.####
