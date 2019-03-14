@@ -309,21 +309,23 @@ done
 exit
 }
 
-emagnet2() {
-################################################################################################
-# Download all urls from pastebin via elinks or lynx, emagnet-setup handle this                #
-################################################################################################
-elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
-
 ################################################################################################
 # This is for check if emagnet has banned us by reading the index.html file from pastebin      #
 ################################################################################################
-if [[ -n $(cat /tmp/.emagnet|grep 'security check') ]]; then
+
+
+emagnet2() {
+################################################################################################
+# Download all urls from pastebin via elinks or lynx, emagnet-setup handle this                #
+lynx -dump $PASTEBIN | sed "s/com\//com\/raw\//g" | grep -o http.* | sed -n "7,14p" > /tmp/.emagnet
+grep -q security /tmp/.emagnet
+if [[ $? = "0" ]]; then
   printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
   printf "and then you will be able to continue, if this wont help - Wait for a while\n\n"
   exit
 fi
+
 
 ################################################################################################
 # Moved pastebin-urls to here insted, we can rather echo them after we downloaded them directly#
@@ -346,7 +348,7 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>')
 
 if [[ ! -s /tmp/.emagnet ]]; then
-   elinks -dump $PASTEBIN > /tmp/.emagnet
+lynx -dump $PASTEBIN > /tmp/.emagnet
    grep -qe "blocked your IP" /tmp/.emagnet
    if [[ $? = "0" ]]; then banned; fi
 
@@ -445,7 +447,6 @@ echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use
 #####################################################################
 ### MERGE ALL FILES INTO ARCHIVE DIR
 #####################################################################
-banner
 mergeem() {
 createbdirs() {
 if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then

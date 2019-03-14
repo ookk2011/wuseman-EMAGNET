@@ -340,18 +340,26 @@ if [[ -f $LYNX && -f $ELINKS ]]; then
 if [[ $browsertouse = "lynx" ]]; then
   sed -i "315d" $SCRIPT
   sed -i '315i lynx -dump \$PASTEBIN | sed "s/com\\\//com\\\/raw\\\//g" | grep -o http.* | sed -n "7,14p" > /tmp/.emagnet' $SCRIPT
+  sed -i "348d" $SCRIPT
+  sed -i '348i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
   printf "\nConfig file has been updated, lynx will be used for downloading files\n\n"
 else
   sed -i "315d" $SCRIPT
   sed -i "315i elinks -dump \$PASTEBIN| sed 's/com\\\//com\\\/raw\\\//g' | grep -o http.* | sed -n '13,20p' > \/tmp\/.emagnet" $SCRIPT
+  sed -i "348d" $SCRIPT
+  sed -i '348i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
   printf "\nConfig file has been updated, elinks will be used for downloading files\n\n"
 fi
 elif [[ -f $LYNX && ! -f $ELINKS ]]; then
   sed -i "315d" $SCRIPT
   sed -i '315i lynx -dump \$PASTEBIN | sed "s/com\\\//com\\\/raw\\\//g" | grep -o http.* | sed -n "7,14p" > /tmp/.emagnet' $SCRIPT
+  sed -i "348d" $SCRIPT
+  sed -i '348i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
 elif [[ ! -f $LYNX && -f $ELINKS ]]; then
   sed -i "315d" $SCRIPT
   sed -i "315i elinks -dump \$PASTEBIN| sed 's/com\\\//com\\\/raw\\\//g' | grep -o http.* | sed -n '13,20p' > \/tmp\/.emagnet" $SCRIPT
+  sed -i "348d" $SCRIPT
+  sed -i '348i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
 else
   printf  "+====================================================================+\n"
   printf  "#                                                                    #\n"
@@ -393,6 +401,8 @@ else
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
        sed -i "315d" $SCRIPT
        sed -i '315i lynx -dump \$PASTEBIN | sed "s/com\\\//com\\\/raw\\\//g" | grep -o http.* | sed -n "7,14p" > /tmp/.emagnet' $SCRIPT
+       sed -i "348d" $SCRIPT
+       sed -i '348i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
    N) exit 0 ;;
    \?) echo "Please enter a proper answer y=yes N=no" ;;
