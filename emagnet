@@ -242,7 +242,8 @@ if [[ -f .emagnetconf/emagnet.conf ]]; then
 #### Usage/Help for emagnet.......................................####
 ######################################################################
 usage() {
-banner;cat << "EOF"
+banner
+cat << "EOF"
 
 emagnet - find leaked mail addresses and passwords uploaded on pastebin.com
 
