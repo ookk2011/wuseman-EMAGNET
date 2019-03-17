@@ -271,9 +271,7 @@ countdown() {
 }
 
 ######################################################################
-#### This is the heart of emagnet, dont edit unless you know......####
-#### exactly what you are doing, touch emagnet's heart........... ####
-#### by your own risk, it may crash or be broken by oen  mistake..####
+#### This is the heart of emagnet                                 ####
 ######################################################################
 trap ctrl_z INT
 
@@ -324,6 +322,12 @@ if [[ $? = "0" ]]; then
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
   printf "and then you will be able to continue, if this wont help - Wait for a while\n\n"
   exit
+fi
+
+grep -q "heavy load" /tmp/.emagnet
+if [[ $? = "0" ]]; then
+  printf "          Pastebin.com is under heavy load right now :(\n\n%17sTrying again in 60 seconds.    "
+  sleep 60
 fi
 
 
