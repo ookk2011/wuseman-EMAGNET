@@ -13,6 +13,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     
  ![Screenshot](https://nr1.nu/emagnet-howto.gif)
 
+### Temp preview for new filtering
+
+![Screenshot](https://nr1.nu/fixed-missing-passwords.gif)
+
 ### EMAGNET WIKI
 
 - [ABOUT](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
