@@ -350,8 +350,8 @@ il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP |cut
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| wc -l)
 
 p=$(
-if [[ -n $(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<') ]]; then
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$"|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<'
+if [[ -n $(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S') ]]; then
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<'
 else
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<'| grep -v '>'
 fi
@@ -359,7 +359,7 @@ fi
 
 pl=$(
 if [[ -n $(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<') ]]; then
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$"|grep '\S' | sed 's/|/:/g'
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S' | sed 's/|/:/g'
 else
 grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'
 fi
@@ -367,7 +367,7 @@ fi
 
 pt=$(
 if [[ -n $(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<'|wc -l) ]]; then
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$"|grep '\S' | sed 's/|/:/g'|wc -l
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\|.*$" $EMAGNETTEMP|grep '\S' | sed 's/|/:/g'|wc -l
 else
 grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l
 fi
