@@ -17,8 +17,14 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 ##### Download the fetched urls at anytime by:
 
     ./emagnet -d
-    
+
 ![Screenshot](https://nr1.nu/ezgif-4-6b77349f898a.gif)     
+
+##### If you wanna find passwords and emails from the above fetches you need to run the default command './emagnet -e' and it will count as usual and move & sort files.
+    
+![Screenshot](https://nr1.nu/ezgif-4-efef81348b90.gif)
+    
+
 
 ### GET STARTED
 
