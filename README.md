@@ -12,13 +12,13 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
     ./emagnet -f 
     
-![Screenshot](https://nr1.nu/emagnet-fetchurls.gif)     
+![Screenshot](https://nr1.nu/ezgif-4-3f22de1ab10c.gif)     
                                                                                                                                                                                     
 ##### Download the fetched urls at anytime by:
 
     ./emagnet -d
     
-![Screenshot](https://nr1.nu/download-fetched-urls.gif)     
+![Screenshot](https://nr1.nu/ezgif-4-6b77349f898a.gif)     
 
 ### GET STARTED
 
