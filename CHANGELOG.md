@@ -11,6 +11,9 @@
 -    Fxed so all desc boxes are at the same length when running emagnet-setup
 -    Edited so we grab our IP from nr1.nu properly since they rebuilt the page, no more sed is required
 -    Small fixes
+-    Emagnet -f have been added as a new feature. 
+     Just gather urls into /tmp/.emagnet-urls for downloading them in a later moment, you can cancel and continue after a while
+-    Download all fetched urls fetched by -f command with emagnet -d command.
 
 ##### Version 1.6.1
 
