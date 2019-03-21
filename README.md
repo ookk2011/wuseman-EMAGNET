@@ -1,12 +1,24 @@
 ![Screenshot](https://nr1.nu/emagnet-banner.png)
 
-# Emagnet is curently under active development. 
-
 # If you are using emagnet please report all bugs and errors to contribute.
 
 ## _"I'll will find you, it's just a matter of time"_
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
+
+# New feature has been added (2019-03-21)
+
+##### From now you just can store the urls from pastebin and download them in a later moment.
+
+    ./emagnet -f 
+    
+    ![Screenshot](https://nr1.nu/emagnet-fetchurls.gif)     
+                                                                                                                                                                                    
+##### Download the fetched urls at anytime by:
+
+    ./emagnet -d
+    
+![Screenshot](https://nr1.nu/download-fetched-urls.gif)     
 
 ### GET STARTED
 
