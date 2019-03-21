@@ -531,7 +531,7 @@ while read line; do wget -q \$line; done < /tmp/.emagnet
 clear 
 banner
 printf "%29sURLS: [\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]\n"
-sleep 10
+sleep $TIME
 done
 }
 
