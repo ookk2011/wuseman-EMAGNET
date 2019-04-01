@@ -2,6 +2,7 @@
 
 ##### Version 1.6.3
 
+-    In this version the big changes has been in emagnet-setup.sh
 -    Removed script path from config file since we have merged everything into one script now
 -    Changed echo to printf in emagnet-setup were we printing if depends has been found or not
 -    Emagnet setup script has been improved alot, much better descriptions and changed layout to a more clean look
