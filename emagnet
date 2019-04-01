@@ -270,10 +270,9 @@ if [[ -f .emagnetconf/emagnet.conf ]]; then
 #### Usage/Help for emagnet.......................................####
 ################################################################################
 usage() {
-banner
 cat << "EOF"
 
-emagnet - find leaked mail addresses and passwords uploaded on pastebin.com
+emagnet - A tool for find leaked databases, email-addresses, passwords, credit cards, paypal accounts and much more from uploaded files on pastebin.
 
   -d|--download - Download all uploads from pastebin, this command can only be used after you fetched some urls with -f
   -e|--emagnet  - Download latest uploads on pastebin and grep email and passwords to sort in daily dirs (Main Option)
@@ -297,7 +296,7 @@ if [[ -z $1 ]]; then usage; exit 0; fi
 #### Print ascii and a timer when we counting seconds to download.####
 ################################################################################
 countdown() { 
-  wait_time=$TIME; temp_cnt=${wait_time}; while [[ ${temp_cnt} -gt 0 ]]; do printf "\r         I'll Will Find You <-%2d -> Just A Matter Of Time" ${temp_cnt};sleep 1;((temp_cnt--));done;echo "" 
+  wait_time=$TIME; temp_cnt=${wait_time}; while [[ ${temp_cnt} -gt 0 ]]; do printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt};sleep 1;((temp_cnt--));done;echo "" 
 }
 
 ################################################################################
