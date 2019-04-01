@@ -1,44 +1,61 @@
 #!/bin/bash
-###############################################################################
-###############################################################################
-###############################################################################
-####                                                                       ####
-#### Copyright (C) 2019  wuseman <wuseman@nr1.nu> - All Rights Reserved    ####
-#### Created: 12/12/2018                                                   ####
-####                                                                       ####
-#### A notice to all nerds.                                                ####
-#### If you will copy developers real work it will not make you a hacker.  ####
-#### Resepect all developers, we doing this because it's fun!              ####
-####                                                                       ####
-###############################################################################
-###############################################################################
-################################ SOURCE CODE ##################################
-###############################################################################
-###################### EMAGNET WAS FOUNDED BY WUSEMAN #########################
-###############################################################################
-###############################################################################
-####                                                                      #####
-#### EMAGNET SOURCE CODE BEGINS HERE FEEL FREE TO USE AND EDIT THE SOURCE #####
-####   OF EMAGNET AS YOU WISH ASLONG AS ORIGIN AUTHOR WILL BE MENTIONED   #####
-####                                                                      #####
-###############################################################################
-#################################################################### 2o18 #####
-###############################################################################
+################################################################################
+################################################################################
+####                                                                       #####
+#### A notice to all nerds.                                                #####
+#### If you will copy developers real work it will not make you a hacker.  #####
+#### Resepect all developers, we doing this because it's fun!              #####
+####                                                                       #####
+################################################################################
+################################ SOURCE CODE ###################################
+################################################################################
+###################### EMAGNET WAS FOUNDED BY WUSEMAN ##########################
+################################################################################
+####                                                                       #####
+####  Emagnet - A tool for find all latest leaked databases                #####
+####  Copyright (C) 2018-2019, wuseman                                     #####
+####                                                                       #####
+####  This program is free software; you can redistribute it and/or modify #####
+####  it under the terms of the GNU General Public License as published by #####
+####  the Free Software Foundation; either version 2 of the License, or    #####
+####  (at your option) any later version.                                  #####
+####                                                                       #####
+####  This program is distributed in the hope that it will be useful,      #####
+####  but WITHOUT ANY WARRANTY; without even the implied warranty of       #####
+####  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #####
+####  GNU General Public License for more details.                         #####
+####                                                                       #####
+####  You must obey the GNU General Public License. If you will modify     #####
+####  emagnet file(s), you may extend this exception to your version       #####
+####  of the file(s), but you are not obligated to do so.  If you do not   #####
+####  wish to do so, delete this exception statement from your version.    #####
+####  If you delete this exception statement from all source files in the  #####
+####  program, then also delete it here.                                   #####
+####                                                                       #####
+####  Contact:                                                             #####
+####          IRC: Freenode @ wuseman                                      #####
+####          Mail: wuseman <wuseman@nr1.nu>                               #####
+####                                                                       #####
+################################################################################
+######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
+################################################################################
 
-######################################################################
-#### This script require root for many reasons like install pcks..####
-######################################################################
-mustberoot() { if [[ $EUID -gt "0" ]]; then printf "Root privileges is required for this tool.\n"; exit 0;fi }
+################################################################################
+#### Emagnet require root for we must install packages for example..........####
+################################################################################
+mustberoot() { if [[ $EUID -gt "0" ]]; then
+printf "Root privileges is required for this tool.\n"; exit 0;
+fi }
 
-######################################################################
-#### Check if its the first time a user running emagnet...........####
-######################################################################
+################################################################################
+#### Check if its the first time a user running emagnet.....................####
+################################################################################
 confexist() { if [[ ! -f /etc/emagnet.conf ]]; then printf "Error: /etc/emagnet.conf is required, run emagnet-setup.sh for generate emagnet.conf\n";exit 0;fi }
 mustberoot; confexist
 
-######################################################################
-#### Emagnet's maskot, it will stay forever.......................####
-######################################################################
+###############################################################################
+#### Emagnet's MASKOT......................................................####
+###############################################################################
 banner() {
 cat << "EOF"
      _                      _______                      _
@@ -64,134 +81,144 @@ EOF
 printf "%62s \n\n" | tr ' ' '='
 }
 
-######################################################################
-#### Where we store all variables for easier usage................####
-######################################################################
-CONF="/etc/emagnet.conf"
-source $CONF
+################################################################################
+#### Configuration file where emagnet keep all variables and settings.......####
+################################################################################
+CONF="/etc/emagnet.conf";source $CONF
 
-######################################################################
-#### If there is any variable that has been removed, we fix it....####
-#### otherwise emagnet will stop..................................####
-######################################################################
+################################################################################
+#### If there is any variable that has been removed we gonna re-add paths...####
+#### otherwise emagnet will stop............................................####
+################################################################################
 mustbefilled() {
-if [[ -z $EMAGNET ]]; then echo "You must set a path where emagnet should store it files, aborted..";exit 0;fi
-if [[ -z $EMAGNETHOME ]]; then sed -i "43d" $CONF; sed -i '43 i EMAGNETHOME=$EMAGNET\/emagnet\/incoming\/$(date +%Y-%m-%d)' $CONF;fi
-if [[ -z $EMAGNETLOGS ]]; then sed -i "44d" $CONF; sed -i '44 i EMAGNETLOGS=$EMAGNET/logs' $CONF;fi
-if [[ -z $EMAGNETARCHIVE ]]; then sed -i "50d" $CONF;sed -i '50 i EMAGNETARCHIVE=$EMAGNET/archive' $CONF;fi
-if [[ -z $EMAGNETPW ]]; then sed -i "46d" $CONF;sed -i '46 i EMAGNETPW=$EMAGNETHOME\/password-files' $CONF;fi
-if [[ -z $EMAGNETALL ]]; then sed -i "47d" $CONF;sed -i '47 i EMAGNETALL=$EMAGNETALL=$EMAGNETHOME\/all-files' $CONF;fi
-if [[ -z $EMAGNETCRAP ]]; then sed -i "48d" $CONF; sed -i '48i EMAGNETCRAP=$EMAGNETHOME\/.pastebin' $CONF;fi
-if [[ -z $EMAGNETTEMP ]]; then sed -i "49d" $CONF;sed -i '49 i EMAGNETTEMP=$EMAGNETHOME\/.temp' $CONF;fi
-if [[ -z $EMAGNETDB ]]; then sed -i "45d" $CONF;sed -i '45 i EMAGNETDB=$EMAGNETHOME\/email-files' $CONF;fi
-if [[ -z $PASTEBIN ]]; then sed -i '13d' /etc/emagnet.conf
-                            sed -i '13i PASTEBIN=https:\/\/www.pastebin.com' /etc/emagnet.conf
-                           echo "Added script path to /etc/emagnet.conf, run magnet again.";fi 
+if [[ -z $EMAGNET ]];         then echo "You must set a path where emagnet should store it files, aborted..";exit 0;fi
+if [[ -z $EMAGNETHOME ]];     then sed -i "43d" $CONF; sed -i '43 i EMAGNETHOME=$EMAGNET\/emagnet\/incoming\/$(date +%Y-%m-%d)' $CONF;fi
+if [[ -z $EMAGNETLOGS ]];     then sed -i "44d" $CONF; sed -i '44 i EMAGNETLOGS=$EMAGNET/logs' $CONF;fi
+if [[ -z $EMAGNETARCHIVE ]];  then sed -i "50d" $CONF;sed -i '50 i EMAGNETARCHIVE=$EMAGNET/archive' $CONF;fi
+if [[ -z $EMAGNETPW ]];       then sed -i "46d" $CONF;sed -i '46 i EMAGNETPW=$EMAGNETHOME\/password-files' $CONF;fi
+if [[ -z $EMAGNETALL ]];      then sed -i "47d" $CONF;sed -i '47 i EMAGNETALL=$EMAGNETALL=$EMAGNETHOME\/all-files' $CONF;fi
+if [[ -z $EMAGNETCRAP ]];     then sed -i "48d" $CONF; sed -i '48i EMAGNETCRAP=$EMAGNETHOME\/.pastebin' $CONF;fi
+if [[ -z $EMAGNETTEMP ]];     then sed -i "49d" $CONF;sed -i '49 i EMAGNETTEMP=$EMAGNETHOME\/.temp' $CONF;fi
+if [[ -z $EMAGNETDB ]];       then sed -i "45d" $CONF;sed -i '45 i EMAGNETDB=$EMAGNETHOME\/email-files' $CONF;fi
+if [[ -z $PASTEBIN ]];        then sed -i '13d' /etc/emagnet.conf
+                              sed -i '13i PASTEBIN=https:\/\/www.pastebin.com' /etc/emagnet.conf
+                              echo "Added script path to /etc/emagnet.conf, run magnet again.";fi 
                            }
 
-######################################################################
-#### Create paths for emagnet if there is no incoming path created####
-######################################################################
+################################################################################
+#### Create paths for emagnet if there is no incoming path created...........####
+################################################################################
 paths() {
-if [[ ! -d $EMAGNETHOME ]]; then mkdir -p $EMAGNETHOME &> /dev/null;fi
-if [[ ! -d $EMAGNETDB ]]; then mkdir -p $EMAGNETDB &> /dev/null;fi
-if [[ ! -d $EMAGNETPW ]]; then mkdir -p $EMAGNETPW &> /dev/null;fi
-if [[ ! -d $EMAGNETTEMP ]]; then mkdir -p $EMAGNETTEMP &> /dev/null;fi
-if [[ ! -d $EMAGNETCRAP ]]; then mkdir -p $EMAGNETCRAP &> /dev/null;fi
-if [[ ! -d $EMAGNETALL ]]; then mkdir -p $EMAGNETALL &> /dev/null;fi
+if [[ ! -d $EMAGNETHOME ]];    then mkdir -p $EMAGNETHOME &> /dev/null;fi
+if [[ ! -d $EMAGNETDB ]];      then mkdir -p $EMAGNETDB &> /dev/null;fi
+if [[ ! -d $EMAGNETPW ]];      then mkdir -p $EMAGNETPW &> /dev/null;fi
+if [[ ! -d $EMAGNETTEMP ]];    then mkdir -p $EMAGNETTEMP &> /dev/null;fi
+if [[ ! -d $EMAGNETCRAP ]];    then mkdir -p $EMAGNETCRAP &> /dev/null;fi
+if [[ ! -d $EMAGNETALL ]];     then mkdir -p $EMAGNETALL &> /dev/null;fi
 if [[ ! -d $EMAGNETARCHIVE ]]; then mkdir -p $EMAGNETARCHIVE &> /dev/null;fi
-if [[ ! -d $EMAGNETLOGS ]]; then mkdir -p $EMAGNETLOGS &> /dev/null;fi
+if [[ ! -d $EMAGNETLOGS ]];    then mkdir -p $EMAGNETLOGS &> /dev/null;fi
 }
 
-######################################################################
-#### We using nr1.nu/ip/ to find the ip address so we can warn....####
-#### and inform users that pastebin might ban your private IP.....####
-######################################################################
-whoiser() { if [[ -z $WIP ]]; then sed -i 's/WIP=/WIP=nr1/g' $CONF; fi }
+################################################################################
+#### We using nr1.nu/ip/ to find the ip address so we can warn..............####
+#### and inform users that pastebin might ban your private IP...............####
+################################################################################
+whoiser() { if [[ -z $WIP ]];  then sed -i 's/WIP=/WIP=nr1/g' $CONF; fi }
 
-######################################################################
-#### This is for specify time before downloading new files........####
-######################################################################
+################################################################################
+#### This is for specify time before downloading new files..................####
+################################################################################
 checktime() {
-if [[ -z $TIME ]]; then
-   printf "You must set a time otherwise emagnet won't work properly..\n"; 
-     read -p "How often do you want to download new uploads from pastebin: (Default 10): " timepastebin
- if [[ -n $timepastebin ]];then sed -i '19d' /etc/emagnet.conf;sed -i "19i TIME=" /etc/emagnet.conf;
-    sed -i "s/TIME=/TIME=$timepastebin/g" /etc/emagnet.conf;printf "Refresh time has been set to: $timepastebin seconds"
-   echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
- else
-    sed -i '19d' /etc/emagnet.conf;
-    sed -i "19i TIME=" /etc/emagnet.conf;
-    sed -i "s/TIME=/TIME=10/g" /etc/emagnet.conf
+if [[ -z $TIME ]]; then printf "You must set a time otherwise emagnet won't work properly..\n"; 
+   read -p "How often do you want to download new uploads from pastebin: (Default 60): " timepastebin
+if [[ -n $timepastebin ]];then sed -i '19d' /etc/emagnet.conf;sed -i "19i TIME=" /etc/emagnet.conf;
+   sed -i "s/TIME=/TIME=$timepastebin/g" /etc/emagnet.conf;printf "Refresh time has been set to: $timepastebin seconds"
+   echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log;else
+   sed -i '19d' /etc/emagnet.conf;sed -i "19i TIME=" /etc/emagnet.conf;sed -i "s/TIME=/TIME=10/g" /etc/emagnet.conf
    printf "Refresh time has been set to: 10 seconds\n\n"; sleep 2
    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
- fi
+fi
 fi
 }
 
 checkip() {
 if [[ -z $MYIP ]]; then
-clear
-banner | sed '19,20d'
-echo "+==================================================================+"
-echo "#                                                                  #"
-echo "# Set your private ip here because we do not want to risk to get a #"
-echo "#    permanent ip ban on pastebin with our real ip of course.      #"
-echo "#                                                                  #"
-echo "#  You can set something like 127.0.0.1 to trick emagnet for skip  #" 
-echo "#  to get asked for a proxy / vpn or tor ip to be set............  #"
-echo "#                                                                  #" 
-echo "+==================================================================+"
+echo -e "\n\n\033[1mIP-ADDRESS SETUP:\033[0m\n\033[1m----------------------\033[0m
+Set your private ip here if you don't wanna take the risk to get
+your 'private' ip number banned on www.pastebin.com for around
+a time limit of ~1200-1600 seconds. Remember this will happends if
+you will set time limit to 59 seconds or less in next option.
+
+If this is something you don't care about then please just hit
+enter and set your ip to 0.0.0.0. If you wont do this and time
+has been set to <59s emagnet will warn you about about this every
+time you executing emagnet.
+
+This setting exist so all users is aware that pastebin will ban
+your ip if you will visit the page too often.
+"
+
+if [[ -f /etc/emagnet.conf ]]; then
+printf "emagnet.conf seems already has been configured are you\n"
+read -p "really sure you want to overwrite /etc/emagnet.conf (y/n): " yupiamsure
+ if [[ $yupiamsure = "n" ]]; then
+    printf "\naborted\n\n"
+    exit
+fi
+cp /etc/emagnet.conf /etc/emagnet.conf.bak
+rm /etc/emagnet.conf
+printf "\nCreated a backup file: /etc/emagnet.conf.bak\n\n"
+fi
+if [[ -d "/usr/local/bin" ]]; then
+cp ./emagnet /usr/local/bin &> /dev/null
+fi
+
 myip="$(curl -s https://nr1.nu/i/)"
-read -p "Is $myip your private IP-Address (y/n): " realip
+printf "Is \e[1;1m$myip\e[0m your private IP-Address (yes/no): "; read realip
 case "$realip" in
   YES)
       sed -i '26d' $CONF
       sed -i '26 i MYIP=' $CONF
       sed -i "s/MYIP=/MYIP=$myip/g" $CONF
-      printf "\nConfig file has been updated with your IP set to: $myip\n\n"
-      sleep 1.5
+      printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
   y)
       sed -i '26d' $CONF
-      sed -i '26 i MYIP=' $CONF 
+      sed -i '26 i MYIP=' $CONF
       sed -i "s/MYIP=/MYIP=$myip/g" $CONF
-      printf "\nConfig file has been updated with your IP set to: $myip\n\n"
-      sleep 1.5
+      printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
   yes)
       sed -i '26d' $CONF
-      sed -i '26 i MYIP=' $CONF 
+      sed -i '26 i MYIP=' $CONF
       sed -i "s/MYIP=/MYIP=$myip/g" $CONF
-      printf "\nConfig file has been updated with your IP set to: $myip\n\n"
-      sleep 1.5
+      printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
 
    *) read -p "Enter your current real IP-Adress: " currentip
       sed -i "s/MYIP=/MYIP=$currentip/g" $CONF
-      printf "\nConfig file has been updated with your IP set to: $currentip\n\n"
+      printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
 esac
 fi
 }
 
-
 stats() {
-banner
-printf "%27sPatience..\n\n%23s Gathering Data..\n"
-TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
-TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
-TPASSWORDFILES=$(grep -raEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
-TEMAILS=$(cat $EMAGNETARCHIVE/logs/emails-from-pastebin.txt|wc -l)
-TPASSWORDS=$(cat $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt|wc -l)
-
-printf "                             STATS\n\n"
-
+   clear;banner
+   printf "Please wait, reading files.."
+   TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
+   TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
+   TPASSWORDFILES=$(grep -raEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
+   TEMAILS=$(cat $EMAGNETARCHIVE/logs/emails-from-pastebin.txt|wc -l)
+   TPASSWORDS=$(cat $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt|wc -l)
+   printf "%29s[\e[1;32mDONE\e[0m]"|tr ' ' '.'; sleep 1
+   clear; banner; 
+   printf "\n                       \e[4mEMAGNET STATS\e[0m\n\n"
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
-    printf "Total files%s%s ................................................[\e[1;31m0$TOTALFILES\e[0m]\n"
+    printf "Total files%s%s%45s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
   else
-    printf "Total files%s%s ................................................[\e[1;32m$TOTALFILES\e[0m]\n"
+    printf "Total files%s%s%45s[\e[1;32m$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
   fi
 done
 
@@ -226,29 +253,31 @@ for temailfiles in $TEMAILFILES; do
 done
 echo ""
 }
-######################################################################
+################################################################################
 #### Check so emagnet's idletime, they remove ban after 20 min....####
-######################################################################
+################################################################################
 idletime() { if [[ -z $IDLETIME ]]; then sed -i "s/IDLETIME=/IDLETIME=1200/g" /etc/emagnet.conf;fi; }
 
-######################################################################
+################################################################################
 #### Re-create emagnet.conf after emagnet-setup has been executed.####
-######################################################################
+################################################################################
 copyconf() {
 if [[ -f .emagnetconf/emagnet.conf ]]; then
   cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf;fi
 }
 
-######################################################################
+################################################################################
 #### Usage/Help for emagnet.......................................####
-######################################################################
+################################################################################
 usage() {
 banner
 cat << "EOF"
 
 emagnet - find leaked mail addresses and passwords uploaded on pastebin.com
 
-  -e|--emagnet  - Download latest uploads on pastebin and store passwords and mail addresses in sorted folders
+  -d|--download - Download all uploads from pastebin, this command can only be used after you fetched some urls with -f
+  -e|--emagnet  - Download latest uploads on pastebin and grep email and passwords to sort in daily dirs (Main Option)
+  -f|--fetch    - Just fetch the latest uploads and store them into /tmp/.emagnet-urls.txt
   -k|--kill     - Kill emagnet if there is a ghost session running. Required when you run emagnet in background (-q)
   -m|--merge    - Merge all logs from incoming folders into one file, and move all files from incoming to one folder
   -n|--netcat   - Upload anything to nr1.nu pastebin for sharing terminal output. 
@@ -259,31 +288,30 @@ emagnet - find leaked mail addresses and passwords uploaded on pastebin.com
 EOF
 }
 
-######################################################################
+################################################################################
 #### If user just typing emagnet, show them usage.................####
-######################################################################
+################################################################################
 if [[ -z $1 ]]; then usage; exit 0; fi
 
-######################################################################
+################################################################################
 #### Print ascii and a timer when we counting seconds to download.####
-######################################################################
+################################################################################
 countdown() { 
-  wait_time=$TIME; temp_cnt=${wait_time}; while [[ ${temp_cnt} -gt 0 ]]; do printf "\r         I'll will find you <-%2d -> It's a matter of time" ${temp_cnt};sleep 1;((temp_cnt--));done;echo "" 
+  wait_time=$TIME; temp_cnt=${wait_time}; while [[ ${temp_cnt} -gt 0 ]]; do printf "\r         I'll Will Find You <-%2d -> Just A Matter Of Time" ${temp_cnt};sleep 1;((temp_cnt--));done;echo "" 
 }
 
-######################################################################
+################################################################################
 #### This is the heart of emagnet                                 ####
-######################################################################
+################################################################################
 trap ctrl_z INT
-
 ctrl_z() {
-printf "\n\n               Hit CTRL+z if you really wanna quit"
-printf "\n\n                 For continue hit CTRL+c again"
-printf "\n\n%66s" | tr ' ' '='
-printf "\n\n                         Found a bug? \n\n"
-printf "          https://github.com/wuseman/EMAGNET/issues/new"
-printf "\n\n                  Thanks for using emagnet\n\n"
-printf "%66s" | tr ' ' '='
+      printf "\n\n               Hit CTRL+z if you really wanna quit"
+      printf "\n\n                 For continue hit CTRL+c again"
+      printf "\n\n%66s" | tr ' ' '='
+      printf "\n\n                         Found a bug? \n\n"
+      printf "          https://github.com/wuseman/EMAGNET/issues/new"
+      printf "\n\n                  Thanks for using emagnet\n\n"
+      printf "%66s" | tr ' ' '='
 sleep $IDLETIME
 }
 
@@ -293,31 +321,21 @@ source /etc/emagnet.conf
 for (( ; ; )); do
 wait_time=$IDLETIME
 temp_cnt=${wait_time}
-   while [[ ${temp_cnt} -gt 0 ]]; do
-      printf "\r        No worries, emagnet will continue in %1d " ${temp_cnt};printf "seconds"; 
-      sleep 1
-      ((temp_cnt--))
-  done;
+while [[ ${temp_cnt} -gt 0 ]]; do
+       printf "\rIP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
+done;
       echo ""
-   clear
-   banner
-   bash emagnet -e
-   sleep 2
+      clear;banner;bash emagnet -e;sleep 2
 done
    bash emagnet -e
 exit
 }
 
-################################################################################################
-# This is for check if emagnet has banned us by reading the index.html file from pastebin      #
-################################################################################################
-
-
+##########################################################################################################
+#### Download all urls from pastebin via elinks or lynx, emagnet-setup handle this....................####
+##########################################################################################################
 emagnet2() {
-################################################################################################
-# Download all urls from pastebin via elinks or lynx, emagnet-setup handle this                #
-lynx -dump $PASTEBIN | sed "s/com\//com\/raw\//g" | grep -o http.* | sed -n "7,14p" > /tmp/.emagnet
-grep -q security /tmp/.emagnet
+elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
 if [[ $(grep -q security /tmp/.emagnet; echo $?) = "0" ]]; then
   printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
@@ -332,9 +350,9 @@ if [[ $? = "0" ]]; then
 fi
 
 
-################################################################################################
-# Moved pastebin-urls to here insted, we can rather echo them after we downloaded them directly#
-################################################################################################
+##########################################################################################################
+##### Moved pastebin-urls to here insted, we can rather echo them after we downloaded them directly..#####
+##########################################################################################################
 # // Create a new line when we gather new urls, removed the old line so we can shorter the code a bit
 echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
 cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
@@ -342,9 +360,9 @@ cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
 # // Using wget via -P instead of joining temp path since we grabbingall data via the variable anyway..
 parallel -j $THREADS wget -nc -q -P $EMAGNETTEMP {} < /tmp/.emagnet &> /dev/null
 
-################################################################################################
-# We using some awesome regex to grab what we looking for                                      #
-################################################################################################
+##########################################################################################################
+##### We using some awesome regex to grab what we looking for........................................#####
+##########################################################################################################
 i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP | cut -d: -f1)
 il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP |cut -d: -f2)
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| wc -l)
@@ -352,21 +370,20 @@ p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EM
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' | sed 's/|/:/g')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
 if [[ ! -s /tmp/.emagnet ]]; then
-lynx -dump $PASTEBIN > /tmp/.emagnet
+   elinks -dump $PASTEBIN > /tmp/.emagnet
    grep -qe "blocked your IP" /tmp/.emagnet
    if [[ $? = "0" ]]; then banned; fi
-
-##############################################################################
-#    If we are not banned and we found both mail addresses && passwords....  #
-#    then we move files and echo all data we have found to our logs          #
-##############################################################################
+########################################################################################
+#### If we are not banned and we found both mail addresses && passwords.............####
+#### then we move files and echo all data we have found to our logs.................####
+########################################################################################
 elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
 
-##############################################################################
-#  If we found passwords and email addresses, then echo how many             #
-#  passwords and email addresses we have found and then move                 #
-#  everything to the directories.                                            #
-##############################################################################
+########################################################################################
+#### If we found passwords and email addresses, then echo how many..................####
+#### passwords and email addresses we have found and then move......................####
+#### everything to the directories..................................................####
+########################################################################################
 # Echo from wich file swe found email-addresses and passwords to emagnet.log #
    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found $it emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
    echo $il >> $EMAGNETLOGS/emails-from-pastebin.txt
@@ -375,7 +392,7 @@ elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'>> $EMAGNETLOGS/passwords-from-pastebin.txt
    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found $pt passwords from ${p##*/}" | xargs >> $EMAGNETLOGS/emagnet.log 
 
-# Copy / Move Move passwords and send passwords to logs
+elinks -dump $PASTEBIN > /tmp/.emagnet
    cp $p $EMAGNETHOME/password-files/ 2>/dev/null
    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'>> $EMAGNETLOGS/passwords-from-pastebin.txt     
    mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
@@ -386,11 +403,11 @@ elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
 
 #if [[ $(env |grep DESKTOP|cut -d= -f2) = "KDE" ]]; then 
 #fi
-################################################################################
+##########################################################################################
 #  | If we are not banned and we get 0 emails then we have 0                 | #
 #  | passwords also since without mail we wont find any passwords and        | #
 #  | in this case we still want to move files and echo urls to logs          | #
-###|#########################################################################|##
+###|###################################################################################|##
 #  |____________,                    |                                       | #
 #               ˇ                    ˇ                                       ˇ #
  elif [[ $pt = "0" ]] && [[ $it -gt "0" ]]; then
@@ -424,27 +441,30 @@ else
 fi
 }
 
-######################################################################
-#### Print analyzing meanwhile we go through the files..........:.####
-######################################################################
+################################################################################
+#### Print analyzing meanwhile we go through the files......................####
+################################################################################
 analyz() {
-printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l; sleep 0.1;printf y; sleep 0.1;printf z; sleep 0.1; printf i; sleep 0.1;printf n; sleep 0.1;printf g; sleep 0.1;printf .; sleep 0.1; printf . ; printf .; sleep 0.1; printf .; sleep 0.1;printf "\n\n";
+printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l; 
+sleep 0.1;printf y;sleep 0.1;printf z;sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1
+printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
 }
 
-######################################################################
-#### This will stop after we found email, run 4ever if its in a loop #
-######################################################################
+################################################################################
+#### This will stop after we found email, run 4ever if its in a loop........####
+################################################################################
 stopwhenfound() {
 for (( ; ; )); do clear;banner;countdown;clear;banner;clear;banner;analyz;clear;banner;emagnet2; done
 }
 
-######################################################################
-#### Since user must be known of the risk that pastebin might be:.####
-#### IP-Banned PERMANENT from pastebin (Use VPN or TOR if you can.####
-#### since it's REALLY recommended................................####
-######################################################################
+################################################################################
+#### Since user must be known of the risk that pastebin might be............####
+#### IP-Banned PERMANENT from pastebin (Use VPN or TOR if you can...........####
+#### since it's REALLY recommended..........................................####
+################################################################################
 safety() {
-if [[ -z $MYIP ]]; then myyyyip="$(curl -s https://nr1.nu/i/ | sed -n '121p')"; sed -i '26d' /etc/emagnet.conf;sed -i "26i MYIP=" /etc/emagnet.conf; sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
+if [[ -z $MYIP ]]; then myyyyip="$(curl -s https://nr1.nu/i/ | sed -n '121p')"
+sed -i '26d' /etc/emagnet.conf;sed -i "26i MYIP=" /etc/emagnet.conf; sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
 echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log;fi
 }
 
@@ -466,9 +486,9 @@ cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files  &> /
 }
 
 merge_logs() {
-######################################################################
+################################################################################
 # Merge logs from incoming dirs into archive.........................#
-######################################################################
+################################################################################
 echo -n "Merging emagnet.log $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
 cat $EMAGNET/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log &> /dev/null
 
@@ -499,8 +519,6 @@ createbdirs
 copy_files
 merge_logs
 }
-
-
 
 fetchurls() {
 while :; do
@@ -534,16 +552,9 @@ fi
 rm /tmp/.emagnet-urls &> /dev/null && rm /tmp/.emagnet &> /dev/null
 }
 
-
-
-
-
-
-
-
-######################################################################
+################################################################################
 #### Check so everything is OK before we running emagnet........:.####
-######################################################################
+################################################################################
 checkeverything() {
 mustberoot;confexist;mustbefilled;paths;whoiser;idletime;checktime;copyconf;safety;checkip
 };
@@ -551,10 +562,9 @@ mustberoot;confexist;mustbefilled;paths;whoiser;idletime;checktime;copyconf;safe
 safety
 checkeverything
 
-
-######################################################################
+################################################################################
 #### Getopts for emagnet........................................:.####
-######################################################################
+################################################################################
 while getopts ":abcemnkhHpsSvumqfd" getopt; do
   case $getopt in
        d) downloadfetchedurls ;; # New
@@ -578,7 +588,6 @@ echo -e "\nThis message exist so all users have been warned..."
 echo -e ""
               read hi; echo $hi>/dev/null
               sed -i '26d' $CONF;sed -i '26 i MYIP=127.0.0.1' $CONF;printf "\n$(curl -s https://nr1.nu/ip/ | sed -n '121p')"
-
 fi
 fi
               while :; do clear;banner;countdown;clear;banner;clear;banner;analyz;clear;banner;emagnet2;sleep 2; mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null; done ;;
@@ -595,4 +604,3 @@ fi
       \?) echo "No such option, try ./emagnet -h" ;;
   esac
 done
-

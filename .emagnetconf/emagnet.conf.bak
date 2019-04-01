@@ -77,9 +77,3 @@ THREADS=8
 #######################################################################################################################
 IDLETIME=1200
 
-#### SCRIPTS PATH
-#######################################################################################################################
-#### You must set this path for emagnet to run properly, this is where emagnet main tool is stored                 ####
-#### OBS: This is not required to set anymore, we gonna use the folder where you run emagnet-setup.sh from         ####
-#######################################################################################################################
-export EMAGNETSCRIPTS=

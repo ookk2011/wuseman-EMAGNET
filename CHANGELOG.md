@@ -1,19 +1,27 @@
 ### CHANGELOG FOR EMAGNET
 
+##### Version 1.6.3
+
+-    Removed script path from config file since we have merged everything into one script now
+-    Changed echo to printf in emagnet-setup were we printing if depends has been found or not
+-    Emagnet setup script has been improved alot, much better descriptions and changed layout to a more clean look
+-    Emagnet -f have been added as a new feature wich will fetch all latest uploads on pastebin.com without downloading
+-    If you want to download the files you have choosed to fetch earlier then you just run emagnet -d for download them
+-    If you want to grab email addresses and password to be sorted by below new feature then just run emagnet -e and just wait until emagnet will fetch new uploads as usual    
+-    Changed DEFAULT refresh time to 60 seconds since pastebin have changed time limit how often you are allowed to visit pastebin until they will set a ban for 1600 seconds
+-    Changed wait time for 1600 seconds, this is for everyone who sets a time intervall of 59 seconds or less (set a time of 60 secons or more to avoid bans)
+
 ##### Version 1.6.2 
 
 -    Emagnet mirror has been removed
 -    Emagnet clone any users git repositories has been removed
--    Emagnet upor down has been removed
+-    Emagnet up or down feature has been removed
 -    Added a new feature for check stats of downloaded files and also how many email-addresses and passwords you have been found
 -    Added emagnet archive feature, move all files to archive dir and merge all logs
 -    Added a notice message if the time is set to 60 seconds or less and if your real ip is used
 -    Fxed so all desc boxes are at the same length when running emagnet-setup
 -    Edited so we grab our IP from nr1.nu properly since they rebuilt the page, no more sed is required
 -    Small fixes
--    Emagnet -f have been added as a new feature. 
-     Just gather urls into /tmp/.emagnet-urls for downloading them in a later moment, you can cancel and continue after a while
--    Download all fetched urls fetched by -f command with emagnet -d command.
 
 ##### Version 1.6.1
 

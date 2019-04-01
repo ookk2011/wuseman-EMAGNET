@@ -6,25 +6,6 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
-# New feature has been added (2019-03-21)
-
-##### From now you just can store the urls from pastebin and download them in a later moment. You can cancel at anytime and continue from were you left before you downloading the uploads:
-
-    ./emagnet -f 
-    
-![Screenshot](https://nr1.nu/ezgif-4-3f22de1ab10c.gif)     
-                                                                                                                                                                                    
-##### Download the fetched urls at anytime by below command:
-
-    ./emagnet -d
-
-![Screenshot](https://nr1.nu/ezgif-4-6b77349f898a.gif)     
-
-##### If you wanna find passwords and emails from the above fetches you need to run the default command './emagnet -e' and it will count as usual and move & sort files into incoming dirs:
-    
-![Screenshot](https://nr1.nu/ezgif-4-efef81348b90.gif)
-    
-
 
 ### GET STARTED
 
