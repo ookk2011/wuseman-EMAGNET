@@ -2,6 +2,7 @@
 
 ##### Version 1.6.3
 
+-    Fixed interface for gathering urls
 -    In this version the big changes has been in emagnet-setup.sh
 -    Removed script path from config file since we have merged everything into one script now
 -    Changed echo to printf in emagnet-setup were we printing if depends has been found or not
@@ -11,6 +12,8 @@
 -    If you want to grab email addresses and password to be sorted by below new feature then just run emagnet -e and just wait until emagnet will fetch new uploads as usual    
 -    Changed DEFAULT refresh time to 60 seconds since pastebin have changed time limit how often you are allowed to visit pastebin until they will set a ban for 1600 seconds
 -    Changed wait time for 1600 seconds, this is for everyone who sets a time intervall of 59 seconds or less (set a time of 60 secons or more to avoid bans)
+-    Added the new features to help and also edited descriptions
+-    Removed banner from help 
 
 ##### Version 1.6.2 
 

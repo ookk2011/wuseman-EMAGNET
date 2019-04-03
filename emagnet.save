@@ -86,13 +86,6 @@ printf "%62s \n\n" | tr ' ' '='
 ################################################################################
 CONF="/etc/emagnet.conf";source $CONF
 
-
-################################################################################
-#### Control the network connection.........................................####
-################################################################################
-#ping -t 0.5 -c 1 8.8.8.8 &> /dev/null
-#if [[ "$?" -gt "0" ]]; then echo "Internet is down, try again later."; exit 1;fi
-
 ################################################################################
 #### If there is any variable that has been removed we gonna re-add paths...####
 #### otherwise emagnet will stop............................................####
@@ -212,15 +205,15 @@ fi
 
 stats() {
    clear;banner
-   printf "Please wait, counting data..."
+   printf "Please wait, reading files.."
    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
    TPASSWORDFILES=$(grep -raEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
    TEMAILS=$(cat $EMAGNETARCHIVE/logs/emails-from-pastebin.txt|wc -l)
    TPASSWORDS=$(cat $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt|wc -l)
    printf "%29s[\e[1;32mDONE\e[0m]"|tr ' ' '.'; sleep 1
-   clear; banner;
-   printf "                       \e[4mEMAGNET STATS\e[0m\n\n"
+   clear; banner
+   printf "\n                       \e[4mEMAGNET STATS\e[0m\n\n"
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
     printf "Total files%s%s%45s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
@@ -478,11 +471,6 @@ echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use
 ### MERGE ALL FILES INTO ARCHIVE DIR
 #####################################################################
 mergeem() {
-if [[ ! -d EMAGNETHOME=$EMAGNET/incoming ]]; then
-printf "There is nothing to merge or move, aborted\n"; exit 1
-fi
-clear; banner
-
 createbdirs() {
 if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then
    mkdir -p $EMAGNETARCHIVE/{all-files,email-files,password-files,logs}
@@ -537,7 +525,7 @@ curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep 
 while read line; do wget -q \$line; done < /tmp/.emagnet
 clear 
 banner
-printf "Total URLS"; printf "%48s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]" |tr ' ' '.'
+printf "%27sURLS: \e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m\n"
 sleep $TIME
 done
 }
@@ -592,7 +580,7 @@ printf "                            \e[1;31mNOTICE\e[0m\n"
 echo ""
 echo -e "Please use TOR or a VPN connection. Otherwise [\e[1;31m$MYIP\e[0m] will get"
 echo -e "temporary ip banned since you have set your time below 60 seconds."
-echo -e "It will take ~5 minutes until you will get banned due to unusually "
+echo -e "It will take around 5 miuntes until you will get banned due to unusually "
 echo -e "visiting by pastebin and the ban will last for 20 minutes, if you dont care" 
 echo -e "about this just hit [:enter:] otherwise hit [CTRL-z] so you can change IP."
 echo -e "\nThis message exist so all users have been warned..."
