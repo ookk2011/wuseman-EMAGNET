@@ -218,22 +218,22 @@ stats() {
    TPASSWORDFILES=$(grep -raEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
    TEMAILS=$(cat $EMAGNETARCHIVE/logs/emails-from-pastebin.txt|wc -l)
    TPASSWORDS=$(cat $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt|wc -l)
-   printf "%29s[\e[1;32mDONE\e[0m]"|tr ' ' '.'; sleep 1
+   printf "%28s[\e[1;32mDONE\e[0m]"|tr ' ' '.'; sleep 1
    clear; banner;
    printf "                       \e[4mEMAGNET STATS\e[0m\n\n"
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
-    printf "Total files%s%s%45s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
+    printf "Total Files"; printf "%s%s%49s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
   else
-    printf "Total files%s%s%45s[\e[1;32m$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
+    printf "Total Files"; printf "%s%s%49s[\e[1;32m$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
   fi
 done
 
 for temails in $TEMAILS; do
   if [[ $TEMAILS -lt "10" ]]; then
-    printf "Total email-addresses %s%s......................................[\e[1;31m0$TEMAILS\e[0m]\n"
+    printf "Total Mail Addresses%s%s......................................[\e[1;31m0$TEMAILS\e[0m]\n"
   else
-    printf "Total email-addresses %s%s......................................[\e[1;32m$TEMAILS\e[0m]\n"
+    printf "Total Mmail Addresses %s%s......................................[\e[1;32m$TEMAILS\e[0m]\n"
   fi
 done
 
@@ -478,7 +478,7 @@ echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use
 ### MERGE ALL FILES INTO ARCHIVE DIR
 #####################################################################
 mergeem() {
-if [[ ! -d EMAGNETHOME=$EMAGNET/incoming ]]; then
+if [[ ! -d $EMAGNET/incoming ]]; then
 printf "There is nothing to merge or move, aborted\n"; exit 1
 fi
 clear; banner
