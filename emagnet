@@ -50,7 +50,8 @@ fi }
 ################################################################################
 #### Check if its the first time a user running emagnet.....................####
 ################################################################################
-confexist() { if [[ ! -f /etc/emagnet.conf ]]; then printf "Error: /etc/emagnet.conf is required, run emagnet-setup.sh for generate emagnet.conf\n";exit 0;fi }
+confexist() { if [[ ! -f /etc/emagnet.conf ]]; then 
+printf "Error: /etc/emagnet.conf is required, run emagnet-setup.sh for generate emagnet.conf\n";exit 0;fi }
 mustberoot; confexist
 
 ###############################################################################
@@ -214,51 +215,57 @@ stats() {
    printf "Please wait, counting data..."
    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
-   TPASSWORDFILES=$(grep -raEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b.*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
-   TEMAILS=$(cat $EMAGNETARCHIVE/logs/emails-from-pastebin.txt|wc -l)
-   TPASSWORDS=$(cat $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt|wc -l)
+   TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
+   TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
+   TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
    printf "%28s[\e[1;32mDONE\e[0m]"|tr ' ' '.'; sleep 1
    clear; banner;
-   printf "                       \e[4mEMAGNET STATS\e[0m\n\n"
-for totalfiles in $TOTALFILES; do
-  if [[ $TOTALFILES -lt "10" ]]; then
-    printf "Total Files"; printf "%s%s%49s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
-  else
-    printf "Total Files"; printf "%s%s%49s[\e[1;32m$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
-  fi
-done
-
-for temails in $TEMAILS; do
-  if [[ $TEMAILS -lt "10" ]]; then
-    printf "Total Mail Addresses%s%s......................................[\e[1;31m0$TEMAILS\e[0m]\n"
-  else
-    printf "Total Mmail Addresses %s%s......................................[\e[1;32m$TEMAILS\e[0m]\n"
-  fi
-done
-
-for tpasswords in $TPASSWORDS; do
-  if [[ $TPASSWORDS -lt "10" ]]; then
-    printf "Total Passwords Found %s%s......................................[\e[1;31m0$TPASSWORDS\e[0m]\n"
-  else
-    printf "Total Passwords Found %s%s......................................[\e[1;32m$TPASSWORDS\e[0m]\n"
-  fi
-done
-
+   printf "                       EMAGNET STATS\n\n"
+   
 for tpasswordsfiles in $TPASSWORDFILES; do
   if [[ $TPASSWORDFILES -lt "10" ]]; then
-    printf "Files With Atleast One Password %s%s............................[\e[1;31m0$TPASSWORDFILES\e[0m]\n"
+    printf "Total Files That Includes Atleast 1 Password%s%s............[\e[1;31m0$TPASSWORDFILES\e[0m]\n"
   else
-    printf "Files With Atleast One Password %s%s............................[\e[1;32m$TPASSWORDFILES\e[0m]\n"
+    printf "Total Files That Includes Atleast 1 Password %s%s...........[\e[1;32m$TPASSWORDFILES\e[0m]\n"
   fi
 done
 
 for temailfiles in $TEMAILFILES; do
   if [[ $TEMAILFILES -lt "10" ]]; then
-    printf "Files With Atleast One Email Address%s%s........................[\e[1;31m00\e[0m]\n"
+    printf "Total Files That Includes Atleast 1 Mail Address%s%s........[\e[1;31m00\e[0m]\n"
+else
+    printf "Total Files That Includes Atleast 1 Mail Address%s%s........[\e[1;32m$TEMAILFILES\e[0m]\n"
   fi
 done
+
+for totalfiles in $TOTALFILES; do
+  if [[ $TOTALFILES -lt "10" ]]; then
+    printf "Total Files"; printf "%s%s%45s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
+  else
+    printf "Total Files"; printf "%s%s%45s[\e[1;32m$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
+  fi
+done
+
+for temails in $TEMAILS; do
+  if [[ $TEMAILS -lt "10" ]]; then
+    printf "Total Mail Addresses Stored%s%s.............................[\e[1;31m0$TEMAILS\e[0m]\n"
+  else
+    printf "Total Mail Addresses Stored%s%s.............................[\e[1;32m$TEMAILS\e[0m]\n"
+  fi
+done
+
+for tpasswords in $TPASSWORDS; do
+  if [[ $TPASSWORDS -lt "10" ]]; then
+    printf "Total Passwords Stored%s%s..................................[\e[1;31m0$TPASSWORDS\e[0m]\n"
+  else
+    printf "Total Passwords Stored%s%s..................................[\e[1;32m$TPASSWORDS\e[0m]\n"
+  fi
+done
+
 echo ""
 }
+
+
 ################################################################################
 #### Check so emagnet's idletime, they remove ban after 20 min....####
 ################################################################################
@@ -409,12 +416,12 @@ elinks -dump $PASTEBIN > /tmp/.emagnet
 #if [[ $(env |grep DESKTOP|cut -d= -f2) = "KDE" ]]; then 
 #fi
 ##########################################################################################
-#  | If we are not banned and we get 0 emails then we have 0                 | #
-#  | passwords also since without mail we wont find any passwords and        | #
-#  | in this case we still want to move files and echo urls to logs          | #
+#  | If we are not banned and we get 0 emails then we have 0                 |         | #
+#  | passwords also since without mail we wont find any passwords and        |         | #
+#  | in this case we still want to move files and echo urls to logs          |         | #
 ###|###################################################################################|##
-#  |____________,                    |                                       | #
-#               ˇ                    ˇ                                       ˇ #
+#  |____________,                    |                                       |         | #
+#               ˇ                    ˇ                                       ˇ         ˇ #
  elif [[ $pt = "0" ]] && [[ $it -gt "0" ]]; then
 
 # // Handle logs for email only since password is 0 and echo how many we found
@@ -477,10 +484,6 @@ echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use
 ### MERGE ALL FILES INTO ARCHIVE DIR
 #####################################################################
 mergeem() {
-if [[ ! -d $EMAGNET/incoming ]]; then
-printf "There is nothing to merge or move, aborted\n"; exit 1
-fi
-clear; banner
 
 createbdirs() {
 if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then
@@ -489,35 +492,84 @@ fi
 }
 
 copy_files() {
-echo -n "Copying emagnet files into archive/all-files $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
-cp -rn $EMAGNET/incoming/*/all-files/*  $EMAGNETARCHIVE/all-files/ &> /dev/null
-cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
-cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files  &> /dev/null
+paths;clear; banner
+AEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))" 
+EEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))" 
+PEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))"
+
+if [[ $AEXIST -gt "0" ]]; then
+echo -n "Copying all files into 'archive/all-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+cp -rn $EMAGNET/incoming/*/all-files/*  $EMAGNETARCHIVE/all-files &> /dev/null
+else
+echo -n "Copying 'all-files' into 'archive/all-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
+fi
+
+if [[ $EEXIST -gt "0" ]]; then
+echo -n "Copying 'email-files' into 'archive/email-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+      cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
+else 
+echo -n "Copying 'email-files' info 'archive/email-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
+fi
+
+if [[ $PEXIST -gt "0" ]]; then
+echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]\n"
+      cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files &> /dev/null
+else 
+echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]\n"
+fi
 }
 
 merge_logs() {
+	paths
+YEAR=$(echo $(date +%Y))
 ################################################################################
-# Merge logs from incoming dirs into archive.........................#
+# Merge logs from incoming dirs into archive...................................#
 ################################################################################
-echo -n "Merging emagnet.log $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
-cat $EMAGNET/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log &> /dev/null
 
-echo -n "Merging emails-from-pastebin.txt $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
-cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt  2> /dev/null 
+cd $EMAGNET/incoming; for i in *; do touch $i/logs/emagnet.log; done
+cd $EMAGNET/incoming; for i in *; do touch $i/logs/emails-from-pastebin.txt; done
+cd $EMAGNET/incoming; for i in *; do touch $i/logs/passwords-from-pastebin.txt; done
+cd $EMAGNET/incoming; for i in *; do touch $i/logs/pastebin-urls.txt; done
+if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/emagnet.log|wc -l) -gt "0" ]]; then
+echo -n "Merging 'emagnet.log' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+awk -F, '!seen[$1]++' $EMAGNET/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log &> /dev/null
+else
+echo -n "Merging 'emagnet.log' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
+fi
 
-echo -n "Merging passwords-from-pastebin.txt $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
-cat $EMAGNET/incoming/*/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
+################################################################################
+# It's NOT a mistake to using a awk twice here.................................#
+################################################################################
+if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/emails-from-pastebin.txt|wc -l) -gt "0" ]]; then
+if [[ ! -f $EMAGNET/incoming/$YEAR-*-*/logs/emails-from-pastebin.txt ]]; then touch $EMAGNET/incoming/*/logs/emails-from-pastebin.txt; fi
+echo -n "Merging 'emails-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+awk -F, '!seen[$1]++'  $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|tr ' ' '\n'|awk -F, '!seen[$1]++' $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|tr ' ' '\n' >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt  2> /dev/null 
+else
+echo -n "Merging 'emails-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
+fi
 
-echo -n "Merging pastebin-urls.txt $(printf '\056%.0s' {1..40})" | head -c 56 ; echo -e " [\e[1;32mDONE\e[0m]"
-cat $EMAGNET/incoming/*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
+if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/passwords-from-pastebin.txt|wc -l) -gt "0" ]]; then
+if [[ ! -f $EMAGNET/incoming/$YEAR-*-*/logs/passwords-from-pastebin.txt ]]; then touch $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt; fi
+echo -n "Merging 'passwords-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+awk -F, '!seen[$1]++' $EMAGNET/incoming/$YEAR-*-*/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
+else
+	echo -n "Merging 'passwords-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
+fi
 
+if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/pastebin-urls.txt|wc -l) -gt "0" ]]; then
+if [[ ! -f $EMAGNET/incoming/$YEAR-*-*/logs/pastebin-urls.txt ]]; then touch $EMAGNET/incoming/*/logs/pastebin-urls.txt; fi
+echo -n "Merging pastebin-urls.txt $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+if [[ $INCLUDETIME = "true" ]]; then
+    cat $EMAGNET/incoming/*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
+else 
+	grep "https" $EMAGNET/incoming/*/logs/pastebin-urls.txt |>> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
+fi
+else
+	echo -n "Merging 'pastebin-urls.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
+fi 
 
-printf "\nLogs has been successfully merged into $EMAGNETARCHIVE\n\n"
-
-
-#createbdirs;copyfiles;mergelogs
-
-read -p "Wipe incoming directories (y/n): " cleanup
+printf "\nAll data has been successfully merged into archive/logs\n\n"
+read -p "Do you want to wipe incoming directories (y/n): " cleanup
 if [[ $cleanup = "y" ]]; then
    rm -rf $EMAGNET/incoming/
    printf "\nSuccessfully \e[1;31mwiped\e[0m incoming directories..\n\n"
@@ -563,7 +615,7 @@ rm /tmp/.emagnet-urls &> /dev/null && rm /tmp/.emagnet &> /dev/null
 }
 
 ################################################################################
-#### Check so everything is OK before we running emagnet........:.####
+#### Check so everything is OK before we running emagnet....................####
 ################################################################################
 checkeverything() {
 mustberoot;confexist;mustbefilled;paths;whoiser;idletime;checktime;copyconf;safety;checkip
@@ -573,7 +625,7 @@ safety
 checkeverything
 
 ################################################################################
-#### Getopts for emagnet........................................:.####
+#### Getopts for emagnet....................................................####
 ################################################################################
 while getopts ":abcemnkhHpsSvumqfd" getopt; do
   case $getopt in

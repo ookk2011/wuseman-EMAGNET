@@ -1,5 +1,8 @@
 ### CHANGELOG FOR EMAGNET
 
+##### Version 1.6.4 
+
+
 ##### Version 1.6.3
 
 -    Fixed interface for gathering urls
@@ -14,6 +17,9 @@
 -    Changed wait time for 1600 seconds, this is for everyone who sets a time intervall of 59 seconds or less (set a time of 60 secons or more to avoid bans)
 -    Added the new features to help and also edited descriptions
 -    Removed banner from help 
+-    Changed so we using awk instead of cat to not get dupes into our log files.
+-    Improved STATS
+-    Improved MERGE
 
 ##### Version 1.6.2 
 
