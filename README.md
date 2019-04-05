@@ -36,7 +36,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
     awk -F, '!seen[$1]++'
 
-##### 8) If you want all accounts & password in a seperated file you can just use > in bash, for change : to , or whatever character you want to use if you for example will create your own database with leaked accounts just use: 'sed 's/:/,/g'' for this purpose then:
+##### 8) If you want all accounts & password in a separate file you can just use > in bash, for change : to , or whatever character you want to use if you for example will create your own database with leaked accounts just use: 'sed 's/:/,/g'' for this purpose then:
 
     commands here > leaked-spotify-accounts-20190401_to_20190405.txt 
 
