@@ -24,19 +24,19 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     
     cut -d: -f2,3
 
-##### 5) The guys that leaks all has different forms to seperate things, so let us skip all forms that includes 'mail | password' and also forms that seperate things with / instead of the usual : character:
-  
+##### 5) The guys that leaks all data on pastebin has different forms to separate things, so let us skip all forms that includes 'mail|;/password'/ and instead aim on mail:passwords since that is sitll the most used: 
+
     awk -F'|' '{print$1}'|cut -d/ -f1
 
-##### 6) We want to keep our list sorted since that will be easier to find our account then and perhaps your friends accounts if you want to warn them if they also has been leaked:
-    
-    sort -r|
+##### 6) I want to keep the list sorted since it will be easier to find accounts we looking for without some commands for ppl that have no knowledge about bash commands:
 
-##### 7) We do not want duplicates to keep things clean and nice: 
-    
+    sort -r
+
+##### 7) I do not want duplicates since some ppl leaking same credenticals about an account twice in different lists:
+
     awk -F, '!seen[$1]++'
 
-##### 8) If you want all accounts:password in some seperated file you can just use:
+##### 8) If you want all accounts & password in a seperated file you can just use > in bash, for change : to , or whatever character you want to use if you for example will create your own database with leaked accounts just use: 'sed 's/:/,/g'' for this purpose then:
 
     commands here > leaked-spotify-accounts-20190401_to_20190405.txt 
 
