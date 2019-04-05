@@ -6,51 +6,47 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ##### Got some questions from some peps with low or no linux experience at all and they wanted know how to sort things into a human readable format so I decided to show an example instead of answer the questions one by one and since probably someone else want to know.
 
-##### In this example we gonna search for latest leaked spotify accounts, hopefully your account has NOT been leaked, anyway here we go: 
+##### In this example I will search for the latest leaked spotify accounts, hopefully your account has NOT been leaked. The files I am searching through has been downloaded via emagnet between 2019-04-01 > 2019-04-04 _only_ so this is a nice proof how many accounts that is getting leaked in three days(remember this is spotify leaks only), hopefully people that have been saying say something like "NOBODY CAN GET MY LOGIN DETAILS, WHY WOULD SOMEONE WANT TO LEAK MY ACCOUNT?"
 
 ##### 1) First of all, search for all files that contains the word _SPOTIFY_ (This is an awesome mix with find + parallel + grep to speed up things since we like when things going fast):
    
     find /opt/emagnet/archive/ -type f | parallel -k -j150% -n 1000 -m grep -H -in 'spotify' {}
 
-##### 2) As you probably already have figured out, this will be a big mess by searching for spotify only, so we gonna grep all _MAIL ADDRESSES_ + _'SPOTIFY'_:
+##### 2) You have probably already figured out that it will be a big mess when I _searching_ for 'spotify' only... So, then I gonna grep all '_MAIL ADDRESSES_' + _'SPOTIFY'_ instead:
     
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"
 
-##### 3) We want all sorted line by line instead of have alot of spaces here and there so we gonna use \S for this:
+##### 3) I want all details sorted line by line instead of having alot of spaces here and there so we gonna use \S for this:
     
     grep '\S' 
 
-##### 4) We dont care about filenames anymore, all we want is to gather the MAIL ADDRESSES + PASSWORDS so we can be sure our account hasn't been leaked: 
+##### 4) I do not care about the filenames anymore since all we want right now is to gather the 'MAIL ADDRESSES' + 'PASSWORDS':
     
     cut -d: -f2,3
 
-##### 5) The guys that leaks all data on pastebin has different forms to separate things, so let us skip all forms that includes 'mail|;/password'/ and instead aim on mail:passwords since that is sitll the most used: 
+##### 5) The guys that leaks all data on pastebin has different forms to separate things, so let us skip all forms that includes 'mail|;/password'/ and instead aim on mail:passwords since that is sitll the most used form, this can easily be filtered later if we want too but to keep this as simple as possible let us start with this form only: 
 
     awk -F'|' '{print$1}'|cut -d/ -f1
 
-##### 6) I want to keep the list sorted since it will be easier to find accounts we looking for without some commands for ppl that have no knowledge about bash commands:
+##### 6) Now I want to keep the list sorted also since it will be easier to find the accounts we looking for without some advanced commands for all ppl that have no knowledge about CLI commands so it will be easy to go through the list from a to z:
 
     sort -r
 
-##### 7) I do not want duplicates since some ppl leaking same credenticals about an account twice in different lists:
+##### 7) Of course I do not want duplicates since some ppl leaking same credenticals for some accounts twice in different lists:
 
     awk -F, '!seen[$1]++'
 
-##### 8) If you want all accounts & password in a separate file you can just use > in bash, for change : to , or whatever character you want to use if you for example will create your own database with leaked accounts just use: 'sed 's/:/,/g'' for this purpose then:
+##### 8) If you want all accounts & password in a separate file you can use >> in bash to write data into files. If you want separate the details with , instead of : or whatever character you want to use if you want to import a list into your own sql/mysql database you can use sed for this purpose:
 
-    commands here > leaked-spotify-accounts-20190401_to_20190405.txt 
+    commands here from above | _sed 's/:/,/g'_ > leaked-spotify-accounts-20190401_to_20190405.txt 
 
-##### Entire Command In A One Liner: 
+##### All above commands in a one-liner, try to copy paste it when you have fetched some accounts. Change spotify whatever you wanna find, gmail, paypal, facebook, twitter etc etc etc etc..
 
     find /opt/emagnet/archive/ -type f | parallel -k -j150% -n 1000 -m grep -H -in 'spotify' {} | grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"|grep '\S' | cut -d: -f2,3|awk -F'|' '{print$1}'|cut -d/ -f1|sort -r|less|awk -F, '!seen[$1]++' > leaked-spotify-accounts-20190401_to_20190405.txt 
     
-    
- ### VIDEO EXAMPLE OF ABOVE COMMANDS:
+ ### VIDEO EXAMPLE OF ABOVE COMMANDS one by one:
  
  ![Screenshot](_video/spotify-leaks.gif)
-
- 
-#### Emagnet will let you know if your password has been leaked or not via pastebin, this was just an example for SPOTIFY leaks. Stay safe! ;)
 
 
 ### GET STARTED
