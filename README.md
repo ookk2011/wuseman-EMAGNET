@@ -46,6 +46,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
  ### VIDEO EXAMPLE OF ABOVE COMMANDS:
  
  ![Screenshot](https://nr1.nu/emagnet/previews/spotify-leaks.gif)
+
  
 #### Emagnet will let you know if your password has been leaked or not via pastebin, this was just an example for SPOTIFY leaks. Stay safe! ;)
 
