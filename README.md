@@ -4,6 +4,52 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
+##### Got some questions from some peps with low or no linux experience at all for how they sort things into a human readable format for find their accounts easier so I decided to make an example below (incl. a video) for a good start. In this example we gonna search for latest leaked spotify accounts, hopefully your account has NOT been leaked, anyway here we go: 
+
+##### 1) First of all, search for all files that contains the word _SPOTIFY_ (This is an awesome mix with find + parallel + grep to speed up things since we like when things going fast):
+   
+    find /opt/emagnet/archive/ -type f | parallel -k -j150% -n 1000 -m grep -H -in 'spotify' {}
+
+##### 2) As you probably already have figured out, this will be a big mess by searching for spotify only, so we gonna grep all _MAIL ADDRESSES_ + _'SPOTIFY'_:
+    
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"
+
+##### 3) We want all sorted line by line instead of have alot of spaces here and there so we gonna use \S for this:
+    
+    grep '\S' 
+
+##### 4) We dont care about filenames anymore, all we want is to gather the MAIL ADDRESSES + PASSWORDS so we can be sure our account hasn't been leaked: 
+    
+    cut -d: -f2,3
+
+##### 5) The guys that leaks all has different forms to seperate things, so let us skip all forms that includes 'mail | password' and also forms that seperate things with / instead of the usual : character:
+  
+    awk -F'|' '{print$1}'|cut -d/ -f1
+
+##### 6) We want to keep our list sorted since that will be easier to find our account then and perhaps your friends accounts if you want to warn them if they also has been leaked:
+    
+    sort -r|
+
+##### 7) We do not want duplicates to keep things clean and nice: 
+    
+    awk -F, '!seen[$1]++'
+
+##### 8) If you want all accounts:password in some seperated file you can just use:
+
+    commands here > leaked-spotify-accounts-20190401_to_20190405.txt 
+
+##### Entire Command In A One Liner: 
+
+    find /opt/emagnet/archive/ -type f | parallel -k -j150% -n 1000 -m grep -H -in 'spotify' {} | grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"|grep '\S' | cut -d: -f2,3|awk -F'|' '{print$1}'|cut -d/ -f1|sort -r|less|awk -F, '!seen[$1]++' > leaked-spotify-accounts-20190401_to_20190405.txt 
+    
+    
+ ### VIDEO EXAMPLE OF ABOVE COMMANDS:
+ 
+ ![Screenshot](https://nr1.nu/emagnet/previews/spotify-leaks.gif)
+ 
+#### Emagnet will let you know if your password has been leaked or not via pastebin, this was just an example for SPOTIFY leaks. Stay safe! ;)
+
+
 ### GET STARTED
 
 ##### You can copy and paste below code in your shell 
