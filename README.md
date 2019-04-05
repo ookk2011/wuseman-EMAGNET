@@ -40,7 +40,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
     commands here from above | _sed 's/:/,/g'_ > leaked-spotify-accounts-20190401_to_20190405.txt 
 
-##### All above commands in a one-liner, try to copy paste it when you have fetched some accounts. Change spotify whatever you wanna find, gmail, paypal, facebook, twitter etc etc etc etc..
+##### All above commands in a one-liner, try to copy paste it when you have fetched some uploads. Change 'spotify' to whatever you wanna find, gmail, paypal, facebook, twitter etc etc etc etc..
 
     find /opt/emagnet/archive/ -type f | parallel -k -j150% -n 1000 -m grep -H -in 'spotify' {} | grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"|grep '\S' | cut -d: -f2,3|awk -F'|' '{print$1}'|cut -d/ -f1|sort -r|less|awk -F, '!seen[$1]++' > leaked-spotify-accounts-20190401_to_20190405.txt 
     
