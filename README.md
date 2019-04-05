@@ -4,7 +4,9 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
-##### Got some questions from some peps with low or no linux experience at all for how they sort things into a human readable format for find their accounts easier so I decided to make an example below (incl. a video) for a good start. In this example we gonna search for latest leaked spotify accounts, hopefully your account has NOT been leaked, anyway here we go: 
+##### Got some questions from some peps with low or no linux experience at all and they wanted know how to sort things into a human readable format so I decided to show an example instead of answer the questions one by one and since probably someone else want to know.
+
+##### In this example we gonna search for latest leaked spotify accounts, hopefully your account has NOT been leaked, anyway here we go: 
 
 ##### 1) First of all, search for all files that contains the word _SPOTIFY_ (This is an awesome mix with find + parallel + grep to speed up things since we like when things going fast):
    
