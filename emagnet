@@ -333,11 +333,16 @@ source /etc/emagnet.conf
 for (( ; ; )); do
 wait_time=$IDLETIME
 temp_cnt=${wait_time}
-while [[ ${temp_cnt} -gt 0 ]]; do
-       printf "\rIP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
-done;
+   while [[ ${temp_cnt} -gt 0 ]]; do
+      printf "\r                    Emagnet will continue in %1d " ${temp_cnt};printf "seconds"; 
+      sleep 1
+      ((temp_cnt--))
+  done;
       echo ""
-      clear;banner;bash emagnet -e;sleep 2
+   clear
+   banner
+   bash emagnet -e
+   sleep 2
 done
    bash emagnet -e
 exit
@@ -370,7 +375,7 @@ echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=============================
 cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
 
 # // Using wget via -P instead of joining temp path since we grabbingall data via the variable anyway..
-parallel -j $THREADS wget -nc -q -P $EMAGNETTEMP {} < /tmp/.emagnet &> /dev/null
+elinks -dump $PASTEBIN > /tmp/.emagnet
 
 ##########################################################################################################
 ##### We using some awesome regex to grab what we looking for........................................#####
