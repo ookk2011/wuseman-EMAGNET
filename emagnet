@@ -163,19 +163,11 @@ time you executing emagnet.
 
 This setting exist so all users is aware that pastebin will ban
 your ip if you will visit the page too often.
+
+This message appears here cause you have not set any value 
+under 'MYIP' in /etc/emagnet.conf, set 0.0.0.0 instead of removing the IP.
 "
 
-if [[ -f /etc/emagnet.conf ]]; then
-printf "emagnet.conf seems already has been configured are you\n"
-read -p "really sure you want to overwrite /etc/emagnet.conf (y/n): " yupiamsure
- if [[ $yupiamsure = "n" ]]; then
-    printf "\naborted\n\n"
-    exit
-fi
-cp /etc/emagnet.conf /etc/emagnet.conf.bak
-rm /etc/emagnet.conf
-printf "\nCreated a backup file: /etc/emagnet.conf.bak\n\n"
-fi
 if [[ -d "/usr/local/bin" ]]; then
 cp ./emagnet /usr/local/bin &> /dev/null
 fi
@@ -606,7 +598,7 @@ banner
 echo -e "You must fetch some urls before you can download uploads from pastebin."
 read -p "Do you want me to fetch some downloads for you (y/N): " fetchdownloads
 case $fetchdownloads in
-     y) fetchdownloads ;;
+     y) fetchurls ;;
      *) echo "Aborted."; exit ;;
 esac
 exit
