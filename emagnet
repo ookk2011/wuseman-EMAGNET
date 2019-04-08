@@ -296,9 +296,9 @@ stats() {
 if [ $SPINNER_COLORNUM -eq 7 ]; then SPINNER_COLORNUM=1; else SPINNER_COLORNUM=$((SPINNER_COLORNUM+1)); fi
    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
-   TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l)
+   TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
-   TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l)
+   TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
    touch "donespinning"
    clear; banner;
    printf '+ Please wait, counting data.............................[\e[1;32mDONE\e[0m]'
@@ -459,12 +459,12 @@ parallel -j $THREADS wget -nc -q -P $EMAGNETTEMP {} < /tmp/.emagnet &> /dev/null
 i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP | cut -d: -f1)
 il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP |cut -d: -f2)
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| wc -l)
-p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<')
+p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'| grep -v ','|grep -v '<')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' | sed 's/|/:/g')
-pt="$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>')
-if [[! -s /tmp/.emagnet ]]; then
+pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
+if [[ ! -s /tmp/.emagnet ]]; then
 elinks -dump $PASTEBIN > /tmp/.emagnet
-elinks -dump $PASTEBIN > /tmp/.emagnet
+   grep -qe "blocked your IP" /tmp/.emagnet
    if [[ $? = "0" ]]; then banned; fi
 ########################################################################################
 #### If we are not banned and we found both mail addresses && passwords.............####
@@ -565,6 +565,7 @@ echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use
 ### MERGE ALL FILES INTO ARCHIVE DIR
 #####################################################################
 mergeem() {
+
 createbdirs() {
 if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then
    mkdir -p $EMAGNETARCHIVE/{all-files,email-files,password-files,logs}
@@ -573,9 +574,9 @@ fi
 
 copy_files() {
 paths;clear; banner
-AEXIST="$(echo $(ls $EMAGNET/incoming/*/all-files|wc -l))" 
-EEXIST="$(echo $(ls $EMAGNET/incoming/*/all-files|wc -l))" 
-PEXIST="$(echo $(ls $EMAGNET/incoming/*/all-files|wc -l))"
+AEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))" 
+EEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))" 
+PEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))"
 
 if [[ $AEXIST -gt "0" ]]; then
 echo -n "Copying all files into 'archive/all-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
@@ -674,8 +675,7 @@ case $fetchlimit in
           exit 1
           ;;
 
-          *) printf "\nYou must set a value under FETCHTIME in /etc/emagnet.conf manually before you can fetch urls\n\nAborted\n\n"; exit 1 
-	  ;;
+          *) printf "\nYou must set a value under FETCHTIME in /etc/emagnet.conf manually before you can fetch urls\n\nAborted\n\n"; exit 1 ;;
 esac
 fi
 elinks -dump $PASTEBIN > /tmp/.emagnet
