@@ -416,7 +416,7 @@ for (( ; ; )); do
 wait_time=$IDLETIME
 temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-       printf "\r      IP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
+       printf "\r  IP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       echo ""
       clear;banner;bash emagnet -e;sleep 2
@@ -673,8 +673,7 @@ case $fetchlimit in
           read -p "Time: " timelimiz
           sed -i "s/FETCHTIME=/FETCHTIME=$timelimiz/g" $CONF
           printf "\nConfig file has been updated, you will fetch new uploads every \e[1;1m$timelimiz\e[0m second(s)\n\n"
-          printf "Please wait, emagnet will begin in \e[1;37m2\e[0m seconds..\n\n"
-          sleep 2
+          exit 1
           ;;
 
           *) printf "\nYou must set a value under FETCHTIME in /etc/emagnet.conf manually before you can fetch urls\n\nAborted\n\n"; exit 1 ;;

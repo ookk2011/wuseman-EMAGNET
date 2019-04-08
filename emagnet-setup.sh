@@ -354,7 +354,7 @@ fi
 }
 
 idletime() {
-  sed -i "81d" $CONF;sed -i "81i IDLETIME=1200" $CONF
+  sed -i "78d" $CONF;sed -i "78i IDLETIME=1200" $CONF
 }
 
 clear;banner;choosebrowser;requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;
