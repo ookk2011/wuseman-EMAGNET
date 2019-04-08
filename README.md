@@ -57,6 +57,12 @@ _How To Find your facebook credenticals, if it has been leaked._
 - Lynx     - _Find more info about _lynx_ [here.](https://lynx.browser.org/)_
 - Elinks   - _Find more info about _elinks_ [here.](http://elinks.or.cz/)_
 
+### WHATS UPCOMMING IN NEXT VERSION
+
+-  Auto brute forcer is almost done so it will be get added to Emagnet again, removed it for a month ago
+-  A search plugin so we can search for things easier from our archive files
+-  Stay tuned.
+
 ### CONTACT 
 
   If you have problems, questions, ideas or suggestions please contact me: wuseman@nr1.nu
