@@ -225,7 +225,7 @@ if [[ -z $o ]]; then
         printf "\nConfig file has updated the refresh time to 60 seconds\n"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "Execute \e[1;32m./emagnet.sh -e\e[0m to get started :-)\e[0m\n\n"
+        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e' \e[1;1m:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/
         exit 1
 else
@@ -237,10 +237,10 @@ fi
         sed -i '19d' $CONF
         sed -i "19 i TIME=$o" $CONF
         printf "\nConfig file has updated the refresh time to $o seconds\n"
-        printf "\n\e[1;31mYou has been warned, expect a ban within ~300 seconds!\n\e[0m"
+        printf "\n\e[1;31mYou have been warned, expect a ban within ~300 seconds!\n\e[0m"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "Execute \e[1;32m./emagnet.sh -f\e[0m to grab some passwords:-)\e[0m\n\n"
+        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e' \e[1;1m:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/; break ;;
 
     *)  printf "\nSet a number between 10 and 3600 is recommended..\n\n"; continue ;;
@@ -297,15 +297,15 @@ know which one you prefer it doesn't matter, just choose one.
     printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
 if [[ $browsertouse = "lynx" ]]; then
     sed -i "432d" $SCRIPT;sed -i "432i lynx -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet" $SCRIPT
-    sed -i "467d" $SCRIPT;sed -i '467i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
-    printf "\nConfig file has been updated, lynx will be used for downloading files\n\n";else
+    sed -i "467d" $SCRIPT;sed -i '467i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT;sed -i '682i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
+    printf "\nConfig file has been updated, lynx will be used for downloading files\n";else
     sed -i "432d" $SCRIPT;sed -i "432i elinks -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet" $SCRIPT
     sed -i "467d" $SCRIPT;sed -i '467i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
-    printf "\nConfig file has been updated, elinks will be used for downloading files\n\n"; fi; elif [[ -f $LYNX && ! -f $ELINKS ]]; then
+    printf "\nConfig file has been updated, elinks will be used for downloading files\n"; fi; elif [[ -f $LYNX && ! -f $ELINKS ]]; then
     sed -i "432d" $SCRIPT;sed -i "432i lynx -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet " $SCRIPT
     sed -i "467d" $SCRIPT;sed -i '467i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT; elif [[ ! -f $LYNX && -f $ELINKS ]]; then
     sed -i "432d" $SCRIPT;sed -i "432i elinks -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet" $SCRIPT
-    sed -i "467d" $SCRIPT;sed -i '467i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT;else
+      sed -i "467d" $SCRIPT;sed -i '467i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT;sed -i "682d" $SCRIPT;sed -i '682i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT;else
     echo -e "\n\n\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
 Choose wich browser you prefer to use when emagnet will visit
 pastebin.com for the latest uploads urls on site. If you don't
@@ -327,8 +327,8 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install elinks;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install elinks manually."; exit 0; fi 
-      sed -i "338d" $SCRIPT
-      sed -i "338i elinks -dump \$PASTEBIN| sed 's/com\\\//com\\\/raw\\\//g' | grep -o http.* | sed -n '13,20p' > \/tmp\/.emagnet" $SCRIPT
+      sed -i "432d" $SCRIPT;sed -i "432i elinks -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet" $SCRIPT
+      sed -i "467d" $SCRIPT;sed -i '467i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT;sed -i "682d" $SCRIPT;sed -i '682i elinks -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT; 
        printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" $SCRIPT ;;
    lynx)
       printf "\nGoing to install $browsertouse2, setup will continue when $browsertouse2 has been installed..\n\n"
@@ -345,7 +345,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
        sed -i "432d" $SCRIPT
        sed -i "432d" $SCRIPT;sed -i "432i lynx -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet" $SCRIPT
-       sed -i "432d" $SCRIPT;sed -i '467i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
+       sed -i "432d" $SCRIPT;sed -i '467i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT; sed -i "682d" $SCRIPT;sed -i '682i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT;
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
    N) exit 0 ;;
    \?) echo "Please enter a proper answer y=yes N=no" ;;
