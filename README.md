@@ -5,6 +5,16 @@
 
 #### Congrats windows users, here is a tutorial how you can get started in ~1min
 
+##### Install Emagnet on Windows 10
+
+      Install Ubuntu or any other distro from Microsoft Store
+      When installation has been done, hit _start_
+      Now type _sudo -s_ and enter your password
+      Now update repo and install git, just copy and paste the below linee
+      All I can say is, have phun! :-) Emagnet has been installed.
+
+      apt update; apt install git -y; git clone https://github.com/wuseman/EMAGNET;cd EMAGNET; bash emagnet-setup.sh; emagnet -e
+
 ![Screenshot](_video/emagnet-on-windows.gif)
 
 #### _Emagnet keep watch, so you don’t have to._
