@@ -328,7 +328,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install elinks manually."; exit 0; fi 
       sed -i "342d" $SCRIPT
-      sed -i "342i elinks -dump \$PASTEBIN| sed 's/com\\\//com\\\/raw\\\//g' | grep -o http.* | sed -n '13,20p' > \/tmp\/.emagnet" $SCRIPT
+      sed -i "342d" $SCRIPT;sed -i "342i elinks -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping'
        printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" $SCRIPT ;;
    lynx)
       printf "\nGoing to install $browsertouse2, setup will continue when $browsertouse2 has been installed..\n\n"
@@ -344,7 +344,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
        sed -i "342d" $SCRIPT
-       sed -i '342i lynx -dump \$PASTEBIN | sed "s/com\\\//com\\\/raw\\\//g" | grep -o http.* | sed -n "7,14p" > /tmp/.emagnet' $SCRIPT
+       sed -i "342d" $SCRIPT;sed -i "342i lynx -dump \$PASTEBIN|grep https|cut -c 7-|sed 's/com/com\\\/raw/g'|awk 'length(\$0)>32 && length(\$0)<35\'|grep -v 'messages\\\|settings\\\|languages\\\|archive\\\|facebook\\\|scraping' > /tmp/.emagnet" $SCRIPT
        sed -i "377d" $SCRIPT
        sed -i '377i lynx -dump $PASTEBIN > /tmp/.emagnet' $SCRIPT
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
@@ -355,7 +355,7 @@ fi
 }
 
 idletime() {
-  sed -i "81d" $CONF;sed -i "81i IDLETIME=1200" $CONF
+  sed -i "77d" $CONF;sed -i "77i IDLETIME=1200" $CONF
 }
 
 clear;banner;choosebrowser;requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;
