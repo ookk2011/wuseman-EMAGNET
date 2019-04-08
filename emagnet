@@ -410,13 +410,13 @@ sleep $IDLETIME
 }
 
 banned() {
-printf " %8s Pastebin.com has blocked [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] temporary\n"
+printf " %4s Pastebin.com has blocked [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] temporary\n"
 source /etc/emagnet.conf
 for (( ; ; )); do
 wait_time=$IDLETIME
 temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-       printf "\rIP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
+       printf "\r      IP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       echo ""
       clear;banner;bash emagnet -e;sleep 2
