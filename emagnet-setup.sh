@@ -12,7 +12,10 @@
 ###################### EMAGNET WAS FOUNDED BY WUSEMAN ##########################
 ################################################################################
 ####                                                                       #####
-####  Emagnet - A tool for find all latest leaked databases                #####
+####   Emagnet - Tool for find leaked databases, email-addresses, passwords#####
+####   credit cards, paypal accounts, darknet urls and much much more      #####
+####   from uploaded files on pastebin.                                    #####
+####                                                                       #####
 ####  Copyright (C) 2018-2019, wuseman                                     #####
 ####                                                                       #####
 ####  This program is free software; you can redistribute it and/or modify #####
@@ -73,76 +76,114 @@ EOF
 requirements() {
 echo -e "\n\n\033[1mDEPENDENCIES SETUP:\033[0m\n\033[1m----------------------\033[0m"
 DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
-if [[ $DISTRO = "ubuntu" ]]; then NETCAT="/bin/nc";else NETCAT="/usr/bin/nc";fi
-LYNX="/usr/bin/lynx";WGET="/usr/bin/wget";CURL="/usr/bin/curl"
-SCREEN="/usr/bin/screen";PARALLEL="/usr/bin/parallel"
+if [[ $DISTRO = "ubuntu" ]]; then
+     NETCAT="/bin/nc";
+else
+     NETCAT="/usr/bin/nc";fi
+
+LYNX="/usr/bin/lynx"
+WGET="/usr/bin/wget"
+CURL="/usr/bin/curl"
+SCREEN="/usr/bin/screen"
+PARALLEL="/usr/bin/parallel"
 
 checkwget() {
-if [[ -x  $WGET ]]; then printf "\nDetected wget"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'; else
-    printf "\nDetected wget"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.' >> packages
-    printf "\nDetected wget"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+if [[ -x  $WGET ]]; then
+    printf "\nDetected WGET"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+else
+    printf "\nDetected WGET %46s[\e[1;32mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "\nDetected WGET"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
 
 checkcurl() {
-if [[ -x  $CURL ]]; then printf "Detected curl";printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'; else
-    printf "Detected curl";printf "%46s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.' >> packages
-    printf "Detected curl";printf "%46s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.'
+if [[ -x  $CURL ]]; then
+    printf "Detected CURL"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+else
+    printf "Detected CURL"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected CURL"; printf " %46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
 
 checkscreen() {
-if [[ -x  $SCREEN ]]; then printf "Detected screen";printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'; else
-    printf "Detected screen";printf "%44s[\e[1;31mFAILED\e[0m]\n" |tr ' ' '.' >> packages
-    printf "Detected screen";printf "%44s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.'
+if [[ -x  $SCREEN ]]; then
+    printf "Detected SCREEN"; printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+else
+    printf "Detected SCREEN %44s[\e[1;31mNO\e[0m]\n" |tr ' ' '.' >> packages
+    printf "Detected SCREEN"; printf "%44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
+
 checkparallel() {
 if [[ -x  $PARALLEL ]]; then
-    printf "Detected parallel";printf "%42s[\e[1;32mOK\e[0m]\n"|tr ' ' '.';else
-if [[ $DISTRO = "gentoo" ]]; then printf "Detected sys-process\/parallel"
-    printf "%48s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.' >> packages
-    printf "Detected parallel";printf "%42s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.';else
-    printf "Detected parallel";printf "%42s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.'
-    printf "Detected parallel";printf "%42s.[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.' >> packages
-fi
+    printf "Detected PARALLEL"; printf "%42s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+else
+ if [[ $DISTRO = "gentoo" ]]; then
+    printf "Detected sys-process\/parallel";printf "%48s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+ else
+    printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
+    printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+ fi
 fi
 }
 
 checknetcat() {
 if [[ -x  $NETCAT ]]; then
-    printf "Detected netcat";printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
-if [[ ! -f packages ]]; then
-    printf "\nAll dependencies has been found, moving on\n"
-    idletime;idletime;wip;emagnethome;wgettimer;settime;exit 1
-fi;
-    else printf "Detected screen";printf "%44s[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.'
-    printf "Detected screen";printf "%44s.[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.' >> packages
+     printf "Detected NETCAT"; printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+ if [[ ! -f packages ]]; then
+     printf "\nAll dependencies has been found, moving on\n"
+     idletime;idletime;wip;emagnethome;wgettimer;settime
+     exit 1
+ fi
+ else
+     printf "Detected NETCAT"; printf "%44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
+     printf "Detected NETCAT %44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
 fi
 }
-checkwget; checkcurl; checkscreen;checknetcat
+
+checkwget; checkcurl; checkscreen;checkparallel;checknetcat
 
 if [[ -f packages ]]; then
-missed="$(cat packages|grep -i failed|awk '{print $3}'|cut -d. -f1|sed 's/ /,/g'|xargs|sed 's/ /, /g')"
-missed2="$(cat packages|grep -i failed|awk '{print $3}'|cut -d. -f1)"
+missed="$(awk -F. '{print $2}' packages|sed 's/ /,/g'|xargs|sed 's/ /, /g')"
+missed2="$(cat packages|awk -F. '{print $2}' packages)"
+missed3="$(cat packages|awk -F. '{print $2}' packages|tr ' ' '\n'|wc -l)"
+if [[ $missed3 = "2" ]]; then
+    missed="$(awk -F. '{print $2}' packages|xargs|sed 's/ /\ \& /g')"
+    printf "\nYou must have \e[1;37m$missed\e[0m installed before emagnet can run\n\n"
+    printf "Do you want to install the missed packages: (y/n): "; read missedpackages
+    echo ""
     rm packages &> /dev/null
-    printf "$missed is required for emagnet\n"
-    printf "Do you want to install the missed packages: (y/n): "; read missedpackages;echo ""
+else
+    printf "\nYou must have \e[1;37m$missed\e[0m installed before emagnet can run\n\n"
+    printf "Do you want to install the missed packages: (y/n): ";
+    read missedpackages
+    echo ""
+    rm packages &> /dev/null
+fi
 
 if [[ ! $missedpackages = "y" ]]; then
-      echo -e "\nCan't continue until these packages has been installed, aborted...\n";exit 0;else
-case $missedpackages in
-   y) if [[ $DISTRO = "gentoo" ]]; then emerge --ask  $missed2;echo ""
+      echo -e "Setup can't continue until these packages has been installed, aborted...\n";exit 0;else
+ case $missedpackages in
+   y|yes|YES)
+        if [[ $DISTRO = "gentoo" ]]; then emerge --ask  $missed2;echo ""
       elif [[ $DISTRO = "sabayon" ]]; then emerge --ask $missed2;echo ""
       elif [[ $DISTRO = "ubuntu" ]]; then apt-get install $missed2 -y; echo ""
       elif [[ $DISTRO = "debian" ]]; then apt-get install $missed2; echo ""
       elif [[ $DISTRO = "mint" ]]; then apt-get install $missed2; echo "";else
-      echo "Emagnet is not supported for $DISTRO, please install $missed manually.";exit 0
-fi ;;
-   N) echo "Can't continue until these packages has been installed, aborted..."; exit 0 ;;
-  \?) echo "Please enter a proper answer y=yes N=no" ;esac
-fi;   else idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0
-fi;   idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0
+        echo "Emagnet is not supported for $DISTRO, please install $missed manually.";exit 0
+        fi
+        ;;
+
+   "*") echo "Can't continue until these packages has been installed, aborted..."; exit 0 ;;
+   \?)  echo "Please enter a proper answer y=yes N=no"
+ esac
+       fi
+else
+       idletime;idletime;wip;emagnethome;wgettimer;settime
+       exit 0
+fi
+       idletime;idletime;wip;emagnethome;wgettimer;settime
+       exit 0
 }
 
 wip() {
