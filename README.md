@@ -22,13 +22,18 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
-### GET STARTED
+### GET STARTED ON LINUX
 
 ##### You can copy and paste below code in your shell 
 
     git clone https://github.com/wuseman/EMAGNET
     cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e
     
+### GET STARTED ON MACOSX
+
+    git clone https://github.com/wuseman/EMAGNET
+    cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e
+
 ### EMAGNET WIKI
 
 - [ABOUT](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
