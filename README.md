@@ -5,7 +5,7 @@
 
 #### Congrats windows users, here is a tutorial how you can get started in ~1min
 
-![Screenshot](https://nr1.nu/emagnet/previews/emagnet-on-windows.gif)
+![Screenshot](_video/emagnet-on-windows.gif)
 
 #### _Emagnet keep watch, so you don’t have to._
 
