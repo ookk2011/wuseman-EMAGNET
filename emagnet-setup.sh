@@ -111,7 +111,7 @@ fi
 
 checknetcat() {
 if [[ -x  $NETCAT ]]; then
-    printf "Detected netcat";printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+    printf "\nDetected netcat";printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 if [[ ! -f packages ]]; then
     printf "\nAll dependencies has been found, moving on\n"
     idletime;idletime;wip;emagnethome;wgettimer;settime;exit 1
@@ -120,7 +120,7 @@ fi;
     printf "Detected screen";printf "%44s.[\e[1;31mFAILED\e[0m]\n"|tr ' ' '.' >> packages
 fi
 }
-checkwget; checkcurl; checkscreen;checkparallel;checknetcat
+checkwget; checkcurl; checkscreen;checknetcat
 
 if [[ -f packages ]]; then
 missed="$(cat packages|grep -i failed|awk '{print $3}'|cut -d. -f1|sed 's/ /,/g'|xargs|sed 's/ /, /g')"
