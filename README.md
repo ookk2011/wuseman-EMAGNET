@@ -59,7 +59,7 @@ _How To Find your facebook credenticals, if it has been leaked._
 
 #### WHAT TO EXPECT IN NEXT VERSION?
 
--  Auto brute forcer is almost done so it will be get added to Emagnet again, removed it for a month ago
+-  Auto brute forcer is almost done so will be re-added to Emagnet again without any random crashes ( thats why it was removed last time )
 -  A search plugin so we can search for things easier from our archive files
 -  Stay tuned.
 
