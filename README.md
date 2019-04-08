@@ -2,6 +2,8 @@
 
 ## _"I'll will find you, it's just a matter of time"_
 
+![Screenshot](https://nr1.nu/emagnet/previews/thisisemagnet.gif)
+
 #### _Emagnet keep watch, so you don’t have to._
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
