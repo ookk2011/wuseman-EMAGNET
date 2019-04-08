@@ -111,7 +111,7 @@ fi
 
 checknetcat() {
 if [[ -x  $NETCAT ]]; then
-    printf "\nDetected netcat";printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+    printf "Detected netcat";printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 if [[ ! -f packages ]]; then
     printf "\nAll dependencies has been found, moving on\n"
     idletime;idletime;wip;emagnethome;wgettimer;settime;exit 1
