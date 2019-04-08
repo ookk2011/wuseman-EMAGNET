@@ -99,17 +99,17 @@ CONF="/etc/emagnet.conf";source $CONF
 ################################################################################
 mustbefilled() {
 if [[ -z $EMAGNET ]];         then echo "You must set a path where emagnet should store it files, aborted..";exit 0;fi
-if [[ -z $EMAGNETHOME ]];     then sed -i "43d" $CONF; sed -i '43 i EMAGNETHOME=$EMAGNET\/emagnet\/incoming\/$(date +%Y-%m-%d)' $CONF;fi
-if [[ -z $EMAGNETLOGS ]];     then sed -i "44d" $CONF; sed -i '44 i EMAGNETLOGS=$EMAGNET/logs' $CONF;fi
+if [[ -z $EMAGNETHOME ]];     then sed -i "43d" $CONF;sed -i '43 i EMAGNETHOME=$EMAGNET\/emagnet\/incoming\/$(date +%Y-%m-%d)' $CONF;fi
+if [[ -z $EMAGNETLOGS ]];     then sed -i "44d" $CONF;sed -i '44 i EMAGNETLOGS=$EMAGNET/logs' $CONF;fi
 if [[ -z $EMAGNETARCHIVE ]];  then sed -i "50d" $CONF;sed -i '50 i EMAGNETARCHIVE=$EMAGNET/archive' $CONF;fi
 if [[ -z $EMAGNETPW ]];       then sed -i "46d" $CONF;sed -i '46 i EMAGNETPW=$EMAGNETHOME\/password-files' $CONF;fi
 if [[ -z $EMAGNETALL ]];      then sed -i "47d" $CONF;sed -i '47 i EMAGNETALL=$EMAGNETALL=$EMAGNETHOME\/all-files' $CONF;fi
-if [[ -z $EMAGNETCRAP ]];     then sed -i "48d" $CONF; sed -i '48i EMAGNETCRAP=$EMAGNETHOME\/.pastebin' $CONF;fi
+if [[ -z $EMAGNETCRAP ]];     then sed -i "48d" $CONF;sed -i '48i EMAGNETCRAP=$EMAGNETHOME\/.pastebin' $CONF;fi
 if [[ -z $EMAGNETTEMP ]];     then sed -i "49d" $CONF;sed -i '49 i EMAGNETTEMP=$EMAGNETHOME\/.temp' $CONF;fi
 if [[ -z $EMAGNETDB ]];       then sed -i "45d" $CONF;sed -i '45 i EMAGNETDB=$EMAGNETHOME\/email-files' $CONF;fi
-if [[ -z $PASTEBIN ]];        then sed -i '13d' /etc/emagnet.conf
-                              sed -i '13i PASTEBIN=https:\/\/www.pastebin.com' /etc/emagnet.conf
-                              echo "Added script path to /etc/emagnet.conf, run magnet again.";fi 
+if [[ -z $PASTEBIN ]];        then sed -i '13d' $CONF
+                                   sed -i '13i PASTEBIN=https:\/\/www.pastebin.com' /etc/emagnet.conf
+                                   echo "Added script path to /etc/emagnet.conf, run magnet again.";fi 
                            }
 
 ################################################################################
@@ -202,59 +202,149 @@ esac
 fi
 }
 
+
+SPINNER_COLORNUM=2 # What color? Irrelevent if COLORCYCLE=1.
+SPINNER_COLORCYCLE=1 # Does the color cycle?
+SPINNER_DONEFILE="stopspinning" # Path/name of file to exit on.
+SPINNER_SYMBOLS="UNI_DOTS2" # Name of the variable containing the symbols.
+SPINNER_CLEAR=1 # Blank the line when done.
+
+# Handle signals
+cleanup () {
+	tput rc
+	tput cnorm
+	return 1
+}
+
+trap cleanup INT QUIT TERM
+spinner () {
+  local ASCII_PROPELLER="/ - \\ |"
+  local ASCII_PLUS="x +"
+  local ASCII_BLINK="o -"
+  local ASCII_V="v < ^ >"
+  local ASCII_INFLATE=". o O o"
+#  local UNI_DOTS="⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏"
+#  local UNI_DOTS="E M A G N E T"
+#  local UNI_DOTS2="E M A G N E T"
+#  local UNI_DOTS3="E M A G N E T"
+#  local UNI_DOTS4="E M A G N E T"
+#  local UNI_DOTS5="E M A G N E T"
+#  local UNI_DOTS6="E M A G N E T"
+  local UNI_DOTS2="⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷"
+  local UNI_DOTS3="⣷ ⣯ ⣟ ⡿ ⢿ ⣻ ⣽ ⣾"
+  local UNI_DOTS4="⠋ ⠙ ⠚ ⠞ ⠖ ⠦ ⠴ ⠲ ⠳ ⠓"
+  local UNI_DOTS5="⠄ ⠆ ⠇ ⠋ ⠙ ⠸ ⠰ ⠠ ⠰ ⠸ ⠙ ⠋ ⠇ ⠆"
+  local UNI_DOTS6="⠋ ⠙ ⠚ ⠒ ⠂ ⠂ ⠒ ⠲ ⠴ ⠦ ⠖ ⠒ ⠐ ⠐ ⠒ ⠓ ⠋"
+  local UNI_DOTS7="⠁ ⠉ ⠙ ⠚ ⠒ ⠂ ⠂ ⠒ ⠲ ⠴ ⠤ ⠄ ⠄ ⠤ ⠴ ⠲ ⠒ ⠂ ⠂ ⠒ ⠚ ⠙ ⠉ ⠁"
+  local UNI_DOTS8="⠈ ⠉ ⠋ ⠓ ⠒ ⠐ ⠐ ⠒ ⠖ ⠦ ⠤ ⠠ ⠠ ⠤ ⠦ ⠖ ⠒ ⠐ ⠐ ⠒ ⠓ ⠋ ⠉ ⠈"
+  local UNI_DOTS9="⠁ ⠁ ⠉ ⠙ ⠚ ⠒ ⠂ ⠂ ⠒ ⠲ ⠴ ⠤ ⠄ ⠄ ⠤ ⠠ ⠠ ⠤ ⠦ ⠖ ⠒ ⠐ ⠐ ⠒ ⠓ ⠋ ⠉ ⠈ ⠈"
+  local UNI_DOTS10="⢹ ⢺ ⢼ ⣸ ⣇ ⡧ ⡗ ⡏"
+  local UNI_DOTS11="⢄ ⢂ ⢁ ⡁ ⡈ ⡐ ⡠"
+  local UNI_DOTS12="⠁ ⠂ ⠄ ⡀ ⢀ ⠠ ⠐ ⠈"
+  local UNI_BOUNCE="⠁ ⠂ ⠄ ⠂"
+  local SPINNER_NORMAL
+  SPINNER_NORMAL=$(tput sgr0)
+
+  eval SYMBOLS=\$${SPINNER_SYMBOLS}
+
+  # Get the parent PID
+  SPINNER_PPID=$(ps -p "$$" -o ppid=)
+  while :; do
+    tput civis
+    for c in ${SYMBOLS}; do
+      if [ $SPINNER_COLORCYCLE -eq 1 ]; then
+        if [ $SPINNER_COLORNUM -eq 7 ]; then
+          SPINNER_COLORNUM=1
+        else
+          SPINNER_COLORNUM=$((SPINNER_COLORNUM+1))
+        fi
+      fi
+      local COLOR
+      COLOR=$(tput setaf ${SPINNER_COLORNUM})
+      tput sc
+      env printf "${COLOR}${c}${SPINNER_NORMAL}"
+      tput rc
+      if [ -f "${SPINNER_DONEFILE}" ]; then
+        if [ ${SPINNER_CLEAR} -eq 1 ]; then
+          tput el
+        fi
+        rm ${SPINNER_DONEFILE}
+        break 2
+      fi
+      env sleep .2
+      if [ ! -z "$SPINNER_PPID" ]; then
+        SPINNER_PARENTUP=$(ps --no-headers $SPINNER_PPID)
+        if [ -z "$SPINNER_PARENTUP" ]; then
+          break 2
+        fi
+      fi
+    done
+  done
+  tput cnorm
+  return 0
+}
+
 stats() {
+   SPINNER_DONEFILE="donespinning"
    clear;banner
-   printf "Please wait, counting data..."
+   spinner &
+   printf "+ Please wait, counting data.................................." &
+   sleep 1
+   SPINNER_COLORCYCLE=0
+   SPINNER_COLORNUM=1
+   SPINNER_SYMBOLS=$1
+if [ $SPINNER_COLORNUM -eq 7 ]; then SPINNER_COLORNUM=1; else SPINNER_COLORNUM=$((SPINNER_COLORNUM+1)); fi
    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
    TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}' |cut -d: -f1 |uniq |grep -v '"' | grep -v ','|grep -v '<' | grep -v '>'|uniq |sort  | wc -l)
    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
    TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
-   printf "%28s[\e[1;32mDONE\e[0m]"|tr ' ' '.'; sleep 1
+   touch "donespinning"
    clear; banner;
-   printf "                       EMAGNET STATS\n\n"
-   
+   printf '+ Please wait, counting data.............................[\e[1;32mDONE\e[0m]'
+   sleep 1
+   clear; banner;
+   printf "%23s EMAGNET STATS\n\n"
+
 for tpasswordsfiles in $TPASSWORDFILES; do
   if [[ $TPASSWORDFILES -lt "10" ]]; then
-    printf "Total Files That Includes Atleast 1 Password%s%s............[\e[1;31m0$TPASSWORDFILES\e[0m]\n"
+    printf "Total Files That Includes Atleast 1 Password%s%s%11s[\e[1;31m0$TPASSWORDFILES%10d\e[0m]\n"|tr ' ' '.'
   else
-    printf "Total Files That Includes Atleast 1 Password %s%s...........[\e[1;32m$TPASSWORDFILES\e[0m]\n"
-  fi
+    printf "Total Files That Includes Atleast 1 Password %s%s%11s[\e[1;32m$TPASSWORDFILES\e[0m]\n"|tr ' ' '.'
+ fi
 done
 
 for temailfiles in $TEMAILFILES; do
   if [[ $TEMAILFILES -lt "10" ]]; then
-    printf "Total Files That Includes Atleast 1 Mail Address%s%s........[\e[1;31m00\e[0m]\n"
+    printf "Total Files That Includes Atleast 1 Mail Address%s%s%8s[\e[1;31m00\e[0m]\n"|tr ' ' '.'
 else
-    printf "Total Files That Includes Atleast 1 Mail Address%s%s........[\e[1;32m$TEMAILFILES\e[0m]\n"
+    printf "Total Files That Includes Atleast 1 Mail Address%s%s%8s[\e[1;32m$TEMAILFILES\e[0m]\n"|tr ' ' '.'
   fi
 done
 
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
-    printf "Total Files"; printf "%s%s%45s[\e[1;31m0$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
+    printf "Total Files"; printf "%s%s%45s[\e[1;31m0$TOTALFILES\e[0m]\n"|tr ' ' '.'
   else
-    printf "Total Files"; printf "%s%s%45s[\e[1;32m$TOTALFILES\e[0m]"|tr ' ' '.'; echo ""
+    printf "Total Files"; printf "%s%s%45s[\e[1;32m$TOTALFILES\e[0m]\n"|tr ' ' '.'
   fi
 done
 
 for temails in $TEMAILS; do
   if [[ $TEMAILS -lt "10" ]]; then
-    printf "Total Mail Addresses Stored%s%s.............................[\e[1;31m0$TEMAILS\e[0m]\n"
+    printf "Total Mail Addresses Stored%s%s%29s[\e[1;31m0$TEMAILS\e[0m]\n"|tr ' ' '.'
   else
-    printf "Total Mail Addresses Stored%s%s.............................[\e[1;32m$TEMAILS\e[0m]\n"
+    printf "Total Mail Addresses Stored%s%s%29s[\e[1;32m$TEMAILS\e[0m]\n"|tr ' ' '.'
   fi
 done
 
 for tpasswords in $TPASSWORDS; do
   if [[ $TPASSWORDS -lt "10" ]]; then
-    printf "Total Passwords Stored%s%s..................................[\e[1;31m0$TPASSWORDS\e[0m]\n"
+    printf "Total Passwords Stored%s%s%s%34s[\e[1;31m0$TPASSWORDS\e[0m]\n\n"|tr ' ' '.'
   else
-    printf "Total Passwords Stored%s%s..................................[\e[1;32m$TPASSWORDS\e[0m]\n"
+    printf "Total Passwords Stored%s%s%34s[\e[1;32m$TPASSWORDS\e[0m]\n\n"|tr ' ' '.'
   fi
 done
-
-echo ""
 }
 
 
@@ -314,7 +404,7 @@ ctrl_z() {
       printf "\n\n%66s" | tr ' ' '='
       printf "\n\n                         Found a bug? \n\n"
       printf "          https://github.com/wuseman/EMAGNET/issues/new"
-      printf "\n\n                  Thanks for using emagnet\n\n"
+      printf "\n\n                   Thanks for using emagnet\n\n"
       printf "%66s" | tr ' ' '='
 sleep $IDLETIME
 }
@@ -339,7 +429,7 @@ exit
 #### Download all urls from pastebin via elinks or lynx, emagnet-setup handle this....................####
 ##########################################################################################################
 emagnet2() {
-elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
+elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
 if [[ $(grep -q security /tmp/.emagnet; echo $?) = "0" ]]; then
   printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
@@ -374,7 +464,7 @@ p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EM
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' | sed 's/|/:/g')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
 if [[ ! -s /tmp/.emagnet ]]; then
-   elinks -dump $PASTEBIN > /tmp/.emagnet
+elinks -dump $PASTEBIN > /tmp/.emagnet
    grep -qe "blocked your IP" /tmp/.emagnet
    if [[ $? = "0" ]]; then banned; fi
 ########################################################################################
@@ -575,13 +665,41 @@ merge_logs
 }
 
 fetchurls() {
+if [[ -z $FETCHTIME ]]; then
+printf "\nYou must set how often you want to fetch new uploads in seconds\n\n"
+read -p "Do you want to set a time limit now (y/N): " fetchlimit
+case $fetchlimit in
+        y|yes)
+          read -p "Time: " timelimiz
+          sed -i "s/FETCHTIME=/FETCHTIME=$timelimiz/g" $CONF
+          printf "\nConfig file has been updated, you will fetch new uploads every \e[1;1m$timelimiz\e[0m second(s)\n\n"
+          printf "Please wait, emagnet will begin in \e[1;37m2\e[0m seconds..\n\n"
+          sleep 2
+          ;;
+
+          *) printf "\nYou must set a value under FETCHTIME in /etc/emagnet.conf manually before you can fetch urls\n\nAborted\n\n"; exit 1 ;;
+esac
+fi
+
 while :; do
 curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw/g' >> /tmp/.emagnet-urls
 while read line; do wget -q \$line; done < /tmp/.emagnet
-clear 
-banner
-printf "Total URLS"; printf "%48s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]" |tr ' ' '.'
-sleep $TIME
+clear
+IFS=$'\n'
+set -- $(<".quotes")
+len=${#@}
+rand=$((RANDOM%len+1))
+linenum=0
+while read -r myline
+do
+  (( linenum++ ))
+  case "$linenum" in
+   $rand) banner; printf "$myline\n\n";
+    printf "%15s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]"; printf " - Total urls has been saved"
+  esac
+done < ".quotes"
+#printf "Total URLS"; printf "%48s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]" |tr ' ' '.'
+sleep $FETCHTIME
 done
 }
 
