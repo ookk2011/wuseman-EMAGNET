@@ -4,7 +4,7 @@
 
 #### _Emagnet keep watch, so you don’t have to._
 
-Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and especially leaked databases uploaded on pastebin since it's almost impossible to find them when they are out of latest top 10 list on https://pastebin.com. Either they have been deleted by pastebin's techs or the upload is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
+Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find the leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
 ### GET STARTED
 
@@ -26,11 +26,11 @@ _How To Find your facebook credenticals, if it has been leaked._
 
 ### REQUIREMENTS
 
-- _Parallel_ - Find more info about _parallel_ [here.](https://www.gnu.org/software/parallel/)
-- _Wget_     - Find more info about _wget_ [here.](https://www.gnu.org/software/wget/)
-- _Curl_    - Find more info about _curl_ [here.](https://github.com/curl/curl)
-- _Lynx_     - Find more info about _lynx_ [here.](https://lynx.browser.org/)
-- _Elinks_   - Find more info about _elinks_ [here.](http://elinks.or.cz/)
+- Parallel - _Find more info about _parallel_ [here.](https://www.gnu.org/software/parallel/)_
+- Wget     - _Find more info about _wget_ [here.](https://www.gnu.org/software/wget/)_
+- Curl     - _Find more info about _curl_ [here.](https://github.com/curl/curl)_
+- Lynx     - _Find more info about _lynx_ [here.](https://lynx.browser.org/)_
+- Elinks   - _Find more info about _elinks_ [here.](http://elinks.or.cz/)_
 
 ### CONTACT 
 
