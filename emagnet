@@ -410,13 +410,12 @@ sleep $IDLETIME
 }
 
 banned() {
-printf " %4s Pastebin.com has blocked [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] temporary\n"
 source /etc/emagnet.conf
 for (( ; ; )); do
 wait_time=$IDLETIME
 temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-       printf "\r  IP: \e[1;37m$MYIP\e[0m has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
+       printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       echo ""
       clear;banner;bash emagnet -e;sleep 2
@@ -679,32 +678,21 @@ case $fetchlimit in
           *) printf "\nYou must set a value under FETCHTIME in /etc/emagnet.conf manually before you can fetch urls\n\nAborted\n\n"; exit 1 ;;
 esac
 fi
-
+elinks -dump $PASTEBIN > /tmp/.emagnet
+grep -qe "blocked your IP" /tmp/.emagnet
+if [[ $? = "0" ]]; then clear;banner; banned; fi
 while :; do
-curl -Ls https://pastebin.com|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|grep archive -A10 | sed -n 2,9p|sed 's/^/http:\/\/pastebin.com\/raw/g' >> /tmp/.emagnet-urls
+curl -Ls https://pastebin.com/archive|grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2|sed -n '16,71p'|sed 's/^/http:\/\/pastebin.com\/raw/g'|awk 'length($0)>31 && length($0)<34' >> /tmp/.emagnet-urls
 while read line; do wget -q \$line; done < /tmp/.emagnet
-clear
-IFS=$'\n'
-set -- $(<".quotes")
-len=${#@}
-rand=$((RANDOM%len+1))
-linenum=0
-while read -r myline
-do
-  (( linenum++ ))
-  case "$linenum" in
-   $rand) banner; printf "$myline\n\n";
-    printf "%15s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]"; printf " - Total urls has been saved"
-  esac
-done < ".quotes"
-#printf "Total URLS"; printf "%48s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]" |tr ' ' '.'
-sleep $FETCHTIME
+clear;banner
+printf "%14s[\e[1;32m$(cat /tmp/.emagnet-urls|wc -l)\e[0m]"; printf " - Total urls has been saved"
+sleep $TIME
 done
 }
 
 downloadfetchedurls() {
 if [[ -f /tmp/.emagnet-urls ]]; then
-clear
+clear;
 banner
 printf "Please wait, downloading \e[1;32m$(cat /tmp/.emagnet-urls | wc -l)\e[0m uploads from pastebin.com"
 parallel -j $THREADS wget -nc -q -P $EMAGNETTEMP {} < /tmp/.emagnet-urls &> /dev/null
@@ -750,7 +738,7 @@ clear
 banner
 printf "                            \e[1;31mNOTICE\e[0m\n"
 echo ""
-echo -e "Please use TOR or a VPN connection. Otherwise [\e[1;31m$MYIP\e[0m] will get"
+echo -e "Please setup a VPN connection. Otherwise [\e[1;31m$MYIP\e[0m] will get"
 echo -e "temporary ip banned since you have set your time below 60 seconds."
 echo -e "It will take ~5 minutes until you will get banned due to unusually "
 echo -e "visiting by pastebin and the ban will last for 20 minutes, if you dont care" 
