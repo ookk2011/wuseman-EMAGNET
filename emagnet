@@ -464,7 +464,7 @@ pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $E
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '| grep -v '/'| grep -v '"'| grep -v ','|grep -v '<' | grep -v '>'|wc -l)
 if [[ ! -s /tmp/.emagnet ]]; then
 elinks -dump $PASTEBIN > /tmp/.emagnet
-   grep -qe "blocked your IP" /tmp/.emagnet
+elinks -dump $PASTEBIN > /tmp/.emagnet
    if [[ $? = "0" ]]; then banned; fi
 ########################################################################################
 #### If we are not banned and we found both mail addresses && passwords.............####
