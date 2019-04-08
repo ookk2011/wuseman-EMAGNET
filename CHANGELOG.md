@@ -2,6 +2,15 @@
 
 ##### Version 1.6.4 
 
+-    'Emagnet -f' - Fetching URLS has been improved alot
+-    Added a colorized spinner while we counting stats, you can of course turn off colors in /etc/emagnet.conf
+-    While we gathering new uploads from pastebin we gonna print some random quotes in pure bash code
+-    FETCHTIME has been added to emagnet.conf, you dont need to care you will be asked to set a value when you executing emagnet -f
+-    It's now time for us to move over to pastebin/archive instead of using pasting, this means you wont need fetch urls as often as before this was just under a beta period we used pastebin.com
+-    Changed interface of emagnet -f to a more cleaner look so it fetch with rest of interfaces we using
+-    Edited entire lines when we visits PASTEBIN. Cut, sed, awk, grep, lynx or elinks is used when we fetching urls
+-    General fixes
+
 
 ##### Version 1.6.3
 
