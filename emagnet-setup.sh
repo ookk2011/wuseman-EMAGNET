@@ -91,7 +91,7 @@ checkwget() {
 if [[ -x  $WGET ]]; then
     printf "\nDetected WGET"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
-    printf "\nDetected WGET %46s[\e[1;32mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "\nDetected wget %46s[\e[1;32mNO\e[0m]\n"|tr ' ' '.' >> packages
     printf "\nDetected WGET"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
@@ -100,7 +100,7 @@ checkcurl() {
 if [[ -x  $CURL ]]; then
     printf "Detected CURL"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
-    printf "Detected CURL"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected curl"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
     printf "Detected CURL"; printf " %46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
@@ -109,7 +109,7 @@ checkscreen() {
 if [[ -x  $SCREEN ]]; then
     printf "Detected SCREEN"; printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
-    printf "Detected SCREEN %44s[\e[1;31mNO\e[0m]\n" |tr ' ' '.' >> packages
+    printf "Detected screen %44s[\e[1;31mNO\e[0m]\n" |tr ' ' '.' >> packages
     printf "Detected SCREEN"; printf "%44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
@@ -119,10 +119,10 @@ if [[ -x  $PARALLEL ]]; then
     printf "Detected PARALLEL"; printf "%42s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
  if [[ $DISTRO = "gentoo" ]]; then
-    printf "Detected sys-process\/parallel";printf "%48s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected sys-process/parallel";printf "%48s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  else
     printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
-    printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected parallel"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  fi
 fi
 }
@@ -137,7 +137,7 @@ if [[ -x  $NETCAT ]]; then
  fi
  else
      printf "Detected NETCAT"; printf "%44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
-     printf "Detected NETCAT %44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+     printf "Detected netcat %44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
 fi
 }
 
