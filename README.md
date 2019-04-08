@@ -31,6 +31,8 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     
 ### GET STARTED ON MACOSX
 
+##### You can copy and paste below code in your shell 
+
     git clone https://github.com/wuseman/EMAGNET
     cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e
 
