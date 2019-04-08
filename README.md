@@ -2,7 +2,10 @@
 
 ## _"I'll will find you, it's just a matter of time"_
 
-![Screenshot](https://nr1.nu/emagnet/previews/thisisemagnet.gif)
+
+#### Congrats windows users, here is a tutorial how you can get started in ~1min
+
+![Screenshot](https://nr1.nu/emagnet/previews/emagnet-on-windows.gif)
 
 #### _Emagnet keep watch, so you don’t have to._
 
