@@ -8,8 +8,8 @@
 ##### Install Emagnet on Windows 10
 
       1) Install Ubuntu or any other distro from Microsoft Store
-      2) When installation has been done, hit _start_
-      3) Now type _sudo -s_ and enter your password
+      2) When installation has been done, hit 'start'
+      3) Now type 'sudo -s' and enter your password
       4) Now update repo and install git, just copy and paste the below linee
       5) All I can say is, have phun! :-) Emagnet has been installed.
 
