@@ -86,6 +86,7 @@ WGET="/usr/bin/wget"
 CURL="/usr/bin/curl"
 SCREEN="/usr/bin/screen"
 PARALLEL="/usr/bin/parallel"
+NETCAT="/usr/bin/nc"
 
 checkwget() {
 if [[ -x  $WGET ]]; then
