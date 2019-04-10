@@ -398,9 +398,9 @@ fi
 #### Usage/Help for emagnet.................................................####
 ################################################################################
 usage() {
-cat << "EOF"
 
-$basename$0 - Powerful tool for find leaked databases, passwords, credit cards and much much more from uploads on pastebin
+printf "\n$basename$0 - Powerful tool for find leaked databases, passwords, credit cards and much much more from uploads on pastebin\n"
+cat << "EOF"
 
   -d|--download       -
 
@@ -435,11 +435,14 @@ fi
 #### Print ascii and a timer when we counting seconds to download...........####
 ################################################################################
 countdown() {
-wait_time=$TIME; temp_cnt=${wait_time}
+wait_time=$TIME
+temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-  printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt};((temp_cnt--))
+    printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
+sleep 1
+((temp_cnt--))
 done
-  echo ""
+echo ""
 }
 
 ################################################################################
