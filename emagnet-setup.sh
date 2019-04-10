@@ -76,17 +76,19 @@ EOF
 requirements() {
 echo -e "\n\n\033[1mDEPENDENCIES SETUP:\033[0m\n\033[1m----------------------\033[0m"
 DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
+
+# Since ubuntu have named netcat on it's own way
 if [[ $DISTRO = "ubuntu" ]]; then
-     NETCAT="/bin/nc";
+     NETCAT="/bin/netcat";
 else
-     NETCAT="/usr/bin/nc";fi
+     NETCAT="/usr/bin/nc"
+fi
 
 LYNX="/usr/bin/lynx"
 WGET="/usr/bin/wget"
 CURL="/usr/bin/curl"
 SCREEN="/usr/bin/screen"
 PARALLEL="/usr/bin/parallel"
-NETCAT="/usr/bin/nc"
 
 checkwget() {
 if [[ -x  $WGET ]]; then
