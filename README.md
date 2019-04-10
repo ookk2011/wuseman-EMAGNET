@@ -5,39 +5,15 @@
 
 #### Congrats windows users, here is a tutorial how you can get started in ~1min
 
-##### Install Emagnet on Windows 10
-
-      1) Install Ubuntu or any other distro from Microsoft Store
-      2) When installation has been done, hit 'start'
-      3) Now type 'sudo -s' and enter your password
-      4) Now update repo and install git, just copy and paste the below lines
-
-      apt update; apt install git -y; git clone https://github.com/wuseman/EMAGNET
-      cd EMAGNET;bash emagnet-setup.sh; emagnet -e
-
-      5) All I can say is, have phun! :-) Emagnet has been installed.
-
-
-![Screenshot](_video/emagnet-on-windows.gif)
-
 #### _Emagnet keep watch, so you don’t have to._
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
-### GET STARTED ON LINUX
-
-##### You can copy and paste below code in your shell 
+### GET STARTED
 
     git clone https://github.com/wuseman/EMAGNET
     cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e
     
-### GET STARTED ON MACOSX
-
-##### You can copy and paste below code in your shell 
-
-    git clone https://github.com/wuseman/EMAGNET
-    cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e
-
 ### EMAGNET WIKI
 
 - [ABOUT](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
