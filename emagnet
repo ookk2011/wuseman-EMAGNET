@@ -402,23 +402,23 @@ usage() {
 printf "\n$basename$0 - Powerful tool for find leaked databases, passwords, credit cards and much much more from uploads on pastebin\n"
 cat << "EOF"
 
-  -d|--download       -
+  -d|--download       - Download urls (can only be used after -f)
 
-  -e|--emagnet        -
+  -e|--emagnet        - Download latest uploads from pastebin and grab all email addresses and passwords and store them
 
-  -f|--fetch          -
+  -f|--fetch          - Fetch latest urls for download them later
 
-  -k|--kill           -
+  -k|--kill           - Kill emagnet
 
-  -m|--merge          -
+  -m|--merge          - Merge all log files from /incoming dirs into /archive and move all files from /incoming into /archive
 
-  -n|--netcat         -
+  -n|--netcat         - Upload stdout to nr1.nu, similiar to pastebin but for commandline
 
-  -s|--stats          -
+  -s|--stats          - Print amount of files we have stored in archive and also print total passwords and email addresses we have found
 
-  -q|--quiet          -
+  -q|--quiet          - Run emagnet in a screen, use screen -rd emagnet for join the screen
 
-  -v|--version        -
+  -v|--version        - Print current version of emagnet you have installed
 
 EOF
 }
@@ -484,7 +484,7 @@ exit
 ################################################################################
 
 ##########################################################################################################
-#### Download all urls from pastebin via elinks or lynx, emagnet-setup handle this....................####
+elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
 ##########################################################################################################
 emagnet2() {
 elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
