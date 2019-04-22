@@ -1,15 +1,17 @@
-![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-v2.0-brute.gif)
+![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-maskot.png)
+
+## _"I'll will find you, it's just a matter of time"_
+
 
 | Version            |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `2.0`              |  2019-04-11    | Under active development          | Linux - Windows - MacOS - Android  |
+| `2.0`              |  2019-04-22    | Under active development          | Linux - Windows - MacOS - Android  |
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
 
+### Brute force mode has been added in version 2.0
 
-# Example Video For Brute Force Mode:
-
-![Screenshot](https://nr1.nu/f/emagnet-1.6.5.gif)
+![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-v2.0-brute.gif)
 
 ### Get Started
  
