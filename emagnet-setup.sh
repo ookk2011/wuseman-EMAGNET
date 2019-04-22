@@ -49,7 +49,6 @@ CONF=".emagnetconf/emagnet.conf ";SCRIPT="$(pwd)/emagnet"
 LYNX="/usr/bin/lynx";ELINKS="/usr/bin/elinks";source $CONF
 DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
 
-cd /var/git/EMAGNET/
 
 
 banner() {
