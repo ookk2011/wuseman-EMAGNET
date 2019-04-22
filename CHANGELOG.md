@@ -22,6 +22,7 @@ r    Emagnet now has full support for AUTO BRUTE MODE - Current version have sup
 +    Emagnet must be triggered with -e emagnet/bruteforce
 +    Emagnet has a new banner
 -    Removed _video folder so you can clone emagnet much faster
+-    Removed _old scripts, download them from my repo instead
 -    Small fixes
 
 # Version 1.6.4 - BETA 
