@@ -458,17 +458,17 @@ fi
 ################################################################################
 #### When user wanna quit emagnet tell them to report ev. bugs,issues etc...####
 ################################################################################
-trap ctrl_z INT
-ctrl_z() {
-      printf "\n\n               Hit CTRL+z if you really wanna quit"
-      printf "\n\n                 For continue hit CTRL+c again"
-      printf "\n\n%66s" | tr ' ' '='
-      printf "\n\n                         Found a bug? \n\n"
-      printf "          https://github.com/wuseman/EMAGNET/issues/new"
-      printf "\n\n                   Thanks for using emagnet\n\n"
-      printf "%66s" | tr ' ' '='
-      sleep $IDLETIME
-}
+#trap ctrl_z INT
+#ctrl_z() {
+#      printf "\n\n               Hit CTRL+z if you really wanna quit"
+#      printf "\n\n                 For continue hit CTRL+c again"
+#      printf "\n\n%66s" | tr ' ' '='
+#      printf "\n\n                         Found a bug? \n\n"
+#      printf "          https://github.com/wuseman/EMAGNET/issues/new"
+#      printf "\n\n                   Thanks for using emagnet\n\n"
+#      printf "%66s" | tr ' ' '='
+#      sleep $IDLETIME
+#}
 
 ################################################################################
 #### If we have been temporary banned we will start a timer and then restart####
@@ -636,8 +636,8 @@ grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNE
    printf "%18s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
    printf "%18s[\e[1;32m$it\e[0m] - Email Adresses Found\n\n"
    printf "%62s \n\n" | tr ' ' '='
-   printf "%22s \e[1;32mBRUTE FORCING\e[0m\n\n"
-   sleep 2;if [[ $BRUTEFORCE = "true" ]]; then bruter; else sleep 2; fi
+#   printf "%22s \e[1;32mBRUTE FORCING\e[0m\n\n"
+   sleep 2;if [[ $BRUTEFORCE = "true" ]]; then    printf "%22s \e[1;32mBRUTE FORCING\e[0m\n\n"; bruter; else sleep 2; fi
    cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 
 ###########################################################################################
@@ -943,6 +943,11 @@ while getopts ":e:cdfimkmhsqv" getopt; do
                       printf "\n$(curl -s https://nr1.nu/ip/ | sed -n '121p')"
             fi
            fi
+exit_()
+{
+    exit
+}
+
                       while :; do
                       if [[ $BRUTEFORCE = "false" ]]; then
                       clear;banner;countdown;clear;banner;clear;banner;analyz;clear;banner;emagnet2;sleep 2
@@ -951,7 +956,8 @@ while getopts ":e:cdfimkmhsqv" getopt; do
 
                       fi
                       mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-                      done
+                      trap exit_ int
+                      done || break
                       ;;
 
        k|\--kill)
