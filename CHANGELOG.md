@@ -1,6 +1,30 @@
 ### CHANGELOG FOR EMAGNET
 
-##### Version 1.6.4 
+##### EMAGNET IS A NEW PROJECT, I WILL RELEASE VERSION IN SHORT INTERVALLS SO I CAN GO BACK TO SEE EVERYTHING I ADDED AND REMOVED AND WHEN ..
+##### PLEASE DO NOT CONSIDER EMAGNET AS A STABLE PROJECT UNTIL RELEASE 2.0 WILL BE RELEASED, DO NOT REPORT ISSUES THAT IS COMMON SENSE AND 
+##### IS VERY COMMON, I PROBABLY HAVE 100% KNOWLEDGE ABOUT THIS AND PLEASE BE WITH ME - EMAGNET WILL BECOME STABLE SOON WITH A MORE CLEAN CODE WHINE AND YOU DIE!*kidding* ;-)
+
+# DESCRIPTION
+
++ = NEW FEATURE
+- = DELETED FEATURE
+r = RE-ADDED FEATURE FROM AN EARLIER VERSION
+     If you have been using emagnet since version 1.2 you know some stuff have been added and removed during the time frequently, these features
+     that has been re-added is now stable and not "half done" so they are here for stay.
+R = REMVOED FEATURE
+
+# Version 2.0
+
+r    Emagnet now has full support for AUTO BRUTE MODE - Current version have support for GMAIL accounts
++    Emagnet now have support for check wich IP you downloading files from via -i
++    Emagnet now have support for a web crawler via lynx or elinks browser to grab all urls from a website website's website's yeah list may be extremely long
++    Emagnet does now also support uploads via nr1.nu not just via commandline, now upload files too or take a screenshot
++    Emagnet must be triggered with -e emagnet/bruteforce
++    Emagnet has a new banner
+-    Removed _video folder so you can clone emagnet much faster
+-    Small fixes
+
+# Version 1.6.4 - BETA 
 
 -    'Emagnet -f' - Fetching URLS has been improved alot
 -    Added a colorized spinner while we counting stats, you can of course turn off colors in /etc/emagnet.conf
@@ -12,7 +36,7 @@
 -    General fixes
 
 
-##### Version 1.6.3
+# Version 1.6.3 - BETA
 
 -    Fixed interface for gathering urls
 -    In this version the big changes has been in emagnet-setup.sh
@@ -30,7 +54,7 @@
 -    Improved STATS
 -    Improved MERGE
 
-##### Version 1.6.2 
+##### Version 1.6.2 - BETA
 
 -    Emagnet mirror has been removed
 -    Emagnet clone any users git repositories has been removed
@@ -42,17 +66,17 @@
 -    Edited so we grab our IP from nr1.nu properly since they rebuilt the page, no more sed is required
 -    Small fixes
 
-##### Version 1.6.1
+- Version 1.6.1 - BETA 
+-  --------------------
+-  ./emagnet-f.sh has been removed
+-  Fixed the issue when a user choosed elinks as prefered browser it deleted wrong lines so emagnet got broken. Now you can run emagnet on Android(termux) again.
+-  Bugfixes
+-  Added better support when we getting banned by pastebin.com
+-  Fixed the password issue i thought was fixed in last version, now everything will be sorted as it should be
+-  Fixed so emagnet.log wont log both X emails and X passwords, if there is 0 passwords found and 2 email addresses then we just will add in wich files email addresses was found
+-  Fixed typos
 
--    ./emagnet-f.sh has been removed
--    Fixed the issue when a user choosed elinks as prefered browser it deleted wrong lines so emagnet got broken. Now you can run emagnet on Android(termux) again.
--    Bugfixes
--    Added better support when we getting banned by pastebin.com
--    Fixed the password issue i thought was fixed in last version, now everything will be sorted as it should be
--    Fixed so emagnet.log wont log both X emails and X passwords, if there is 0 passwords found and 2 email addresses then we just will add in wich files email addresses was found
--    Fixed typos
-
-##### Version 1.6.0
+##### Version 1.6.0 - BETA
 
 -    After few days emagnet have download over 10 000+ files so now emagnet using day directories for keep things sorted
 -    Emagnet is now supported on ANDROID via termux app.
@@ -72,7 +96,7 @@
 -    Small layout changes.
 -    Changed question emagnet used if you got banned and wanted to read the message for idle in 1200 seconds instead and then we start again, you can leave emagnet running 24/7 now it will handle everything perfect, you can change idle time if you want in /etc/emagnet.conf but remember pastebin use 20 minutes until they remove the temp ban if you wasn't PERMANENT banned (you must have been abusing pastebin VERY much for get permanent banned)
 
-##### Version 1.5.1
+##### Version 1.5.1 - BETA
 
 -    Added idle time setting to conf file, this setting is for how long you want to stay idle if emagnet have noticed a ip ban from pastebin
 -    Since we get millions of uploads then our path will be extremely big so now i have fixed that we gonna use daily folders instead
@@ -80,12 +104,12 @@
 -    emagnet-setup has added descriptions for every setting
 -    updated storage dirs so we can store dirs with dated dirs
 
-##### Version 1.5
+##### Version 1.5 - BETA
 
 -   Some small fixes has been solved with setup script
 -   emagnet-wbruter has been added as a new feature, consider this as a beta since this is still under active development
 
-##### Version 1.4
+##### Version 1.4 - BETA
 
 -   I decided to split everything into small scripts instead since it's alot easier to troubleshoot if something goes wrong, you wont notice any difference at all, run 'emagnet' to execute them, 
     there is no  reason to run any of the scripts from .scripts dir, listing the new ones only:
@@ -110,7 +134,7 @@
 -   Gather all urls from a webpage, this is meant to be a web crawler.
 -   It's now possible to clone all repos from any user on github.
 
-##### Version 1.3
+##### Version 1.3 - BETA
 
 -   Emagnet will notice if you getting ip-banned from pastebin and then emagnet will stop and after X minutes emagnet will continue.
 -   Small fixes
@@ -119,7 +143,7 @@
     /etc/emagnet.conf anymore, just run emagnet-setup.sh and then you will be able to run emagnet.
 -   Debug mode has been enable, use debug mode with arg: -d 
 
-##### Version: 1.2
+##### Version: 1.2 - BETA
 
 -   Fixed so we wont keep any duplicate.
 -   Set your paths in /etc/emagnet.conf. There is no need for change stuff in 'emagnet' anymore.
@@ -131,3 +155,7 @@
 -   If pastebin has banned the current IP beccause you was an idiot and was trying to fetch uploads every <10s then emagnet will stop (just change ip)
 -   Mirror any site and download all files that is possible from a website
 
+##### Version: 1.0 - ALPHA
+
+-   Support for download latest uploads from pastebin via Lynx Web Browser
+-   Emagnet 1.0 Has Been Created (Current: 3 lines of code)
