@@ -1,4 +1,10 @@
 #!/bin/bash
+# File              : emagnet
+# Date              : 23.04.2019
+# Last Modified Date: 23.04.2019
+# File              : emagnet
+# Date              : 23.04.2019
+# Last Modified Date: 23.04.2019
 ################################################################################
 ################################################################################
 ####                                                                       #####
@@ -527,7 +533,7 @@ fi
 ################################################################################
 
 emagnet2() {
-elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
+lynx -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
 if [[ $(grep -q security /tmp/.emagnet; echo $?) = "0" ]]; then
   printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
