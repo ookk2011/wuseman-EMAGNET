@@ -13,7 +13,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
 
-### Get Started
+### Get Started On Linux/MacOSX
  
     git clone https://github.com/wuseman/EMAGNET
     cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e emagnet
@@ -24,7 +24,9 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 * Start brute force attack if there is any passwords found and then continue as usual:
     emagnet -e bruteforce
 
-*  Windows users, please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
+###  Get Started On Windows 10
+
+Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
 
 ### Wiki Sections:
 
