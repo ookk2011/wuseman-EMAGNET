@@ -22,8 +22,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
       emagnet -e emagnet
 
-* Start brute force attack if there is any mail:password combinations found.
-* If there is no mail:passwords found we just trying again as normal mode. (NOTICE: Support for GMAIL accounts only)
+* Start brute force attack if there is any mail:password combinations found. If there is no mail:passwords found we just trying again as normal mode. (NOTICE: Support for GMAIL accounts only)
  
       emagnet -e bruteforce
 
