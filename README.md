@@ -71,7 +71,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ### Haters Gonna Hate
 
-_If you are one of these who dislikes _EMAGNET_ and believe the program has been developed for a reason that would break the law then I am not interested in taking part of your opinions, keep them for _yourself_! Emagnet does **NOT** leak any data at all. _EMAGNET_ gathering data from PASTEBIN and that is the source for all files EMAGNET is downloading.
+If you are one of these who dislikes _EMAGNET_ and believe the program has been developed for a reason that would break the law then I am not interested in taking part of your opinions, keep them for _yourself_! Emagnet does **NOT** leak any data at all. _EMAGNET_ gathering data from PASTEBIN and that is the source for all files EMAGNET is downloading.
 
 If you'r email AND password is in my video tutorials please change your password **_ASAP_** and contact PASTEBIN to request  a removal from the source. This is nothing i can be held responsible for. Pastebin contact formular can be found [here](https://pastebin.com/contact)
  
