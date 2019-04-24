@@ -19,10 +19,13 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e emagnet
 
 * Normal mode without brute forcing: 
-    emagnet -e emagnet
 
-* Start brute force attack if there is any passwords found and then continue as usual:
-    emagnet -e bruteforce
+      emagnet -e emagnet
+
+* Start brute force attack if there is any mail:password combinations found.
+* If there is no mail:passwords found we just trying again as normal mode. (NOTICE: Support for GMAIL accounts only)
+ 
+      emagnet -e bruteforce
 
 ###  Get Started On Windows 10
 
