@@ -11,7 +11,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ### Brute force mode has been added in version 2.0
 
-![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-v2.0-brute.gif)
+![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
 
 ### Get Started
  
@@ -42,12 +42,12 @@ _How To Find your facebook credenticals, if it has been leaked._
 
 ### System requirements
 
-- Bash     - _Find more info about _bash_ [here.](https://www.gnu.org/software/bash/)
-- Parallel - _Find more info about _parallel_ [here.](https://www.gnu.org/software/parallel/)_
-- Wget     - _Find more info about _wget_ [here.](https://www.gnu.org/software/wget/)_
-- Curl     - _Find more info about _curl_ [here.](https://github.com/curl/curl)_
-- Lynx     - _Find more info about _lynx_ [here.](https://lynx.browser.org/)_
-- Elinks   - _Find more info about _elinks_ [here.](http://elinks.or.cz/)_
+- Bash     - Find more info about _bash_ [here](https://www.gnu.org/software/bash/)
+- Parallel - Find more info about _parallel_ [here](https://www.gnu.org/software/parallel/)
+- Wget     - Find more info about _wget_ [here](https://www.gnu.org/software/wget/)
+- Curl     - Find more info about _curl_ [here](https://github.com/curl/curl)
+- Lynx     - Find more info about _lynx_ [here](https://lynx.browser.org/)
+- Elinks   - Find more info about _elinks_ [here](http://elinks.or.cz/)
 
 ## Changelog
 
