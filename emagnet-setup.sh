@@ -271,7 +271,7 @@ if [[ -z $o ]]; then
         printf "\nConfig file has updated the refresh time to 60 seconds\n"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e' \e[1;1m:-)\e[0m\n\n"
+        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e emagnet' \e[1;1m:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/
         exit 1
 else
@@ -286,7 +286,7 @@ fi
         printf "\n\e[1;31mYou have been warned, expect a ban within ~300 seconds!\n\e[0m"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e' \e[1;1m:-)\e[0m\n\n"
+        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e emagnet' \e[1;1m:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/; break ;;
 
     *)  printf "\nSet a number between 10 and 3600 is recommended..\n\n"; continue ;;
