@@ -1,10 +1,4 @@
 #!/bin/bash
-# File              : emagnet
-# Date              : 23.04.2019
-# Last Modified Date: 23.04.2019
-# File              : emagnet
-# Date              : 23.04.2019
-# Last Modified Date: 23.04.2019
 ################################################################################
 ################################################################################
 ####                                                                       #####
@@ -172,7 +166,7 @@ fi
 #### This is set if MYIP has been removed or is not SET for users security..####
 ################################################################################
 checkip() {
-if [[ -z $MYIP ]]; then
+clear;banner;if [[ -z $MYIP ]]; then
 echo -e "\n\n\033[1mIP-ADDRESS SETUP:\033[0m\n\033[1m----------------------\033[0m
 Set your private ip here if you don't wanna take the risk to get
 your 'private' ip number banned on www.pastebin.com for around
@@ -942,7 +936,7 @@ while getopts ":e:cdfimkmhsqv" getopt; do
                       printf "It will take ~5 minutes until you will get banned due to unusually \n"
                       printf "visiting by pastebin and the ban will last for 20 minutes, if you dont care\n"
                       printf "about this just hit [:enter:] otherwise hit [CTRL-z] so you can change IP.\n"
-                      printf "\nThis message exist so all users have been warned...\n\n"
+                      printf "\nThis message appears so you have been warned...\n\n"
                       read
                       sed -i '26d' $CONF
                       sed -i '26 i MYIP=127.0.0.1' $CONF
