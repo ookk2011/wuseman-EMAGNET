@@ -812,7 +812,7 @@ merge_logs
 }
 
 fetchurls() {
-banner
+clear;banner
 if [[ -z $FETCHTIME ]]; then
     printf "You must set how often you want to fetch new uploads\n\n"
 read -p "Do you want to set a time limit now (y/N): " fetchlimit
@@ -820,7 +820,7 @@ case $fetchlimit in
         y|yes)
           read -p "Time (Seconds): " timelimiz
           sed -i "s/FETCHTIME=/FETCHTIME=$timelimiz/g" $CONF
-          printf "\nConfig file has been updated, you will fetch new uploads every \e[1;1m$timelimiz\e[0m second(s)\n\nRe-run by type 'emagnet -f' or press 'Arrow UP+Enter.\n\n"
+          printf "\nConfig file has been updated, you will fetch new uploads every \e[1;1m$timelimiz\e[0m second(s)\n\nRe-run by type 'emagnet -e emagnet' or press 'Arrow UP+Enter.\n\n"
           exit 1
           ;;
 
