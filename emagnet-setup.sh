@@ -49,8 +49,6 @@ CONF=".emagnetconf/emagnet.conf ";SCRIPT="$(pwd)/emagnet"
 LYNX="/usr/bin/lynx";ELINKS="/usr/bin/elinks";source $CONF
 DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
 
-
-
 banner() {
 cat << "EOF"
      _                      _______                      _
@@ -91,6 +89,7 @@ WGET="/usr/bin/wget"
 CURL="/usr/bin/curl"
 SCREEN="/usr/bin/screen"
 PARALLEL="/usr/bin/parallel"
+NETCAT="/bin/nc"
 
 checkwget() {
 if [[ -x  $WGET ]]; then
@@ -105,8 +104,8 @@ checkcurl() {
 if [[ -x  $CURL ]]; then
     printf "Detected CURL"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
-    printf "Detected curl"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
-    printf "Detected CURL"; printf " %46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
+    printf "Detected curl%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected CURL"; printf "%46s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
 fi
 }
 
@@ -124,10 +123,10 @@ if [[ -x  $PARALLEL ]]; then
     printf "Detected PARALLEL"; printf "%42s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
  if [[ $DISTRO = "gentoo" ]]; then
-    printf "Detected sys-process/parallel";printf "%48s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected sys-process/parallel %48s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  else
     printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
-    printf "Detected parallel"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
+    printf "Detected parallel %42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  fi
 fi
 }
@@ -154,7 +153,7 @@ missed2="$(cat packages|awk -F. '{print $2}' packages)"
 missed3="$(cat packages|awk -F. '{print $2}' packages|tr ' ' '\n'|wc -l)"
 if [[ $missed3 = "2" ]]; then
     missed="$(awk -F. '{print $2}' packages|xargs|sed 's/ /\ \& /g')"
-    printf "\nYou must have \e[1;37m$missed\e[0m installed before emagnet can run\n\n"
+    printf "You must have \e[1;37m$missed\e[0m\n installed before emagnet can run\n\n"
     printf "Do you want to install the missed packages: (y/n): "; read missedpackages
     echo ""
     rm packages &> /dev/null
