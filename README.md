@@ -11,20 +11,24 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ### Brute force mode has been added in version 2.0
 
-![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-v2.0-brute.gif)
+![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
 
-### Get Started
+### Get Started On Linux/MacOSX
  
     git clone https://github.com/wuseman/EMAGNET
     cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e emagnet
 
 * Normal mode without brute forcing: 
-    emagnet -e emagnet
 
-* Start brute force attack if there is any passwords found and then continue as usual:
-    emagnet -e bruteforce
+      emagnet -e emagnet
 
-*  Windows users, please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
+* Start brute force attack if there is any mail:password combinations found. If there is no mail:passwords found we just trying again as normal mode. (NOTICE: Support for GMAIL accounts only)
+ 
+      emagnet -e bruteforce
+
+###  Get Started On Windows 10
+
+Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
 
 ### Wiki Sections:
 
@@ -42,12 +46,12 @@ _How To Find your facebook credenticals, if it has been leaked._
 
 ### System requirements
 
-- Bash     - _Find more info about _bash_ [here.](https://www.gnu.org/software/bash/)
-- Parallel - _Find more info about _parallel_ [here.](https://www.gnu.org/software/parallel/)_
-- Wget     - _Find more info about _wget_ [here.](https://www.gnu.org/software/wget/)_
-- Curl     - _Find more info about _curl_ [here.](https://github.com/curl/curl)_
-- Lynx     - _Find more info about _lynx_ [here.](https://lynx.browser.org/)_
-- Elinks   - _Find more info about _elinks_ [here.](http://elinks.or.cz/)_
+- Bash     - Find more info about _bash_ [here](https://www.gnu.org/software/bash/)
+- Parallel - Find more info about _parallel_ [here](https://www.gnu.org/software/parallel/)
+- Wget     - Find more info about _wget_ [here](https://www.gnu.org/software/wget/)
+- Curl     - Find more info about _curl_ [here](https://github.com/curl/curl)
+- Lynx     - Find more info about _lynx_ [here](https://lynx.browser.org/)
+- Elinks   - Find more info about _elinks_ [here](http://elinks.or.cz/)
 
 ## Changelog
 
@@ -71,7 +75,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ### Haters Gonna Hate
 
-_If you are one of these who dislikes _EMAGNET_ and believe the program has been developed for a reason that would break the law then I am not interested in taking part of your opinions, keep them for _yourself_! Emagnet does **NOT** leak any data at all. _EMAGNET_ gathering data from PASTEBIN and that is the source for all files EMAGNET is downloading.
+If you are one of these who dislikes _EMAGNET_ and believe the program has been developed for a reason that would break the law then I am not interested in taking part of your opinions, keep them for _yourself_! Emagnet does **NOT** leak any data at all. _EMAGNET_ gathering data from PASTEBIN and that is the source for all files EMAGNET is downloading.
 
 If you'r email AND password is in my video tutorials please change your password **_ASAP_** and contact PASTEBIN to request  a removal from the source. This is nothing i can be held responsible for. Pastebin contact formular can be found [here](https://pastebin.com/contact)
  
