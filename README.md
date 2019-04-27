@@ -13,6 +13,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
 
+
 ### Get Started On Linux/MacOSX
  
     git clone https://github.com/wuseman/EMAGNET
@@ -29,6 +30,25 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 ###  Get Started On Windows 10
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
+
+
+### Notice: 
+
+Emagnet brute forcer is just the beginning of what's coming and is still under development , _but_ if you are not satisfied with the gmail brute forcer then you can use my simple script I have been used for a while for all kind of stuff, it can be used for anything only your imagination can stop you. It doesn't have to be more difficult than this. Hopefully you might get some ideas with my example below, good luck and have fun! 
+
+
+#### Here is an example how you can call another script in another session (The tool in video can be found [here](https://github.com/D4Vinci/Cr3dOv3r.git))
+
+![Screenshot](https://nr1.nu/f/emagnet-third-party.gif)
+
+### Just use some regex to grep what you looking for. This is a very good start thanks to inotifywait wich is an extremely powerful tool for this purpose. 
+
+       inotifywait -q -m -r -e create --format '%w%f' "/path/to/monitor" | while read FILES; do
+       # Run-your-favorit-tool-here--read-files-by-$(cat $FILES)
+       # Example usage for Hydra: 
+       hydra -C $FILES ftp://$(grep-a-ip-or-hostname-for-example)”    
+       done
+
 
 ### Wiki Sections:
 
