@@ -7,12 +7,7 @@
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
 | `2.0`              |  2019-04-22    | Under active development          | Linux - Windows - MacOS - Android  |
 
-Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect.
-
-### Brute force mode has been added in version 2.0
-
-![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
-
+Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. Brute force mode has been added in version 2.0. See emagnet in action [here](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
 
 ### Get Started On Linux/MacOSX
  
@@ -30,29 +25,6 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 ###  Get Started On Windows 10
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
-
-
-### Notice: 
-
-Emagnet brute forcer is just the beginning of what's coming and is still under development , _but_ if you are not satisfied with the gmail brute forcer then you can use my simple script I have been used for a while for all kind of stuff, it can be used for anything only your imagination can stop you. It doesn't have to be more difficult than this. Hopefully you might get some ideas with my example below, good luck and have fun! 
-
-
-#### Here is an example how you can call another script in another session (The tool in video can be found [here](https://github.com/D4Vinci/Cr3dOv3r.git))
-
-![Screenshot](https://nr1.nu/f/emagnet-third-party.gif)
-
-### Just use some regex to grep what you looking for. This is a very good start thanks to inotifywait wich is an extremely powerful tool for this purpose. 
-
-       #!/bin/bash
-       
-       inotifywait -q -m -r -e create --format '%w%f' "/path/to/monitor" | while read FILES; do
-       # Run-your-favorit-tool-here--read-files-by-$(cat $FILES)
-       # Just an example usage for Hydra that can be used when you download uploads from pastebin: 
-       hydra -C $FILES ftp://$(grep-a-ip-or-hostname-for-example)”    
-       # For use my example in the video: (for hit enter when cr3d0v3r asking for password read: "manual yes") 
-       cd /path/to/Cr3dOv3r;python -q emailaddress.com 
-       done
-
 
 ### Wiki Sections:
 
