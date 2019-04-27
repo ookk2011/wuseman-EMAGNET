@@ -47,6 +47,9 @@ Emagnet brute forcer is just the beginning of what's coming and is still under d
        # Run-your-favorit-tool-here--read-files-by-$(cat $FILES)
        # Example usage for Hydra: 
        hydra -C $FILES ftp://$(grep-a-ip-or-hostname-for-example)”    
+       # Use my example in video:
+       # For hit enter when asking for password read: "manual yes" 
+       cd /path/to/Cr3dOv3r;python -q emailaddress.com" 
        done
 
 
