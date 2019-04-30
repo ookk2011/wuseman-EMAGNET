@@ -221,7 +221,7 @@ fi
 }
 
 
-### SPINNER
+elinks -dump $PASTEBIN| sed 's/com\//com\/raw\//g' | grep -o http.* | sed -n '13,20p' > /tmp/.emagnet
 
 ################################################################################
 #### Choose wich symbol you wish to use, UNI_DOTS2 is default...............####
@@ -458,17 +458,13 @@ fi
 ################################################################################
 #### When user wanna quit emagnet tell them to report ev. bugs,issues etc...####
 ################################################################################
-#trap ctrl_z INT
-#ctrl_z() {
-#      printf "\n\n               Hit CTRL+z if you really wanna quit"
-#      printf "\n\n                 For continue hit CTRL+c again"
-#      printf "\n\n%66s" | tr ' ' '='
-#      printf "\n\n                         Found a bug? \n\n"
-#      printf "          https://github.com/wuseman/EMAGNET/issues/new"
-#      printf "\n\n                   Thanks for using emagnet\n\n"
-#      printf "%66s" | tr ' ' '='
-#      sleep $IDLETIME
-#}
+trap ctrl_z INT
+ctrl_z() {
+      printf "\n\n               Hit CTRL+z if you really wanna quit"
+      printf "\n\n                 For continue hit CTRL+c again"
+      printf "\n\n%66s" | tr ' ' '='
+      sleep $IDLETIME
+}
 
 ################################################################################
 #### If we have been temporary banned we will start a timer and then restart####
@@ -478,8 +474,7 @@ for (( ; ; )); do
 wait_time=$IDLETIME
 temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-#       printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
-printf "temp"
+       printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       printf "\n"
       clear;banner;bash emagnet -e;sleep 2
@@ -527,7 +522,7 @@ fi
 ################################################################################
 
 emagnet2() {
-lynx -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
+elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
 if [[ $(grep -q security /tmp/.emagnet; echo $?) = "0" ]]; then
   printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
@@ -545,8 +540,7 @@ for (( ; ; )); do
 wait_time=60
 temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-#       printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
-echo "temp"
+       printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       echo ""
       clear;banner;bash emagnet -e
@@ -582,9 +576,9 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"  $E
 # // FOR LATER USAGE
 # // EDIT X TO ANY VALUE
 
-# x
+#s=$(grep -roE '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' |awk -F, '!seen[$1]++'|cut -d: -f2 $EMAGNETTEMP)
 # xl=()
-# xt=()
+#st=(grep -roE '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' |awk -F, '!seen[$1]++'|cut -d: -f2 $EMAGNETTEMP|wc -l)
 
 # x
 # xl=()
