@@ -477,9 +477,9 @@ while [[ ${temp_cnt} -gt 0 ]]; do
        printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       printf "\n"
-      clear;banner;bash emagnet -e;sleep 2
+      clear;banner;bash emagnet -e emagnet;sleep 2
 done
-      bash emagnet -e
+      bash emagnet -e emagnet
 exit
 }
 
@@ -543,9 +543,9 @@ while [[ ${temp_cnt} -gt 0 ]]; do
        printf "\rIP: [\e[1;31m$(curl -s https://nr1.nu/i/)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
 done;
       echo ""
-      clear;banner;bash emagnet -e
+      clear;banner;bash emagnet -e emagnet
 done
-      bash emagnet -e
+      bash emagnet -e emagnet
 exit
 fi
 
@@ -918,7 +918,7 @@ while getopts ":e:cdfimkmhsqv" getopt; do
                   source $CONF
                elif [[ -z ${OPTARG} ]]; then
                   sed -i 's/BRUTEFORCE=true/BRUTEFORCE=false/g' $CONF ; source $CONF
-                  emagnet -e 
+                  emagnet -e emagnet
                fi
 
             if [[ "$(curl -s https://nr1.nu/i/)" = "$MYIP" ]]; then
