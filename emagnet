@@ -362,6 +362,7 @@ for tpasswords in $TPASSWORDS; do
     printf "Total Passwords Stored%s%s%34s[\e[1;32m$TPASSWORDS\e[0m]\n\n"|tr ' ' '.'
   fi
 done
+rm donespinning &> /dev/null
 }
 
 
@@ -391,16 +392,24 @@ fi
 usage() {
 clear
 banner
-printf "\nemagnet $VERSION is a powerful tool for find leaked databases, passwords, credit cards and much much more from uploads on pastebin\n"
+printf "  ./emagnet -e [emagnet] [bruteforce <service>] [syntax]\n"
 cat << "EOF"
+    
+        - emagnet for just sort email and password files into directories
+  
+        - bruteforce for brute-force attack gmail accounts in realtime
+  
+        - syntax for download files sorted by syntaxes (syntaxes set by pastebin)
+ 
+ ./emagnet -i   - Print your current WAN IP-Address
 
-  -e|--emagnet        - Download latest uploads from pastebin and grab all email addresses and passwords and store them
-  -i|--ip             - Print your current WAN IP-Address - Supported: ipv4/ipv6/country
-  -k|--kill           - Kill emagnet sessions
-  -m|--logs           - Merge all daily incoming logs into one large archive log in emagnet/archive/logs, move all downloaded files into archive/all-files
-  -s|--stats          - Print stats for emagnet - Total passwords, total files, total email/password files and total passwords/email address found
-  -q|--quiet          - Run emagnet in a screen, use screen -rd emagnet for join the screen
-  -v|--version        - Print current version of emagnet you have installed
+ ./emagnet -k   - Kill emagnet sessions
+
+ ./emagnet -m   - Merge incoming files into archive path
+
+ ./emagnet -s   - Print stats for emagnet
+
+ ./emagnet -q   - Run emagnet in a screen, use screen -rd emagnet for join the screen
 
 EOF
 }
@@ -486,6 +495,32 @@ else
 
 fi
 
+}
+
+emagnetsyntax() {
+if [[ ! -f "/tmp/.emagnet-syntaxes" ]]; then
+SYNTAXES="$(lynx -dump https://pastebin.com/languages|grep archive|sed '$d'|cut -c 7-|sed '1d'|cut -d'/' -f5|xargs -L3|column -t > /tmp/.emagnet-syntaxes)"
+fi
+
+read -p "Syntax Files To Download (Ex: bash): " SYNTAX2DL
+if [[ $SYNTAX2DL = "" ]]; then
+  echo "You must choose atleast one syntax to download, aborted.."
+  exit
+else
+grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
+if [[ $? = "0" ]]; then
+elinks -dump https://pastebin.com/archive/bash |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet-syntaxes-urls
+clear;banner
+printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) $SYNTAX2DL files.."
+#SYNTAX2DL2="$(echo "SYNTAX2DL" |tr '[:upper:] [:lower:])"
+mkdir -p $EMAGNETSYNTAX/$SYNTAX2DL2
+parallel -j $THREADS wget -nc -q -P $EMAGNETSYNTAX/$SYNTAX2DL2 {} < /tmp/.emagnet-syntaxes-urls &> /dev/null
+printf "%29s [\e[1;32mDONE\e[0m]\n\n" | tr ' ' '.'
+else
+  echo "Not a valid syntax language.."
+  exit 1
+fi
+fi
 }
 
 ################################################################################
@@ -812,6 +847,10 @@ while getopts ":e:cdfimkmhsqv" getopt; do
        i|\--ip) clear;banner;printf "%24s$(curl -s https://nr1.nu/i/)\n\n"                  ;;
        m|\--stats) mergeem                                                                  ;;
        e|\--emagnet)
+               if [[ $2 = "syntax" ]]; then
+                    emagnetsyntax
+                    exit 1
+               fi
                if [[ ${OPTARG} = "bruteforce" ]]; then
                   sed -i 's/BRUTEFORCE=false/BRUTEFORCE=true/g' $CONF
                   source $CONF
@@ -843,7 +882,6 @@ exit_()
 {
     exit
 }
-
                       while :; do
                       if [[ $BRUTEFORCE = "false" ]]; then
                       clear;banner;countdown;clear;banner;clear;banner;analyz;clear;banner;emagnet2;sleep 2
@@ -868,6 +906,5 @@ exit_()
        *)                         echo -e "      You must use emagnet with 'emagnet' or 'bruteforce'\n" ; exit 1 ;;
   esac
 done
-
 shift $((OPTIND-1))
 
