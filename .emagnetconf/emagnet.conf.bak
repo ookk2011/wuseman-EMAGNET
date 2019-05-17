@@ -16,14 +16,14 @@ PASTEBIN=https://pastebin.com/archive
 #######################################################################################################################
 #### Set the time for how often you wanna run emagnet, dont set 0-9 seconds that will get you ip banned(permanent) ####
 #######################################################################################################################
-TIME=30
+TIME=
 
 #### IP
 #######################################################################################################################
 #### Set your real ip here cause we do not want to get permanent ip banned on pastebin with our real ip            ####
 #### You can allwas set something like 127.0.0.1 to trick emagnet but keep in mind you might get a perm ban.       ####
 #######################################################################################################################
-MYIP=127.0.0.1
+MYIP=
 
 #### WHOIS YOUR IP  - DISABLED
 #######################################################################################################################
@@ -90,9 +90,9 @@ FETCHTIME=30
 #######################################################################################################################
 BRUTEFORCE=false
 
-#### CRAWLER & MIRROR (NEW!)
+#### BROWSER
 #######################################################################################################################
-#### Path for store urls from crawler and website data from emagnet                                                ####
+#### Choose wich browser you wanna use when using emagnet, choose between ELINKS and LYNX..........................####
 #######################################################################################################################
-BROWSER=lynx
+BROWSER=elinks
 
