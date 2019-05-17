@@ -45,7 +45,7 @@
 
 if [[ $EUID -gt "0" ]]; then printf "Root privileges is required for this tool..\n"; exit 0; fi
 cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
-CONF=".emagnetconf/emagnet.conf "
+CONF=".emagnetconf/emagnet.conf ";source $CONF
 SCRIPT="$(pwd)/emagnet"
 LYNX="/usr/bin/lynx"
 ELINKS="/usr/bin/elinks"
@@ -53,8 +53,8 @@ WGET="/usr/bin/wget"
 CURL="/usr/bin/curl"
 SCREEN="/usr/bin/screen"
 PARALLEL="/usr/bin/parallel"
-NETCAT="/bin/nc"
-source $CONF
+NETCAT="/usr/bin/nc"
+DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
 
 banner() {
 cat << "EOF"
@@ -82,7 +82,6 @@ EOF
 
 requirements() {
 echo -e "\n\n\033[1mDEPENDENCIES SETUP:\033[0m\n\033[1m----------------------\033[0m"
-DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
 
 # Since ubuntu have named netcat on it's own way
 if [[ $DISTRO = "ubuntu" ]]; then
