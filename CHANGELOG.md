@@ -18,6 +18,7 @@ R = REMVOED FEATURE
 +    Minor fixes
 +    Added new feature for -e, use emagnet -e syntax for download all files by a syntax set and sorted by pastebin
 +    Added iconnection function wich will check if we got internet connection otherwise we stop
++    Created a better usage/help part
 -    No more trap so emagnet will run in background, stop emagnet by ctrl+c
 -    Emagnet crawler has been removed
 -    Emagnet fetch urls has been removed
