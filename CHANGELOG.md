@@ -11,6 +11,19 @@ r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      that has been re-added is now stable and not "half done" so they are here for stay.
 R = REMVOED FEATURE
 
+# Version 2.1
+
++    Added BROWSER to emagnet.conf so we can choose browser via setup script easier
++    Cleaned up some code
++    Minor fixes
++    Added new feature for -e, use emagnet -e syntax for download all files by a syntax set and sorted by pastebin
++    Added iconnection function wich will check if we got internet connection otherwise we stop
+-    No more trap so emagnet will run in background, stop emagnet by ctrl+c
+-    Emagnet crawler has been removed
+-    Emagnet fetch urls has been removed
+-    Emagnet download fetched urls has been removed
+-    Emagnet pastebin uploader has been removed
+
 # Version 2.0
 
 r    Emagnet now has full support for AUTO BRUTE MODE - Current version have support for GMAIL accounts
