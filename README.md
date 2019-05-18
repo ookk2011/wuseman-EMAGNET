@@ -29,6 +29,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
       ./emagnet -e syntax
 
+* Send an choosen email to all targets we have found, this require emagnet to run in another session.
+
+      ./emagnet -e spammer
+
 ###  Get Started On Windows 10
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
