@@ -15,16 +15,23 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ### Get Started On Linux/MacOSX
  
-    git clone https://github.com/wuseman/EMAGNET
-    cd EMAGNET;bash ./emagnet-setup.sh;bash emagnet -e emagnet
+    git clone https://github.com/wuseman/emagnet
+    cd emagnet
+    chmod +x emagnet*
+    bash ./emagnet-setup.sh
+    bash emagnet -e emagnet
 
 * Normal mode without brute forcing: 
 
-      emagnet -e emagnet
+      ./emagnet -e emagnet
 
 * Start brute force attack if there is any mail:password combinations found. If there is no mail:passwords found we just trying again as normal mode. (NOTICE: Support for GMAIL accounts only)
  
-      emagnet -e bruteforce
+      ./emagnet -e bruteforce
+
+* Download uploads from pastebin sorted by syntaxes, syntaxes is set by pastebin (https://pastebin.com/language)
+
+      ./emagnet -e syntax
 
 ###  Get Started On Windows 10
 
