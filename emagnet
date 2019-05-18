@@ -530,17 +530,25 @@ fi
 ################################################################################
 emagnet2() {
 if [[ $BROWSER = "elinks" ]]; then
+if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
+   elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet
+else
    rm /tmp/.emagnet* &> /dev/null
    elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet1
    ls $EMAGNETALL > /tmp/.emagnet2
    grep -vf /tmp/.emagnet1 /tmp/.emagnet2 > /tmp/.emagnet
    sed -i 's/^/https:\/\/pastebin.com\/archive\//g' /tmp/.emagnet
+fi
+else
+if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
+	   lynx -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|\/raw\/pastebin\|contact'|cut -d/ -f5 > /tmp/.emagnet
 else
    rm /tmp/.emagnet* &> /dev/null
    lynx -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|\/raw\/pastebin\|contact'|cut -d/ -f5 > /tmp/.emagnet1
    ls $EMAGNETALL > /tmp/.emagnet2
    grep -vf /tmp/.emagnet1 /tmp/.emagnet2 > /tmp/.emagnet
    sed -i 's/^/https:\/\/pastebin.com\/archive\//g' /tmp/.emagnet
+fi
 fi
 
 if [[ $(grep -q security /tmp/.emagnet; echo $?) = "0" ]]; then
