@@ -477,7 +477,7 @@ fi
 if [[ -n "$attack" ]]; then
    echo -e  "[+] Password Has Been Cracked $mail: \e[1;32m$password\e[0m"
    read -p "[+] Accounts to crack has been set to 1, emagnet has been killed.\n" hey
-   echo -e "================================================================"     >    $EMAGNETLOGS/cracked-passwords.txt
+   echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-passwords.txt
    echo -e "[+] Login Details For Gmail - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"    >>    $EMAGNETLOGS/cracked-passwords.txt
    echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-passwords.txt
    echo -e "[+] Username: $mail"                                                  >>    $EMAGNETLOGS/cracked-passwords.txt
