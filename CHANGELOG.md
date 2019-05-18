@@ -13,6 +13,7 @@ R = REMVOED FEATURE
 
 # Version 2.1
 
++    Fixed so we wont grab same files twice, no more duplicates will be checked or downloaded
 +    Added BROWSER to emagnet.conf so we can choose browser via setup script easier
 +    Cleaned up some code
 +    Minor fixes
