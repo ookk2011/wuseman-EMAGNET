@@ -395,21 +395,15 @@ banner
 printf "  ./emagnet -e [emagnet] [bruteforce <service>] [syntax]\n"
 cat << "EOF"
 
-        - emagnet for just sort email and password files into directories
-
-        - bruteforce for brute-force attack gmail accounts in realtime
-
-        - syntax for download files sorted by syntaxes (syntaxes set by pastebin)
-
- ./emagnet -i   - Print your current WAN IP-Address
-
- ./emagnet -k   - Kill emagnet sessions
-
- ./emagnet -m   - Merge incoming files into archive path
-
- ./emagnet -s   - Print stats for emagnet
-
- ./emagnet -q   - Run emagnet in a screen, use screen -rd emagnet for join the screen
+ ./emagnet -e emagnet     - Download and sort email and password files into directories
+ ./emagnet -e bruteforce  - Brute-Force attack gmail accounts in realtime
+ ./emagnet -e syntax      - Download files sorted by syntaxes (syntaxes set by pastebin)
+ ./emagnet -e spammer     - Send email to all targets we have found (Required: to be runned in a second session)
+ ./emagnet -i             - Print your current WAN IP-Address
+ ./emagnet -k             - Kill emagnet sessions
+ ./emagnet -m             - Merge incoming files into archive path
+ ./emagnet -s             - Print stats for emagnet
+ ./emagnet -q             - Run emagnet in a screen, use screen -rd emagnet for join the screen
 
 EOF
 }
@@ -847,6 +841,37 @@ copy_files
 merge_logs
 }
 
+emagnetspammer() {
+ssmtp &> /dev/null
+if [[ $? -eq "0" ]]; then
+if [[ -z $EMAIL2SEND ]]; then
+   echo "You must enter wich file to email to the targets"
+   exit 1
+fi
+
+if [[ $(echo $(ps aux | grep 'emagnet -e'|sed '$d'|wc -l)) -eq "0" ]]; then
+   echo "You must have atleast 1 emagnet session running..."
+   read -p "Want me to start emagnet in background (yes/no) " runinbackground
+if [[ $runinbackground = "yes" ]]; then
+   screen -dmS emagnet "emagnet -e emagnet"
+else
+   echo "Aborted.."
+fi
+   exit 1
+fi
+   echo "- Waiting for targets :-)"
+   inotifywait -q -r $EMAGNETDB --timefmt %d-%m-%Y --format '%f' > /tmp/.emagnet-spammer
+while read line; do
+   echo -e "[\e[1;32m+\e[0m] Sending e-email too: $(cat $EMAGNETPW/$line)"
+   ssmtp $line < $EMAIL2SEND
+done < /tmp/.emagnet-spammer
+   rm /tmp/.emagnet-spammer &> /dev/null
+else
+   echo "You must install ssmtp before you can spam targets..."
+   exit 1
+fi
+}
+
 ################################################################################
 #### Check so everything is OK before we running emagnet....................####
 ################################################################################
@@ -865,7 +890,11 @@ while getopts ":e:cdfimkmhsqv" getopt; do
        i|\--ip) clear;banner;printf "%24s$(curl -s https://nr1.nu/i/)\n\n"                  ;;
        m|\--stats) mergeem                                                                  ;;
        e|\--emagnet)
-               if [[ $2 = "syntax" ]]; then
+              if [[ $2 = "spammer" ]]; then
+                  emagnetspammer
+                  exit 1
+              fi
+              if [[ $2 = "syntax" ]]; then
                     emagnetsyntax
                     exit 1
                fi
