@@ -11,7 +11,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ### Emagnet in action
 
-![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
+![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif.1)
 
 ### Get Started On Linux/MacOSX
  
