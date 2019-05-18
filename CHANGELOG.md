@@ -13,7 +13,7 @@ R = REMVOED FEATURE
 
 # Version 2.1
 
-+    Added support for email all targets that has been found, emagnet -e spammer must be runned beside emagnet -e emagnet
++    Added support for email all targets that has been found, 'emagnet -e spammer' must be runned beside 'emagnet -e emagnet'
 +    You are now able to get notifications via notify-send, set NOTIFY to true or false in /etc/emagnet.conf (Default: false)
 +    Fixed so we wont grab same files twice, no more duplicates will be checked or downloaded
 +    Added BROWSER to emagnet.conf so we can choose browser via setup script easier
