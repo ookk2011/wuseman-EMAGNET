@@ -870,7 +870,7 @@ while read line; do
 done < /tmp/.emagnet-spammer
    rm /tmp/.emagnet-spammer &> /dev/null
 else
-   echo "You must install ssmtp before you can spam targets..."
+   printf "You must install ssmtp before you can spam targets...\n"
    exit 1
 fi
 }
