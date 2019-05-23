@@ -16,7 +16,7 @@ PASTEBIN=https://pastebin.com/archive
 #######################################################################################################################
 #### Set the time for how often you wanna run emagnet, dont set 0-9 seconds that will get you ip banned(permanent) ####
 #######################################################################################################################
-TIME=6
+TIME=60
 
 #### IP
 #######################################################################################################################
@@ -61,48 +61,65 @@ LOGS2=/tmp
 
 #### VERSION
 #######################################################################################################################
-#### Nothing fancy, just version of emagnet........................................................................####
+#### Nothing fancy, just version of emagnet                                                                        ####
 #######################################################################################################################
-VERSION=2.1
+VERSION=2.0
 
 #### THREADS
 #######################################################################################################################
-#### The higher value the better. This speeds up the download extremely during download from pastebin..............####
+#### The higher value the better. This speeds up the download extremely during download from pastebin              ####
 #######################################################################################################################
-THREADS=
+THREADS=8
 
 #### IDLE TIME
 #######################################################################################################################
-#### This is for how long emagnet will stay idle when we got banned on pastebin, 1600s or more is recommended......####
+#### This is for how long emagnet will stay idle when we got banned on pastebin, 1600s or more is recommended      ####
 #######################################################################################################################
 IDLETIME=1200
 
+#### FETCH TIME (NEW!)
+#######################################################################################################################
+#### This time will be used when you fetching urls since we do not need wait so long for this since its............####
+#### just one visit per time we fetching the urls from pastebin via fetching mode..................................#### 
+#######################################################################################################################
+FETCHTIME=30
+
 #### BRUTE FORCE (NEW!)
 #######################################################################################################################
-#### If there is any GMAIL accounts found we gonna brute force to see if the accounts is legit (Default: false)....####
+#### If there is any GMAIL accounts found we gonna brute force to see if the accounts is legit (Default: false)    ####
 #######################################################################################################################
 BRUTEFORCE=false
 
-#### BROWSER
+#### CRAWLER & MIRROR (NEW!)
 #######################################################################################################################
-#### Choose wich browser to use, available browsers: elinks & lynx.................................................####
+#### Path for store urls from crawler and website data from emagnet                                                ####
 #######################################################################################################################
-BROWSER=
+BROWSER=elinks
 
 #### EMAIL
 #######################################################################################################################
 #### You must set path and document to the email you want to send to all addresses we have found...................####
 #######################################################################################################################
-EMAIL2SEND=
+EMAIL2SEND=/home/wuseman/test
 	
 #### NOTIFY
 #######################################################################################################################
 #### Turn notifications on or off .................................................................................####
 #######################################################################################################################
-NOTIFY=false
+NOTIFY=true
 
 #### BACKUP
 #######################################################################################################################
 #### Where to store tarball when we compressing archive dir for emagnet...........................................:####
 #######################################################################################################################
-BACKUP=
+BACKUP=/home/wuseman
+
+#### SSH BRUTE-FORCER
+#######################################################################################################################
+#### Set path to your wordlist here and also wich username + password you wanna use during bruteforcing............####
+#### if you prefer to use a wordlist instead of a single password then leave sshpass empty and enter SSHPASSFILE=..####
+#######################################################################################################################
+SSHUSER=root
+SSHPASS=odemnn
+SSHPASSFILE=odemnn
+SSHWORDLIST=/tmp/emagnet-sshpass
