@@ -171,6 +171,7 @@ if [[ ! $missedpackages = "y" ]]; then
         if [[ $DISTRO = "gentoo" ]]; then emerge --ask  $missed2;echo ""
       elif [[ $DISTRO = "sabayon" ]]; then emerge --ask $missed2;echo ""
       elif [[ $DISTRO = "ubuntu" ]]; then apt-get install $missed2 -y; echo ""
+      elif [[ $DISTRO = "kali" ]]; then apt-get install $missed2 -y; echo ""
       elif [[ $DISTRO = "debian" ]]; then apt-get install $missed2; echo ""
       elif [[ $DISTRO = "mint" ]]; then apt-get install $missed2; echo "";else
         echo "Emagnet is not supported for $DISTRO, please install $missed manually.";exit 0
