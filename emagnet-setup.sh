@@ -236,7 +236,7 @@ case "$realip" in
       ;;
 
    *) read -p "Enter your current real IP-Adress: " currentip;sed -i "s/MYIP=/MYIP=$currentip/g" $CONF
-      printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
+      printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$currentip\e[0m\n"
       ;;
 esac
 }
