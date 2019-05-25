@@ -531,7 +531,7 @@ fi
 if [[ $(grep -q security /tmp/.emagnet; echo $?) = "0" ]]; then
   printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
   printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
-  printf "and then you will be able to continue, if this wont help - Wait for a while\n\n"
+  printf "and then you will be able to continue hopefully. If this wont help just wait for a few minutes. \n\nIf the request about captcha wont be removed after few minutes then you have\nended up in their ip-filter so you must fix a new IP or wait for a few days until\nyour IP has been removed from the filter they are using. \n\nThe last solution is to register an account on pastebin and whitlist the IP but then you\nwont be completely anonymous depending on what information you used when you created the account.\n\n"
   exit
 fi
 
