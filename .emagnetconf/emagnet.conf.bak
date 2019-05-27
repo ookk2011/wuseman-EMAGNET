@@ -120,6 +120,6 @@ BACKUP=/home/wuseman
 #### if you prefer to use a wordlist instead of a single password then leave sshpass empty and enter SSHPASSFILE=..####
 #######################################################################################################################
 SSHUSER=root
-SSHPASS=odemnn
-SSHPASSFILE=odemnn
-SSHWORDLIST=/tmp/emagnet-sshpass
+SSHPASS=
+SSHPASSFILE=
+SSHWORDLIST=
