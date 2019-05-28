@@ -121,13 +121,9 @@ checkparallel() {
 if [[ -x  $PARALLEL ]]; then
     printf "Detected PARALLEL"; printf "%42s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
 else
- if [[ $DISTRO = "gentoo" ]]; then
-    printf "Detected sys-process/parallel %48s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
- else
     printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
     printf "Detected parallel %42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  fi
-fi
 }
 
 checknetcat() {
@@ -152,7 +148,7 @@ missed2="$(cat packages|awk -F. '{print $2}' packages)"
 missed3="$(cat packages|awk -F. '{print $2}' packages|tr ' ' '\n'|wc -l)"
 if [[ $missed3 = "2" ]]; then
     missed="$(awk -F. '{print $2}' packages|xargs|sed 's/ /\ \& /g')"
-    printf "You must have \e[1;37m$missed\e[0m\n installed before emagnet can run\n\n"
+    printf "\nYou must have \e[1;37m$missed\e[0m installed before emagnet can run\n\n"
     printf "Do you want to install the missed packages: (y/n): "; read missedpackages
     echo ""
     rm packages &> /dev/null
