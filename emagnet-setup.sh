@@ -205,7 +205,7 @@ if [[ -f /etc/emagnet.conf ]]; then
     printf "It seems emagnet.conf has already been configured are you\n"
     read -p "really sure you want to overwrite /etc/emagnet.conf (y/n): " yupiamsure
  if [[ $yupiamsure = "n" ]]; then
-    printf "\naborted\n\n"
+    printf "\nAborted\n\n"
     exit
 fi
     cp /etc/emagnet.conf /etc/emagnet.conf.bak
