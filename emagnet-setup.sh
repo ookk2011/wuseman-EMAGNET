@@ -320,7 +320,7 @@ echo -e "\n\n\033[1mPATH SETUP:\033[0m\n\033[1m----------------------\033[0m"
 printf "Please specify in wich folder you to store all downloaded files from pastebin\n"
 read -p "Path (Default: /opt/emagnet): " ehomedir
 if [[ $ehomedir = "" ]]; then
-  mkdir -p "\/opt\/root"
+  mkdir -p /opt/root
   sed -i '42d' $CONF;sed -i "42 i EMAGNET=\/opt\/\/emagnet" $CONF
   printf "\nConfig file has been updated, using \e[1;1m/opt/emagnet\e[0m as emagnets homedir. \n";else
   eehomedir="$(echo $ehomedir | sed 's/\/\///g')";sed -i '42d' $CONF;sed -i "42 i EMAGNET=$ehomedir" $CONF
