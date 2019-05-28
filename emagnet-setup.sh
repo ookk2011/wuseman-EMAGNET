@@ -254,7 +254,7 @@ Whatever, no matter what time you will choose to set here emagnet
 will take care of the situation. If you will be banned from pastebin
 emagnet will sleep for 1200 seconds and then it will startover again.
 
-\e[1;1mIT IS RECOMMENDED TO SET 59 SECONDS OR MORE AT LEAST\e[0m
+\e[1;1mIT IS RECOMMENDED TO SET 59 SECONDS OR MORE\e[0m
 "
 read -p "Set refresh time in seconds for how often emagnet should download new files from pastebin
 Time: (Default: 60 Seconds): " o
@@ -337,16 +337,16 @@ know which one you prefer it doesn't matter, just choose one.
 "
     printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
 if [[ $browsertouse = "lynx" ]]; then
-    sed -i "90d" $CONF;sed -i '90 i BROWSER=lynx' $CONF
+    sed -i "97d" $CONF;sed -i '97 i BROWSER=lynx' $CONF
     printf "\nConfig file has been updated, lynx will be used for downloading files\n"
     else
-    sed -i "90d" $CONF;sed -i '90 i BROWSER=elinks' $CONF
+    sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
     printf "\nConfig file has been updated, elinks will be used for downloading files\n"
     fi
     elif [[ -f $LYNX && ! -f $ELINKS ]]; then
-    sed -i "90d" $CONF;sed -i '90 i BROWSER=elinks' $CONF
+    sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
     elif [[ ! -f $LYNX && -f $ELINKS ]]; then
-    sed -i "90d" $CONF;sed -i '90 i BROWSER=elinks' $CONF
+    sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
     else
     echo -e "\n\n\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
 Choose wich browser you prefer to use when emagnet will visit
@@ -369,7 +369,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install elinks;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install elinks manually."; exit 0; fi 
-       sed -i "90d" $CONF;sed -i '90 i BROWSER=elinks' $CONF
+       sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
        printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" $SCRIPT ;;
    lynx)
       printf "\nGoing to install $browsertouse2, setup will continue when $browsertouse2 has been installed..\n\n"
@@ -384,7 +384,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install lynx;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
-       sed -i "90d" $CONF;sed -i '90 i BROWSER=lynx' $CONF
+       sed -i "97d" $CONF;sed -i '97 i BROWSER=lynx' $CONF
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
    N) exit 0 ;;
    \?) echo "Please enter a proper answer y=yes N=no" ;;
