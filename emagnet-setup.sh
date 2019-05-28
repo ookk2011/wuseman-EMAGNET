@@ -306,10 +306,10 @@ pastebin dramatically, this wont affect how fast you will get banned
 printf "Your\e[1;1m$(cat /proc/cpuinfo|grep 'model name'| awk -F: '{print $2}'|uniq)\e[0m processor has \e[1;1m$(nproc)\e[0m threads\n"
 printf "Do you want emagnet to use all \e[1;1m$(nproc)\e[0m threads when downloading: (y/N): "; read threads
 if [[ $threads = "y" ]]; then
-    sed -i '72d' $CONF;sed -i "72 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF;
+    sed -i '73d' $CONF;sed -i "73 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF;
     printf "\nConfig file has been updated, cpu threads has been set to \e[1;1m$(nproc)\e[0m thread(s)\n";else
     read -p "How many threads do you want to use (Ex: 2): " threadstouse
-    sed -i '72d' $CONF;sed -i "72 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
+    sed -i '73d' $CONF;sed -i "73 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
     printf "\nConfig file has been updated, cpu threads has been set to \e[1;1m$threadstouse\e[0m thread(s).\n"
 fi
 }
@@ -337,16 +337,16 @@ know which one you prefer it doesn't matter, just choose one.
 "
     printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
 if [[ $browsertouse = "lynx" ]]; then
-    sed -i "97d" $CONF;sed -i '97 i BROWSER=lynx' $CONF
+    sed -i "98d" $CONF;sed -i '98 i BROWSER=lynx' $CONF
     printf "\nConfig file has been updated, lynx will be used for downloading files\n"
     else
-    sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
+    sed -i "98d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
     printf "\nConfig file has been updated, elinks will be used for downloading files\n"
     fi
     elif [[ -f $LYNX && ! -f $ELINKS ]]; then
-    sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
+    sed -i "98d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
     elif [[ ! -f $LYNX && -f $ELINKS ]]; then
-    sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
+    sed -i "98d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
     else
     echo -e "\n\n\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
 Choose wich browser you prefer to use when emagnet will visit
@@ -369,7 +369,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install elinks;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install elinks manually."; exit 0; fi 
-       sed -i "97d" $CONF;sed -i '97 i BROWSER=elinks' $CONF
+       sed -i "98d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
        printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" $SCRIPT ;;
    lynx)
       printf "\nGoing to install $browsertouse2, setup will continue when $browsertouse2 has been installed..\n\n"
@@ -384,7 +384,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install lynx;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
-       sed -i "97d" $CONF;sed -i '97 i BROWSER=lynx' $CONF
+       sed -i "98d" $CONF;sed -i '98 i BROWSER=lynx' $CONF
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
    N) exit 0 ;;
    \?) echo "Please enter a proper answer y=yes N=no" ;;
