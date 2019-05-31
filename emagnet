@@ -44,7 +44,7 @@
 #### Emagnet require root for we must install packages for 7example.........####
 ################################################################################
 mustberoot() {
-if [[ $EUID -gt "0" ]]; then
+if [[ $(whoami) != root ]]; then
         printf "Root privileges is required for this tool.\n"
         exit 0
 fi
