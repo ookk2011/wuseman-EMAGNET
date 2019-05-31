@@ -13,6 +13,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif.1)
 
+### Emagnet with a simple script running beside emagnet: 
+
+![Screenshot](https://nr1.nu/f/emagnet-third-party.gif)
+
 ### Get Started On Linux/MacOSX
  
     git clone https://github.com/wuseman/emagnet
