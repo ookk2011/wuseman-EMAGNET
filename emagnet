@@ -550,14 +550,14 @@ if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
    elinks -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settin^C\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet
 else
    rm /tmp/.emagnet* &> /dev/null
-   lynx -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settin^C\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings\|signup\|raw\/$\|alerts' > /tmp/.emagnet1
+   elinks -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settin^C\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet1
 while read line; do
   grep -v '$line'|grep -i 'https' /tmp/.emagnet1 > /tmp/.emagnet
 done < $EMAGNETLOGS/pastebin-urls.txt
 fi
 else
 if [[ $(ls $EMAGNETALL|wc -l) = "0" ]]; then
-    elinks -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settin^C\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet
+    lynx -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settin^C\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings\|signup\|raw\/$\|alerts' > /tmp/.emagnet
 else
    rm /tmp/.emagnet* &> /dev/null
     lynx -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settin^C\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings\|signup\|raw\/$\|alerts' > /tmp/.emagnet1
