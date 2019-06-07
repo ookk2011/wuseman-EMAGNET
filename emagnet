@@ -509,14 +509,14 @@ else
 grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
 if [[ $? = "0" ]]; then
 if [[ $BROWSER = "elinks" ]]; then
-   elinks -dump $PASTEBIN/$SYNTAX2DL |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|night_mode' > /tmp/.emagnet-syntaxes-urls
+   elinks -dump $PASTEBIN/$SYNTAX2DL |grep https|cut -c 8-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|night_mode' > /tmp/.emagnet-syntaxes-urls
 else
-   lynx -dump https://pastebin.com/archive/bash |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|night_mode\|contact\|pastebin$'  > /tmp/.emagnet-syntaxes-urls
+   lynx -dump https://pastebin.com/archive/bash |grep https|cut -c 8-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|night_mode\|contact\|pastebin$'  > /tmp/.emagnet-syntaxes-urls
 fi
    clear;banner
    printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) $SYNTAX2DL files.."
-#SYNTAX2DL2="$(echo "SYNTAX2DL" |tr '[:upper:] [:lower:])"
-   mkdir -p $EMAGNETSYNTAX/$SYNTAX2DL2
+   SYNTAX2DL2="$(echo 'SYNTAX2DL' |tr '[:upper:]' '[:lower:]')"
+   mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
    parallel -j $THREADS wget -nc -q -P $EMAGNETSYNTAX/$SYNTAX2DL2 {} < /tmp/.emagnet-syntaxes-urls &> /dev/null
    printf "%29s [\e[1;32mDONE\e[0m]\n\n" | tr ' ' '.'
 else
