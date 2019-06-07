@@ -292,7 +292,7 @@ fi
     printf "\nRefresh time has been set to: $o seconds..\n\n"
     echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
     printf "Successfully created /etc/emagnet.conf\n"
-    printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e' \e[1;1m:-)\e[0m\n\n"
+    printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e emagnet' \e[1;1m:-)\e[0m\n\n"
     cp .emagnetconf/emagnet.conf  /etc/
   exit
 done
