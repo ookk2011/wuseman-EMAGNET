@@ -69,7 +69,7 @@ iconnection
 #### Check if its the first time a user running emagnet.....................####
 ################################################################################
 confexist() {
-if [[ ! -f /etc/emagnet.conf ]]; then
+if [[ ! -f "/etc/emagnet.conf" ]]; then
         printf "Error: /etc/emagnet.conf is required, run emagnet-setup.sh for generate emagnet.conf\n"
         exit 0
 fi
@@ -183,7 +183,7 @@ fi
 #### This is set if MYIP has been removed or is not SET for users security..####
 ################################################################################
 checkip() {
-clear;banner;if [[ -z $MYIP ]]; then
+clear;banner;if [[ -z "$MYIP" ]]; then
 echo -e "\n\n\033[1mIP-ADDRESS SETUP:\033[0m\n\033[1m----------------------\033[0m
 Set your private ip here if you don't wanna take the risk to get
 your 'private' ip number banned on www.pastebin.com for around
@@ -961,11 +961,12 @@ exit_()
                       ;;
        h|\--help)      help                                      ;;
        s|\--stats)     stats                                     ;;
-       q|\--quiet)     screen -dmS emagnet bash $basename$0 -e   ;;
-       v|\--version)   printf "Emagnet: v$VERSION\n\n" ;;
+       q|\--quiet)     screen -dmS emagnet emagnet -e emagnet  ;;
+       v|\--version)   printf "Version: v$VERSION\n\n" ;;
        \?) usage ;;
        *)                         echo -e "      You must use emagnet with 'emagnet' or 'bruteforce'\n" ; exit 1 ;;
   esac
 done
+
 shift $((OPTIND-1))
 
