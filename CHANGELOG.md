@@ -9,7 +9,23 @@
 r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      If you have been using emagnet since version 1.2 you know some stuff have been added and removed during the time frequently, these features
      that has been re-added is now stable and not "half done" so they are here for stay.
-R = REMVOED FEATURE
+R = REBUILT
+
+# Version 3.0
+
+-    Removed LOGS2 from emagnet.conf
+R    Spammer has been rebuilded totally since it didnt work any good before. From now we gonna spam all targets from our daily dir if there is any email addresses stored
+r    Added inotify script example to README again
++    Added BACKUPS to emagnet.conf
++    Cleaned up alot and changed order on all functions so it's easier to understand how emagnet is built
++    Added better description in configuration file
++    Added NOTIFY to emagnet.conf so we can get notification if we are using notify-send (Linux Only)
++    Added VPN settings in /etc/emagnet.conf, if we getting banned we can choose to get a new IP from our vpn provider instead of idle 3600+ seconds so we wont miss anything ;-)
++    Added SSH settings in /etc/emagnet.conf for ssh bruteforcer (COMMING SOON)
++    Changed WIP to entire url instead of just nr1.nu
++    Changed IDLETIME's default value from 1200 > 3600 since pastebin has raised the ban time to 60 minutes.
++    Added browser function, if the values are empty then we asking for wich browser you want to use
++    Added threader, if threader has been deleted we gonna set the threader to 1 else things gets broken, edit this after your needs if you have removed this value then you know how to fix it
 
 # Version 2.1
 

