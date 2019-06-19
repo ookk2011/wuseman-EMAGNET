@@ -112,12 +112,6 @@ if [[ $? -eq "0" ]]; then
 fi
 }
 
-################################################################################
-#### Configuration file where emagnet keep all variables and settings.......####
-################################################################################
-CONF="/etc/emagnet.conf"
-source $CONF
-
 
 ################################################################################
 #### Check if its the first time a user running emagnet.....................####
@@ -128,6 +122,14 @@ if [[ ! -f /etc/emagnet.conf ]]; then
         exit 0
 fi
 }
+
+
+################################################################################
+#### Configuration file where emagnet keep all variables and settings.......####
+################################################################################
+CONF="/etc/emagnet.conf"
+source $CONF
+
 
 ################################################################################
 #### If there is any variable that has been removed we gonna re-add paths...####
