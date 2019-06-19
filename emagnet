@@ -123,14 +123,6 @@ if [[ ! -f /etc/emagnet.conf ]]; then
 fi
 }
 
-
-################################################################################
-#### Configuration file where emagnet keep all variables and settings.......####
-################################################################################
-CONF="/etc/emagnet.conf"
-source $CONF
-
-
 ################################################################################
 #### If there is any variable that has been removed we gonna re-add paths...####
 #### otherwise emagnet will stop............................................####
@@ -332,8 +324,8 @@ fi
 ################################################################################
 
 mustberoot
-iconnection
 confexist
+iconnection
 mustbefilled
 paths
 whoiser
@@ -361,6 +353,12 @@ if [[ -z $1 ]]; then usage;exit 1;fi
 ################################################################################
 #### // wuseman ################################################################
 ################################################################################
+
+################################################################################
+#### Configuration file where emagnet keep all variables and settings.......####
+################################################################################
+CONF="/etc/emagnet.conf"
+source $CONF
 
 vpnsetup() {
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -1)
