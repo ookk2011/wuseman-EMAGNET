@@ -1,4 +1,4 @@
-![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
+## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
 
 ## <p align="center"> _"I'll will find you, it's just a matter of time"_
 <p align="center">
@@ -15,16 +15,10 @@
   
   <img src="https://img.shields.io/github/last-commit/wuseman/emagnet.svg?color=darkmagenta&label=Latest%20Commit">
   <a href="https://twitter.com/wuseman1">
-  
 
  <img src="https://img.shields.io/website/https/nr1.nu.svg?down_color=darkred&down_message=DOWN&label=Nr1.nu%2Femagnet&up_message=UP">
-  
-
-  <a href="">
     <img src="https://img.shields.io/github/license/wuseman/emagnet.svg?color=blue&label=License">
-  <a href="">
-    <img src="">
-
+</a>
 </p>
 
 | Version            |  Released      | Status                            | Tested On                          |
