@@ -185,11 +185,11 @@ echo -e "pastebin.com for the latest uploads urls on site. If you don't"
 echo -e "know which one you prefer it doesn't matter, just choose one."
     printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
 if [[ $browsertouse = "lynx" ]]; then
-    sed -i "178d" $CONF;sed -i '178 i BROWSER=lynx' $CONF
+    sed -i "177d" $CONF;sed -i '177 i BROWSER=lynx' $CONF
     printf "\nConfig file has been updated, lynx will be used for downloading files\n"
     sleep 2
     else
-    sed -i "178d" $CONF;sed -i '178 i BROWSER=elinks' $CONF
+    sed -i "177d" $CONF;sed -i '177 i BROWSER=elinks' $CONF
     printf "\nConfig file has been updated, elinks will be used for downloading files\n"
     sleep 2
     fi
