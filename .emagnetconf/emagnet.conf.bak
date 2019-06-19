@@ -1,125 +1,179 @@
-# Configuration file for emagnet
-
-#### DEBUG
 #######################################################################################################################
-#### Do you want to execute emagnet with -x flag as debug change debug_mode to true                                   #
+#### Configuration file for emagnet ###################################################################################
+#######################################################################################################################
+
+#######################################################################################################################
+#### DEBUG ############################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
+#### Do you want to execute emagnet with -x flag as debug change debug_mode to true                                ####
+####                                                                                                               ####
 #######################################################################################################################
 DEBUG_ENABLE=false
 
-#### PASTEBIN
 #######################################################################################################################
+#### PASTEBIN #########################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
 #### Wich pastebin site do you wanna use, pastebin is the only one for the moment more will be added soon.         ####
+####                                                                                                               ####
 #######################################################################################################################
 PASTEBIN=https://pastebin.com/archive
 
-#### TIME
 #######################################################################################################################
+#### TIME #############################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
 #### Set the time for how often you wanna run emagnet, dont set 0-9 seconds that will get you ip banned(permanent) ####
+####                                                                                                               ####
 #######################################################################################################################
-TIME=60
+TIME=
 
-#### IP
 #######################################################################################################################
+#### IP ###############################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
 #### Set your real ip here cause we do not want to get permanent ip banned on pastebin with our real ip            ####
 #### You can allwas set something like 127.0.0.1 to trick emagnet but keep in mind you might get a perm ban.       ####
+####                                                                                                               ####
 #######################################################################################################################
-MYIP=127.0.0.1
+MYIP=
 
-#### WHOIS YOUR IP  - DISABLED
 #######################################################################################################################
+#### WHOIS YOUR IP ####################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
 #### Whois your ip via nr1.nu since its really fast and just contains what we need - the ip addr in a              ####
 #### oneliner and no data is stored data from vistors wich means we can whois our ip unlimited times.              ####
+####                                                                                                               ####
 #######################################################################################################################
-WIP=nr1.nu
+WIP=https://nr1.nu/i/
 
-#### PATHS
-######################################################################################################################
-#### EMAGNETCRAP = Emagnetcrap is the file where emagnet store urls before we downloading the files                ####                                      
-#### EMAGNETTEMP = Where to download files from pastebin before we go through the files                            ####
-#### EMAGNETHOME = Main path for emagnet where everything will get stored inside subfolders.                       ####
-#### EMAGNETDB   = This is the folder we will store all files that contains atleast 1 email                        ####
-######################################################################################################################
-EMAGNET=/opt//emagnet
+#######################################################################################################################
+#### PATHS ############################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
+#### EMAGNET        = Emagnet's main dir that contains all folders and files                                       ####
+#### EMAGNETHOME    = Main path for emagnet's incoming files sorted by date folders                                ####
+#### EMAGNETLOGS    = Folder to store log files                                                                    ####
+#### EMAGNETDB      = This is the folder we will store all files that has atleast 1 mail address in the paste      ####
+#### EMAGNETPW      = Same as above but we store all files that got a mail:password                                ####
+#### EMAGNETALL     = All files will be stored in this dir no matter if it includes a mail or password             ####
+#### EMAGNETCRAP    = ?                                                                                            ####
+#### EMAGNETTEMP    = This dir is the dir we downloading files to and reading files from                           ####
+#### EMAGNETARCHIVE = This is the folder we gonna create and move files to when we merging files (./emagnet -m)    ####
+#### EMAGNETDB      =                                                                                              ####
+#### EMAGNETCRAP    = Emagnetcrap is the file where emagnet store urls before we downloading the files             ####                                      
+#### EMAGNETTEMP    = Where to download files from pastebin before we go through the files                         ####
+#### EMAGNETSYNTAX  = In this fodler we save all uploads when we downloading files by syntax (./emagnet -e syntax) ####
+####                                                                                                               ####
+#######################################################################################################################
+EMAGNET=
 EMAGNETHOME=$EMAGNET/incoming/$(date +%Y-%m-%d)
 EMAGNETLOGS=$EMAGNETHOME/logs
 EMAGNETDB=$EMAGNETHOME/email-files
 EMAGNETPW=$EMAGNETHOME/password-files
 EMAGNETALL=$EMAGNETHOME/all-files
-EMAGNETCRAP=$EMAGNETHOME/.pastebin
 EMAGNETTEMP=$EMAGNETHOME/.temp
 EMAGNETARCHIVE=$EMAGNET/archive
-EMAGNETDB=$EMAGNETHOME/email-files
-EMAGNETSYNTAX=$EMAGNETHOME/sorted-by-syntax
-#### LOG PATHS
+EMAGNETDB=$EMAGNETHOME/sorted-by-syntax
+EMAGNETBACKUP=$EMAGNETHOME/backup
+
 #######################################################################################################################
-#### LOGS       = Where we will store all urls so you can go through them later if you seraching for               ####
-####            = something else then emails only. If there is an email found, it could be a a password too! ;)    ####
+#### VERSION ##########################################################################################################
+#######################################################################################################################
 ####                                                                                                               ####
-#### LOGS2      = Contains logs when non-root has been trying to run EMAGNET without permissions.                  ####
-#######################################################################################################################
-LOGS2=/tmp
-
-#### VERSION
-#######################################################################################################################
 #### Nothing fancy, just version of emagnet                                                                        ####
+####                                                                                                               ####
 #######################################################################################################################
-VERSION=2.0
+VERSION=3.0
 
-#### THREADS
 #######################################################################################################################
+#### THREADS ##########################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
 #### The higher value the better. This speeds up the download extremely during download from pastebin              ####
+####                                                                                                               ####     
 #######################################################################################################################
-THREADS=8
+THREADS=
 
-#### IDLE TIME
 #######################################################################################################################
+#### IDLETIME #########################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
 #### This is for how long emagnet will stay idle when we got banned on pastebin, 1600s or more is recommended      ####
+####                                                                                                               ####
 #######################################################################################################################
-IDLETIME=1200
+IDLETIME=3600
 
-#### FETCH TIME (NEW!)
 #######################################################################################################################
-#### This time will be used when you fetching urls since we do not need wait so long for this since its............####
-#### just one visit per time we fetching the urls from pastebin via fetching mode..................................#### 
+#### BRUTE FORCE (NEW!) ###############################################################################################
 #######################################################################################################################
-FETCHTIME=30
-
-#### BRUTE FORCE (NEW!)
-#######################################################################################################################
+####                                                                                                               ####
 #### If there is any GMAIL accounts found we gonna brute force to see if the accounts is legit (Default: false)    ####
+####                                                                                                               ####
 #######################################################################################################################
 BRUTEFORCE=false
 
-#### CRAWLER & MIRROR (NEW!)
 #######################################################################################################################
-#### Path for store urls from crawler and website data from emagnet                                                ####
+#### EMAIL (NEW!) #####################################################################################################
 #######################################################################################################################
-BROWSER=elinks
+####                                                                                                               ####
+#### You must create a file with the text you want to send to the targets before anything can be sent              ####
+####                                                                                                               ####
+#######################################################################################################################
+EMAIL2SEND=
 
-#### EMAIL
 #######################################################################################################################
-#### You must set path and document to the email you want to send to all addresses we have found...................####
+#### NOTIFY (NEW!) ####################################################################################################
 #######################################################################################################################
-EMAIL2SEND=/home/wuseman/test
-	
-#### NOTIFY
+####                                                                                                               ####
+#### Turn notifications on or off (Supported for Linux desktop only)                                               ####
+####                                                                                                               ####
 #######################################################################################################################
-#### Turn notifications on or off .................................................................................####
-#######################################################################################################################
-NOTIFY=true
+NOTIFY=false
 
-#### BACKUP
 #######################################################################################################################
-#### Where to store tarball when we compressing archive dir for emagnet...........................................:####
+#### OPENVPN (NEW!) ###################################################################################################
 #######################################################################################################################
-BACKUP=/home/wuseman
+####                                                                                                               ####
+#### Setup your vpn connections below, for example if your VPN provider is mullvad (https://mullvad.net) then      ####
+#### you can download the vpn configs and place the folder ($PROVIDER_config_linux_all) in /etc/openvpn and then   ####
+#### you just need to edit the openvpndir and provider fields below, if you might have another vpn provider        ####
+#### then just set your path to your vpn folder and rename your files as $VPNPROVIDER.se.ovpn (se for Sweden)      ####
+####                                                                                                               ####
+#######################################################################################################################
+VPN=false
+VPNPROVIDER="$VPNROOT/<foldername>"
+VPNPROVIDER2="$VPNROOT/<foldername2>"
+VPNPROVIDER3="$VPNROOT/<foldername3>"
+VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy <add them as country>"
+VPNCOUNTRYS2=""
+VPNCOUNTRYS3=""
 
-#### SSH BRUTE-FORCER
 #######################################################################################################################
-#### Set path to your wordlist here and also wich username + password you wanna use during bruteforcing............####
-#### if you prefer to use a wordlist instead of a single password then leave sshpass empty and enter SSHPASSFILE=..####
+### SSH BRUTEFORCER ###################################################################################################
 #######################################################################################################################
-SSHUSER=root
-SSHPASS=
-SSHPASSFILE=
-SSHWORDLIST=
+####                                                                                                               ####
+#### SSHUSER = The username you want to use during brute-force                                                     ####
+#### SSHPORT = Wich port you want to attack during brute-force                                                     ####
+#### SSHTARGETS = File we gonna store all ip addresses from the pastes, this is a temp file                        ####
+#### SSHWORDLIST = Wordlist you want to use during the attack                                                      ####
+####                                                                                                               ####
+#######################################################################################################################
+SSHUSER="root"
+SSHPORT="22"
+SSHTARGETS="/tmp/.emagnet-sshbruter.txt"
+SSHWORDLIST=""
+
+#######################################################################################################################
+### BROWSER ###########################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
+#### Here you are able to choose if you wanna use ELINKS or LYNX when we grabbing stuff from pastebin.com          ####	
+#### Available: lynx or elinks                                                                                     ####
+####                                                                                                               ####
+#######################################################################################################################
+BROWSER=
+
+#### Edited: 2019-06-17
