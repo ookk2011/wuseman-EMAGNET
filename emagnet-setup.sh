@@ -16,7 +16,7 @@
 ####   credit cards, paypal accounts, darknet urls and much much more      #####
 ####   from uploaded files on pastebin.                                    #####
 ####                                                                       #####
-####  Copyright (C) 2018-2019, wuseman                                     #####
+####  Copyright (C) 2018-2030, wuseman                                     #####
 ####                                                                       #####
 ####  This program is free software; you can redistribute it and/or modify #####
 ####  it under the terms of the GNU General Public License as published by #####
@@ -78,7 +78,26 @@ cat << "EOF"
                            `~OOOOO~'
 
 EOF
+printf "%62s \n\n" | tr ' ' '='
 }
+
+alreadyconfigured() {
+clear; banner
+if [[ -f /etc/emagnet.conf ]]; then
+    printf "It seems emagnet.conf has already been configured are you\n"
+    read -p "really sure you want to overwrite /etc/emagnet.conf (y/n): " yupiamsure
+ if [[ $yupiamsure = "n" ]]; then
+    printf "\nAborted\n\n"
+    exit
+fi
+    cp /etc/emagnet.conf /etc/emagnet.conf.bak
+    rm /etc/emagnet.conf
+    printf "\nCreated a backup file for you: \e[1m/etc/emagnet.conf.bak\n\n\e[0m"
+   sleep 2
+fi
+}
+
+alreadyconfigured
 
 requirements() {
 echo -e "\n\n\033[1mDEPENDENCIES SETUP:\033[0m\n\033[1m----------------------\033[0m"
@@ -201,33 +220,21 @@ time you executing emagnet.
 This setting exist so all users is aware that pastebin will ban
 your ip if you will visit the page too often.
 "
-if [[ -f /etc/emagnet.conf ]]; then
-    printf "It seems emagnet.conf has already been configured are you\n"
-    read -p "really sure you want to overwrite /etc/emagnet.conf (y/n): " yupiamsure
- if [[ $yupiamsure = "n" ]]; then
-    printf "\nAborted\n\n"
-    exit
-fi
-    cp /etc/emagnet.conf /etc/emagnet.conf.bak
-    rm /etc/emagnet.conf
-    printf "\n\e[1mCreated a backup file for you: /etc/emagnet.conf.bak\n\n\e[0m"
-fi
-
 if [[ -d "/usr/local/bin" ]]; then cp ./emagnet /usr/local/bin &> /dev/null;fi
 
 myip="$(curl -s https://nr1.nu/i/)"
 printf "Is \e[1;1m$myip\e[0m your private IP-Address (yes/no): "; read realip
 case "$realip" in
   YES)
-      sed -i '26d' $CONF;sed -i '26 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF
+      sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF
       printf "\nConcfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
   y)
-      sed -i '26d' $CONF;sed -i '26 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF
+      sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF
       printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
   yes)
-      sed -i '26d' $CONF;sed -i '26 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF
+      sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF
       printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"
       ;;
 
@@ -235,6 +242,9 @@ case "$realip" in
       printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$currentip\e[0m\n"
       ;;
 esac
+if [[ -z $realip ]]; then
+      sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=127.0.0.1/g" $CONF
+fi
 }
 
 settime() {
@@ -261,8 +271,8 @@ Time: (Default: 60 Seconds): " o
 
 if [[ $o -lt "59" ]]; then
 if [[ -z $o ]]; then
-        sed -i '19d' $CONF
-        sed -i "19 i TIME=60" $CONF
+        sed -i '30d' $CONF
+        sed -i "30 i TIME=60" $CONF
         printf "\nConfig file has updated the refresh time to 60 seconds\n"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
@@ -275,8 +285,8 @@ read -p "Are you REALLY sure you want to set $o seconds (YES/no): " rlysure
 fi
  case $rlysure in
    YES)
-        sed -i '19d' $CONF
-        sed -i "19 i TIME=$o" $CONF
+        sed -i '30d' $CONF
+        sed -i "30 i TIME=$o" $CONF
         printf "\nConfig file has updated the refresh time to $o seconds\n"
         printf "\n\e[1;31mYou have been warned, expect a ban within ~300 seconds!\n\e[0m"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
@@ -287,12 +297,12 @@ fi
     *)  printf "\nSet a number between 10 and 3600 is recommended..\n\n"; continue ;;
  esac
 fi
-    sed -i "19d" $CONF
-    sed -i "19i TIME=$o" $CONF
+    sed -i "30d" $CONF
+    sed -i "30i TIME=$o" $CONF
     printf "\nRefresh time has been set to: $o seconds..\n\n"
     echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
     printf "Successfully created /etc/emagnet.conf\n"
-    printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e emagnet' \e[1;1m:-)\e[0m\n\n"
+    printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e' \e[1;1m:-)\e[0m\n\n"
     cp .emagnetconf/emagnet.conf  /etc/
   exit
 done
@@ -306,10 +316,10 @@ pastebin dramatically, this wont affect how fast you will get banned
 printf "Your\e[1;1m$(cat /proc/cpuinfo|grep 'model name'| awk -F: '{print $2}'|uniq)\e[0m processor has \e[1;1m$(nproc)\e[0m threads\n"
 printf "Do you want emagnet to use all \e[1;1m$(nproc)\e[0m threads when downloading: (y/N): "; read threads
 if [[ $threads = "y" ]]; then
-    sed -i '73d' $CONF;sed -i "73 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF;
+    sed -i '178d' $CONF;sed -i "178 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF;
     printf "\nConfig file has been updated, cpu threads has been set to \e[1;1m$(nproc)\e[0m thread(s)\n";else
     read -p "How many threads do you want to use (Ex: 2): " threadstouse
-    sed -i '73d' $CONF;sed -i "73 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
+    sed -i '178d' $CONF;sed -i "178 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
     printf "\nConfig file has been updated, cpu threads has been set to \e[1;1m$threadstouse\e[0m thread(s).\n"
 fi
 }
@@ -321,32 +331,32 @@ printf "Please specify in wich folder you to store all downloaded files from pas
 read -p "Path (Default: /opt/emagnet): " ehomedir
 if [[ $ehomedir = "" ]]; then
   mkdir -p /opt/root
-  sed -i '42d' $CONF;sed -i "42 i EMAGNET=\/opt\/\/emagnet" $CONF
+  sed -i '71d' $CONF;sed -i "71 i EMAGNET=\/opt\/\/emagnet" $CONF
   printf "\nConfig file has been updated, using \e[1;1m/opt/emagnet\e[0m as emagnets homedir. \n";else
-  eehomedir="$(echo $ehomedir | sed 's/\/\///g')";sed -i '42d' $CONF;sed -i "42 i EMAGNET=$ehomedir" $CONF
+  eehomedir="$(echo $ehomedir | sed 's/\/\///g')";sed -i '71d' $CONF;sed -i "71 i EMAGNET=$ehomedir" $CONF
   printf "\nConfig file has been updated, home dir has been set to: \e[1;1m$eehomedir/emagnet\e[0m\n"
 fi
 }
 
 choosebrowser() {
 if [[ -f $LYNX && -f $ELINKS ]]; then
-echo -e "\n\n\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
+echo -e "\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
 Choose wich browser you prefer to use when emagnet will visit
 pastebin.com for the latest uploads urls on site. If you don't
 know which one you prefer it doesn't matter, just choose one.
 "
     printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
 if [[ $browsertouse = "lynx" ]]; then
-    sed -i "97d" $CONF;sed -i '98 i BROWSER=lynx' $CONF
+    sed -i "178d" $CONF;sed -i '178 i BROWSER=lynx' $CONF
     printf "\nConfig file has been updated, lynx will be used for downloading files\n"
     else
-    sed -i "97d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
+    sed -i "178d" $CONF;sed -i '178 i BROWSER=elinks' $CONF
     printf "\nConfig file has been updated, elinks will be used for downloading files\n"
     fi
     elif [[ -f $LYNX && ! -f $ELINKS ]]; then
-    sed -i "97d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
+    sed -i "178d" $CONF;sed -i '178 i BROWSER=elinks' $CONF
     elif [[ ! -f $LYNX && -f $ELINKS ]]; then
-    sed -i "97d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
+    sed -i "178d" $CONF;sed -i '178 i BROWSER=elinks' $CONF
     else
     echo -e "\n\n\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
 Choose wich browser you prefer to use when emagnet will visit
@@ -369,7 +379,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install elinks;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install elinks manually."; exit 0; fi 
-       sed -i "97d" $CONF;sed -i '98 i BROWSER=elinks' $CONF
+       sed -i "178d" $CONF;sed -i '178 i BROWSER=elinks' $CONF
        printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" $SCRIPT ;;
    lynx)
       printf "\nGoing to install $browsertouse2, setup will continue when $browsertouse2 has been installed..\n\n"
@@ -384,7 +394,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install lynx;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
-       sed -i "97d" $CONF;sed -i '98 i BROWSER=lynx' $CONF
+       sed -i "178d" $CONF;sed -i '178 i BROWSER=lynx' $CONF
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
    N) exit 0 ;;
    \?) echo "Please enter a proper answer y=yes N=no" ;;
@@ -393,7 +403,8 @@ fi
 }
 
 idletime() {
-  sed -i "78d" $CONF;sed -i "78i IDLETIME=1200" $CONF
+  sed -i "107d" $CONF;sed -i "107i IDLETIME=3600" $CONF
 }
 
 clear;banner;choosebrowser;requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;
+
