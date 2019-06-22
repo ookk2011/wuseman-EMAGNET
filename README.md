@@ -24,7 +24,7 @@
 </p>
 
 # NOTICE:
-### If you have problems when downloading files with lynx remove parallel during download or please use elinks until I fix this:
+### If you have problems when downloading files with lynx set as browser pelase remove parallel during download or please use elinks until I fix this:
 
     wget: Resolving    visible links... failed: Name or service not know  https://pastebin.com
 
