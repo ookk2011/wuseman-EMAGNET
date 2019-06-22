@@ -1,3 +1,5 @@
+   
+
 ## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
 
 ## <p align="center"> _"I'll will find you, it's just a matter of time"_
@@ -21,10 +23,23 @@
 </a>
 </p>
 
+# NOTICE:
+### If you have problems when downloading files with lynx remove parallel during download or please use elinks until I fix this:
+
+    wget: Resolving    visible links... failed: Name or service not know  https://pastebin.com
+
+#### Just copy and paste:
+
+    sed -i 's/BROWSER=lynx/BROWSER=elinks/g' /etc/emagnet.conf
+    
+
 | Version            |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
 | `3.0`              |  2019-06-19    | Under Active Development          | Linux - Windows - MacOS - Android  |
 | `2.1`              |  2019-05-17    | Stable                            | Linux - Windows - MacOS - Android  |
+
+
+### Desription
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. Brute force mode has been added in version 2.0. See emagnet in action [here](https://nr1.nu/emagnet/previews/emagnet_infous.gif)
 
