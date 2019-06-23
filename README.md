@@ -23,15 +23,7 @@
 </a>
 </p>
 
-# NOTICE:
-### If you have problems when downloading files with lynx set as browser please remove parallel during download or please use elinks until I fix this:
-
-    wget: Resolving    visible links... failed: Name or service not know  https://pastebin.com
-
-#### Just copy and paste:
-
-    sed -i 's/BROWSER=lynx/BROWSER=elinks/g' /etc/emagnet.conf
-    
+   
 
 | Version            |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
@@ -44,6 +36,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 ### Emagnet v3.0 - Support for jumping between VPN servers
 
 ![Screenshot](https://nr1.nu/emagnet/previews/ezgif-2-c2de16f47d3c.gif)
+
+### Emagnet v2.0 - Supporting auto brute forcing of gmail accounts: 
+
+![Screenshot](https://nr1.nu/emagnet/pictures/emagnet-v2.0-brute.gif)
 
 ### Emagnet with a simple script running beside emagnet: 
 #### Tools used: inotifywait + Cr3dOv3r + emagnet
