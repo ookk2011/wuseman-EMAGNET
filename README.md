@@ -1,6 +1,6 @@
    
 
-## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif))
+## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
 
 ## <p align="center"> _"I'll will find you, it's just a matter of time"_
 <p align="center">
