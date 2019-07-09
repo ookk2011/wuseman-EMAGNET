@@ -322,8 +322,6 @@ fi
 ################################################################################
 #### Configuration file where emagnet keep all variables and settings.......####
 ################################################################################
-CONF="/etc/emagnet.conf"
-source $CONF
 
 ################################################################################
 #### Before emagnet will run, we gonna check so everything is OK            ####
@@ -332,6 +330,8 @@ source $CONF
 mustberoot
 confexist
 iconnection
+CONF="/etc/emagnet.conf"
+source $CONF
 mustbefilled
 paths
 whoiser
