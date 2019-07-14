@@ -1,21 +1,18 @@
-   
-
 ## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
 
 ## <p align="center"> _"I'll will find you, it's just a matter of time"_
 <p align="center">
 
-  <a href="https://github.com/wuseman/EMAGNET">
+<a href="https://github.com/wuseman/EMAGNET">
 <img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell"></a>
 
-  <a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
-    <img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues"></a>
+<a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
+<img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues"></a>
   
-  <a href="https://github.com/wuseman/EMAGNET/issues">
-    <img src="https://img.shields.io/github/issues-raw/wuseman/emagnet.svg?color=orange&label=Open%20Issues"></a>
-  
+<a href="https://github.com/wuseman/EMAGNET/issues">
+<img src="https://img.shields.io/github/issues-raw/wuseman/emagnet.svg?color=orange&label=Open%20Issues"></a>
  
-  <img src="https://img.shields.io/github/last-commit/wuseman/emagnet.svg?color=darkmagenta&label=Latest%20Commit">
+<img src="https://img.shields.io/github/last-commit/wuseman/emagnet.svg?color=darkmagenta&label=Latest%20Commit">
 
 <a href="https://twitter.com/wuseman1">
  <img src="https://img.shields.io/website/https/nr1.nu.svg?down_color=darkred&down_message=DOWN&label=Nr1.nu%2Femagnet&up_message=UP">
@@ -25,10 +22,9 @@
 
    
 
-| Version            |  Released      | Status                            | Tested On                          |
+| Current Version    |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.0`              |  2019-06-19    | Under Active Development          | Linux - Windows - MacOS - Android  |
-| `2.1`              |  2019-05-17    | Stable                            | Linux - Windows - MacOS - Android  |
+| `3.0`              |  2019-07-14    | : Stable                          | : Linux                            |
 
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
@@ -45,19 +41,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 * Normal mode without brute forcing: 
 
-      ./emagnet -e emagnet
-
-* Start brute force attack if there is any mail:password combinations found. If there is no mail:passwords found we just trying again as normal mode. (NOTICE: Support for GMAIL accounts only)
- 
-      ./emagnet -e bruteforce
-
-* Download uploads from pastebin sorted by syntaxes, syntaxes is set by pastebin (https://pastebin.com/language)
-
-      ./emagnet -e syntax
-
-* Send an choosen email to all targets we have found, this require emagnet to run in another session.
-
-      ./emagnet -e spammer
+      ./emagnet --emagnet
 
 ###  Get Started On Windows 10
 
@@ -98,7 +82,6 @@ _How To Find your facebook credenticals, if it has been leaked._
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
-
 
 ### Contact
 
