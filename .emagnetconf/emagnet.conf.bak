@@ -1,4 +1,4 @@
-######################################################################################################################
+#######################################################################################################################
 #### Configuration file for emagnet ###################################################################################
 #######################################################################################################################
 
@@ -56,17 +56,17 @@ WIP4=
 #### PATHS ############################################################################################################
 #######################################################################################################################
 ####                                                                                                               ####
-#### EMAGNET          =
-#### EMAGNETHOME      = 
-#### EMAGNETLOGS      =
-#### EMAGNETPW        = 
-#### EMAGNETALL       = 
-#### EMAGNETCRAP      = 
-#### EMAGNETTEMP      = 
-#### EMAGNETARCHIVE   = 
-#### EMAGNEDB         = 
-#### EMAGNETBACKUP    =   
-#### EMAGNETSYNTAX    =   
+#### EMAGNET        = Emagnet's main dir that contains all folders and files                                       ####
+#### EMAGNETHOME    = Main path for emagnet's incoming files sorted by date folders                                ####
+#### EMAGNETLOGS    = Folder to store log files                                                                    ####
+#### EMAGNETPW      = Same as above but we store all files that got a mail:password                                ####
+#### EMAGNETALL     = All files will be stored in this dir no matter if it includes a mail or password             ####
+#### EMAGNETCRAP    = Emagnetcrap is the file where emagnet store urls before we downloading the files             ####
+#### EMAGNETTEMP    = Where to download files from pastebin before we go through the files                         ####
+#### EMAGNETARCHIVE = This is the folder were all files are stored                                                 ####
+#### EMAGNEDB       = This is the folder we will store all files that has atleast 1 mail address in the paste      ####
+#### EMAGNETBACKUP  = This is the folder were you will save your backups when running emagnet --backup             ####
+#### EMAGNETSYNTAX  = In this fodler we save all uploads when we downloading files by syntax (./emagnet -e syntax) ####  
 ####                                                                                                               ####
 #######################################################################################################################
 EMAGNET=
@@ -159,10 +159,10 @@ VPNCOUNTRYS3=
 ### SSH BRUTEFORCER ###################################################################################################
 #######################################################################################################################
 ####                                                                                                               ####
-#### SSHUSER 
-#### SSHPORT 
-#### SSHTARGETS  
-#### SSHWORDLIST 
+#### SSHUSER = The username you want to use during brute-force                                                     ####
+#### SSHPORT = Wich port you want to attack during brute-force                                                     ####
+#### SSHTARGETS = File we gonna store all ip addresses from the pastes, this is a temp file                        ####
+#### SSHWORDLIST = Wordlist you want to use during the attack                                                      ####
 ####                                                                                                               ####
 #######################################################################################################################
 SSHUSER=
@@ -172,10 +172,10 @@ SSHWORDLIST=
 SSHWORDLIST=
 
 #######################################################################################################################
-### BROWSER ###################################################################################################
+### BROWSER ###########################################################################################################
 #######################################################################################################################
 ####                                                                                                               ####
-#### BROWSER   =  
+#### Here you are able to choose if you wanna use ELINKS or LYNX when we grabbing stuff from pastebin.com          ####	
 ####                                                                                                               ####
 #######################################################################################################################
 BROWSER= 
