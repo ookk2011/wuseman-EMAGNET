@@ -840,11 +840,12 @@ fi
 
 if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
 clear;banner
-   echo -e "                   \e[1;31mNOTICE\e[0m:\n"
-   echo -e "[\e[1;31m<<\e[0m] - Hey! You are scraping our site way too fast! Slow Down!"
+   echo -e "                            \e[1;31mNOTICE\e[0m:\n"
+   echo -e "[\e[1;31m<<\e[0m] - You are scraping pastbin.com way too fast! \e[1;31mSlow Down\e[0m!"
    echo -e "[\e[1;31m<<\e[0m] - Pastebin has blocked you from the archive page until you slow down."
-   echo -e "[\e[1;31m<<\e[0m] - You will only be able to download 8 files at time until you change TIME\n\n"
-   sleep 2
+   echo -e "[\e[1;31m<<\e[0m] - You will only be able to download 8 files at time until you raise TIME"
+   echo -e "[\e[1;31m<<\e[0m] - The block from pastebin.com/archive will be lifted within 20 minutes.."
+sleep 7
 clear;banner
 fi
 ##########################################################################################################
@@ -869,7 +870,7 @@ fi
 
 # // If no files was found, then let user know that it might be good to rise TIME in /etc/emagnet.conf
 if [[ $tt = "00" ]]; then
-   printf "[\e[1;31m<<\e[0m] - No new files downloaded, you may wanna rise refresh time..\n\n"
+   printf "[\e[1;31m<<\e[0m] - No files has been downloaded, you may wanna rise time?\n\n"
    tt="\e[1;31m\e[5m00\e[0m"
    sleep 5
    clear
