@@ -31,6 +31,7 @@ R = REBUILT
 +    Added so you can set time with --time 5 instead of changing conf file all the time
 +    Better support for VPN, it will try connect again if it didnt connect the first time, the third time you will be asked to fix it manually since something is probably wrong?
 +    If no new files has been downloaded you will see that 0 files has been downloading by blinking + you will be noticed that you should raise the REFRESH time probably? (this happends mostly if you run emagnet within 3 seconds or less for testing
++    Pastebin has added a new protection, if you are scraping pastebin to fast you will be banned from archive page and will only be available to get 8 downloads at each visit - Emagnet will notice when this happends from now.
 
 # Version 3.0
 

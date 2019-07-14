@@ -44,12 +44,20 @@ CONF="/etc/emagnet.conf"
 ################################################################################
 #### Emagnet require root for we must install packages for 7example.........####
 ################################################################################
-mustberoot() {
 if [[ $(whoami) != root ]]; then
-     printf "[\e[1;31m<<\e[0m] - Root privileges is required for this tool.\n\n"
+     printf "emagnet: internal error -- root privileges is required\n"
      exit 0
 fi
-}
+
+###############################################################################
+#### Check if its the first time a user running emagnet.....................####
+################################################################################
+if ! [[ $1 = "--setup" ]]; then
+ if ! [[ -f "/etc/emagnet.conf" ]];then
+  echo "emagnet: internal error -- you may wanna run emagnet-setup.sh?"
+  exit 1
+ fi
+fi
 
 ###############################################################################
 #### Emagnet's MASKOT......................................................####
@@ -78,7 +86,6 @@ cat << "EOF"
 EOF
 printf "%64s \n\n" | tr ' ' '-'
 }
-
 ################################################################################
 #### Usage/Help for emagnet.................................................####
 ################################################################################
@@ -121,37 +128,52 @@ fi
 }
 
 ################################################################################
-#### Check if its the first time a user running emagnet.....................####
-################################################################################
-confexist() {
-if [[ ! -f /etc/emagnet.conf ]]; then
-        printf "Error: /etc/emagnet.conf is required, run emagnet-setup.sh for generate emagnet.conf\n"
-        exit 0
-fi
-}
-
-################################################################################
 #### If there is any variable that has been removed we gonna re-add paths...####
 #### otherwise emagnet will stop............................................####
 ################################################################################
 mustbefilled() {
-     if [[ -z $EMAGNET        ]]; then echo "You must set a path where emagnet should store it files, aborted..";                  exit 0;fi
-     if [[ -z $EMAGNETHOME    ]]; then sed -i "71d"  $CONF;sed -i '71 i EMAGNETHOME=$EMAGNET\/emagnet\/incoming\/$(date +%Y-%m-%d)' $CONF;fi
-     if [[ -z $EMAGNETLOGS    ]]; then sed -i "72d"  $CONF;sed -i '72 i EMAGNETLOGS=$EMAGNET/logs'                                  $CONF;fi
-     if [[ -z $EMAGNETDB      ]]; then sed -i "73d"  $CONF;sed -i '73 i EMAGNETDB=$EMAGNETHOME\/email-files'                        $CONF;fi
-     if [[ -z $EMAGNETPW      ]]; then sed -i "74d"  $CONF;sed -i '74 i EMAGNETPW=$EMAGNETHOME\/password-files'                     $CONF;fi
-     if [[ -z $EMAGNETALL     ]]; then sed -i "75d"  $CONF;sed -i '75 i EMAGNETALL=$EMAGNETHOME\/all-files'                         $CONF;fi
-     if [[ -z $EMAGNETCRAP    ]]; then sed -i "76d"  $CONF;sed -i '76 i EMAGNETCRAP=$EMAGNETHOME\/.pastebin'                        $CONF;fi
-     if [[ -z $EMAGNETTEMP    ]]; then sed -i "77d"  $CONF;sed -i '77 i EMAGNETTEMP=$EMAGNETHOME\/.temp'                            $CONF;fi
-     if [[ -z $EMAGNETARCHIVE ]]; then sed -i "78d"  $CONF;sed -i '78 i EMAGNETARCHIVE=$EMAGNET/archive'                            $CONF;fi
-     if [[ -z $EMAGNETSYNTAX  ]]; then sed -i "79d"  $CONF;sed -i '79 i EMAGNETDB=$EMAGNETHOME\/sorted-by-syntax'                   $CONF;fi
-     if [[ -z $EMAGNETBACKUP  ]]; then sed -i "80d"  $CONF;sed -i '80 i EMAGNETDB=backup'                                           $CONF;fi
-     if [[ -z $VPN            ]]; then sed -i "150d" $CONF;sed -i '150 i VPN=false'                                                 $CONF;fi
-     if [[ -z $VPNROOT        ]]; then sed -i "151d" $CONF;sed -i '151 i VPNROOT=/etc/openvpn'                                      $CONF;fi
-     if [[ -z $PASTEBIN       ]]; then sed -i "21d"  $CONF;sed -i '21 i PASTEBIN=https:\/\/www.pastebin.com\/archive'               $CONF;fi
-     if [[ -z $THREADS        ]]; then sed -i "98d"  $CONF;sed -i '98 i THREADS=1'                                                  $CONF;fi
-     if [[ -z $WIP            ]]; then sed -i "50d"  $CONF;sed -i '50 i WIP=https:\/\/nr1.nu\/i\/'                                  $CONF;fi
-     if [[ -z $IDLETIME       ]]; then sed -i "108d" $CONF;sed -i "108 i IDLETIME=3600"                                             $CONF;fi
+source $CONF
+if [[ -z $DEBUG          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                               $CONF;fi
+if [[ -z $PASTEBIN       ]];   then sed -i '21d'  $CONF;sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com\/archive'              $CONF;fi
+
+if [[ -z $WIP            ]];   then sed -i '50d'  $CONF;sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                 $CONF;fi
+if [[ -z $WIP2           ]];   then sed -i '51d'  $CONF;sed -i '51  i WIP2='                                                     $CONF;fi
+if [[ -z $WIP3           ]];   then sed -i '52d'  $CONF;sed -i '52  i WIP3='                                                     $CONF;fi
+if [[ -z $WIP4           ]];   then sed -i '53d'  $CONF;sed -i '53  i WIP4='                                                     $CONF;fi
+
+if [[ -z $EMAGNETHOME    ]];   then sed -i "73d"  $CONF;sed -i '73 i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'          $CONF;fi
+if [[ -z $EMAGNETLOGS    ]];   then sed -i "74d"  $CONF;sed -i '74 i EMAGNETLOGS=$EMAGNET/logs'                                  $CONF;fi
+if [[ -z $EMAGNETPW      ]];   then sed -i "75d"  $CONF;sed -i '75 i EMAGNETPW=$EMAGNETHOME\/password-files'                     $CONF;fi
+if [[ -z $EMAGNETALL     ]];   then sed -i "76d"  $CONF;sed -i '76 i EMAGNETALL=$EMAGNETHOME\/all-files'                         $CONF;fi
+if [[ -z $EMAGNETCRAP    ]];   then sed -i "77d"  $CONF;sed -i '77 i EMAGNETCRAP=$EMAGNETHOME\/.pastebin'                        $CONF;fi
+if [[ -z $EMAGNETTEMP    ]];   then sed -i "78d"  $CONF;sed -i '78 i EMAGNETTEMP=$EMAGNETHOME\/.temp'                            $CONF;fi
+if [[ -z $EMAGNETARCHIVE ]];   then sed -i "79d"  $CONF;sed -i '79 i EMAGNETARCHIVE=$EMAGNET/archive'                            $CONF;fi
+if [[ -z $EMAGNETDB      ]];   then sed -i "80d"  $CONF;sed -i '80 i EMAGNETDB=$EMAGNETHOME\/email-files'                        $CONF;fi
+if [[ -z $EMAGNETBACKUP  ]];   then sed -i "81d"  $CONF;sed -i '81 i EMAGNETBACKUP=$EMAGNET/backup'                              $CONF;fi
+if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82 i EMAGNETDB=$EMAGNETHOME\/sorted-by-syntax'                   $CONF;fi
+
+if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.1'                                               $CONF;fi
+if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=1"                                                 $CONF;fi
+if [[ -z $IDLETIME       ]];   then sed -i '109d' $CONF;sed -i "109 i IDLETIME=3600"                                             $CONF;fi
+if [[ -z $GBRUTEFORCE    ]];   then sed -i '118d' $CONF;sed -i '118 i GBRUTEFORCE=false'                                         $CONF;fi
+if [[ -z $SBRUTEFORCE    ]];   then sed -i '119d' $CONF;sed -i '119 i SBRUTEFORCE=false'                                         $CONF;fi
+if [[ -z $EMAIL2SEND     ]];   then sed -i '128d' $CONF;sed -i '128 i EMAIL2SEND='                                               $CONF;fi
+if [[ -z $NOTIFY         ]];   then sed -i '137d' $CONF;sed -i '137 i NOTIFY=false'                                              $CONF;fi
+
+if [[ -z $VPN            ]];   then sed -i '149d' $CONF;sed -i '149 i VPN=false'                                                 $CONF;fi
+if [[ -z $VPNROOT        ]];   then sed -i '150d' $CONF;sed -i '150 i VPNROOT=/etc/openvpn'                                      $CONF;fi
+if [[ -z $VPNPROVIDER    ]];   then sed -i '151d' $CONF;sed -i '151 i VPNPROVIDER=$VPNROOT/'                                     $CONF;fi
+if [[ -z $VPNPROVIDER2   ]];   then sed -i '152d' $CONF;sed -i '152 i VPNPROVIDER2=$VPNROOT/'                                    $CONF;fi
+if [[ -z $VPNPROVIDER3   ]];   then sed -i '153d' $CONF;sed -i '153 i VPNPROVIDER3=$VPNROOT/'                                   $CONF;fi
+if [[ -z $VPNCOUNTRYS    ]];   then sed -i '154d' $CONF;sed -i '154 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'                                            $CONF;fi
+if [[ -z $VPNCOUNTRYS2   ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'                                           $CONF;fi
+if [[ -z $VPNCOUNTRYS3   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'                                           $CONF;fi
+
+if [[ -z $SSHUSER        ]];   then sed -i '168d' $CONF;sed -i '168 i SSHUSER="root"'                                            $CONF;fi
+if [[ -z $SSHPORT        ]];   then sed -i '169d' $CONF;sed -i '169 i SSHPORT="22"'                                              $CONF;fi
+if [[ -z $SSHTARGETS     ]];   then sed -i '170d' $CONF;sed -i '170 i SSHTARGETS="/tmp/.emagnet-sshbruter.txt"'                  $CONF;fi
+if [[ -z $SSHWORDLIST    ]];   then sed -i '171d' $CONF;sed -i '171 i SSHWORDLIST=""'                                            $CONF;fi
+source $CONF
 }
 
 ################################################################################
@@ -415,8 +437,6 @@ sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;slee
 #### Before emagnet will run, we gonna check so everything is OK            ####
 ################################################################################
 check4all() {
-mustberoot
-confexist
 source $CONF
 iconnection
 mustbefilled
@@ -466,7 +486,7 @@ if [[ $GBRUTEFORCE = "true" ]]; then
 elif [[ $GBRUTEFORCE = "false" ]]; then
     analyzer
 else
-    sed -i '116d' $CONF; sed '116 i GBRUTEFORCE=false' $CONF
+    sed -i '121d' $CONF; sed '121 i GBRUTEFORCE=false' $CONF
 fi
 }
 
@@ -978,6 +998,9 @@ for (( ; ; )); do
   countdown
   clear
   banner
+  analyz
+  clear
+  banner
   emagnet2
   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 done
@@ -1030,9 +1053,6 @@ fi
 
 if [[ $GBRUTEFORCE = "false" ]]; then
       dontstopwhenfound
-else
-    printf "emagnet: unknown error -- you may wanna re-run emagnet-setup.sh?\n"
-    exit 1
 fi
      mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 ;;
@@ -1254,7 +1274,7 @@ if [[ $1 = "--setup" ]]; then
 if [[ $? -eq "0" ]]; then
       bash ./emagnet-setup.sh
 else
-    printf "\e[1;31m<<\e[0m Can't find emagnet-setup.sh\n"
+    printf "emagnet: internal errror -- can't find emagnet-setup.sh\n"
 fi
 fi
 ;;
@@ -1263,7 +1283,7 @@ fi
 
 
 *)   clear;banner
-     printf "[\e[1;31m<<\e[0m] - emagnet: unknown option -- try './emagnet --help'\n\n"
+     printf "emagnet: internal error -- './emagnet --help'\n\n"
      exit 1 ;;
 
 esac
