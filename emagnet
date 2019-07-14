@@ -72,7 +72,7 @@ CONF="/etc/emagnet.conf"
 ################################################################################
 mustberoot() {
 if [[ $(whoami) != root ]]; then
-     printf "Root privileges is required for this tool.\n"
+     printf "[\e[1;31m<<\e[0m] - Root privileges is required for this tool.\n\n"
      exit 0
 fi
 }
@@ -167,24 +167,24 @@ cat << "EOF"
 
 Usage: ./emagnet [--author] [--emagnet] [--option] .....
 
-  --author            Show author information.
-  --backup            Create a compressed archive
-  --help              Display this very helpful text
-  --license           Show license information.
-  --version           Displays version information.
-  --stats             Print stats from all folders
+  -a, --author        Show author information.
+  -l, --license       Show license information.
+  -h, --help          Display this very helpful text
+  -S, --setup         Run emagnet-setup.sh again
+  -t, --time          Set refresh time
+  -v, --vpn           Toggle VPN on or off (true/false)
+  -V, --version       Displays version information.
 
-  -x, --syntax        Download uploads sorted by syntax
+  -b, --backup        Create a compressed archive
+  -d, --stats         Print stats from all folders
   -e, --emagnet       Download latest uploads and store leaked dbs
   -g, --bruteforce    Same as '-e' with brute-force mode on
   -i, --ip            Print you current WAN IPv4/IPv6
   -k, --kill          Kill emagnet sessions
   -m, --move          Move files to archive
-  -p, --spider        Spider a website
-  -s, --spam          Spam email addresses we found today
-  -t, --time          Set refresh time
-  -v, --vpn           Toggle VPN on or off (true/false)
   -q, --quiet         Run in screen
+  -s, --spam          Spam email addresses we found today
+  -x, --syntax        Download uploads sorted by syntax
 
 EOF
 }
@@ -815,21 +815,21 @@ sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;slee
 
 
 
-captcha() {
-$BROWSER -dump $PASTEBIN | grep -q -i captcha
-if [[ $? = "0" ]]; then
-  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
-  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
-  printf "and then you will be able to continue hopefully. If this wont help just wait for a few minutes. \n\nIf the request about captcha wont be removed after few minutes then you have\nended up in their ip-filter so you must fix a new IP or wait for a few days until\nyour IP has been removed from the filter they are using. \n\nThe last solution is to register an account on pastebin and whitlist the IP but then you\nwont be completely anonymous depending on what information you used when you created the account.\n\n"
-  if [[ $VPN = "false" ]]; then
-     sleep 5
-     rm /tmp/.emagnet &> /dev/null
-     exit 1
-  else
-  Iwasbanned
-  fi
-fi
-}
+#captcha() {
+#$BROWSER -dump $PASTEBIN | grep -q -i captcha
+#if [[ $? = "0" ]]; then
+#  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
+#  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
+#  printf "and then you will be able to continue hopefully. If this wont help just wait for a few minutes. \n\nIf the request about captcha wont be removed after few minutes then you have\nended up in their ip-filter so you must fix a new IP or wait for a few days until\nyour IP has been removed from the filter they are using. \n\nThe last solution is to register an account on pastebin and whitlist the IP but then you\nwont be completely anonymous depending on what information you used when you created the account.\n\n"
+#  if [[ $VPN = "false" ]]; then
+#     sleep 5
+#     rm /tmp/.emagnet &> /dev/null
+#     exit 1
+#  else
+#  Iwasbanned
+#  fi
+#fi
+#}
 
 
 
@@ -851,7 +851,6 @@ iconnection
 mustbefilled
 paths
 whoiser
-captcha
 threader
 idletime
 copyconf
@@ -1052,52 +1051,53 @@ stats() {
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
      printf "Total Files That Have Been Downloaded From Pastebin"
-     printf "%s%s%5s[\e[1;31m0$TOTALFILES\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%7s[\e[1;31m0$TOTALFILES\e[0m]\n"|tr ' ' '.'
   else
      printf "Total Files That Have Been Downloaded From Pastebin"
-     printf "%s%s%5s[\e[1;32m$TOTALFILES\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%7s[\e[1;32m$TOTALFILES\e[0m]\n"|tr ' ' '.'
   fi
 done
 
 for temails in $TEMAILS; do
   if [[ $TEMAILS -lt "10" ]]; then
      printf "Total Mail Addresses Found"
-     printf "%s%s%30s[\e[1;31m0$TEMAILS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%32s[\e[1;31m0$TEMAILS\e[0m]\n"|tr ' ' '.'
   else
      printf "Total Mail Addresses Found"
-     printf "%s%s%30s[\e[1;32m$TEMAILS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%32s[\e[1;32m$TEMAILS\e[0m]\n"|tr ' ' '.'
   fi
 done
 
 for tpasswords in $TPASSWORDS; do
   if [[ $TPASSWORDS -lt "10" ]]; then
      printf "Total Passwords Found"
-     printf "%s%s%s%35s[\e[1;31m0$TPASSWORDS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%s%37s[\e[1;31m0$TPASSWORDS\e[0m]\n"|tr ' ' '.'
   else
      printf "Total Passwords Found"
-     printf "%s%s%35s[\e[1;32m$TPASSWORDS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%37s[\e[1;32m$TPASSWORDS\e[0m]\n"|tr ' ' '.'
   fi
 done
 
 for tpasswordsfiles in $TPASSWORDFILES; do
   if [[ $TPASSWORDFILES -lt "10" ]]; then
      printf "Files With Atleast 1 Password Stored "
-     printf "%s%s%19s[\e[1;31m0$TPASSWORDFILES%10d\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%21s[\e[1;31m0$TPASSWORDFILES%10d\e[0m]\n"|tr ' ' '.'
   else
      printf "Files With Atleast 1 Password Stored "
-     printf "%s%s%19s[\e[1;32m$TPASSWORDFILES\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%21s[\e[1;32m$TPASSWORDFILES\e[0m]\n"|tr ' ' '.'
  fi
 done
 
 for temailfiles in $TEMAILFILES; do
   if [[ $TEMAILFILES -lt "10" ]]; then
      printf "Files With Atleast 1 Mail Address Stored"
-     printf "%s%s%16s[\e[1;31m00\e[0m]\n\n"|tr ' ' '.'
+     printf "%s%s%18s[\e[1;31m00\e[0m]\n\n"|tr ' ' '.'
 else
      printf "Files With Atleast 1 Mail Address Stored"
-     printf "%s%s%16s[\e[1;32m$TEMAILFILES\e[0m]\n\n"|tr ' ' '.'
+     printf "%s%s%18s[\e[1;32m$TEMAILFILES\e[0m]\n\n"|tr ' ' '.'
   fi
 done
+printf "%64s \n\n" | tr ' ' '='
 
 }
 
@@ -1282,7 +1282,8 @@ fi
 ################################################################################
 #### This is were we store all files for merging files into archive.........####
 ################################################################################
-mergeem() {
+moveem() {
+clear; banner
 createbdirs() {
 if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then
     mkdir -p $EMAGNETARCHIVE/{all-files,email-files,password-files,logs}
@@ -1352,7 +1353,7 @@ else
 fi
 if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/pastebin-urls.txt|wc -l) -gt "0" ]]; then
 
-    echo -n "Merging pastebin-urls.txt $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
+    echo -n "Merging 'pastebin-urls.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
 if [[ $INCLUDETIME = "true" ]]; then
     cat $EMAGNET/incoming/*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
 else 
@@ -1737,7 +1738,7 @@ fi
 if [[ $GBRUTEFORCE = "false" ]]; then
       dontstopwhenfound
 else
-    printf "emagnet: unknown error -- aborted\n"
+    printf "emagnet: unknown error -- you may wanna re-run emagnet-setup.sh?\n"
     exit 1
 fi
      mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
@@ -2008,7 +2009,16 @@ fi
 
 
 
-
+"--setup")
+if [[ $1 = "--setup" ]]; then
+   file emagnet-setup.sh
+if [[ $? -eq "0" ]]; then
+      bash ./emagnet-setup.sh
+else
+    printf "\e[1;31m<<\e[0m Can't find emagnet-setup.sh\n"
+fi
+fi
+;;
 
 "\?") usage ;;
 
@@ -2027,4 +2037,6 @@ fi
      exit 1 ;;
 
 esac
+
+#!/bin/bash
 
