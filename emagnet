@@ -891,6 +891,10 @@ fi
 
 # // If no files was found, then let user know that it might be good to rise TIME in /etc/emagnet.conf
 if [[ $tt = "00" ]]; then
+   $BROWSER -dump $PASTEBIN|grep -q "blocked"
+ if [[ $? = "0" ]]; then
+   Iwasbanned
+ fi
    printf "[\e[1;31m<<\e[0m] - No files has been downloaded, you may wanna rise time?\n\n"
    tt="\e[1;31m\e[5m00\e[0m"
    sleep 5
@@ -900,7 +904,6 @@ else
 echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
 cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
 fi
-
 ##########################################################################################################
 ##### We using some awesome regex to grab what we looking for........................................#####
 ##########################################################################################################
