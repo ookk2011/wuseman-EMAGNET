@@ -11,6 +11,27 @@ r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      that has been re-added is now stable and not "half done" so they are here for stay.
 R = REBUILT
 
+# Version 3.1
+
++    From now you will see how many files the current session was downloading
++    Fixed bug so emagnet-files never was created and no email files was stored, they was still stored in logs so nothing was missed
++    Fixed a new layout on emagnet stats
++    Fixed so we wont download duplicates, this have been tricky during time as you might have noticed but finally it is working 100% so no more dupes will be downloaded, you will see this
+     thanks to the new "Files has been downloaded" feature when you run emagnet
++    Fixed a new layout for email bruter
++    Fixed new layout for help
++    Fixed so unneccessary stuff wont be sourced or loaded while we run --help for example, this will print help only (will even be possible without root)
++    General fixes..
++    Added author for print author information
++    Added license for print license information
++    Added setup for re-run setup (in next version emagnet-setup will be built in, hence this was added since it's useless otherwise since you can run emagnet-setup.sh otherwise ;) )
++    Added emagnet backup for backup all, archive or incoming folder
++    Added long + short options for everything, removed while getopts..
++    Added so you can toggle between false or true on vpn
++    Added so you can set time with --time 5 instead of changing conf file all the time
++    Better support for VPN, it will try connect again if it didnt connect the first time, the third time you will be asked to fix it manually since something is probably wrong?
++    If no new files has been downloaded you will see that 0 files has been downloading by blinking + you will be noticed that you should raise the REFRESH time probably? (this happends mostly if you run emagnet within 3 seconds or less for testing
+
 # Version 3.0
 
 -    Removed LOGS2 from emagnet.conf
