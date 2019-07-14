@@ -909,7 +909,19 @@ fi
 ################################################################################
 #### If we have been temporary banned we will start a timer and then restart####
 ################################################################################
-iwasbennedban() {
+
+if [[ ! -s /tmp/.emagnet ]]; then
+if [[ $BROWSER = "lynx" ]]; then
+    lynx -dump $PASTEBIN > /tmp/.emagnet
+elif [[ $BROWSER = "elinks" ]]; then
+    elinks -dump $PASTEBIN > /tmp/.emagnet
+else
+    choosebrowser
+fi
+fi
+
+$BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
+if [[ $? = "0" ]]; then
 clear;banner
 source $CONF
 if [[ $VPN = "false" ]]; then
@@ -930,9 +942,8 @@ exit
 else
   banned
 fi
-}
+fi
 
-iwasbennedban
 
 
 ##########################################################################################################
@@ -989,8 +1000,6 @@ if [[ $BROWSER = "lynx" ]]; then
 else
     elinks -dump $PASTEBIN > /tmp/.emagnet
 fi
-    $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
-    [[ $? = "0" ]] && banned
 
 ########################################################################################
 #### If we fetched urls we checking for mail addresses && passwords and if we have..####
