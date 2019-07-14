@@ -142,7 +142,7 @@ if [[ -z $WIP3           ]];   then sed -i '52d'  $CONF;sed -i '52  i WIP3='    
 if [[ -z $WIP4           ]];   then sed -i '53d'  $CONF;sed -i '53  i WIP4='                                                     $CONF;fi
 
 if [[ -z $EMAGNETHOME    ]];   then sed -i "73d"  $CONF;sed -i '73 i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'          $CONF;fi
-if [[ -z $EMAGNETLOGS    ]];   then sed -i "74d"  $CONF;sed -i '74 i EMAGNETLOGS=$EMAGNET/logs'                                  $CONF;fi
+if [[ -z $EMAGNETLOGS    ]];   then sed -i "74d"  $CONF;sed -i '74 i EMAGNETLOGS=$EMAGNETHOME/logs'                              $CONF;fi
 if [[ -z $EMAGNETPW      ]];   then sed -i "75d"  $CONF;sed -i '75 i EMAGNETPW=$EMAGNETHOME\/password-files'                     $CONF;fi
 if [[ -z $EMAGNETALL     ]];   then sed -i "76d"  $CONF;sed -i '76 i EMAGNETALL=$EMAGNETHOME\/all-files'                         $CONF;fi
 if [[ -z $EMAGNETCRAP    ]];   then sed -i "77d"  $CONF;sed -i '77 i EMAGNETCRAP=$EMAGNETHOME\/.pastebin'                        $CONF;fi
@@ -929,12 +929,13 @@ if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
 ########################################################################################
    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
 
-   cp -rn $p $EMAGNETHOME/password-files/ 2>/dev/null
-   cp -rn $i $EMAGNETHOME/email-files/ 2>/dev/null
    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>' > $EMAGNETLOGS/passwords-from-pastebin.txt 
+   grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
    printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
    printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
    printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+   cp -rn $p $EMAGNETPW/ &> /dev/null
+   cp -rn $i $EMAGNETDB/ &> /dev/null
    sleep 2
    if [[ $GBRUTEFORCE = "true" ]]; then
    	printf "%64s \n\n" | tr ' ' '-'
@@ -961,7 +962,7 @@ if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
 
 # // Copy / Move mail file
-   cp $i $EMAGNETDB/ 2> /dev/null
+   cp $i $EMAGNETDB/ &> /dev/null
 
 # // Move everything
    mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
