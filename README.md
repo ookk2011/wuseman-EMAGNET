@@ -37,11 +37,16 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     cd emagnet
     chmod +x emagnet*
     bash ./emagnet-setup.sh
-    bash emagnet -e emagnet
+    bash emagnet --help
 
 * Normal mode without brute forcing: 
 
       ./emagnet --emagnet
+
+* Normal mode with brute forcing: 
+
+     ./emagnet --bruteforce
+
 
 ###  Get Started On Windows 10
 
