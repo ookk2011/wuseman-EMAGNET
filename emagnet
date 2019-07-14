@@ -1026,23 +1026,23 @@ stats() {
     TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
-    printf "%s" "........                 [14%]"
+    printf "%s" "....                     [14%]"
     TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
-    printf "%s" "............             [39%]"
+    printf "%s" "........                 [39%]"
     TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
-    printf "%s" "..............           [51%]"
+    printf "%s" "...........              [51%]"
     TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
-    printf "%s" "......................   [92%]"
+    printf "%s" "...................      [82%]"
     TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
-    printf "%s\n" ".......................[100%]"
+    printf "%s\n" ".........................[100%]"
     printf '[\e[1;32m>>\e[0m] - Done.\n'
     printf '[\e[1;32m>>\e[0m] - Calculating Stats\n\n'
     sleep 3
@@ -1051,50 +1051,50 @@ stats() {
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
      printf "Total Files That Have Been Downloaded From Pastebin"
-     printf "%s%s%7s[\e[1;31m0$TOTALFILES\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%7s(\e[1;31m0$TOTALFILES\e[0m)\n"|tr ' ' '.'
   else
      printf "Total Files That Have Been Downloaded From Pastebin"
-     printf "%s%s%7s[\e[1;32m$TOTALFILES\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%7s(\e[1;32m$TOTALFILES\e[0m)\n"|tr ' ' '.'
   fi
 done
 
 for temails in $TEMAILS; do
   if [[ $TEMAILS -lt "10" ]]; then
      printf "Total Mail Addresses Found"
-     printf "%s%s%32s[\e[1;31m0$TEMAILS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%32s(\e[1;31m0$TEMAILS\e[0m)\n"|tr ' ' '.'
   else
      printf "Total Mail Addresses Found"
-     printf "%s%s%32s[\e[1;32m$TEMAILS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%32s(\e[1;32m$TEMAILS\e[0m)\n"|tr ' ' '.'
   fi
 done
 
 for tpasswords in $TPASSWORDS; do
   if [[ $TPASSWORDS -lt "10" ]]; then
      printf "Total Passwords Found"
-     printf "%s%s%s%37s[\e[1;31m0$TPASSWORDS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%s%37s(\e[1;31m0$TPASSWORDS\e[0m)\n"|tr ' ' '.'
   else
      printf "Total Passwords Found"
-     printf "%s%s%37s[\e[1;32m$TPASSWORDS\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%37s(\e[1;32m$TPASSWORDS\e[0m)\n"|tr ' ' '.'
   fi
 done
 
 for tpasswordsfiles in $TPASSWORDFILES; do
   if [[ $TPASSWORDFILES -lt "10" ]]; then
      printf "Files With Atleast 1 Password Stored "
-     printf "%s%s%21s[\e[1;31m0$TPASSWORDFILES%10d\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%21s(\e[1;31m0$TPASSWORDFILES%10d\e[0m)\n"|tr ' ' '.'
   else
      printf "Files With Atleast 1 Password Stored "
-     printf "%s%s%21s[\e[1;32m$TPASSWORDFILES\e[0m]\n"|tr ' ' '.'
+     printf "%s%s%21s(\e[1;32m$TPASSWORDFILES\e[0m)\n"|tr ' ' '.'
  fi
 done
 
 for temailfiles in $TEMAILFILES; do
   if [[ $TEMAILFILES -lt "10" ]]; then
      printf "Files With Atleast 1 Mail Address Stored"
-     printf "%s%s%18s[\e[1;31m00\e[0m]\n\n"|tr ' ' '.'
+     printf "%s%s%18s(\e[1;31m00\e[0m)\n\n"|tr ' ' '.'
 else
      printf "Files With Atleast 1 Mail Address Stored"
-     printf "%s%s%18s[\e[1;32m$TEMAILFILES\e[0m]\n\n"|tr ' ' '.'
+     printf "%s%s%18s[\e(1;32m$TEMAILFILES\e[0m)\n\n"|tr ' ' '.'
   fi
 done
 printf "%64s \n\n" | tr ' ' '='
