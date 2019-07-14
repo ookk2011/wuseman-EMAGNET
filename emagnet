@@ -1176,10 +1176,10 @@ if [[ -z $2 ]]; then
      exit 1
 fi
 if [[ $2 = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
-     sed -i '150d' $CONF;sed -i "150i VPN=true" $CONF
+     sed -i '149d' $CONF;sed -i "149i VPN=true" $CONF
      echo -e "[\e[1;32m>>\e[0m] - VPN has been set to true: \e[1;32mON\e[0m\n";exit 1
 elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then
-     sed -i '150d' $CONF;sed -i "150i VPN=false" $CONF
+     sed -i '149d' $CONF;sed -i "149i VPN=false" $CONF
      echo -e "[\e[1;31m<<\e[0m] - VPN has been set to false: \e[1;31mOFF\e[0m\n";exit 1
 else
      echo -e "emagnet: internal error -- $2 is an unknown option - please use true or false"
