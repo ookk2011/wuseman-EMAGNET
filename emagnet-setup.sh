@@ -43,7 +43,11 @@
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
 
-if [[ $EUID -gt "0" ]]; then printf "Root privileges is required for this tool..\n"; exit 0; fi
+if [[ $EUID -gt "0" ]]; then
+    printf "Root privileges is required for this tool..\n"
+    exit 0
+fi
+
 cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
 CONF=".emagnetconf/emagnet.conf ";source $CONF
 SCRIPT="$(pwd)/emagnet"
@@ -53,7 +57,6 @@ WGET="/usr/bin/wget"
 CURL="/usr/bin/curl"
 SCREEN="/usr/bin/screen"
 PARALLEL="/usr/bin/parallel"
-NETCAT="/usr/bin/nc"
 DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
 
 banner() {
@@ -101,14 +104,6 @@ alreadyconfigured
 
 requirements() {
 echo -e "\n\n\033[1mDEPENDENCIES SETUP:\033[0m\n\033[1m----------------------\033[0m"
-
-# Since ubuntu have named netcat on it's own way
-if [[ $DISTRO = "ubuntu" ]]; then
-     NETCAT="/bin/netcat";
-else
-     NETCAT="/usr/bin/nc"
-fi
-
 checkwget() {
 if [[ -x  $WGET ]]; then
     printf "\nDetected WGET"; printf "%46s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
@@ -139,27 +134,21 @@ fi
 checkparallel() {
 if [[ -x  $PARALLEL ]]; then
     printf "Detected PARALLEL"; printf "%42s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
+ if [[ ! -f packages ]]; then
+     printf "\nAll dependencies has been found, moving on\n"
+     idletime;idletime;wip;emagnethome;wgettimer;settime
+     exit 1
+ fi
 else
     printf "Detected PARALLEL"; printf "%42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
     printf "Detected parallel %42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  fi
 }
 
-checknetcat() {
-if [[ -x  $NETCAT ]]; then
-     printf "Detected NETCAT"; printf "%44s[\e[1;32mOK\e[0m]\n"|tr ' ' '.'
- if [[ ! -f packages ]]; then
-     printf "\nAll dependencies has been found, moving on\n"
-     idletime;idletime;wip;emagnethome;wgettimer;settime
-     exit 1
- fi
- else
-     printf "Detected NETCAT"; printf "%44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.'
-     printf "Detected netcat %44s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
-fi
-}
-
-checkwget;checkcurl;checkscreen;checkparallel;checknetcat
+checkwget
+checkcurl
+checkscreen
+checkparallel
 
 if [[ -f packages ]]; then
 missed="$(awk -F. '{print $2}' packages|sed 's/ /,/g'|xargs|sed 's/ /, /g')"
@@ -276,7 +265,7 @@ if [[ -z $o ]]; then
         printf "\nConfig file has updated the refresh time to 60 seconds\n"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e emagnet' \e[1;1m:-)\e[0m\n\n"
+        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet --emagnet' \e[1;1m:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/
         exit 1
 else
@@ -291,7 +280,7 @@ fi
         printf "\n\e[1;31mYou have been warned, expect a ban within ~300 seconds!\n\e[0m"
         echo -e "\n\n\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
         printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet -e emagnet' \e[1;1m:-)\e[0m\n\n"
+        printf "\nNow you're all set - Have phun - \e[1;1m'bash emagnet --emagnet' \e[1;1m:-)\e[0m\n\n"
         cp .emagnetconf/emagnet.conf  /etc/; break ;;
 
     *)  printf "\nSet a number between 10 and 3600 is recommended..\n\n"; continue ;;
@@ -316,10 +305,10 @@ pastebin dramatically, this wont affect how fast you will get banned
 printf "Your\e[1;1m$(cat /proc/cpuinfo|grep 'model name'| awk -F: '{print $2}'|uniq)\e[0m processor has \e[1;1m$(nproc)\e[0m threads\n"
 printf "Do you want emagnet to use all \e[1;1m$(nproc)\e[0m threads when downloading: (y/N): "; read threads
 if [[ $threads = "y" ]]; then
-    sed -i '98d' $CONF;sed -i "98 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF;
+    sed -i '99d' $CONF;sed -i "99 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$(nproc)/g" $CONF;
     printf "\nConfig file has been updated, cpu threads has been set to \e[1;1m$(nproc)\e[0m thread(s)\n";else
     read -p "How many threads do you want to use (Ex: 2): " threadstouse
-    sed -i '98d' $CONF;sed -i "98 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
+    sed -i '99d' $CONF;sed -i "99 i THREADS=" $CONF;sed -i "s/THREADS=/THREADS=$threadstouse/g" $CONF
     printf "\nConfig file has been updated, cpu threads has been set to \e[1;1m$threadstouse\e[0m thread(s).\n"
 fi
 }
@@ -347,16 +336,16 @@ know which one you prefer it doesn't matter, just choose one.
 "
     printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
 if [[ $browsertouse = "lynx" ]]; then
-    sed -i "177d" $CONF;sed -i '177 i BROWSER=lynx' $CONF
+    sed -i "182d" $CONF;sed -i '182 i BROWSER=lynx' $CONF
     printf "\nConfig file has been updated, lynx will be used for downloading files\n"
     else
-    sed -i "177d" $CONF;sed -i '177 i BROWSER=elinks' $CONF
+    sed -i "182d" $CONF;sed -i '182 i BROWSER=elinks' $CONF
     printf "\nConfig file has been updated, elinks will be used for downloading files\n"
     fi
     elif [[ -f $LYNX && ! -f $ELINKS ]]; then
-    sed -i "177d" $CONF;sed -i '177 i BROWSER=elinks' $CONF
+    sed -i "182d" $CONF;sed -i '182 i BROWSER=elinks' $CONF
     elif [[ ! -f $LYNX && -f $ELINKS ]]; then
-    sed -i "177d" $CONF;sed -i '177 i BROWSER=elinks' $CONF
+    sed -i "182d" $CONF;sed -i '182 i BROWSER=elinks' $CONF
     else
     echo -e "\n\n\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m
 Choose wich browser you prefer to use when emagnet will visit
@@ -379,7 +368,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install elinks;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install elinks manually."; exit 0; fi 
-       sed -i "177d" $CONF;sed -i '177 i BROWSER=elinks' $CONF
+       sed -i "182d" $CONF;sed -i '182 i BROWSER=elinks' $CONF
        printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" $SCRIPT ;;
    lynx)
       printf "\nGoing to install $browsertouse2, setup will continue when $browsertouse2 has been installed..\n\n"
@@ -394,7 +383,7 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
       if [[ $DISTRO = "mint" ]]; then apt-get install lynx;
        requirements;idletime;idletime;wip;emagnethome;wgettimer;settime;exit 0;fi
       if [[ -n $DISTRO ]]; then echo "Emagnet is not supported for $DISTRO, please install lynx or elinks manually."; exit 0; fi
-       sed -i "177d" $CONF;sed -i '177 i BROWSER=lynx' $CONF
+       sed -i "182d" $CONF;sed -i '182 i BROWSER=lynx' $CONF
        printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" $SCRIPT ;;
    N) exit 0 ;;
    \?) echo "Please enter a proper answer y=yes N=no" ;;
