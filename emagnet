@@ -40,6 +40,32 @@
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
 CONF="/etc/emagnet.conf"
+# if [[ -z $VPN ]]; then sed -i '150d' $CONF; sed -i '150 i VPN=false' $CONF;fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### Emagnet require root for we must install packages for 7example.........####
@@ -50,6 +76,28 @@ if [[ $(whoami) != root ]]; then
      exit 0
 fi
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ###############################################################################
 #### Emagnet's MASKOT......................................................####
@@ -78,6 +126,38 @@ cat << "EOF"
 EOF
 printf "%64s \n\n" | tr ' ' '='
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### Usage/Help for emagnet.................................................####
@@ -109,6 +189,26 @@ Usage: ./emagnet [--author] [--emagnet] [--option] .....
 EOF
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################
 #### We must have a proper internet connection for run emagnet..............####
 ################################################################################
@@ -120,6 +220,24 @@ if [[ $? -gt "0" ]]; then
 fi
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################
 #### Check if its the first time a user running emagnet.....................####
 ################################################################################
@@ -129,6 +247,15 @@ if [[ ! -f /etc/emagnet.conf ]]; then
         exit 0
 fi
 }
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### If there is any variable that has been removed we gonna re-add paths...####
@@ -148,6 +275,25 @@ mustbefilled() {
      if [[ -z $EMAGNETBACKUP  ]];   then sed -i "80d"  $CONF;sed -i '80 i EMAGNETDB=backup'                                           $CONF;       fi
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################
 #### Create paths for emagnet if there is no incoming path created..........####
 ################################################################################
@@ -162,252 +308,126 @@ paths() {
      if [[ ! -d $EMAGNETLOGS    ]];    then mkdir -p $EMAGNETLOGS     &> /dev/null;  fi
 }
 
-################################################################################
-#### We using nr1.nu/ip/ to find the ip address so we can warn..............####
-#### and inform users that pastebin might ban your private IP...............####
-################################################################################
-whoiser() {
-if [[ -z $WIP ]]; then 
-  sed -i 's/WIP=/WIP=https:\/\/nr1.nu\/i\//g' $CONF
-fi
-}
 
-pastebin() {
-if [[ -z $PASTEBIN       ]]; then 
-  sed -i '21d'  $CONF
-  sed -i '21i PASTEBIN=https:\/\/www.pastebin.com\/archive' $CONF
-fi
-}
-################################################################################
-#### If threads value has been removed or deleted we will set 1 as default  ####
-################################################################################
-threader() {
-if [[ -z $THREADS ]]; then 
-  sed -i '98d' $CONF
-  sed -i '98 i THREADS=1' $CONF
-fi
-}
 
-################################################################################
-#### If browser has been removed we must re-add a value                     ####
-################################################################################
-browser() {
-if [[ -z $BROWSER ]]; then
-echo -e "\033[1mBROWSER SETUP:\033[0m\n\033[1m----------------------\033[0m"
-echo -e "Choose wich browser you prefer to use when emagnet will visit"
-echo -e "pastebin.com for the latest uploads urls on site. If you don't"
-echo -e "know which one you prefer it doesn't matter, just choose one."
-    printf "It seems you have both lynx and elinks2 installed, you must choose one\n"; read -p "Option: (lynx/elinks): " browsertouse
-if [[ $browsertouse = "lynx" ]]; then
-    sed -i "177d" $CONF;sed -i '177 i BROWSER=lynx' $CONF
-    printf "\nConfig file has been updated, lynx will be used for downloading files\n"
-    sleep 2
-    else
-    sed -i "177d" $CONF;sed -i '177 i BROWSER=elinks' $CONF
-    printf "\nConfig file has been updated, elinks will be used for downloading files\n"
-    sleep 2
-    fi
-fi
-}
 
-################################################################################
-#### This is for specify time before downloading new files..................####
-################################################################################
-checktime() {
-if [[ -z $TIME ]]; then
-     echo -e "\033[1mREFRESH TIME:\033[0m\n\033[1m----------------------\033[0m"
-     printf "You must set a refresh time otherwise emagnet won't work properly..\n"
-     read -p "How often do you want to download new uploads from pastebin: (Default 60): " timepastebin
- if [[ -n $timepastebin ]]; then
-      sed -i '30d' $CONF
-      sed -i "30i TIME=" $CONF
-      sed -i "s/TIME=/TIME=$timepastebin/g" $CONF
-      printf "\nConfig file has been updated, refresh time has been set to: \e[1m$timepastebin\e[0m seconds\n"
-      echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
-      sleep 2
- else
-      sed -i '30d' $CONF
-      sed -i "30i TIME=" $CONF
-      sed -i "s/TIME=/TIME=60/g" $CONF
-      printf "\nConfig file has been updated, refresh time has been set to: \e[1m60\e[0m seconds\n\n"
-      sleep 2
-      echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
- fi
-fi
-}
 
-################################################################################
-#### This is set if MYIP has been removed or is not SET for users security..####
-################################################################################
-checkip() {
-if [[ -z "$MYIP" ]]; then
-      echo -e "\n\n\033[1mIP-ADDRESS SETUP:\033[0m\n\033[1m----------------------\033[0m"
-      echo -e "Set your private ip here if you don't wanna take the risk to get"
-      echo -e "your 'private' ip number banned on www.pastebin.com for around"
-      echo -e "a time limit of ~1200-1600 seconds. Remember this will happends if"
-      echo -e "you will set time limit to 59 seconds or less in next option.\n"
-      echo -e "If this is something you don't care about then please just hit"
-      echo -e "enter and set your ip to 0.0.0.0. If you wont do this and time"
-      echo -e "has been set to <59s emagnet will warn you about about this every"
-      echo -e "time you executing emagnet.\n"
-      echo -e "This setting exist so all users is aware that pastebin will ban"
-      echo -e "your ip if you will visit the page too often.\n"
-      echo -e "This message appears here cause you have not set any value"
-      echo -e "under 'MYIP' in /etc/emagnet.conf, set 0.0.0.0 instead of removing the IP.\n"
 
-if [[ -d "/usr/local/bin" ]]; then
-  if [[ ! -f "/usr/local/bin/emagnet" ]]; then
-      cp ./emagnet /usr/local/bin &> /dev/null
-  fi
-fi
 
-myip="$(curl -s $WIP)"
-printf "\nIs \e[1;1m$myip\e[0m your private IP-Address (yes/no): "
-read realip
 
-case "$realip" in
-  YES|y|yes|Yes) sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF;printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"; sleep 2 ;;
-   *) read -p "Enter your current real IP-Adress: " currentip;sed -i "s/MYIP=/MYIP=$currentip/g" $CONF;printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"; sleep 2 ;;
-esac
-fi
-}
 
-################################################################################
-#### Check so emagnet's idletime, they remove ban after 20 min..............####
-################################################################################
-idletime() {
-if [[ -z "$IDLETIME" ]]; then 
-  sed -i '107d' $CONF;sed -i "107i IDLETIME=3600" $CONF
-fi
- }
 
-################################################################################
-#### Re-create emagnet.conf after emagnet-setup has been executed...........####
-################################################################################
-copyconf() {
-if [[ -f .emagnetconf/emagnet.conf ]]; then 
-  cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
-fi
-}
 
-################################################################################
-#### Since user must be known of the risk that pastebin might be............####
-#### IP-Banned PERMANENT from pastebin (Use VPN or TOR if you can...........####
-#### since it's REALLY recommended..........................................####
-################################################################################
-safety() {
-if [[ -z $MYIP ]]; then
-    myyyyip="$(curl -s $WIP | sed -n '121p')"
-    sed -i '30d' /etc/emagnet.conf
-    sed -i "30i MYIP=" /etc/emagnet.conf
-    sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
-    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
-fi
-}
 
-################################################################################
-#### Print analyzing meanwhile we go through the files......................####
-################################################################################
-analyz() {
-clear;banner
-printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
-sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
-}
 
-captcha() {
-if [[ ! -s /tmp/.emagnet ]]; then
-if [[ $BROWSER = "lynx" ]]; then
-    lynx -dump $PASTEBIN > /tmp/.emagnet
-elif [[ $BROWSER = "elinks" ]]; then
-    elinks -dump $PASTEBIN > /tmp/.emagnet
-else
-    choosebrowser
-fi
 
-if [[ $(grep -iq captcha /tmp/.emagnet; echo $?) = "0" ]]; then
-  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
-  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
-  printf "and then you will be able to continue hopefully. If this wont help just wait for a few minutes. \n\nIf the request about captcha wont be removed after few minutes then you have\nended up in their ip-filter so you must fix a new IP or wait for a few days until\nyour IP has been removed from the filter they are using. \n\nThe last solution is to register an account on pastebin and whitlist the IP but then you\nwont be completely anonymous depending on what information you used when you created the account.\n\n"
-if [[ $VPN = "false" ]]; then
-  exit 1
-  sleep 5
-fi
-  rm /tmp/.emagnet &> /dev/null
-fi
-fi
-}
 
-################################################################################
-#### Configuration file where emagnet keep all variables and settings.......####
-################################################################################
 
-################################################################################
-#### Before emagnet will run, we gonna check so everything is OK            ####
-################################################################################
 
-check4all() {
-source $CONF
-mustberoot
-confexist
-iconnection
-mustbefilled
-paths
-whoiser
-checktime
-checkip
-captcha
-threader
-idletime
-copyconf
-safety
-browser
-pastebin
-}
 
-################################################################################
-#### If user executing emagnet without any value we printing help...........####
-################################################################################
-if [[ -z $1 ]]; then 
-  usage
-  exit 1
-fi
 
-################################################################################
-###### ALL EMAGNET'S FEATURES BEGINS HERE ######################################
-################################################################################
-################################################################################
-###### DON'T TOUCH UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING ##################
-################################################################################
-################################################################################
-#### // wuseman ################################################################
-################################################################################
 
-################################################################################
-#### Print ascii and a timer when we counting seconds to download...........####
-################################################################################
-analyzer() {
-wait_time=$TIME
-temp_cnt=${wait_time}
 
-while [[ ${temp_cnt} -gt 0 ]]; do
-    printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
-    sleep 1
-((temp_cnt--))
+######################################################################################################
+#### Sometimes pastebin is under heavy load,  then we print this instead of an empty result.......####
+#### and we gonna let emagnet wait for 60 seconds until we continues..............................####
+######################################################################################################
+heavyload() {
+$BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
+if [[ $? = "0" ]]; then
+ for (( ; ; )); do
+ wait_time=60
+ temp_cnt=${wait_time}
+ while [[ ${temp_cnt} -gt 0 ]]; do
+        printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
+done;
+      echo ""
+      bash emagnet --emagnet
 done
-}
-
-
-countdown() {
-if [[ $GBRUTEFORCE = "true" ]]; then
-    printf "%22s \e[1;31mBRUTE MODE is \e[1;32mON\e[0m\e[0m\n"
-    echo ""
-    analyzer
-elif [[ $GBRUTEFORCE = "false" ]]; then
-    analyzer
-else
-    sed -i '116d' $CONF; sed '116 i BGRUTEFORCE=false' $CONF
+      bash emagnet --emagnet
 fi
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Iwasbanned() {
+CONF="/etc/emagnet.conf"
+source /etc/emagnet.conf
+$BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
+if [[ $? = "0" ]]; then
+clear
+banner
+if [[ $VPN = "false" ]]; then
+for (( ; ; )); do
+wait_time=$IDLETIME
+temp_cnt=${wait_time}
+while [[ ${temp_cnt} -gt 0 ]]; do
+    printf "\rIP: [\e[1;31m$(curl -s $WIP)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt}
+    printf " seconds";sleep 1;((temp_cnt--))
+    
+done;
+
+    printf "\n"
+    clear;banner
+    bash emagnet --emagnet
+    sleep 2
+done
+    clear;banner
+    bash emagnet --emagnet
+exit
+else
+  banned
+fi
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 vpnsetup() {
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|sed '1d')
@@ -444,14 +464,9 @@ esac
 
 
 banned() {
-if [[ -z $VPN ]]; then
-   sed -i '150d' $CONF
-   sed -i '150 i VPN=false' $CONF
-fi
-
 if [[ $VPN = "false" ]]; then
-ban
-else
+Iwasbanned
+  else
 line='...........................................................'
 line1='................................[ ok ]'
 line2='...............................................'
@@ -521,42 +536,519 @@ fi
 fi
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### We using nr1.nu/ip/ to find the ip address so we can warn..............####
+#### and inform users that pastebin might ban your private IP...............####
+################################################################################
+whoiser() {
+if [[ -z $WIP ]]; then 
+  sed -i 's/WIP=/WIP=https:\/\/nr1.nu\/i\//g' $CONF
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+pastebin() {
+if [[ -z $PASTEBIN       ]]; then 
+  sed -i '21d'  $CONF
+  sed -i '21i PASTEBIN=https:\/\/www.pastebin.com\/archive' $CONF
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### If threads value has been removed or deleted we will set 1 as default  ####
+################################################################################
+threader() {
+if [[ -z $THREADS ]]; then 
+  sed -i '98d' $CONF
+  sed -i '98 i THREADS=1' $CONF
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### This is set if MYIP has been removed or is not SET for users security..####
+################################################################################
+checkip() {
+if [[ -z "$MYIP" ]]; then
+      echo -e "\n\n\033[1mIP-ADDRESS SETUP:\033[0m\n\033[1m----------------------\033[0m"
+      echo -e "Set your private ip here if you don't wanna take the risk to get"
+      echo -e "your 'private' ip number banned on www.pastebin.com for around"
+      echo -e "a time limit of ~1200-1600 seconds. Remember this will happends if"
+      echo -e "you will set time limit to 59 seconds or less in next option.\n"
+      echo -e "If this is something you don't care about then please just hit"
+      echo -e "enter and set your ip to 0.0.0.0. If you wont do this and time"
+      echo -e "has been set to <59s emagnet will warn you about about this every"
+      echo -e "time you executing emagnet.\n"
+      echo -e "This setting exist so all users is aware that pastebin will ban"
+      echo -e "your ip if you will visit the page too often.\n"
+      echo -e "This message appears here cause you have not set any value"
+      echo -e "under 'MYIP' in /etc/emagnet.conf, set 0.0.0.0 instead of removing the IP.\n"
+
+if [[ -d "/usr/local/bin" ]]; then
+  if [[ ! -f "/usr/local/bin/emagnet" ]]; then
+      cp ./emagnet /usr/local/bin &> /dev/null
+  fi
+fi
+
+myip="$(curl -s $WIP)"
+printf "\nIs \e[1;1m$myip\e[0m your private IP-Address (yes/no): "
+read realip
+
+case "$realip" in
+  YES|y|yes|Yes) sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF;printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"; sleep 2 ;;
+   *) read -p "Enter your current real IP-Adress: " currentip;sed -i "s/MYIP=/MYIP=$currentip/g" $CONF;printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"; sleep 2 ;;
+esac
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### Check so emagnet's idletime, they remove ban after 20 min..............####
+################################################################################
+idletime() {
+if [[ -z "$IDLETIME" ]]; then 
+  sed -i '107d' $CONF;sed -i "107i IDLETIME=3600" $CONF
+fi
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### Re-create emagnet.conf after emagnet-setup has been executed...........####
+################################################################################
+copyconf() {
+if [[ -f .emagnetconf/emagnet.conf ]]; then 
+  cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### Since user must be known of the risk that pastebin might be............####
+#### IP-Banned PERMANENT from pastebin (Use VPN or TOR if you can...........####
+#### since it's REALLY recommended..........................................####
+################################################################################
+safety() {
+if [[ -z $MYIP ]]; then
+    myyyyip="$(curl -s $WIP | sed -n '121p')"
+    sed -i '30d' /etc/emagnet.conf
+    sed -i "30i MYIP=" /etc/emagnet.conf
+    sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
+    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### Print analyzing meanwhile we go through the files......................####
+################################################################################
+analyz() {
+clear;banner
+printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
+sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+captcha() {
+$BROWSER -dump $PASTEBIN | grep -q -i captcha
+if [[ $? = "0" ]]; then
+  printf "Pastebin.com asking emagnet for accept the re-captcha.\n\n"
+  printf "Open your browser, go to https://pastebin.com and enter the re-captcha\n"
+  printf "and then you will be able to continue hopefully. If this wont help just wait for a few minutes. \n\nIf the request about captcha wont be removed after few minutes then you have\nended up in their ip-filter so you must fix a new IP or wait for a few days until\nyour IP has been removed from the filter they are using. \n\nThe last solution is to register an account on pastebin and whitlist the IP but then you\nwont be completely anonymous depending on what information you used when you created the account.\n\n"
+  if [[ $VPN = "false" ]]; then
+     sleep 5
+     rm /tmp/.emagnet &> /dev/null
+     exit 1
+  else
+  Iwasbanned
+  fi
+fi
+}
+
+
+
+
+
+
+
+
+
+################################################################################
+#### Before emagnet will run, we gonna check so everything is OK            ####
+################################################################################
+
+check4all() {
+source $CONF
+mustberoot
+confexist
+iconnection
+mustbefilled
+paths
+whoiser
+captcha
+threader
+idletime
+copyconf
+safety
+pastebin
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#### If user executing emagnet without any value we printing help...........####
+################################################################################
+if [[ -z $1 ]]; then 
+  usage
+  exit 1
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+###### ALL EMAGNET'S FEATURES BEGINS HERE ######################################
+################################################################################
+################################################################################
+###### DON'T TOUCH UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING ##################
+################################################################################
+################################################################################
+#### // wuseman ################################################################
+################################################################################
+
+################################################################################
+#### Print ascii and a timer when we counting seconds to download...........####
+################################################################################
+
+
+
+
+analyzer() {
+source $CONF
+wait_time=$TIME
+temp_cnt=${wait_time}
+
+while [[ ${temp_cnt} -gt 0 ]]; do
+    printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
+    sleep 1
+((temp_cnt--))
+done
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+countdown() {
+if [[ $GBRUTEFORCE = "true" ]]; then
+    printf "%18s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+    echo ""
+    analyzer
+elif [[ $GBRUTEFORCE = "false" ]]; then
+    analyzer
+else
+    sed -i '116d' $CONF; sed '116 i GBRUTEFORCE=false' $CONF
+fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################
 #### Check so we are not banned or being asked for captha or anything       ####
 #### else might be wrong before we doing anything                           ####
 ################################################################################
 blocked() {
+    source $CONF
 if [[ ! -s /tmp/.emagnet ]]; then
-if [[ $BROWSER = "lynx" ]]; then
-    lynx -dump $PASTEBIN > /tmp/.emagnet
-elif [[ $BROWSER = "elinks" ]]; then
-    elinks -dump $PASTEBIN > /tmp/.emagnet
-else
-    choosebrowser
-fi
+$BROWSER -dump $PASTEBIN > /tmp/.emagnet
 fi
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### This is stats function when you using emagnet -s for count stats.......####
 ################################################################################
 stats() {
     clear; banner
-    printf "+ Please wait, counting data "
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data"
+    printf "%s" "..                         [00%]"
     sleep 1
     TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
-    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
-    TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l)
-    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
-    TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l)
-    touch "donespinning"
     clear; banner
-    printf '+ Please wait, counting data.............................[\e[1;32m ok \e[0m]\n\n'
-    sleep 2
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
+    printf "%s" "........                 [14%]"
+    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
+    printf "%s" "............             [39%]"
+    TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
+    printf "%s" "..............           [51%]"
+    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
+    printf "%s" "......................   [92%]"
+    TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data.."
+    printf "%s\n" ".......................[100%]"
+    printf '[\e[1;32m>>\e[0m] - Done.\n'
+    printf '[\e[1;32m>>\e[0m] - Calculating Stats\n\n'
+    sleep 3
     clear;banner
     printf "%23s EMAGNET STATS\n\n"
-
-
 for totalfiles in $TOTALFILES; do
   if [[ $TOTALFILES -lt "10" ]]; then
      printf "Total Files That Have Been Downloaded From Pastebin"
@@ -609,6 +1101,34 @@ done
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################
 #### This is were we hold the code for gmail brute forcing..................####
 ################################################################################
@@ -636,17 +1156,53 @@ if [[ -n "$attack" ]]; then
 fi
 done < /tmp/.emagnet-passwords.txt
     rm /tmp/.emagnet-passwords.txt
+    sleep 3
 else
     sleep 1
 fi
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### This is were we hold the code for downloading files by syntax..........####
 ################################################################################
 emagnetsyntax() {
 clear;banner
-$BROWSER -dump https://pastebin.com/archive/bash|grep -q "blocked your IP"
+$BROWSER -dump $PASTEBIN/bash|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
     banned
@@ -675,7 +1231,7 @@ fi
 if [[ $BROWSER = "elinks" ]]; then
     elinks -dump $PASTEBIN/$SYNTAX2DL|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|archive\|contact\|pastebin$\|languages' > /tmp/.emagnet-syntaxes-urls
 elif [[ $BROWSER = "lynx" ]]; then
-    lynx -dump https://pastebin.com/archive/bash |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'language\|night_mode\|messages\|settings\|pastebin$\|archive\|contact'  > /tmp/.emagnet-syntaxes-urls
+    lynx -dump $PASTEBIN/$SYNTAX2DL |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'language\|night_mode\|messages\|settings\|pastebin$\|archive\|contact'  > /tmp/.emagnet-syntaxes-urls
 else
     choosebrowser
 fi
@@ -694,6 +1250,34 @@ else
     rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
 fi
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### This is were we store all files for merging files into archive.........####
@@ -792,6 +1376,23 @@ copy_files
 merge_logs
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################################################################
 #### This is were we holds the code for spamming feature                    ####
 ################################################################################
@@ -837,46 +1438,36 @@ fi
 }
 
 
-youwasblocked() {
-$BROWSER -dump https://pastebin.com/archive/bash|grep -q "blocked your IP"
-if [[ $? = "0" ]]; then
- if [[ $VPN = "true" ]]; then
-    banned
- else
-    iwasbannedban
-       fi
-    fi
-for (( ; ; )); do
-  clear
-  banner
-  countdown
-  analyz
-  clear
-  banner
-  emagnet2
-   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-done
-}
 
-######################################################################################################
-#### Sometimes pastebin is under heavy load,  then we print this instead of an empty result.......####
-#### and we gonna let emagnet wait for 60 seconds until we continues..............................####
-######################################################################################################
-heavyload() {
-$BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
-if [[ $? = "0" ]]; then
- for (( ; ; )); do
- wait_time=60
- temp_cnt=${wait_time}
- while [[ ${temp_cnt} -gt 0 ]]; do
-        printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
-done;
-      echo ""
-      bash emagnet --emagnet
-done
-      bash emagnet --emagnet
-fi
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ################################################################################
@@ -906,69 +1497,36 @@ if [[ $BROWSER = "elinks" ]]; then
    rm 1 2 &> /dev/null
 fi
 
-################################################################################
-#### If we have been temporary banned we will start a timer and then restart####
-################################################################################
-
-if [[ ! -s /tmp/.emagnet ]]; then
-if [[ $BROWSER = "lynx" ]]; then
-    lynx -dump $PASTEBIN > /tmp/.emagnet
-elif [[ $BROWSER = "elinks" ]]; then
-    elinks -dump $PASTEBIN > /tmp/.emagnet
-else
-    choosebrowser
-fi
-fi
-
-$BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
-if [[ $? = "0" ]]; then
-clear;banner
-source $CONF
-if [[ $VPN = "false" ]]; then
-for (( ; ; )); do
-wait_time=$IDLETIME
-temp_cnt=${wait_time}
-while [[ ${temp_cnt} -gt 0 ]]; do
-    printf "\rIP: [\e[1;31m$(curl -s $WIP)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
-done;
-    printf "\n"
-    clear;banner
-    bash emagnet --emagnet
-    sleep 2
-done
-    clear;banner
-    bash emagnet --emagnet
-exit
-else
-  banned
-fi
-fi
-
-
-
 ##########################################################################################################
-##### Moved pastebin-urls to here insted, we can rather echo them after we downloaded them directly..#####
+##### If /tmp/.emagnet havent grabbed some urls, we double check response from pastebin..............#####
+##### and searching for the word blocked since then we have been banned..............................#####
 ##########################################################################################################
-
-# // Create a new line when we gather new urls, removed the old line so we can shorter the code a bit
-echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
-cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
+if [[ $(cat /tmp/.emagnet|grep https) = "0" ]]; then
+# // Have we been banned?
+heavyload
+Iwasbanned
+fi
 
 # // Using wget via -P instead of joining temp path since we grabbingall data via the variable anyway..
-parallel -j200% -n8 -a /tmp/.emagnet wget -nc -q -P $EMAGNETTEMP &> /dev/null
+parallel -j200% -n8 -a /tmp/.emagnet wget -nc -P $EMAGNETTEMP &> /dev/null
 
 # // For how many files we have been downloaded
+# // If there is below 10 add 0 infront of X
 tt="$(ls $EMAGNETTEMP | wc -l)"
 if [[ $tt -lt "10" ]]; then 
-   tt="0$tt"
+  tt="0$tt"
 fi
 
-
-
-# Echo from wich files we found email-addresses and passwords to emagnet.log #
+# // If no files was found, then let user know that it might be good to rise TIME in /etc/emagnet.conf
 if [[ $tt = "00" ]]; then
    printf "[\e[1;31m<<\e[0m] - No new files downloaded, you may wanna rise refresh time..\n\n"
+   tt="\e[1;31m\e[5m00\e[0m"
    sleep 5
+   clear
+   banner
+else
+echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
+cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
 fi
 
 ##########################################################################################################
@@ -979,51 +1537,40 @@ fi
 i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'   $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n')
 il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n')
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|wc -l|tr ' ' '\n')
+if [[ $it -lt "10" ]]; then it=0$it;fi
 
 # // Regex for email addresses including a password
 p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$"  $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' |sed 's/|/:/g'|tr ' ' '\n')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"  $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|wc -l)
-
-IP="$()"
-IPL="$()"
-IPT="$()"
-
-
-##########################################################################################################
-##### If /tmp/.emagnet havent grabbed some urls, we double check response from pastebin..............#####
-##### and searching for the word blocked since then we have been banned..............................#####
-##########################################################################################################
-if [[ ! -s /tmp/.emagnet ]]; then
-if [[ $BROWSER = "lynx" ]]; then
-    lynx -dump $PASTEBIN > /tmp/.emagnet
-else
-    elinks -dump $PASTEBIN > /tmp/.emagnet
-fi
+if [[ $pt -lt "10" ]]; then pt=0$pt;fi
 
 ########################################################################################
 #### If we fetched urls we checking for mail addresses && passwords and if we have..####
 #### found more then 0 data we move files & echo all data we have found to our logs.####
 ########################################################################################
-elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
+if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
 
 ########################################################################################
 #### When we found passwords and email addresses we will move and echo them to......####
 #### the files that has been set in /emagnet.conf...................................####
 ########################################################################################
+   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
 
-   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found $pt emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
    cp -rn $p $EMAGNETHOME/password-files/ 2>/dev/null
    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>' > $EMAGNETLOGS/passwords-from-pastebin.txt 
-   printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-   printf "%17s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-   printf "%17s[\e[1;32m$it\e[0m] - Email Adresses Found\n\n"
-   source $CONF
+   printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+   printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
+   printf "%19s[\e[1;32m$it\e[0m] - Passwords Found\n\n"
    sleep 2
-   if [[ $GBRUTEFORCE = "true" ]]; then    
-      printf "%22s \e[1;32mBRUTE FORCING\e[0m\n\n"; bruter
-   fi
-      cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+   if [[ $GBRUTEFORCE = "true" ]]; then
+   	printf "%64s \n\n" | tr ' ' '='
+   	printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
+   	 bruter
+   	else
+   	 sleep 2
+   	fi
+   cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 
 ##########################################################################################
 #  | If we are not banned and we get 0 emails then we have 0                 |         | #
@@ -1032,44 +1579,64 @@ elif [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
 ###|###################################################################################|##
 #  |____________¸                    |                                       |         | #
 #               ˇ                    ˇ                                       ˇ         ˇ #
- elif [[ $pt = "0" ]] && [[ $it -gt "0" ]]; then
+ elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
 
 # // Handle logs for email only since password is 0 and echo how many we found
-   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found $it emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
+   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
 
 # // Handle logs for email only since password is 0 and echo emails to its file
    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
 
 # // Copy / Move mail file
-   cp $i $EMAGNETHOME/email-files/ 2>/dev/null
+   cp $i $EMAGNETDB/ 2> /dev/null
 
 # // Move everything
-   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+   mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 
 # // We will let the user know how many mail addresses we found
-   printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-   printf "%17s[\e[1;31m00\e[0m] - Passwords Found\n\n"
-   printf "%17s[\e[1;32m$it\e[0m] - Email Adresses Found\n\n"
-
-# // We use sleep 5 here to increase the time before we download new files
-# // from pastebin and also so the user will have time to see what we found
-   sleep 5
+       printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+       printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
+       printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+       sleep 5
 else
 # // We will let the user know that nothing were found
-clear
-banner
-   if [[ $tt = "00" ]]; then
-       printf "%17s[\e[1;31m\e[5m$tt\e[0m] - Files Downloaded\n\n"
-   else
        printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-   fi
        printf "%17s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n"
        printf "%17s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
-   sleep 3.2;
+       sleep 3.2
 fi
-clear
-banner
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 #### This will stop after we found email, run 4ever if its in a loop        ####
@@ -1080,11 +1647,9 @@ if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
     banned
  else
-    echo -e "[\e[1;31m<<\e[0m] - You have been blocked by pastebin"
-    echo -e "[\e[1;31m<<\e[0m] - Enable vpn or please try again later, aborted\n"
-    exit
-       fi
-    fi
+    Iwasbanned
+ fi
+fi
 for (( ; ; )); do
   clear
   banner
@@ -1095,6 +1660,7 @@ for (( ; ; )); do
   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 done
 }
+
 ################################################################################
 #### This will stop after we found email, run 4ever if its in a loop        ####
 ################################################################################
@@ -1104,11 +1670,9 @@ if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
     banned
  else
-    echo -e "[\e[1;31m<<\e[0m] - You have been blocked by pastebin"
-    echo -e "[\e[1;31m<<\e[0m] - Enable vpn or please try again later, aborted\n"
-    exit
-       fi
-    fi
+    Iwasbanned
+ fi
+fi
 for (( ; ; )); do
   clear
   banner
@@ -1151,6 +1715,10 @@ EOF
 
 
 
+
+
+
+
 "emagnet"|"-e"|"-emagnet"|"--emagnet")
 source $CONF
 sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' $CONF
@@ -1158,8 +1726,6 @@ source $CONF
 clear
 banner
 check4all
-heavyload
-youwasblocked
 PWD="$(pwd)"
 if [[ -d "/usr/bin" ]]; then
  if ! [[ -h "/usr/bin/emagnet" ]] || ! [[ -L "/usr/bin/emagnet" ]] ; then
@@ -1184,10 +1750,11 @@ fi
 
 
 
+
+
+
 "-g"|"-bruteforce"|"--bruteforce")
 check4all
-heavyload
-youwasblocked
 sleep 0.5
 source $CONF
 sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' $CONF
@@ -1200,16 +1767,33 @@ else
 fi
       mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 ;;
+
+
 "help"|"-h"|"-help"|"--help")
       usage
       exit 1
 ;;
+
+
+
 
 "-i"|"-ip"|"--ip")
       source $CONF
       printf 'IP: %s\n' "$MYIP"
       exit 1
 ;;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 "-k"|"-kill"|"--kill")
@@ -1225,6 +1809,16 @@ else
 fi
 ;;
 
+
+
+
+
+
+
+
+
+
+
 "-l"|"-license"|"--license")
       printf "%s\n" "Printing LICENSE - Use 'q' to quit"
       sleep 2
@@ -1232,15 +1826,31 @@ fi
       printf "%s\n" "Thank you.."
 ;;
 
+
+
+
+
+
+
 "-m"|"-move"|"--move")
       check4all
       moveem
  ;;
 
 
+
+
+
+
+
+
 "-s"|"-spam"|"--spam")
       emagnetspammer
  ;;
+
+
+
+
 
 
 "-d"|"-stats"|"--stats")
@@ -1251,11 +1861,20 @@ fi
 ;;
 
 
+
+
+
+
 "-x"|"-syntax"|"--syntax")
       check4all
       clear;banner
       emagnetsyntax
 ;;
+
+
+
+
+
 
 "-q"|"-quiet"|"--quiet")
       check4all
@@ -1264,10 +1883,21 @@ fi
       printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n\n"
  ;;
 
-"versio"|"-version"|"--version")
+
+
+
+
+
+"version"|"-version"|"--version"|"-V")
 source $CONF
      printf "Emagnet Version: v$VERSION\n"
  ;;
+
+
+
+
+
+
 
 "-t"|"-time"|"--time")
 source $CONF
@@ -1284,8 +1914,14 @@ fi
  fi
      sed -i '30d' $CONF
      sed -i "30 i TIME=$2" $CONF
-     printf "Config file has been updated, time has been set to to: \e[1;1m$2\e[0ms\n\n"; exit 1
+     printf "[\e[1;32m>>\e[0m] - Config file has been updated, time has been set to to: \e[1;1m$2\e[0ms\n\n"; exit 1
 ;;
+
+
+
+
+
+
 
  "-v"|"-vpn"|"--vpn")
 source $CONF;clear;banner
@@ -1304,6 +1940,10 @@ else
      exit 1 
 fi
 ;;
+
+
+
+
 
 "p"|"--spider")
    spider
@@ -1364,7 +2004,24 @@ fi
 ;;
 
 
+
+
+
+
+
+
 "\?") usage ;;
+
+
+
+
+
+
+
+
+
+
+
 *)   clear;banner
      printf "[\e[1;31m<<\e[0m] - emagnet: unknown option -- try './emagnet --help'\n\n"
      exit 1 ;;
