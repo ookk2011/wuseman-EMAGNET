@@ -930,10 +930,11 @@ if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
 
    cp -rn $p $EMAGNETHOME/password-files/ 2>/dev/null
+   cp -rn $i $EMAGNETHOME/password-files/ 2>/dev/null
    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>' > $EMAGNETLOGS/passwords-from-pastebin.txt 
    printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
    printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-   printf "%19s[\e[1;32m$it\e[0m] - Passwords Found\n\n"
+   printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
    sleep 2
    if [[ $GBRUTEFORCE = "true" ]]; then
    	printf "%64s \n\n" | tr ' ' '-'
