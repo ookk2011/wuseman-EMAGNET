@@ -42,31 +42,6 @@
 CONF="/etc/emagnet.conf"
 # if [[ -z $VPN ]]; then sed -i '150d' $CONF; sed -i '150 i VPN=false' $CONF;fi
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ################################################################################
 #### Emagnet require root for we must install packages for 7example.........####
 ################################################################################
@@ -76,28 +51,6 @@ if [[ $(whoami) != root ]]; then
      exit 0
 fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ###############################################################################
 #### Emagnet's MASKOT......................................................####
@@ -124,40 +77,8 @@ cat << "EOF"
                            `~OOOOO~'
 
 EOF
-printf "%64s \n\n" | tr ' ' '='
+printf "%64s \n\n" | tr ' ' '-'
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ################################################################################
 #### Usage/Help for emagnet.................................................####
@@ -188,26 +109,6 @@ Usage: ./emagnet [--author] [--emagnet] [--option] .....
 
 EOF
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ################################################################################
 #### We must have a proper internet connection for run emagnet..............####
@@ -922,7 +823,6 @@ analyzer() {
 source $CONF
 wait_time=$TIME
 temp_cnt=${wait_time}
-
 while [[ ${temp_cnt} -gt 0 ]]; do
     printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
     sleep 1
@@ -949,7 +849,8 @@ done
 
 countdown() {
 if [[ $GBRUTEFORCE = "true" ]]; then
-    printf "%18s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+    printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+    printf "\n%64s \n" | tr ' ' '-'
     echo ""
     analyzer
 elif [[ $GBRUTEFORCE = "false" ]]; then
@@ -1016,34 +917,43 @@ fi
 
 
 ################################################################################
-#### This is stats function when you using emagnet -s for count stats.......####
+#### This is stats function wwhen you using emagnet -s for count stats.......####
 ################################################################################
 stats() {
+source $CONF
+
+if ! [[ -d $EMAGNETARCHIVE/all-files ]]; then
+    clear
+    banner
+    echo -e "[\e[0;31m<<\e[0m] - Duh! You must run emagnet before you can count any stats.\n"
+    exit 1
+fi
+    echo
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting data"
     printf "%s" "                           (00%)"
     sleep 1
-    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l &> /dev/null)
+    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting total files.."
     printf "%s" "..                (14%)"
     sleep 0.5
-    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l &> /dev/null)
+    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting email files.."
     printf "%s" "....              (39%)"
     sleep 0.5
-    TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l &> /dev/null)
+    TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting password files.."
     printf "%s" "......         (51%)"
     sleep 0.5
-    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l &> /dev/null)
+    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting total email addresses"
     printf "%s" "........  (92%)"
     sleep 0.5
-    TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l &> /dev/null)
+    TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l)
     clear; banner
     printf "[\e[1;32m>>\e[0m] - Please wait, counting total passwords.."
     printf "%s\n" ".............(100%)"
@@ -1099,7 +1009,7 @@ else
      printf "[\e[1;32m$TEMAILFILES\e[0m] - Files With Atleast 1 Mail Address Stored\n\n"
   fi
 done
-printf "%64s \n\n" | tr ' ' '='
+printf "%64s \n\n" | tr ' ' '-'
 
 }
 
@@ -1202,7 +1112,6 @@ fi
 #### This is were we hold the code for downloading files by syntax..........####
 ################################################################################
 emagnetsyntax() {
-clear;banner
 $BROWSER -dump $PASTEBIN/bash|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
@@ -1399,6 +1308,7 @@ merge_logs
 #### This is were we holds the code for spamming feature                    ####
 ################################################################################
 emagnetspammer() {
+source $CONF
 clear;banner
 ssmtp &> /dev/null
 if [[ $? -gt "0" ]]; then
@@ -1407,8 +1317,9 @@ if [[ $? -gt "0" ]]; then
 fi
 
 if [[ -z $EMAIL2SEND ]]; then
-    printf "[\e[1;31m<<\e[0m] - You must create a text file with the text you want to -\n"
-    printf "[\e[1;31m<<\e[0m] - Send to all targets in EMAIL2SEND in /etc/emagnet.conf .\n\n"
+    printf "[\e[1;31m<<\e[0m] - You must create a text file with the text you want to send\n"
+    printf "[\e[1;31m<<\e[0m] - to all targets, when text file has been created then you must\n"
+    printf "[\e[1;31m<<\e[0m] - set text file in /etc/emagnet.conf under EMAIL2SEND=/path/textfile\n\n"
     exit 1
 fi
 
@@ -1418,17 +1329,20 @@ if [[ ! -f $EMAIL2SEND ]]; then
 fi
 
 if [[ $(ls $EMAGNETDB|wc -l) -eq "0" ]]; then
-    echo -e "- No email addresses has been found today, let us grab some?"
-    echo -e "- Run emagnet in default mode by hit enter or hit another key for stop.."
+    echo -e "[\e[0;33m<<\e[0m] - No email addresses has been found today.."
+    echo -e "[\e[0;33m<<\e[0m] - Let's run emagnet by hit [enter] or hit any other for stop.."
     read  -s -n 1 key
-    if [[ -z $key ]]; then ./emagnet --emagnet ; else echo -e "- Aborted... :-/\n";exit 1; fi
+    if [[ -z $key ]]; then
+        bash emagnet --emagnet 
+    else
+        echo -e "[\e[1;31m<<\e[0m] - Let's spam some email addresses another day, aborted. :-(\n";exit 1; fi
     exit 1
 else
 NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2|wc -l)"
 printf "%24s \e[1;31mTargets: \e[1;32m$NRTARGETS\e[0m\e[0m\n\n"
 read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
     case $sendtoall in
-    yes) printf "%62s \n" | tr ' ' '='
+    yes) printf "%62s \n" | tr ' ' '-'
         grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > /tmp/.emagnet-spammer
            while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.' 
            done < /tmp/.emagnet-spammer
@@ -1566,7 +1480,7 @@ if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
    printf "%19s[\e[1;32m$it\e[0m] - Passwords Found\n\n"
    sleep 2
    if [[ $GBRUTEFORCE = "true" ]]; then
-   	printf "%64s \n\n" | tr ' ' '='
+   	printf "%64s \n\n" | tr ' ' '-'
    	printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
    	 bruter
    	else
@@ -1666,26 +1580,6 @@ done
 ################################################################################
 #### This will stop after we found email, run 4ever if its in a loop        ####
 ################################################################################
-dontstopwhenfoundbruter() {
-$BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
-if [[ $? = "0" ]]; then
- if [[ $VPN = "true" ]]; then
-    banned
- else
-    Iwasbanned
- fi
-fi
-for (( ; ; )); do
-  clear
-  banner
-  countdown
-  clear
-  banner
-  emagnet2
-  bruter
-  mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-done
-}
 
 ################################################################################
 #### Below is how we call all functions for emagnet                         ####
@@ -1762,7 +1656,9 @@ source $CONF
 sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' $CONF
 source $CONF
 if [[ $GBRUTEFORCE = "true" ]]; then
-      dontstopwhenfoundbruter
+        printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+        printf "\n%64s \n\n" | tr ' ' '-'
+       dontstopwhenfound
 else
       printf "emagnet: unknown error -- is /etc/emagnet.conf broken?\n"
        exit 1
@@ -1780,8 +1676,7 @@ fi
 
 
 "-i"|"-ip"|"--ip")
-      source $CONF
-      printf 'IP: %s\n' "$MYIP"
+      printf 'IP: %s\n' "$(curl -s https://nr1.nu/i/)"
       exit 1
 ;;
 
@@ -1873,11 +1768,6 @@ fi
       emagnetsyntax
 ;;
 
-
-
-
-
-
 "-q"|"-quiet"|"--quiet")
       check4all
       pid="$(ps aux |grep emagnet)"
@@ -1885,21 +1775,10 @@ fi
       printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n\n"
  ;;
 
-
-
-
-
-
 "version"|"-version"|"--version"|"-V")
 source $CONF
      printf "Emagnet Version: v$VERSION\n"
  ;;
-
-
-
-
-
-
 
 "-t"|"-time"|"--time")
 source $CONF
@@ -1952,11 +1831,14 @@ fi
 ;;
 
 "-b"|"-backup"|"--backup")
-clear;banner
-source $CONF
-if [[ ! -d $EMAGNETBACKUP ]]; then mkdir -p $EMAGNETBACKUP &> /dev/null;fi
+    clear;banner;source $CONF
+
+if [[ ! -d $EMAGNETBACKUP ]]; then
+   mkdir -p $EMAGNETBACKUP
+fi
+
 if [[ ! -d "$EMAGNET" ]]; then
-    echo "Can't do anything since no emagnet folder exists, aborted.."
+    echo "[\e[1;32m<<\e[0m] - Duh! Can't do anything since no emagnet folder exists, aborted.."
 exit 1
 fi
 
@@ -1977,7 +1859,7 @@ elif [[ $* = "incoming" ]]; then
 elif [[ $* = "archive" ]]; then
          echo -e "Removed old backup.."
          echo -e "Compressing $EMAGNET, please wait.."
-         tar -cf - --absolute-names "$EMAGNET/backup"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
+         tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
 else
          printf "emagnet: error -- please specify incoming, archive or all\n\n"
          exit 1
@@ -2012,7 +1894,7 @@ fi
 
 "--setup")
 if [[ $1 = "--setup" ]]; then
-   file emagnet-setup.sh
+   file emagnet-setup.sh &> /dev/null
 if [[ $? -eq "0" ]]; then
       bash ./emagnet-setup.sh
 else
