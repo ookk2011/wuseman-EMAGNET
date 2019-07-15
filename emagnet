@@ -552,51 +552,50 @@ fi
     sleep 2
     fi
     clear;banner
-    printf "%23s EMAGNET STATS\n\n"
-for totalfiles in $TOTALFILES; do
+
+line='      -'
+for totalfiles in $TOTALFILES; do    
   if [[ $TOTALFILES -lt "10" ]]; then
-     printf "[\e[1;31m0$TOTALFILES\e[0m]"; printf "%5s\n" " - Total Files That Have Been Downloaded From Pastebin"
+     printf "[\e[1;32m%s\e[m] %s Total files downloaded from pastebin\n" 0$TOTALFILES "${line:${#TOTALFILES}}"
   else
-     printf "[\e[1;32m$TOTALFILES\e[0m]"; printf "%5s\n" "- Total Files That Have Been Downloaded From Pastebin"
+     printf "[\e[1;32m%s\e[m] %s Total files downloaded from pastebin\n" $TOTALFILES "${line:${#TOTALFILES}}"
   fi
 done
 
 
 for temails in $TEMAILS; do
   if [[ $TEMAILS -lt "10" ]]; then
-     printf "[\e[1;31m0$TEMAILS\e[0m] - Total Mail Addresses Found\n"
+     printf "[\e[1;32m%s\e[m] %s Mail addresses stored\n" 0$TEMAILS "${line:${#TEMAILS}}"
   else
-     printf "[\e[1;32m$TEMAILS\e[0m] - Total Mail Addresses Found\n"
+     printf "[\e[1;32m%s\e[m] %s Mail addresses stored\n" $TEMAILS "${line:${#TEMAILS}}"
   fi
 done
 
 for tpasswords in $TPASSWORDS; do
   if [[ $TPASSWORDS -lt "10" ]]; then
-     printf "[\e[1;31m0$TPASSWORDS\e[0m] - Total Passwords Found\n"
+     printf "[\e[1;32m%s\e[m] %s Passwords stored\n" 0$TPASSWORDS "${line:${#TPASSWORDS}}"
   else
-     printf "[\e[1;32m$TPASSWORDS\e[0m] - Total Passwords Found\n"
+     printf "[\e[1;32m%s\e[m] %s Passwords stored\n" $TPASSWORDS "${line:${#TPASSWORDS}}"
+  fi
+done
 
+for temailfiles in $TEMAILFILES; do
+  if [[ $TEMAILFILES -lt "10" ]]; then
+     printf "[\e[1;32m%s\e[m] %s Files that have at least one email address stored\n" 0$TEMAILFILES "${line:${#TEMAILFILES}}"
+else
+     printf "[\e[1;32m%s\e[m] %s Files that have at least one email address stored\n" $TEMAILFILES "${line:${#TEMAILFILES}}"
   fi
 done
 
 for tpasswordsfiles in $TPASSWORDFILES; do
   if [[ $TPASSWORDFILES -lt "10" ]]; then
-     printf "[\e[1;31m0$TPASSWORDFILES\e[0m] - Files With Atleast 1 Password Stored\n"
+     printf "[\e[1;32m%s\e[m] %s Files that have at least one mail incl: password stored\nn" 0$TPASSWORDFILES "${line:${#TPASSWORDFILES}}"
   else
-     printf "[\e[1;32m$TPASSWORDFILES\e[0m] - Files With Atleast 1 Password Stored\n"
-
+     printf "[\e[1;32m%s\e[m] %s Files that have at least one mail incl: password stored\n" $TPASSWORDFILES "${line:${#TPASSWORDFILES}}"
  fi
 done
 
-for temailfiles in $TEMAILFILES; do
-  if [[ $TEMAILFILES -lt "10" ]]; then
-     printf "[\e[1;31m00\e[0m] - Files With Atleast 1 Mail Address Stored\n\n"
-else
-     printf "[\e[1;32m$TEMAILFILES\e[0m] - Files With Atleast 1 Mail Address Stored\n\n"
-  fi
-done
-printf "%64s \n\n" | tr ' ' '='
-
+printf "\n%64s \n\n" | tr ' ' '='
 }
 
 ################################################################################
