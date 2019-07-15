@@ -1274,7 +1274,7 @@ fi
 
 ;;
 
-"-setup"|"--setup")
+"-S"|"-setup"|"--setup")
 if [[ $1 = "--setup" ]]; then
    file emagnet-setup.sh &> /dev/null
 if [[ $? -eq "0" ]]; then
@@ -1287,12 +1287,8 @@ fi
 
 "\?") usage ;;
 
-
 *)   clear;banner
      printf "emagnet: internal error -- './emagnet --help'\n\n"
      exit 1 ;;
-
 esac
-
-#!/bin/bash
 
