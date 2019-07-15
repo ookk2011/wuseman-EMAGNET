@@ -84,7 +84,7 @@ cat << "EOF"
                            `~OOOOO~'
 
 EOF
-printf "%64s \n\n" | tr ' ' '-'
+printf "%64s \n\n" | tr ' ' '='
 }
 ################################################################################
 #### Usage/Help for emagnet.................................................####
@@ -481,7 +481,7 @@ countdown() {
 if [[ $GBRUTEFORCE = "true" ]]; then
     clear; banner
     printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-    printf "\n%64s \n" | tr ' ' '-'
+    printf "\n%64s \n" | tr ' ' '='
     echo ""
     analyzer
 elif [[ $GBRUTEFORCE = "false" ]]; then
@@ -595,7 +595,7 @@ else
      printf "[\e[1;32m$TEMAILFILES\e[0m] - Files With Atleast 1 Mail Address Stored\n\n"
   fi
 done
-printf "%64s \n\n" | tr ' ' '-'
+printf "%64s \n\n" | tr ' ' '='
 
 }
 
@@ -821,7 +821,7 @@ NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETD
 printf "%24s \e[1;31mTargets: \e[1;32m$NRTARGETS\e[0m\e[0m\n\n"
 read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
     case $sendtoall in
-    yes) printf "%62s \n" | tr ' ' '-'
+    yes) printf "%62s \n" | tr ' ' '='
         grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > /tmp/.emagnet-spammer
            while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.' 
            done < /tmp/.emagnet-spammer
@@ -941,7 +941,7 @@ if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
    cp -rn $i $EMAGNETDB/ &> /dev/null
    sleep 2
    if [[ $GBRUTEFORCE = "true" ]]; then
-   	printf "%64s \n\n" | tr ' ' '-'
+   	printf "%64s \n\n" | tr ' ' '='
    	printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
    	 bruter
    	else
@@ -1073,7 +1073,7 @@ source $CONF
 if [[ $GBRUTEFORCE = "true" ]]; then
         clear; banner
         printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-        printf "\n%64s \n\n" | tr ' ' '-'
+        printf "\n%64s \n\n" | tr ' ' '='
        dontstopwhenfound
 else
       printf "emagnet: unknown error -- is /etc/emagnet.conf broken?\n"
