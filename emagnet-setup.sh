@@ -323,7 +323,7 @@ printf "Please specify in wich folder you to store all downloaded files from pas
 read -p "Path (Default: /opt/emagnet): " ehomedir
 if [[ $ehomedir = "" ]]; then
   mkdir -p /opt/root
-  sed -i '72d' $CONF;sed -i "72 i EMAGNET=\/opt\/\/emagnet" $CONF
+  sed -i '72d' $CONF;sed -i "72 i EMAGNET=\/opt\/emagnet" $CONF
   printf "\nConfig file has been updated, using \e[1;1m/opt/emagnet\e[0m as emagnets homedir. \n";else
   eehomedir="$(echo $ehomedir | sed 's/\/\///g')";sed -i '72d' $CONF;sed -i "72 i EMAGNET=$ehomedir" $CONF
   printf "\nConfig file has been updated, home dir has been set to: \e[1;1m$eehomedir/emagnet\e[0m\n"
