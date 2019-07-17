@@ -583,7 +583,7 @@ for temailfiles in $TEMAILFILES; do
   if [[ $TEMAILFILES -lt "10" ]]; then
      printf "%11s";printf "[\e[1;32m%s\e[m] %s Files with at least one email address\n" 0$TEMAILFILES "${line:${#TEMAILFILES}}"
 else
-     printf "%11s";printf "[\e[1;32m%s\e[m] %s Files with least one email address\n" $TEMAILFILES "${line:${#TEMAILFILES}}"
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Files with at least one email address\n" $TEMAILFILES "${line:${#TEMAILFILES}}"
   fi
 done
 
