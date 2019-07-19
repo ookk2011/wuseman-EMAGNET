@@ -354,11 +354,14 @@ if [[ -z $MYIP ]]; then
 }
 
 analyz() {
-clear;banner;printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
+clear;banner
+printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
 sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
 }
 
-check4all() { source $CONF;iconnection;mustbefilled;paths;copyconf;safety }
+check4all() {
+source $CONF;iconnection;mustbefilled;paths;copyconf;safety
+}
 
 if [[ -z $1 ]]; then usage;exit 1;fi
 
@@ -378,7 +381,9 @@ if [[ $GBRUTEFORCE = "true" ]]; then
     printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
 elif [[ $SBRUTEFORCE = "true" ]]; then
     clear;banner;printf "%19s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n";printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
-else sed -i '121d' $CONF; sed '121 i GBRUTEFORCE=false' $CONF;sed -i '121d' $CONF; sed '122 i SBRUTEFORCE=false' $CONF;source /etc/emagnet.conf;analyzer;fi
+else sed -i '121d' $CONF; sed -i '121 i GBRUTEFORCE=false' $CONF
+	 sed -i '121d' $CONF; sed -i '122 i SBRUTEFORCE=false' $CONF
+	 source /etc/emagnet.conf;analyzer;fi
 }
 
 blocked() { source $CONF;if [[ ! -s /tmp/.emagnet ]]; then $BROWSER -dump $PASTEBIN > /tmp/.emagnet;fi }
