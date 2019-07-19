@@ -815,7 +815,7 @@ printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%19s[\e[1;31m00\e
 printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
 if [[ $NOTIFY = "true" ]]; then notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n$it - Email addresses found"; fi;sleep 5
 else printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%17s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n";printf "%17s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
-if [[ $NOTIFY = "true" ]]; then;notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n00 - Email addresses found"
+if [[ $NOTIFY = "true" ]]; then notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n00 - Email addresses found"
 fi;sleep 3.2;fi;pkill notify-send
 }
 
