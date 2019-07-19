@@ -106,13 +106,7 @@ Usage: ./emagnet [--author] [--emagnet] [--option] .....
 EOF
 }
 
-iconnection() {
-ping -i 0.2 -c 1 1.1.1.1 &> /dev/null
-if [[ $? -gt "0" ]]; then
-     echo "It seems you're not connected to internet properly, aborted"
-     exit 1
-fi
-}
+iconnection() { ping -i 0.2 -c 1 1.1.1.1 &> /dev/null;if [[ $? -gt "0" ]]; then echo "It seems you're not connected to internet properly, aborted";exit 1;fi }
 
 mustbefilled() {
 if [[ -z $DEBUG          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                                                                                             $CONF;fi
@@ -262,7 +256,6 @@ startvpn() {
              COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' /etc/emagnet.conf|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
            printf "Connecting to ";printf "\e[1m%s\e[0m%s \e[1;37m%s\e[0m" $COUNTRY ", please wait${line1:${#COUNTRY}}"
            printf "\n"
-
 vpnsetup
 if [[ -z $VPNCOUNTRYS ]]; then
     VPNCONFIG="$VPNPROVIDER"
@@ -285,10 +278,7 @@ connected() {
      sleep 5
      fi
 }
-     startvpn
-     sleep 1
-     connected
-     sleep 10
+     startvpn;sleep 1;connected;sleep 10
      MYIP="(curl https://nr1.nu/i/)"
 if [[ $MYOLDIP = "$MYIP" ]]; then
      MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
@@ -309,10 +299,7 @@ else
      printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
      printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
      sleep 5
-fi
-fi
-fi
-fi
+fi;fi;fi;fi
 }
 
 checkip() {
@@ -337,10 +324,7 @@ if [[ -d "/usr/local/bin" ]]; then
   fi
 fi
 
-myip="$(curl -s $WIP)"
-printf "\nIs \e[1;1m$myip\e[0m your private IP-Address (yes/no): "
-read realip
-
+myip="$(curl -s $WIP)";printf "\nIs \e[1;1m$myip\e[0m your private IP-Address (yes/no): ";read realip
 case "$realip" in
   YES|y|yes|Yes) sed -i '40d' $CONF;sed -i '40 i MYIP=' $CONF;sed -i "s/MYIP=/MYIP=$myip/g" $CONF;printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"; sleep 2 ;;
    *) read -p "Enter your current real IP-Adress: " currentip;sed -i "s/MYIP=/MYIP=$currentip/g" $CONF;printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$myip\e[0m\n"; sleep 2 ;;
@@ -360,24 +344,15 @@ if [[ -z $MYIP ]]; then
     sed -i '30d' /etc/emagnet.conf
     sed -i "30i MYIP=" /etc/emagnet.conf
     sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
-    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
-fi
+    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log;fi
 }
 
 analyz() {
-clear;banner
-printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
+clear;banner;printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
 sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
 }
 
-check4all() {
-source $CONF
-iconnection
-mustbefilled
-paths
-copyconf
-safety
-}
+check4all() { source $CONF;iconnection;mustbefilled;paths;copyconf;safety }
 
 if [[ -z $1 ]]; then usage;exit 1;fi
 
@@ -393,23 +368,11 @@ done
 
 countdown() {
 if [[ $GBRUTEFORCE = "true" ]]; then
-    clear; banner
-    printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-    printf "\n%64s \n" | tr ' ' '='
-    echo ""
-    analyzer
+    clear; banner;printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+    printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
 elif [[ $SBRUTEFORCE = "true" ]]; then
-    clear; banner
-    printf "%19s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-    printf "\n%64s \n" | tr ' ' '='
-    echo ""
-    analyzer
-else
-    sed -i '121d' $CONF; sed '121 i GBRUTEFORCE=false' $CONF
-    sed -i '121d' $CONF; sed '122 i SBRUTEFORCE=false' $CONF
-    source /etc/emagnet.conf
-    analyzer
-fi
+    clear;banner;printf "%19s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n";printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
+else sed -i '121d' $CONF; sed '121 i GBRUTEFORCE=false' $CONF;sed -i '121d' $CONF; sed '122 i SBRUTEFORCE=false' $CONF;source /etc/emagnet.conf;analyzer;fi
 }
 
 blocked() { source $CONF;if [[ ! -s /tmp/.emagnet ]]; then $BROWSER -dump $PASTEBIN > /tmp/.emagnet;fi }
@@ -757,14 +720,11 @@ fi
 emagnet2() {
 if [[ $BROWSER = "elinks" ]]; then
    elinks -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet1
-   ls -1 $EMAGNETALL |sort > 1
-   cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
+   ls -1 $EMAGNETALL |sort > 1;cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
    grep  -v -x -F -f 1 2  | awk -F, '!seen[$1]++'|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
-    rm 1 2 &> /dev/null
- else
+   rm 1 2 &> /dev/null;else
    lynx -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings\|signup\|raw\/$\|alerts' > /tmp/.emagnet1
-   ls -1 $EMAGNETALL |sort > 1
-   cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
+   ls -1 $EMAGNETALL |sort > 1;cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
    grep -v -x  -F -f 1 2 | awk -F, '!seen[$1]++'|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
    rm 1 2 &> /dev/null
 fi
@@ -780,10 +740,7 @@ sleep 7
 clear;banner
 fi
 
-if [[ $(cat /tmp/.emagnet1|grep https) = "0" ]]; then
-heavyload;Iwasbanned
-fi
-
+if [[ $(cat /tmp/.emagnet1|grep https) = "0" ]]; then heavyload;Iwasbanned;fi
 parallel -j200% -n8 -a /tmp/.emagnet wget -nc -P $EMAGNETTEMP &> /dev/null
 tt="$(ls $EMAGNETTEMP | wc -l)";if [[ $tt -lt "10" ]]; then tt="0$tt";fi
 if [[ $tt = "00" ]]; then  $BROWSER -dump $PASTEBIN|grep -q "blocked";if [[ $? = "0" ]]; then Iwasbanned; fi
