@@ -709,9 +709,6 @@ fi
 createbdirs;copy_files;merge_logs
 }
 
-################################################################################
-#### This is were we holds the code for spamming feature                    ####
-################################################################################
 emagnetspammer() {
 clear;banner
 ssmtp &> /dev/null
@@ -757,16 +754,6 @@ read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
 fi
 }
 
-################################################################################
-################################################################################
-#### And finally the heart of emagnet is stored below ##########################
-################################################################################
-####                                                                       #####
-####                   EMAGNET's MAIN CODE BEGINS HERE                     #####
-####                                                                       #####
-################################################################################
-################################################################################
-################################################################################
 emagnet2() {
 if [[ $BROWSER = "elinks" ]]; then
    elinks -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet1
@@ -792,141 +779,46 @@ clear;banner
 sleep 7
 clear;banner
 fi
-##########################################################################################################
-##### If /tmp/.emagnet havent grabbed some urls, we double check response from pastebin..............#####
-##### and searching for the word blocked since then we have been banned..............................#####
-##########################################################################################################
+
 if [[ $(cat /tmp/.emagnet1|grep https) = "0" ]]; then
-# // Have we been banned?
-heavyload
-Iwasbanned
+heavyload;Iwasbanned
 fi
 
-# // Using wget via -P instead of joining temp path since we grabbingall data via the variable anyway..
 parallel -j200% -n8 -a /tmp/.emagnet wget -nc -P $EMAGNETTEMP &> /dev/null
-
-# // For how many files we have been downloaded
-# // If there is below 10 add 0 infront of X
-tt="$(ls $EMAGNETTEMP | wc -l)"
-if [[ $tt -lt "10" ]]; then 
-  tt="0$tt"
-fi
-
-# // If no files was found, then let user know that it might be good to rise TIME in /etc/emagnet.conf
-if [[ $tt = "00" ]]; then
-   $BROWSER -dump $PASTEBIN|grep -q "blocked"
- if [[ $? = "0" ]]; then
-   Iwasbanned
- fi
-   printf "[\e[1;31m<<\e[0m] - No files has been downloaded, you may wanna rise time?\n\n"
-   tt="\e[1;31m\e[5m00\e[0m"
-   sleep 5
-   clear
-   banner
-else
-echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
-cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
-fi
-
-# // Regex for email addresses
+tt="$(ls $EMAGNETTEMP | wc -l)";if [[ $tt -lt "10" ]]; then tt="0$tt";fi
+if [[ $tt = "00" ]]; then  $BROWSER -dump $PASTEBIN|grep -q "blocked";if [[ $? = "0" ]]; then Iwasbanned; fi
+printf "[\e[1;31m<<\e[0m] - No files has been downloaded, you may wanna rise time?\n\n";tt="\e[1;31m\e[5m00\e[0m";sleep 5;clear;banner
+else echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
+cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt;fi
 i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'   $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n')
 il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n')
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|wc -l|tr ' ' '\n')
-if [[ $it -lt "10" ]]; then it=0$it;fi
-
-# // Regex for email addresses including a password
 p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$"  $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' |sed 's/|/:/g'|tr ' ' '\n')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"  $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|wc -l)
-if [[ $pt -lt "10" ]]; then pt=0$pt;fi
-
-########################################################################################
-#### If we fetched urls we checking for mail addresses && passwords and if we have..####
-#### found more then 0 data we move files & echo all data we have found to our logs.####
-########################################################################################
+if [[ $it -lt "10" ]]; then it=0$it;fi;if [[ $pt -lt "10" ]]; then pt=0$pt;fi
 if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
-
-########################################################################################
-#### When we found passwords and email addresses we will move and echo them to......####
-#### the files that has been set in /emagnet.conf...................................####
-########################################################################################
-   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
-
-   grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>' > $EMAGNETLOGS/passwords-from-pastebin.txt 
-   grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
-   printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-   printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-   printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
-if [[ $NOTIFY = "true" ]]; then
-   notify-send "Emagnet" "\n$tt - Files downloaded\n $pt - Passwords found\n$it - Email addresses found"
-fi
-
-   cp -rn $p $EMAGNETPW/ &> /dev/null
-   cp -rn $i $EMAGNETDB/ &> /dev/null
-   sleep 2
-
-   if [[ $GBRUTEFORCE = "true" ]]; then
-   	printf "%64s \n\n" | tr ' ' '='
-   	printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
-   	 bruter
-         sleep 2
-   elif [[ $SBRUTEFORCE = "true" ]]; then
-   	printf "%64s \n\n" | tr ' ' '='
-         sshbruter
-         sleep 2
-   else
-         sleep 0
-   fi
-
-   cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-
-##########################################################################################
-#  | If we are not banned and we get 0 emails then we have 0                 |         | #
-#  | passwords also since without mail we wont find any passwords and        |         | #
-#  | in this case we still want to move files and echo urls to logs          |         | #
-###|###################################################################################|##
-#  |____________¸                    |                                       |         | #
-#               ˇ                    ˇ                                       ˇ         ˇ #
- elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
-
-# // Handle logs for email only since password is 0 and echo how many we found
-   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
-
-# // Handle logs for email only since password is 0 and echo emails to its file
-   grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
-
-# // Copy / Move mail file
-   cp $i $EMAGNETDB/ &> /dev/null
-
-# // Move everything
-   mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-
-# // We will let the user know how many mail addresses we found
-       printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-       printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
-       printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
-if [[ $NOTIFY = "true" ]]; then
-   notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n$it - Email addresses found"
-fi
-
-       sleep 5
-else
-# // We will let the user know that nothing were found
-       printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-       printf "%17s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n"
-       printf "%17s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
-if [[ $NOTIFY = "true" ]]; then
-   notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n00 - Email addresses found"
-fi
-
-       sleep 3.2
-fi
-   pkill notify-send
+echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
+grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>' > $EMAGNETLOGS/passwords-from-pastebin.txt 
+grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n";printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+if [[ $NOTIFY = "true" ]]; then notify-send "Emagnet" "\n$tt - Files downloaded\n $pt - Passwords found\n$it - Email addresses found";fi
+cp -rn $p $EMAGNETPW/ &> /dev/null;cp -rn $i $EMAGNETDB/ &> /dev/null;sleep 2
+if [[ $GBRUTEFORCE = "true" ]]; then printf "%64s \n\n" | tr ' ' '='
+printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n";bruter;sleep 2
+elif [[ $SBRUTEFORCE = "true" ]]; then printf "%64s \n\n" | tr ' ' '=';sshbruter;sleep 2; else sleep 0;fi
+cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null;elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
+echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
+grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+cp $i $EMAGNETDB/ &> /dev/null;mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
+printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+if [[ $NOTIFY = "true" ]]; then notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n$it - Email addresses found"; fi;sleep 5
+else printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%17s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n";printf "%17s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
+if [[ $NOTIFY = "true" ]]; then;notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n00 - Email addresses found"
+fi;sleep 3.2;fi;pkill notify-send
 }
 
-################################################################################
-#### This will stop after we found email, run 4ever if its in a loop        ####
-################################################################################
 dontstopwhenfound() {
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then if [[ $VPN = "true" ]]; then banned;else Iwasbanned;fi;fi
@@ -936,15 +828,6 @@ elif [[ $SBRUTEFORCE = "true" ]]; then sshbruter;mv $EMAGNETTEMP/* $EMAGNETHOME/
 else mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null;fi;done
 }
 
-################################################################################
-#### This will stop after we found email, run 4ever if its in a loop        ####
-################################################################################
-
-################################################################################
-#### Below is how we call all functions for emagnet                         ####
-#### - This is very ugly I know sorry for that                              ####
-#### - I haven't fixed this but I will do this part much much better soon   ####
-################################################################################
 case $1 in
 "-a"|"-author"|"--author")
 cat << "EOF"
