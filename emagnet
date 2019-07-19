@@ -106,7 +106,13 @@ Usage: ./emagnet [--author] [--emagnet] [--option] .....
 EOF
 }
 
-iconnection() { ping -i 0.2 -c 1 1.1.1.1 &> /dev/null;if [[ $? -gt "0" ]]; then echo "It seems you're not connected to internet properly, aborted";exit 1;fi }
+iconnection() {
+ping -i 0.2 -c 1 1.1.1.1 &> /dev/null
+if [[ $? -gt "0" ]]; then
+     echo "It seems you're not connected to internet properly, aborted"
+     exit 1
+fi
+}
 
 mustbefilled() {
 if [[ -z $DEBUG          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                                                                                             $CONF;fi
@@ -720,11 +726,14 @@ fi
 emagnet2() {
 if [[ $BROWSER = "elinks" ]]; then
    elinks -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet1
-   ls -1 $EMAGNETALL |sort > 1;cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
+   ls -1 $EMAGNETALL |sort > 1
+   cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
    grep  -v -x -F -f 1 2  | awk -F, '!seen[$1]++'|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
-   rm 1 2 &> /dev/null;else
+    rm 1 2 &> /dev/null
+ else
    lynx -dump $PASTEBIN|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings\|signup\|raw\/$\|alerts' > /tmp/.emagnet1
-   ls -1 $EMAGNETALL |sort > 1;cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
+   ls -1 $EMAGNETALL |sort > 1
+   cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
    grep -v -x  -F -f 1 2 | awk -F, '!seen[$1]++'|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
    rm 1 2 &> /dev/null
 fi
