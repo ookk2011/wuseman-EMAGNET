@@ -24,8 +24,10 @@
 
 | Current Version    |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.1`              |  2019-07-14    | Stable                          | Linux - Windows - MacoSX - Android   |
+| `3.2`              |  2019-07-20    | Beta                              | Linux                               |
+| `3.1`              |  2019-07-14    | Stable                            | Linux - Windows - MacoSX - Android   |
 
+### v3.1 Can be downloaded from ![here](https://nr1.nu/emagnet-3.1.tar.gz)
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
 
@@ -43,10 +45,13 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
       ./emagnet --emagnet
 
-* Normal mode with brute forcing: 
+* Default mode and bruteforcing ipv4 addresses we found, this is a very very powerful ssh bruteforcer that will use parallel to bruteforce, you will attack over 7000 targets in 60 seconds on a i7 4th generation.
 
-      ./emagnet --bruteforce
+* We scanning all targets with netcat and if port 22 is open we gonna attack otherwise we skip the attack. Here is a preview how it works. _Don't break the law!_
 
+![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
+
+      ./emagnet --bruteforce ssh
 
 ###  Get Started On Windows 10
 
@@ -78,6 +83,7 @@ _How To Find your facebook credenticals, if it has been leaked._
 ## Changelog
 
 [Versions changelog](CHANGELOG.md).
+
 
 ## Authors: 
 
@@ -117,4 +123,5 @@ _wuseman cannot be held as responsible for users actions regardless of what dama
 ####
 #### Emagnet development has just started and is FAR away from complete, to be continued. 
 ####
+
 
