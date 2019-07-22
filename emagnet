@@ -921,7 +921,7 @@ for urls in $(seq 1 $2); do
      echo -e "[\e[1;32m>>\e[0m] - Trying to download: $fuz"
       echo $fuz|xargs -n 1000 -P 1000 -I{} wget -q https://pastebin.com/raw/$fuzname
      if [[ $? -eq "0" ]]; then
-         echo $YUP - Downloaded $fuz;
+         echo -e $YUP - Downloaded $fuz;
      else
          echo -e "$NOPE - No luck this time for $fuzname.."
      fi
