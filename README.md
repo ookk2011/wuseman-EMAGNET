@@ -58,6 +58,13 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
       ./emagnet --bruteforce ssh
 
+
+### NEWS2!
+
+* Search for your visa card or your mastercard in downloaded files, have it been leaked?
+
+![Screenshot](https://nr1.nu/emagnet/previews/searching-for.png)
+
 ###  Get Started On Windows 10
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
