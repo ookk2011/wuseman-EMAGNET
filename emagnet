@@ -533,8 +533,8 @@ fi
 #echo -e "[\e[1;32mopen..\e[0m] - {}:22" || \
 #echo -e "[\e[1;31mclosed\e[0m] - {}:22"' 
 fi
-    rm $SSHPORTSCAN $SSHTARGETS &> /dev/null
-    sleep 2
+    rm "$SSHPORTSCAN" "$SSHTARGETS" "grep" "open" &> /dev/null
+    sleep 4
 }
 
 bruter() {
