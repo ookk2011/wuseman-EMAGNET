@@ -96,6 +96,7 @@ Usage: ./emagnet [--author] [--emagnet] [--option] .....
   -d, --stats         Print stats from all folders
   -e, --emagnet       Download latest uploads and store leaked dbs
   -f, --fuzzer        Create random urls and download unknown pastes
+  -F, --find          Search for credit cards, images and much more via  menu
   -g, --bruteforce    Same as '-e' with brute-force mode on
   -i, --ip            Print you current WAN IPv4/IPv6
   -k, --kill          Kill emagnet sessions
@@ -927,6 +928,132 @@ for urls in $(seq 1 $2); do
      fi
 done
 ;;
+
+
+"F"|"-find"|"--find")
+echo ""
+COLUMNS=1
+source /etc/emagnet.conf
+
+PS3='
+What are you looking for: '
+options=(
+	"Find HTTP/HTTPs/FTPs/FTP urls"
+        "Find Images"
+        "Find MD5 Hashes"
+	"Find Valid MySQL-Old Hashes"
+	"Find Blowfish Hashes"
+	"Find VBulletin Hashes"
+	"Find PHPBB3-MD5"
+	"Find Wordpress-MD5"
+	"Find Drupal 7"
+	"Find Old Unix-md5"
+	"Find MD5-Apr1"
+	"Find SHA512cCrypt"
+	"Find Floating Point Numbers"
+	"Find Visa Credit Cards"
+	"Find American Express Credit Cards"
+	"Find Diners Club Cards"
+	"Find Discover Cards"
+	"Find JCB Cards"
+	"Find AMEX Cards"
+	"Find Social Security Number (SSN) (US)"
+	"Find Indiana Driver License Number"
+	"Find US Passport Cards"
+	"Find US Passport Number"
+	"Find US Phone Numbers"
+        "Find ISBN Numbers"
+	"Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Find HTTP/HTTPs/FTPs/FTP urls")
+         for urls in $(grep -rEo "(http|https|ftp/ftps)://[a-zA-Z0-9./?=_-]*" $EMAGNETHOME|cut -d: -f2,3|awk -F, '!seen[$1]++'|sort); do echo URL: $urls; done ;;
+
+        "Find Images")
+        find $EMAGNETHOME -type f |xargs -P $THREADS grep -rE -o "(http|https|ftp|ftps)://[a-zA-Z0-9./?=_-]*(\.jpg|png|gif|bmp|tiff|jpeg|jpeg2|pbm)$" $EMAGNETHOME|awk -F, '!seen[$1]++'  ;;
+
+        "Find MD5 Hashes")
+         egrep -roE '(^|[^a-fA-F0-9])[a-fA-F0-9]{32}([^a-fA-F0-9]|$)' $EMAGNETHOME | egrep -ro '[a-fA-F0-9]{32}' $EMAGNETHOME|grep -v "000000000000000000000000" ;;
+
+        "Find valid MySQL-Old hashes")
+         grep -re "[0-7][0-9a-f]{7}[0-7][0-9a-f]{7}" $EMAGNETHOME ;;
+
+        "Find Blowfish Hashes")
+        grep -re "$2a\$\08\$(.){75}" $EMAGENT ;;
+
+        "Find VBulletin Hashes")
+        egrep -ro "([0-9a-zA-Z]{32}):(S{3,32})" $EMAGNETHOME ;;
+
+        "Find PHPBB3-MD5")
+        egrep -ro '$H$S{31}' $EMAGNETHOME ;;
+
+        "Find Wordpress-MD5")
+        egrep -ro '$P$S{31}' $EMAGNETHOME ;;
+
+        "Find Drupal 7")
+        egrep -ro '$S$S{52}' $EMAGNETHOME ;;
+
+        "Find Old Unix-md5")
+         egrep -ro '$1$w{8}S{22}' $EMAGNETHOME ;;
+
+        "Find MD5-Apr1")
+        egrep -ro '$apr1$w{8}S{22}' $EMAGNETHOME ;;
+
+        "Find SHA512cCrypt")
+        egrep -ro '$6$w{8}S{86}' $EMAGNETHOME ;;
+
+        "Find Floating Point Numbers")
+        grep -E -ro "^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)?$" $EMAGNETHOME ;;
+
+        "Find Visa Credit Cards")
+         grep -riE -o "4[0-9]{3}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}"$EMAGNETHOME|awk -F, '!seen[$1]++'  ;;
+
+        "Find MasterCard Credit Cards")
+         grep -E -o "5[0-9]{3}[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}" $EMAGNETHOME ;;
+
+        "Find American Express Credit Cards")
+         grep -rE -o "\b3[47][0-9]{13}\b" $EMAGENT ;;
+
+        "Find Diners Club Cards")
+         grep -rE -o "\b3(?:0[0-5]|[68][0-9])[0-9]{11}\b" $EMAGNETHOME ;;
+
+        "Find Discover Cards")
+        grep -rE -o "6011[ -]?[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}" $EMAGNETHOME ;;
+
+        "Find JCB Cards")
+        grep -rE -o "\b(?:2131|1800|35d{3})d{11}\b" $EMAGNETHOME ;;
+
+        "Find AMEX Cards")
+        grep -rE -o "3[47][0-9]{2}[ -]?[0-9]{6}[ -]?[0-9]{5}" $EMAGNETHOME ;;
+
+        "Find Social Security Numbers")
+        grep -rE -o "[0-9]{3}[ -]?[0-9]{2}[ -]?[0-9]{4}" $EMAGENT ;;
+
+        "Find Indiana Driver License Number")
+        grep -rE -o "[0-9]{4}[ -]?[0-9]{2}[ -]?[0-9]{4}" $EMAGNETHOME ;;
+
+        "Find US Passport Cards")
+        grep -rE -o "C0[0-9]{7}" $EMAGNETHOME ;;
+
+        "Find US Passport Number")
+         grep -rE -o "[23][0-9]{8}" $EMAGNETHOME ;;
+
+        "Find US Phone Numbers")
+         grep -rPo 'd{3}[s-_]?d{3}[s-_]?d{4}' $EMAGNETHOME ;;
+
+        "Find ISBN Numbers")
+         egrep -ra -o "\bISBN(?:-1[03])?:? (?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]\b" $EMAGNETHOME ;;
+
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+
+;;
+
 
 "help"|"-h"|"-help"|"--help") usage;exit 1 ;;
 

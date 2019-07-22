@@ -20,6 +20,7 @@ R = REBUILT
 +    FUZZER has been added
 +    Removed almost all comments since it toke alot of place
 +    General fixes
++    Added --find, search for credit cards, images, urls and much more
 
 # Version 3.1
 
