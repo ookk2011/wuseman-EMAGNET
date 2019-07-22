@@ -24,7 +24,7 @@
 
 | Current Version    |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.2`              |  2019-07-20    | Beta                              | Linux                               |
+| `3.2`              |  2019-07-22    | Beta                              | Linux                               |
 | `3.1`              |  2019-07-14    | Stable                            | Linux - Windows - MacoSX - Android   |
 
 ![Pastebin: Running the site where hackers publicise their attacks](https://www.bbc.com/news/technology-17524822) - Emagnet is your best friend for get the leaks ;-)
@@ -42,24 +42,14 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     bash ./emagnet-setup.sh
     bash emagnet --help
 
-* Normal mode without brute forcing:
 
       ./emagnet --emagnet
-
-* Default mode and bruteforcing ipv4 addresses we found, this is a very very powerful ssh bruteforcer that will use parallel to bruteforce, you will attack over 7000 targets in 60 seconds on a i7 4th generation.
-
-* We scanning all targets with netcat and if port 22 is open we gonna attack otherwise we skip the attack. Here is a preview how it works. _Don't break the law!_
 
 ### NEWS!
 
 * Brute force ipv4 addresses has been added after a request, this is a very very powerful ssh bruteforcer that will use parallel to bruteforce, you will portscan over 7000 targets in <60 seconds thanks to GNU/Parallel and you will *only* attack targets that having port 22 open, all this will be done within minutes.
 
 *  _Don't break the law!_ - Emagnet has been developed for a legal purpose.
-
-![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
-
-      ./emagnet --bruteforce ssh
->>>>>>> 03597f53de30fbe42a4b0a2b91e26fab27e55ffc
 
 ![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
 
