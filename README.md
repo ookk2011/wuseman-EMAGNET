@@ -42,14 +42,8 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
     bash ./emagnet-setup.sh
     bash emagnet --help
 
-### NEWS!
-
 
       ./emagnet --emagnet
-
-* Brute forcing SSH targets has been added after a request, this is a very powerful brute forcer that will be able to attack over 7000 targets in <60 seconds on a i7 4th Generation. You will portscan all targets that we found but you will only attack the targets that have port 22 open so it wont attack *all*. 
-
-* _Don't break the law!_ - Emagnet has been developed for a legit purpose
 
 ### NEWS!
 
