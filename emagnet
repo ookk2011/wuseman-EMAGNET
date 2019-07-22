@@ -503,14 +503,14 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
 |grep -v $SKIPLIST\
 |awk -F, '!seen[$1]++'> $SSHPORTSCAN
 if [[ $(cat /tmp/.emagnet-portscan|wc -l) -eq "0" ]]; then
-if [[ it -gt "0" ]]; then
+if [[ $it -gt "0" ]]; then
   printf "%19s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
 else
   printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
 fi
   sleep 2
 else
-    printf "%64s \n\n" | tr ' ' '='
+  #  printf "%64s \n\n" | tr ' ' '='
     echo -e "                  PORTSCANNING - BRUTEFORCING"
     printf "\n%64s" | tr ' ' '='
     printf "\nPort/Brute attack will be started within 2 seconds..............\n"
