@@ -913,8 +913,8 @@ NOPE="[\e[1;31m<<\e[0m]"
 #      "*") echo -e "emagnet: internal error -- usage: emagnet --fuzzer -f N"; exit ;;
 #   esac
 #done
-echo -e "[\e[1;33m>>\e[0m] - Generating \e[1m$2\e[0m urls."
-echo -e "[\e[1;33m>>\e[0m] - -------------------"
+echo -e "[\e[1;33m--\e[0m] - Generating \e[1m$2\e[0m urls."
+echo -e "[\e[1;33m--\e[0m] - -------------------"
 for urls in $(seq 1 $2); do
      fuz=https://pastebin.com/raw/$(tr -dc a-zA-Z0-9 < /dev/urandom | head -c 8)
      fuzname="$(echo $fuz|cut -d/ -f5)"
