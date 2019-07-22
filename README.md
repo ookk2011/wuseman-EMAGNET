@@ -24,7 +24,7 @@
 
 | Current Version    |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.2`              |  2019-07-20    | Beta                              | Linux                               |
+| `3.2`              |  2019-07-22    | Beta                              | Linux                               |
 | `3.1`              |  2019-07-14    | Stable                            | Linux - Windows - MacoSX - Android   |
 
 ![Pastebin: Running the site where hackers publicise their attacks](https://www.bbc.com/news/technology-17524822) - Emagnet is your best friend for get the leaks ;-)
