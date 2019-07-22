@@ -17,7 +17,7 @@ R = REBUILT
 +    Notifications has been added, this require notify-send
 +    Toggle between true or false via --notify
 +    SSH bruteforce has been added
-+    FUZZED has been added
++    FUZZER has been added
 +    Removed almost all comments since it toke alot of place
 +    General fixes
 
