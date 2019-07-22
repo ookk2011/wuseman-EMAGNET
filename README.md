@@ -54,11 +54,6 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 ![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
 
       ./emagnet --bruteforce ssh
->>>>>>> 03597f53de30fbe42a4b0a2b91e26fab27e55ffc
-
-![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
-
-      ./emagnet --bruteforce ssh
 
 ###  Get Started On Windows 10
 
