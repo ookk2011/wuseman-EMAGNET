@@ -20,11 +20,13 @@
 </a>
 </p>
 
-   
+![BBC: 'Pastebin: Running the site where hackers publicise their attacks'](https://www.bbc.com/news/technology-17524822) - Emagnet is your best friend for get the leaks ;-)
 
 | Current Version    |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.1`              |  2019-07-14    | Stable                          | Linux - Windows - MacoSX - Android   |
+| `3.2`              |  2019-07-20    | Beta                              | Linux                               |
+| `3.1`              |  2019-07-14    | Stable                            | Linux - Windows - MacoSX - Android   |
+
 
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
@@ -32,20 +34,26 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 #### For previews how it looks before you getting started, see ![here](https://github.com/wuseman/EMAGNET/wiki/Previews)
 
 ### Get Started On Linux/MacOSX
- 
+
     git clone https://github.com/wuseman/emagnet
     cd emagnet
     chmod +x emagnet*
     bash ./emagnet-setup.sh
     bash emagnet --help
 
-* Normal mode without brute forcing: 
+* Normal mode without brute forcing:
 
       ./emagnet --emagnet
 
-* Normal mode with brute forcing: 
+### NEWS!
 
-      ./emagnet --bruteforce
+* Brute force ipv4 addresses has been added after a request, this is a very very powerful ssh bruteforcer that will use parallel to bruteforce, you will portscan over 7000 targets in <60 seconds thanks to GNU/Parallel and you will *only* attack targets that having port 22 open, all this will be done within minutes.
+
+*  _Don't break the law!_ - Emagnet has been developed for a legal purpose.
+
+![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
+
+      ./emagnet --bruteforce ssh
 
 
 ###  Get Started On Windows 10
