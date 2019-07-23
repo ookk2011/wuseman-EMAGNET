@@ -504,7 +504,7 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
 |grep -v $SKIPLIST\
 |awk -F, '!seen[$1]++'> $SSHPORTSCAN
 if [[ $(cat /tmp/.emagnet-portscan|wc -l) -eq "0" ]]; then
-  printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
+  printf "%19s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
   sleep 2
 else
     clear;banner;
