@@ -20,7 +20,11 @@
 </a>
 </p>
 
-BB NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) - Emagnet is your best friend for get the leaks ;-)
+BB NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) 
+
+- ^Emagnet is your best friend for get the leaks, you will be the first viewer on every paste but it of course matters of  the time you have set ;-)
+
+
 
 
 | Current Version    |  Released      | Status                            | Tested On                          |
