@@ -20,13 +20,6 @@
 </a>
 </p>
 
-BB NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) 
-
-- ^Emagnet is your best friend for get the leaks, you will be the first viewer on every paste but it of course matters of  the time you have set ;-)
-
-
-
-
 | Current Version    |  Released      | Status                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
 | `3.2`              |  2019-07-22    | Beta                              | Linux                               |
@@ -35,8 +28,10 @@ BB NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](ht
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
 
+#### Previews for all Emagnet features can be found [here](https://github.com/wuseman/EMAGNET/wiki/Previews)
 
-#### Previews for Emagnet can be found [here](https://github.com/wuseman/EMAGNET/wiki/Previews)
+#### BBC NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) 
+- Emagnet is your best friend for get the leaks, you will be the first viewer on every paste but it of course matters of  the time you have set ;-)
 
 ### Get Started On Linux/MacOSX
 
@@ -76,10 +71,10 @@ _How To Find your facebook credenticals, if it has been leaked._
 - Lynx     - Find more info about _lynx_ [here](https://lynx.browser.org/)
 - Elinks   - Find more info about _elinks_ [here](http://elinks.or.cz/)
 
+
 ## Changelog
 
 [Versions changelog](CHANGELOG.md).
-
 
 ## Authors: 
 
@@ -95,30 +90,18 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
   
   Enter Freenode chat via your own client or use the web client by visit this ![page](https://webchat.freenode.net/)
 
+### Notice
+
+Attacking different kinds of accounts vi emagnet that you have not been granted or allowed to attack is strictly prohibited and it breaks the law. The punishment is hard and you can even get into prison in some countries just for trying to attack for intrusion. With this said, it's *important* that all users is aware of this and when you have cloned or downloaded it's fully up to every user to take responsibility over their own actions. wuseman cannot be held responsible for the actions of any user, all users using Emagnet on their own responsibility. 
+
+Developer: "All my previews where a brute force attack has been done is under controlling forms with 100% fully permissions by the owners. If you have any questions about this then you are welcome to contact me or the owner."
+
 ### Haters Gonna Hate
 
-If you are one of these who dislikes _EMAGNET_ and believe the program has been developed for a reason that would break the law then I am not interested in taking part of your opinions, keep them for _yourself_! Emagnet does **NOT** leak any data at all. _EMAGNET_ gathering data from PASTEBIN and that is the source for all files EMAGNET is downloading.
-
-If you'r email AND password is in my video tutorials please change your password **_ASAP_** and contact PASTEBIN to request  a removal from the source. This is nothing i can be held responsible for. Pastebin contact formular can be found [here](https://pastebin.com/contact)
- 
-Be more careful with your private data - It's 2019, you **really** should know better how to keep your data private. 
-
-ALL questions about this will be ignored and filtered as spam FYI. 
+If you are one of these who dislikes _EMAGNET_ and believe the program has been developed for a reason that would break the law then I am not interested in taking part of your opinions, keep them for _yourself_! Emagnet does **NOT** leak any data at all either to the developer(s) or anyone else. No statistics at all to track any user so if you want to contact me for ask who it might was who downloaded emagnet a specific date is completely useless since i really have no idea, and to be honest I don't care.
 
 Feel free to read the history about emagnet [here](https://github.com/wuseman/EMAGNET/wiki/About) and how everything started about this project.
 
-### Notice
+#### Development of emagnet is active and is updated frequently, please use the latest version if you report issues/bugs.
 
-Brute forcing any user(s) account that you do not own or have been granted permission to sign in on is **stricly** forbidden, in most countrys you will break the law so please don't use EMAGNET for any illegal purposes, emagnet has been developed for a a legal purpose to count data and statistics.
-
-wuseman says: All my previews where a brute force attack is under controlling forms. If you have any questions about this then you are welcome to contact me.
-
-
-_wuseman cannot be held as responsible for users actions regardless of what damage a user can achieve with the information/data emagnet might collect for any user(s). All users that  gathering information or data via emagnet is 100% responsible for their own actions, emagnet has been developed for a legal purpose._
-
-####
-#### Emagnet development has just started and is FAR away from complete, to be continued. 
-####
-
-
-
+### Emagnet is a private project since 2015 and was released in June @ 2018, to be continued. 
