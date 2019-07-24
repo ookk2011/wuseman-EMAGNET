@@ -45,26 +45,6 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
       ./emagnet --emagnet
 
-### NEWS!
-
-* Brute force ipv4 addresses has been added after a request, this is a very very powerful ssh bruteforcer that will use parallel to bruteforce, you will portscan over 7000 targets in <60 seconds thanks to GNU/Parallel and you will *only* attack targets that having port 22 open, all this will be done within minutes.
-
-#### Its easy to believe the brute force is very slow if you don't know bash and how it works, but that is not the case. The thing is that it only attacking the target if port 22 is open, take a look at /tmp/.emagnet-portscan then you will see how many targets that actually was scanned and NOT attacked due closed/filtered port. I've never seen a method like this before for bruteforcing so hopefully you will enjoy this one!
-
-
-*  _Don't break the law!_ - Emagnet has been developed for a legal purpose.
-
-![Screenshot](https://nr1.nu//emagnet/previews/emagnet-3.2.gif)
-
-      ./emagnet --bruteforce ssh
-
-
-### NEWS2!
-
-* Search for your visa card or your mastercard in downloaded files, have it been leaked?
-
-![Screenshot](https://nr1.nu/emagnet/previews/searching-for.png)
-
 ###  Get Started On Windows 10
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
