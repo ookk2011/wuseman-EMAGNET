@@ -86,13 +86,13 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ### Contact
 
-  If you have problems, questions, ideas or suggestions please contact me on the e-email under _Authors_ or you can chat with me for faster contact by visit freenode chat and type '/msg wuseman hi!' in the input bar and I will reply you ASAP I will see the message.
+  If you have problems, questions, ideas or suggestions please contact me on *_wuseman@nr1.nu_  - For faster contact visit freenode irc network or the webchat and type '/msg wuseman hi!' in the input bar and I will reply you ASAP I will see the message.
   
-  Enter Freenode chat via your own client or use the web client by visit this ![page](https://webchat.freenode.net/)
+  Enter Freenodes network via your own client 'chat.freenode.com:+6697 or use their new web client [here](https://webchat.freenode.net/)
 
 ### Notice
 
-Attacking different kinds of accounts vi emagnet that you have not been granted or allowed to attack is strictly prohibited and it breaks the law. The punishment is hard and you can even get into prison in some countries just for trying to attack for intrusion. With this said, it's *important* that all users is aware of this and when you have cloned or downloaded it's fully up to every user to take responsibility over their own actions. wuseman cannot be held responsible for the actions of any user, all users using Emagnet on their own responsibility. 
+Attacking different kinds of accounts via emagnet that you have not been granted or allowed to attack is strictly prohibited and it breaks the law. The punishment is hard and you can even get into prison in some countries just for trying to attack for intrusion. With this said, it's *important* that all users is aware of this and when you have cloned or downloaded it's fully up to every user to take responsibility over their own actions. wuseman cannot be held responsible for the actions of any user, all users using Emagnet on their own responsibility. 
 
 Developer: "All my previews where a brute force attack has been done is under controlling forms with 100% fully permissions by the owners. If you have any questions about this then you are welcome to contact me or the owner."
 
