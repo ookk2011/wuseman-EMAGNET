@@ -73,6 +73,11 @@ if [[ $EUID -gt "0" ]]; then
     exit 0
 fi
 
+if ! [[ -d "$(pwd)/.emagnetconf" ]]; then
+    echo "emagnet: internal error -- run emagnet --setup from emagnets main dir"
+    exit 1
+fi
+
 cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
 CONF=".emagnetconf/emagnet.conf "
 source $CONF
@@ -413,6 +418,10 @@ if [[ $(whoami) != root ]]; then
 fi
 
 if ! [[ $1 = "--setup" ]]; then
+if ! [[ -d "$(pwd)/.emagnetconf" ]]; then
+    echo "You must run emagnet --setup from emagnets main dir"
+    exit 1
+fi
  if ! [[ -f "/etc/emagnet.conf" ]];then
   echo "emagnet: internal error -- you may wanna run ./emagnet --setup?"
   exit 1
