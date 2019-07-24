@@ -1151,7 +1151,7 @@ elif [[ $SBRUTEFORCE = "true" ]]; then
    fi
 
 cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null;elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
-echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from ${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
+echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from $EMAGNETDB/${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
 grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
 sleep 2
 cp $i $EMAGNETDB/ &> /dev/null;
