@@ -526,10 +526,10 @@ fi
 }
 
 Iwasbanned() {
+clear;banner
 source /etc/emagnet.conf
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
-  clear;banner
   if [[ $VPN = "false" ]]; then
    for (( ; ; )); do
       wait_time=$IDLETIME
@@ -553,6 +553,7 @@ fi
 }
 
 vpnsetup() {
+source $CONF
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|sed '1d')
 VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|tail -1)
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -3|tail -1)
@@ -589,69 +590,47 @@ banned() {
 if [[ $VPN = "false" ]]; then
    Iwasbanned
 else
-  line='...........................................................'
-  line1='................................[ ok ]'
-  line2='...............................................'
-      curl -s $WIP > /tmp/.emagnet-ip
-      OPENVPNRUNNING="$(ps aux |grep openvpn|sed '1d')"
-      MYOLDIP="$(cat /tmp/.emagnet-ip)"
-      MYIP="$(curl -s https://nr1.nu/i/)"
-      MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
+line='...........................................................'
+line1='................................[ ok ]'
+line2='...............................................'
+OPENVPNRUNNING="$(ps aux |grep openvpn|sed '1d')"
+MYIP="$(curl -s https://nr1.nu/i/)"
+MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
+COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' /etc/emagnet.conf|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
+curl -s $WIP > /tmp/.emagnet-ip
+if [[ -n $OPENVPNRUNNING ]]; then pkill -9 openvpn; fi
+printf "\e[1;31m                You have been blocked by pastebin...\n\n\e[0m"
+printf "%s${line2:${#MYIP}}[ ok ]\n" "Current IP: $MYIP"
+printf "Connecting to "
+printf "\e[1m%s\e[0m%s \e[1;37m%s\e[0m" $COUNTRY ", please wait${line1:${#COUNTRY}}"
+printf "\n"
 
-startvpn() {
-    clear;banner
-       pkill -9 openvpn
-           printf "\e[1;31m                You have been blocked by pastebin...\n\n\e[0m"
-           printf "%s${line2:${#MYIP}}[ ok ]\n" "Current IP: $MYIP"
-             COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' /etc/emagnet.conf|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
-           printf "Connecting to ";printf "\e[1m%s\e[0m%s \e[1;37m%s\e[0m" $COUNTRY ", please wait${line1:${#COUNTRY}}"
-           printf "\n"
-vpnsetup
-if [[ -z $VPNCOUNTRYS ]]; then
-    VPNCONFIG="$VPNPROVIDER"
-    VPNCONFIG="$VPNCOUNTRYS"
-elif [[ -z $VPNCOUNTRYS2 ]]; then
-    VPNCONFIG="$VPNPROVIDER2"
-    VPNCONFIG="$VPNCOUNTRYS2"
-elif [[ -z $VPNCOUNTRYS3 ]]; then
-    VPNCONFIG="$VPNPROVIDER3"
-    COUNTRY="$VPNCOUNTRYS3"
-else
-sed -i 's/VPN=true/VPN=false/g' $CONF
-#sleep 0
-fi
-}
-
-connected() {
-     MYIP="$(curl -s https://nr1.nu/i/)"
-     if [[ $MYIP = "$MYOLDIP" ]]; then
-     sleep 5
-     fi
-}
-     startvpn;sleep 1;connected;sleep 10
-     MYIP="(curl https://nr1.nu/i/)"
-if [[ $MYOLDIP = "$MYIP" ]]; then
-     MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
-     printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
-     printf "\rEmagnet will continue in 5 seconds.......................[ ok ]\n\n"
-     sleep 5
-else
-if ! [[ $(echo $MYNEWIP|awk '{print $4}') = "$MYIP" ]]; then
-     echo -e "Still trying to establish a connection.....................[\e[1;3mwait\e[0m]"
+     vpnsetup
      sleep 10
-     MYIP="(curl https://nr1.nu/i/)"
+     MYIP="$(curl -s https://nr1.nu/i/)"
      MYOLDIP="$(cat /tmp/.emagnet-ip)"
-if [[ $MYOLDIP = "$MYIP" ]]; then
-     echo -e "It seems to be some trouble with the connection, aborted.[\e[1;31mfail\e[0m]\nAborted."
-     exit 1
-else
-     MYNEWIP=$(echo -e "Successfully connected to $(curl -s https://nr1.nu/i/)")
+if [[ $MYIP != "$MYOLDIP" ]]; then
+     MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
      printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
      printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
      sleep 5
 fi
-fi
-fi
+
+ if [[ $MYIP = "$MYOLDIP" ]]; then
+     echo -e "Still trying to establish a connection.....................[\e[1;3m\e[5mwait\e[0m\e[0m]"
+     sleep 10
+
+
+  if [[ ! $MYIP = "$MYOLDIP" ]]; then
+     MYNEWIP=$(echo -e "Successfully connected to $(curl -s https://nr1.nu/i/)")
+     printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
+     printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
+     sleep 5
+  else
+     echo -e "It seems to be some trouble with the connection, aborted...[\e[1;31mfail\e[0m]\n"
+     exit 1
+  fi
+ fi
 fi
 }
 
@@ -1531,6 +1510,7 @@ fi
 
  "-v"|"-vpn"|"--vpn")
 source $CONF;clear;banner
+if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error - you must set a vpn provider\n";exit 1;  fi
 if [[ -z $2 ]]; then echo -e "[\e[1;31m<<\e[0m] - emagnet: internal error - vpn require a true/false value..\n";exit 1;fi
 if [[ $2 = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
      sed -i '149d' $CONF;sed -i "149i VPN=true" $CONF;echo -e "[\e[1;32m>>\e[0m] - VPN has been set to true: \e[1;32mON\e[0m\n";exit 1
