@@ -74,7 +74,9 @@ if [[ $EUID -gt "0" ]]; then
 fi
 
 cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
-CONF=".emagnetconf/emagnet.conf ";source $CONF
+CONF=".emagnetconf/emagnet.conf "
+source $CONF
+
 SCRIPT="$(pwd)/emagnet"
 LYNX="/usr/bin/lynx"
 ELINKS="/usr/bin/elinks"
@@ -152,8 +154,6 @@ else
     printf "Detected parallel %42s[\e[1;31mNO\e[0m]\n"|tr ' ' '.' >> packages
  fi
 }
-
-
 
 checkwget;checkcurl;checkscreen;checkparallel;checknetcat
 
@@ -397,8 +397,6 @@ read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
  esac
 fi
 }
-
-
 clear;banner;choosebrowser;requirements;wip;emagnethome;wgettimer;settime
 }
 
@@ -406,7 +404,6 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
  emagnet-setup
  exit 1
 fi
-
 
 CONF="/etc/emagnet.conf"
 
@@ -417,12 +414,10 @@ fi
 
 if ! [[ $1 = "--setup" ]]; then
  if ! [[ -f "/etc/emagnet.conf" ]];then
-  echo "emagnet: internal error -- you may wanna run emagnet-setup.sh?"
+  echo "emagnet: internal error -- you may wanna run ./emagnet --setup?"
   exit 1
  fi
 fi
-
-
 
 usage() {
 cat << "EOF"
@@ -589,7 +584,6 @@ case $COUNTRY in
  united-states)  cd $VPNPROVIDER;openvpn --config $VPNCONFIG.us.ovpn      &> /dev/null & ;;
 esac
 }
-
 
 banned() {
 if [[ $VPN = "false" ]]; then
@@ -994,7 +988,7 @@ fi
 if [[ $PEXIST -gt "0" ]]; then
     echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]\n"
     cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files &> /dev/null
-else 
+else
     echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]\n"
 fi
 }
@@ -1590,9 +1584,14 @@ fi
 
 ;;
 
-"-S"|"-setup"|"--setup") if [[ $1 = "--setup" ]]; then file emagnet-setup.sh &> /dev/null
-                         if [[ $? -eq "0" ]]; then bash ./emagnet-setup.sh;
-                         else printf "emagnet: internal errror -- can't find emagnet-setup.sh\n";fi;fi ;;
+"-S"|"-setup"|"--setup")
+if [[ $1 = "--setup" ]]; then
+ if [[ $? -eq "0" ]]; then
+	emagnet-setup
+ else
+	printf "emagnet: internal errror -- unknown error\n"
+ fi
+fi ;;
 
 "\?") usage ;;
    *)   clear;banner;printf "emagnet: internal error -- use -help for available commands'\n\n";exit 1 ;;
