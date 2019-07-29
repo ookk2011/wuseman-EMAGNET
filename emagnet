@@ -673,8 +673,8 @@ fi
 safety() {
 if [[ -z $MYIP ]]; then
     myyyyip="$(curl -s $WIP | sed -n '121p')"
-    sed -i '30d' /etc/emagnet.conf
-    sed -i "30i MYIP=" /etc/emagnet.conf
+    sed -i '40d' /etc/emagnet.conf
+    sed -i "40i MYIP=" /etc/emagnet.conf
     sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
     echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log;fi
 }
