@@ -155,7 +155,7 @@ else
  fi
 }
 
-checkwget;checkcurl;checkscreen;checkparallel;checknetcat
+checkwget;checkcurl;checkscreen;checkparallel
 
 if [[ -f packages ]]; then
 missed="$(awk -F. '{print $2}' packages|sed 's/ /,/g'|xargs|sed 's/ /, /g')"
@@ -185,7 +185,7 @@ if [[ ! $missedpackages = "y" ]]; then
       elif [[ $DISTRO = "kali" ]]; then apt-get install $missed2 -y; echo ""
       elif [[ $DISTRO = "debian" ]]; then apt-get install $missed2; echo ""
       elif [[ $DISTRO = "mint" ]]; then apt-get install $missed2; echo "";else
-        echo "Emagnet is not supported for $DISTRO, please install $missed manually.";exit 0
+        echo -e "Emagnet is not supported for $DISTRO, please install $missed manually.\n";exit 0
         fi
         ;;
 
