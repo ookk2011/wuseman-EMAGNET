@@ -84,7 +84,7 @@ WGET="/usr/bin/wget"
 CURL="/usr/bin/curl"
 SCREEN="/usr/bin/screen"
 PARALLEL="/usr/bin/parallel"
-DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
+DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2|sed 's/"//g')
 
 alreadyconfigured() {
 clear; banner
@@ -184,7 +184,8 @@ if [[ ! $missedpackages = "y" ]]; then
       elif [[ $DISTRO = "ubuntu" ]]; then apt-get install $missed2 -y; echo ""
       elif [[ $DISTRO = "kali" ]]; then apt-get install $missed2 -y; echo ""
       elif [[ $DISTRO = "debian" ]]; then apt-get install $missed2; echo ""
-      elif [[ $DISTRO = "mint" ]]; then apt-get install $missed2; echo "";else
+      elif [[ $DISTRO = "arch" ]]; then sudo pacman -Syy $missed2; echo ""
+      elif [[ $DISTRO = "mint" ]]; then apt-get install $missed2; echo ""; else
         echo -e "Emagnet is not supported for $DISTRO, please install $missed manually.\n";exit 0
         fi
         ;;
