@@ -1472,18 +1472,20 @@ else echo -e "[\e[1;31m<<\e[0m] - Killed $(echo $NRESESSIONS-2|bc) emagnet sessi
  ;;
 
 "-t"|"-time"|"--time")
-     source $CONF;clear;banner
+     source $CONF
+
+if [[ -z $2 ]]; then
+     echo "emagnet: internal error -- time require a number to be used"
+     exit 1
+fi
+
 re='^[0-9]+$'
 if ! [[ $2 =~ $re ]] ; then
-   echo -e "[\e[1;31m<<\e[0m] - emagnet: internal error -- that's not a valid number\n" >&2; exit 1
+   echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1
 fi
- if [[ -z $2 ]]; then
-     echo "Time require an value to be set, aborted.."
-     exit 1
- fi
      sed -i '30d' $CONF
      sed -i "30 i TIME=$2" $CONF
-     printf "[\e[1;32m>>\e[0m] - Config file has been updated, time has been set to to: \e[1;1m$2\e[0ms\n\n"; exit 1
+     printf "emagnet: config file has been updated -- refresh time has been set to: $2 seconds\n"
      exit 1
 ;;
 
@@ -1510,14 +1512,15 @@ fi
 ;;
 
  "-v"|"-vpn"|"--vpn")
-source $CONF;clear;banner
-if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error - you must set a vpn provider\n";exit 1;  fi
-if [[ -z $2 ]]; then echo -e "[\e[1;31m<<\e[0m] - emagnet: internal error - vpn require a true/false value..\n";exit 1;fi
+source $CONF
+if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then 
+    echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
+if [[ -z $2 ]]; then echo -e "emagnet: internal error -- you must include true or false";exit 1;fi
 if [[ $2 = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
-     sed -i '149d' $CONF;sed -i "149i VPN=true" $CONF;echo -e "[\e[1;32m>>\e[0m] - VPN has been set to true: \e[1;32mON\e[0m\n";exit 1
+     sed -i '149d' $CONF;sed -i "149i VPN=true" $CONF;echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
 elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then
-     sed -i '149d' $CONF;sed -i "149i VPN=false" $CONF;echo -e "[\e[1;31m<<\e[0m] - VPN has been set to false: \e[1;31mOFF\e[0m\n";exit 1
-else echo -e "emagnet: internal error -- $2 is an unknown option - please use true or false"
+     sed -i '149d' $CONF;sed -i "149i VPN=false" $CONF;echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
+else echo -e "emagnet: internal error -- $2 is an unknown option -- valid options is true or false"
      exit 1;fi
 ;;
 
