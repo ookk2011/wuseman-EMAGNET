@@ -462,22 +462,6 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
 fi
 }
 
-emagnetseetup
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 usage() {
 cat << "EOF"
 
@@ -510,19 +494,15 @@ EOF
 }
 
 
+nothingcalled() {
+if [[ -z $1 ]]; then 
+  usage
+  exit 1
+fi
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
+copyconf() { if [[ -f .emagnetconf/emagnet.conf ]]; then cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf;fi; }
 
 iconnection() {
 ping -i 0.2 -c 1 1.1.1.1 &> /dev/null
@@ -532,22 +512,8 @@ if [[ $? -gt "0" ]]; then
 fi
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 mustbefilled() {
-source $CONF
+conf
   if [[ -z $DEBUG          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                                                                                             $CONF;fi
   if [[ -z $PASTEBIN       ]];   then sed -i '21d'  $CONF;sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com\/archive'                                                                            $CONF;fi
   if [[ -z $WIP            ]];   then sed -i '50d'  $CONF;sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                                                                               $CONF;fi
@@ -585,7 +551,7 @@ source $CONF
   if [[ -z $VPNCOUNTRYS    ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   $CONF;fi
   if [[ -z $VPNCOUNTRYS2   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
   if [[ -z $VPNCOUNTRYS3   ]];   then sed -i '157d' $CONF;sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
-source $CONF
+conf
 }
 
 
@@ -650,9 +616,7 @@ $BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
 
 
 Iwasbanned() {
-clear
-banner
-source /etc/emagnet.conf
+clear;banner
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
@@ -694,7 +658,6 @@ fi
 
 
 vpnsetup() {
-source $CONF
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|sed '1d')
 VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|tail -1)
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -3|tail -1)
@@ -805,11 +768,6 @@ fi
 
 
 
-copyconf() {
-if [[ -f .emagnetconf/emagnet.conf ]]; then 
-    cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
-fi
-}
 
 
 
@@ -904,12 +862,14 @@ banner
 
 
 check4all() {
-     source $CONF
+     conf
+     copyconf
      iconnection
      mustbefilled
      paths
      copyconf
      safety
+     
 }
 
 
@@ -927,12 +887,7 @@ check4all() {
 
 
 
-nothingcalled() {
-if [[ -z $1 ]]; then 
-  usage
-  exit 1
-fi
-}
+
 
 
 
