@@ -1365,20 +1365,6 @@ fi
    pkill -9 notify-send &> /dev/null
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 dontstopwhenfound() {
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then 
@@ -1409,38 +1395,6 @@ for (( ; ; )); do
        fi
 done
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 fuzzer() {
 source /etc/emagnet.conf
@@ -1493,6 +1447,7 @@ check4all() {
 
 
 
+
 case $1 in
 "-a"|"-author"|"--author")
 author
@@ -1525,8 +1480,13 @@ dontstopwhenfound
 fi
 ;;
 
+
+
+
+
+
+
 "-bruteforce"|"--bruteforce")
-conf
 check4all
 sleep 0.5
 if [[ $2 = "gmail" ]]; then
@@ -1714,7 +1674,7 @@ done
 
 "help"|"-h"|"-help"|"--help")
         usage
-        exit 1 
+        exit
  ;;
 
 "-i"|"-ip"|"--ip") 
