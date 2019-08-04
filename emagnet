@@ -1354,15 +1354,23 @@ elif [[ $2 = "ssh" ]]; then
 elif [[ $2 = "spotify" ]]; then
         conf
 
-hash sconsify &> /dev/null
+
+printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
+read LIBSPOTIFY
+if ! [[ $LIBSPOTIFY = "YES" ]]; then
+echo "Can't continue until libspotify has been installed.."
+echo "Exiting.."
+exit 1
+fi
+
+./sconsify &> /dev/null
 if [[ $? -ne "0" ]]; then
  if [[ ! -f "./sconsify" ]]; then
    echo "Sconsify is required to be installed before we attacking targets.."
  fi
 
-   read -p "Download and install scosnify (y/N): " installsconsify
+   read -p "Download and install sconsify (y/N): " installsconsify
          if [[ $installsconsify -eq "y" ]]; then
-
                 wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
                 unzip linux-x86_64-sconsify-0.6.0-next.zip 1> /dev/null
                 chmod +x sconsify
@@ -1372,6 +1380,9 @@ if [[ $? -ne "0" ]]; then
 #                                  mv "sconsify" "/usr/local/bin"
 #                                  chmod +x "/usr/local/bin"
  #                      fi
+        else
+              echo "Cant bruteforce without sconsify, please choose another option.."
+              exit 1
         fi
 fi
 
