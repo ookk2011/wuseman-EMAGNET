@@ -24,7 +24,7 @@
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
 | `3.2`              |  2019-08-04    |  Spotify brute-forcer was added    | Linux                               |
 
-![Screenshot](https://nr1.nu/emagnet/pictures/s.gif)
+![Screenshot](s.gif)
 #### Removed all email addresses.
 ![Screenshot](https://nr1.nu/f/ucdb.png)
 
