@@ -571,7 +571,6 @@ done
 
 copyconf() { if [[ -f .emagnetconf/emagnet.conf ]]; then cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf;fi; }
 
-emagnetseetup() {
 if [[ ! -f "/etc/emagnet.conf" ]]; then
        mustberoot
        colors
@@ -587,7 +586,6 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
        pathsetup
        timesetup
 fi
-}
 
 ####### END OF SETUP
 
@@ -613,6 +611,7 @@ $BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
 Iwasbanned() {
 conf
 clear;banner
+source /etc/emagnet.conf
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
