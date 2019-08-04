@@ -1405,6 +1405,34 @@ cat << "EOF"
 EOF
 }
 
+fuzzer() {
+  source /etc/emagnet.conf
+clear
+banner
+    echo -e "                         FUZZER is: \e[1;32mON\e[0m\n"
+    printf "%64s \n\n" | tr ' ' '='
+
+YUP="[\e[1;32m>>\e[0m]"
+NOPE="[\e[1;31m<<\e[0m]"
+
+    echo -e "[\e[1;33m--\e[0m] - Generating \e[1m$2\e[0m urls."
+    echo -e "[\e[1;33m--\e[0m] - -------------------"
+      for urls in $(seq 1 $2); do
+          fuz=https://pastebin.com/raw/$(tr -dc a-zA-Z0-9 < /dev/urandom | head -c 8)
+          fuzname="$(echo $fuz|cut -d/ -f5)"
+          echo -e "[\e[1;32m>>\e[0m] - Trying to download: $fuz"
+        echo $fuz|xargs -n 1000 -P 1000 -I{} wget -q https://pastebin.com/raw/$fuzname
+            if [[ $? -eq "0" ]]; then
+                   echo -e $YUP - Downloaded $fuz;
+              else
+                   echo -e "$NOPE - No luck this time for $fuzname..\n"
+              fi
+      done
+}
+
+
+
+
 case $1 in
 "-a"|"-author"|"--author")
 author
@@ -1422,14 +1450,18 @@ sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' $CONF
    if [[ -d "/usr/bin" ]]; then
       if ! [[ -h "/usr/bin/emagnet" ]] || ! [[ -L "/usr/bin/emagnet" ]] ; then
           cd /usr/bin/
-           ln -s $PWD/emagnet emagnet
+          ln -s $PWD/emagnet emagnet
       fi
    fi
 
-if [[ $GBRUTEFORCE = "false" ]]; then dontstopwhenfound
- elif [[ $sBRUTEFORCE = "false" ]]; then dontstopwhenfound
-  elif [[ $PBRUTEFORCE = "false" ]]; then dontstopwhenfound
-   else mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+if [[ $GBRUTEFORCE = "false" ]]; then 
+dontstopwhenfound
+ elif [[ $sBRUTEFORCE = "false" ]]; then 
+  dontstopwhenfound
+  elif [[ $PBRUTEFORCE = "false" ]]; then 
+    dontstopwhenfound
+ else 
+  mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 fi
 ;;
 
@@ -1484,32 +1516,14 @@ fi
 ;;
 
 "f"|"-f"|"-fuzzer"|"--fuzzer")
-source /etc/emagnet.conf
-clear
-banner
-	if [[ -z $2 ]]; then
-     		echo -e "[\e[1;31m<<\e[0m] You must specify how many urls to generate..\n" 
-     		exit 1
-	fi
-		echo -e "                         FUZZER is: \e[1;32mON\e[0m\n"
-		printf "%64s \n\n" | tr ' ' '='
+  if [[ -z $2 ]]; then
+        clear
+        banner
+        echo -e "[\e[1;31m<<\e[0m] You must specify how many urls to generate..\n" 
+        exit 1
+  fi
+        fuzzer
 
-YUP="[\e[1;32m>>\e[0m]"
-NOPE="[\e[1;31m<<\e[0m]"
-
-		echo -e "[\e[1;33m--\e[0m] - Generating \e[1m$2\e[0m urls."
-		echo -e "[\e[1;33m--\e[0m] - -------------------"
-			for urls in $(seq 1 $2); do
-     			fuz=https://pastebin.com/raw/$(tr -dc a-zA-Z0-9 < /dev/urandom | head -c 8)
-     			fuzname="$(echo $fuz|cut -d/ -f5)"
-     			echo -e "[\e[1;32m>>\e[0m] - Trying to download: $fuz"
-  			echo $fuz|xargs -n 1000 -P 1000 -I{} wget -q https://pastebin.com/raw/$fuzname
-   				  if [[ $? -eq "0" ]]; then
-      					   echo -e $YUP - Downloaded $fuz;
-     				  else
-        				   echo -e "$NOPE - No luck this time for $fuzname..\n"
-     				  fi
-			done
 ;;
 
 
@@ -1645,7 +1659,7 @@ done
 
 "-i"|"-ip"|"--ip") 
        printf 'IP: %s\n' "$(curl -s https://nr1.nu/i/)"
-       exit 1 
+       exit 
 ;;
 
 "-k"|"-kill"|"--kill")
@@ -1837,7 +1851,8 @@ if [[ $1 = "--setup" ]]; then
  else
 	printf "emagnet: internal errror -- unknown error\n"
  fi
-fi ;;
+fi 
+;;
 
 	"\?")  usage 											     ;;
    	"*")   clear;banner;printf "emagnet: internal error -- use -help for available commands'\n\n";exit 1 ;;
