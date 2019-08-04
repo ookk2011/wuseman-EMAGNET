@@ -141,6 +141,7 @@ while true; do
           if     [[ "$DISTRO" = "gentoo"  ]];then emerge --ask elinks
             elif [[ "$DISTRO" = "sabayon" ]];then emerge --ask elinks
             elif [[ "$DISTRO" = "ubuntu"  ]];then apt-get install elinks -qq -y
+            elif [[ "$DISTRO" = "arch"    ]];then pacman -Syy elinks
             elif [[ "$DISTRO" = "debian"  ]];then apt-get install elinks -qq -y
             elif [[ "$DISTRO" = "mint"    ]];then apt-get install elinks -y
             else echo "Emagnet is not supported for ${DISTRO}, please install elinks manually."
@@ -154,26 +155,27 @@ while true; do
       if     [[ "$DISTRO" = "gentoo"  ]];then emerge --ask    lynx
         elif [[ "$DISTRO" = "sabayon" ]];then emerge --ask    lynx
         elif [[ "$DISTRO" = "ubuntu"  ]];then apt-get install lynx -qq -y
+        elif [[ "$DISTRO" = "arch"    ]];then pacman -Syy elinks 
         elif [[ "$DISTRO" = "debian"  ]];then apt-get install lynx -qq -y
         elif [[ "$DISTRO" = "mint"    ]];then apt-get install lynx -qq -y
         else echo "Emagnet is not supported for ${DISTRO}, please install lynx manually."
         exit 1
       fi
-         sed -i "181d" ${SETUPCONF}
-         sed -i '181 i BROWSER=lynx' ${SETUPCONF}
+         sed -i "181d" "${SETUPCONF}"
+         sed -i '181 i BROWSER=lynx' "${SETUPCONF}"
          printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" "${SCRIPT}"
          ;;
    "*")
           printf "\n${browsertouse2} is not a valid option, however i shuffled and ${WBROWSER} will be used\n"
           printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i "181d" ${SETUPCONF}
-          sed -i "181 i BROWSER=$WBROWSER" '$CONF'
+          sed -i "181d" "${SETUPCONF}"
+          sed -i "181 i BROWSER=$WBROWSER" "${SETUPCONF}"
           ;;
    "\?")
           printf "\n${browsertouse2} is not a valid option, however i shuffled and ${WBROWSER} will be used\n"
           printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i "181d" ${SETUPCONF}
-          sed -i "181 i BROWSER=$WBROWSER" '$CONF'
+          sed -i "181d" "${SETUPCONF}"
+          sed -i "181 i BROWSER=$WBROWSER" "${SETUPCONF}"
           ;;
  esac
 done
@@ -1687,9 +1689,7 @@ ESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}')
 NRESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}'|wc -l)
 NRINSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g'|wc -l)"
 INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
-  
-       clear
-       banner
+clear;banner
  		if [[ $INSCREEN -gt "0" ]]; then
    			for screens in $INSCREEN; do
       			screen -X -S $screens kill
@@ -1862,7 +1862,7 @@ fi
 
 "-S"|"-setup"|"--setup")
 if [[ $1 = "--setup" ]]; then
- if [[ $? -eq "0" ]]; then
+  if [[ $? -eq "0" ]]; then
     mustberoot
     clear; banner
     alreadyconfigured
@@ -1876,7 +1876,7 @@ if [[ $1 = "--setup" ]]; then
  else
 	printf "emagnet: internal errror -- unknown error\n"
  fi
-fi 
+fi
 ;;
 
 	"\?")  usage 											     ;;
