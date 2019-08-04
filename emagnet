@@ -1451,7 +1451,7 @@ if ! [[ $2 =~ $re ]] ; then
 fi
      sed -i '30d' $CONF
      sed -i "30 i TIME=$2" $CONF
-     printf "emagnet: config file has been updated -- time has been set to: $2 s\n\n"
+     printf "emagnet: config file has been updated -- time has been set to: $2 s\n"
      exit 1
 ;;
 
