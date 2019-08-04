@@ -9,7 +9,7 @@
 #### Do you want to execute emagnet with -x flag as debug change debug_mode to true                                ####
 ####                                                                                                               ####
 #######################################################################################################################
-DEBUG=
+DEBUG=false
 
 #######################################################################################################################
 #### PASTEBIN #########################################################################################################
@@ -18,7 +18,7 @@ DEBUG=
 #### Wich pastebin site do you wanna use, pastebin is the only one for the moment more will be added soon.         ####
 ####                                                                                                               ####
 #######################################################################################################################
-PASTEBIN=
+PASTEBIN=https://www.pastebin.com/archive
 
 #######################################################################################################################
 #### TIME #############################################################################################################
@@ -27,7 +27,7 @@ PASTEBIN=
 #### Set the time for how often you wanna run emagnet, dont set 0-9 seconds that will get you ip banned(permanent) ####
 ####                                                                                                               ####
 #######################################################################################################################
-TIME=
+TIME=60
 
 #######################################################################################################################
 #### IP ###############################################################################################################
@@ -37,7 +37,7 @@ TIME=
 #### You can allwas set something like 127.0.0.1 to trick emagnet but keep in mind you might get a perm ban.       ####
 ####                                                                                                               ####
 #######################################################################################################################
-MYIP=
+MYIP=1
 
 #######################################################################################################################
 #### WHOIS YOUR IP ####################################################################################################
@@ -47,7 +47,7 @@ MYIP=
 #### oneliner and no data is stored data from vistors wich means we can whois our ip unlimited times.              ####
 ####                                                                                                               ####
 #######################################################################################################################
-WIP=
+WIP=https://nr1.nu/i/
 WIP2=
 WIP3=
 WIP4=
@@ -69,17 +69,17 @@ WIP4=
 #### EMAGNETSYNTAX  = In this fodler we save all uploads when we downloading files by syntax (./emagnet -e syntax) ####  
 ####                                                                                                               ####
 #######################################################################################################################
-EMAGNET=
-EMAGNETHOME=
-EMAGNETLOGS=
-EMAGNETPW=
-EMAGNETALL=
-EMAGNETCRAP=
-EMAGNETTEMP=
-EMAGNETARCHIVE=
-EMAGNETDB=
-EMAGNETBACKUP=
-EMAGNETSYNTAX=
+EMAGNET=/opt/emagnet
+EMAGNETHOME=$EMAGNET/incoming/$(date +%Y-%m-%d)
+EMAGNETLOGS=$EMAGNETHOME/logs
+EMAGNETPW=$EMAGNETHOME/password-files
+EMAGNETALL=$EMAGNETHOME/all-files
+EMAGNETCRAP=$EMAGNETHOME/.pastebin
+EMAGNETTEMP=$EMAGNETHOME/.temp
+EMAGNETARCHIVE=$EMAGNET/archive
+EMAGNETDB=$EMAGNETHOME/email-files
+EMAGNETBACKUP=$EMAGNET/backup
+EMAGNETSYNTAX=$EMAGNETHOME/sorted-by-syntax
 
 #######################################################################################################################
 #### VERSION ##########################################################################################################
@@ -88,7 +88,7 @@ EMAGNETSYNTAX=
 #### Nothing fancy, just version of emagnet                                                                        ####
 ####                                                                                                               ####
 #######################################################################################################################
-VERSION=
+VERSION=3.2
 
 #######################################################################################################################
 #### THREADS ##########################################################################################################
@@ -97,7 +97,7 @@ VERSION=
 #### The higher value the better. This speeds up the download extremely during download from pastebin              ####
 ####                                                                                                               ####     
 #######################################################################################################################
-THREADS=
+THREADS=8
 
 #######################################################################################################################
 #### IDLETIME #########################################################################################################
@@ -106,7 +106,7 @@ THREADS=
 #### This is for how long emagnet will stay idle when we got banned on pastebin, 1600s or more is recommended      ####
 ####                                                                                                               ####
 #######################################################################################################################
-IDLETIME=
+IDLETIME=3600
 
 #######################################################################################################################
 #### BRUTE FORCE (NEW!) ###############################################################################################
@@ -115,8 +115,9 @@ IDLETIME=
 #### If there is any GMAIL accounts found we gonna brute force to see if the accounts is legit (Default: false)    ####
 ####                                                                                                               ####
 #######################################################################################################################
-GBRUTEFORCE=
-SBRUTEFORCE=
+GBRUTEFORCE=false
+SBRUTEFORCE=false
+PBRUTEFORCE=true
 
 #######################################################################################################################
 #### EMAIL (NEW!) #####################################################################################################
@@ -134,7 +135,7 @@ EMAIL2SEND=
 #### Turn notifications on or off (Supported for Linux desktop only)                                               ####
 ####                                                                                                               ####
 #######################################################################################################################
-NOTIFY=
+NOTIFY=false
 
 #######################################################################################################################
 #### OPENVPN (NEW!) ###################################################################################################
@@ -146,14 +147,14 @@ NOTIFY=
 #### then just set your path to your vpn folder and rename your files as $VPNPROVIDER.se.ovpn (se for Sweden)      ####
 ####                                                                                                               ####
 #######################################################################################################################
-VPN=
-VPNROOT=
-VPNPROVIDER=
-VPNPROVIDER2=
-VPNPROVIDER3=
-VPNCOUNTRYS=
-VPNCOUNTRYS2=
-VPNCOUNTRYS3=
+VPN=false
+VPNROOT=/etc/openvpn
+VPNPROVIDER=$VPNROOT/
+VPNPROVIDER2=$VPNROOT/
+VPNPROVIDER3=$VPNROOT/
+VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"
+VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"
+VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"
 
 #######################################################################################################################
 ### SSH BRUTEFORCER ###################################################################################################
@@ -165,19 +166,53 @@ VPNCOUNTRYS3=
 #### SSHWORDLIST = Wordlist you want to use during the attack                                                      ####
 ####                                                                                                               ####
 #######################################################################################################################
-SSHUSER=
-SSHPORT=
-SSHTARGETS=
-SSHWORDLIST=
-SSHPORTSCAN=
+SSHUSER="root"
+SSHPORT="22"
+SSHPASS=""
+SSHTARGETS="/tmp/.emagnet-sshbruter.txt"
+SSHPORTSCAN="/tmp/.emagnet-portscan"
 
 #######################################################################################################################
 ### BROWSER ###########################################################################################################
 #######################################################################################################################
 ####                                                                                                               ####
-#### Here you are able to choose if you wanna use ELINKS or LYNX when we grabbing stuff from pastebin.com          ####	
+#### Choose if you wanna use ELINKS or LYNX when we grabbing stuff from pastebin.com                               ####	
 ####                                                                                                               ####
 #######################################################################################################################
-BROWSER= 
+BROWSER=elinks
+
+#######################################################################################################################
+### USER-AGENT ########################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
+#### USER-AGENT we gonna use when visiting pastebin                                                                ####	
+####                                                                                                               ####
+#######################################################################################################################
+USERAGENT=
 
 
+#######################################################################################################################
+### BINARYS ###########################################################################################################
+#######################################################################################################################
+####                                                                                                               ####
+#### SCRIPT   =  Where emagnet is stored                                                                           ####
+#### LYNX     =  WWW Browser for visit pastebin                                                                    ####
+#### ELINKS   =  WWW Browser for visit pastebin (added so android users can run emagnet via termux)                ####
+#### WGET     =  For download files from pastebin                                                                  ####
+#### CURL     =  For check our IP                                                                                  ####
+#### SCREEN   =  For run emagnet in background                                                                     ####
+#### PIGZ     =  Not required but recommended, for speed up backup                                                 ####
+#### DISTRO   =  Used for detect wich distro emagnet is runned on                                                  ####
+#### DISTRO2  =  If DISTRO wont reply anything then we control if it's and android device instead4                 ####
+####                                                                                                               ####
+#######################################################################################################################
+SCRIPT="$(pwd)/emagnet"
+LYNX="/usr/bin/lynx"
+ELINKS="/usr/bin/elinks"
+WGET="/usr/bin/wget"
+CURL="/usr/bin/curl"
+SCREEN="/usr/bin/screen"
+PARALLEL="/usr/bin/parallel"
+PIGZ="/usr/bin/pigz"
+DISTRO=$(cat /etc/*release | head -n 1 | awk '{ print tolower($1) }' | cut -d= -f2)
+DISTRO2="$(getprop &> /dev/null)"
