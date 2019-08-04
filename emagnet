@@ -1558,7 +1558,7 @@ fi
 "-s"|"-spam"|"--spam") conf;check4all;emagnetspammer                                                     ;;
 "-d"|"-stats"|"--stats") conf;check4all;stats;exit 1                                                     ;;
 "-x"|"-syntax"|"--syntax") conf;check4all;clear;banner;emagnetsyntax                                     ;;
-"-q"|"-quiet"|"--quiet") conf;check4all;pid="$(ps aux |grep emagnet)";screen -dmS emagnet "emagnet --emagnet"
+"-q"|"-quiet"|"--quiet") conf;check4all;pid="$(ps aux |grep emagnet)";screen -dmS "emagnet emagnet --emagnet"
                          printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n" ;;
 "version"|"-version"|"--version"|"-V") conf:printf "Emagnet Version: v$VERSION\n" 			 ;;
 
