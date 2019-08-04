@@ -391,14 +391,14 @@ IP-ADDRESS SETUP:
 Set your private ip here if you don't wanna take a risk to get
 ip banned on pastebin.com for around ~3200seconds
 
-This will happen if you will set a refresh time to <149 seconds in next step
+This will happen if you will set a refresh time to <150 seconds in next step
 
 According to pastebin's FAQ they using 120 seconds for premium users
 that is allowed to whitelist one ip for scrape pastebin.
 So since they have set 120 seconds and in avarage there is 1 upload every 
 3 econds and we are grabbing uploads from archive page (pastebin.com/archive)
 that have have 56 uploads listed. This mean you will be safe if you will set
-149> seconds since 56 uploads every 3 seconds is 168. if you have setup a VPN
+150> seconds since 56 uploads every 3 seconds is 168. if you have setup a VPN
 connection then you can set any time since you will change ip anyway so you don't 
 have to care, but I still recommending to set a value that is NOT to low. 
 
@@ -508,7 +508,7 @@ TIME SETUP:
 ----------------------
 By updating emagnet in 150 seconds or less you will get ip banned
 by pastebin.com in ~1200 seconds, if you choose to set emagnet to refresh
-in 149 seconds or less anyway then do not leave emagnet running
+in 150 seconds or less anyway then do not leave emagnet running
 in background unless you have enable VPN so you will change IP if you 
 getting banned otherwise emagnet gonna sleep for 3200 seconds and
 you probably gonna miss alot of leaked accounts.
@@ -1575,9 +1575,9 @@ if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then
     echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
 if [[ -z $2 ]]; then echo -e "emagnet: internal error -- you must include true or false";exit 1;fi
 if [[ $2 = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
-     sed -i '149d' $CONF;sed -i "149i VPN=true" $CONF;echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
+     sed -i '150d' $CONF;sed -i "150i VPN=true" $CONF;echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
 elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then
-     sed -i '149d' $CONF;sed -i "149i VPN=false" $CONF;echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
+     sed -i '150d' $CONF;sed -i "150i VPN=false" $CONF;echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
 else echo -e "emagnet: internal error -- $2 is an unknown option -- valid options is true or false"
      exit 1;fi
 ;;
