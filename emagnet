@@ -1156,7 +1156,7 @@ tt="$(ls $EMAGNETTEMP | wc -l)";if [[ $tt -lt "10" ]]; then
   tt="0$tt"
 fi
 
-if [[ $tt = "00" ]]; then  $
+if [[ $tt = "00" ]]; then 
   $BROWSER -dump $PASTEBIN|grep -q "blocked"
     if [[ $? = "0" ]]; then
       Iwasbanned
