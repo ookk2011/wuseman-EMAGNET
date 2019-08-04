@@ -18,7 +18,7 @@ DEBUG=false
 #### Wich pastebin site do you wanna use, pastebin is the only one for the moment more will be added soon.         ####
 ####                                                                                                               ####
 #######################################################################################################################
-PASTEBIN=https://www.pastebin.com/archive
+PASTEBIN=
 
 #######################################################################################################################
 #### TIME #############################################################################################################
@@ -27,7 +27,7 @@ PASTEBIN=https://www.pastebin.com/archive
 #### Set the time for how often you wanna run emagnet, dont set 0-9 seconds that will get you ip banned(permanent) ####
 ####                                                                                                               ####
 #######################################################################################################################
-TIME=60
+TIME=
 
 #######################################################################################################################
 #### IP ###############################################################################################################
@@ -37,7 +37,7 @@ TIME=60
 #### You can allwas set something like 127.0.0.1 to trick emagnet but keep in mind you might get a perm ban.       ####
 ####                                                                                                               ####
 #######################################################################################################################
-MYIP=1
+MYIP=
 
 #######################################################################################################################
 #### WHOIS YOUR IP ####################################################################################################
@@ -47,7 +47,7 @@ MYIP=1
 #### oneliner and no data is stored data from vistors wich means we can whois our ip unlimited times.              ####
 ####                                                                                                               ####
 #######################################################################################################################
-WIP=https://nr1.nu/i/
+WIP=
 WIP2=
 WIP3=
 WIP4=
@@ -69,17 +69,17 @@ WIP4=
 #### EMAGNETSYNTAX  = In this fodler we save all uploads when we downloading files by syntax (./emagnet -e syntax) ####  
 ####                                                                                                               ####
 #######################################################################################################################
-EMAGNET=/opt/emagnet
-EMAGNETHOME=$EMAGNET/incoming/$(date +%Y-%m-%d)
-EMAGNETLOGS=$EMAGNETHOME/logs
-EMAGNETPW=$EMAGNETHOME/password-files
-EMAGNETALL=$EMAGNETHOME/all-files
-EMAGNETCRAP=$EMAGNETHOME/.pastebin
-EMAGNETTEMP=$EMAGNETHOME/.temp
-EMAGNETARCHIVE=$EMAGNET/archive
-EMAGNETDB=$EMAGNETHOME/email-files
-EMAGNETBACKUP=$EMAGNET/backup
-EMAGNETSYNTAX=$EMAGNETHOME/sorted-by-syntax
+EMAGNET=
+EMAGNETHOME=
+EMAGNETLOGS=
+EMAGNETPW=
+EMAGNETALL=
+EMAGNETCRAP=
+EMAGNETTEMP=
+EMAGNETARCHIVE=
+EMAGNETDB=
+EMAGNETBACKUP=
+EMAGNETSYNTAX=
 
 #######################################################################################################################
 #### VERSION ##########################################################################################################
@@ -97,7 +97,7 @@ VERSION=3.2
 #### The higher value the better. This speeds up the download extremely during download from pastebin              ####
 ####                                                                                                               ####     
 #######################################################################################################################
-THREADS=8
+THREADS=
 
 #######################################################################################################################
 #### IDLETIME #########################################################################################################
@@ -106,7 +106,7 @@ THREADS=8
 #### This is for how long emagnet will stay idle when we got banned on pastebin, 1600s or more is recommended      ####
 ####                                                                                                               ####
 #######################################################################################################################
-IDLETIME=3600
+IDLETIME=
 
 #######################################################################################################################
 #### BRUTE FORCE (NEW!) ###############################################################################################
@@ -117,7 +117,7 @@ IDLETIME=3600
 #######################################################################################################################
 GBRUTEFORCE=false
 SBRUTEFORCE=false
-PBRUTEFORCE=true
+PBRUTEFORCE=false
 
 #######################################################################################################################
 #### EMAIL (NEW!) #####################################################################################################
@@ -147,14 +147,14 @@ NOTIFY=false
 #### then just set your path to your vpn folder and rename your files as $VPNPROVIDER.se.ovpn (se for Sweden)      ####
 ####                                                                                                               ####
 #######################################################################################################################
-VPN=false
-VPNROOT=/etc/openvpn
-VPNPROVIDER=$VPNROOT/
-VPNPROVIDER2=$VPNROOT/
-VPNPROVIDER3=$VPNROOT/
-VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"
-VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"
-VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"
+VPN=
+VPNROOT=
+VPNPROVIDER=
+VPNPROVIDER2=
+VPNPROVIDER3=
+VPNCOUNTRYS=
+VPNCOUNTRYS2=
+VPNCOUNTRYS3=
 
 #######################################################################################################################
 ### SSH BRUTEFORCER ###################################################################################################
@@ -166,11 +166,11 @@ VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manc
 #### SSHWORDLIST = Wordlist you want to use during the attack                                                      ####
 ####                                                                                                               ####
 #######################################################################################################################
-SSHUSER="root"
-SSHPORT="22"
-SSHPASS=""
-SSHTARGETS="/tmp/.emagnet-sshbruter.txt"
-SSHPORTSCAN="/tmp/.emagnet-portscan"
+SSHUSER=
+SSHPORT=
+SSHPASS=
+SSHTARGETS=
+SSHPORTSCAN=
 
 #######################################################################################################################
 ### BROWSER ###########################################################################################################
@@ -179,7 +179,7 @@ SSHPORTSCAN="/tmp/.emagnet-portscan"
 #### Choose if you wanna use ELINKS or LYNX when we grabbing stuff from pastebin.com                               ####	
 ####                                                                                                               ####
 #######################################################################################################################
-BROWSER=elinks
+BROWSER=
 
 #######################################################################################################################
 ### USER-AGENT ########################################################################################################
