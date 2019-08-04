@@ -1103,6 +1103,94 @@ fi
 }
 
 
+stats() {
+if ! [[ -d $EMAGNETARCHIVE/all-files ]]; then
+    clear;banner
+    echo -e "[\e[0;31m<<\e[0m] - Duh! You must run emagnet before you can count any stats.\n"
+    exit 1
+fi
+    echo;clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting data"
+    printf "%s" "                           (00%)"
+    sleep 1
+    TOTALFILES=$(ls $EMAGNETARCHIVE/all-files | wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting total files.."
+    printf "%s" "..                (14%)"
+    sleep 0.5
+    TEMAILFILES=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETARCHIVE/all-files | cut -d: -f1|uniq|sort| wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting email files.."
+    printf "%s" "....              (39%)"
+    sleep 0.5
+    TPASSWORDFILES=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'\|'>'|uniq|sort|wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting password files.."
+    printf "%s" "......         (51%)"
+    sleep 0.5
+    TEMAILS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting total email addresses"
+    printf "%s" "........  (92%)"
+    sleep 0.5
+    TPASSWORDS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETARCHIVE/all-files|awk -F, '!seen[$1]++'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ' '\|'/'\|'"'\|','\|'<'\|'>'|wc -l)
+    clear; banner
+    printf "[\e[1;32m>>\e[0m] - Please wait, counting total passwords.."
+    printf "%s\n" ".............(100%)"
+    sleep 0.5
+    clear; banner
+    sleep 1
+    if ! [[ $TOTALFILES = "0" ]]; then
+    printf '[\e[1;32m>>\e[0m] - Done, calculating stats'
+    printf "%s\n\n" ".............................(100%)"
+    sleep 2
+    fi
+    clear;banner
+
+line='      -'
+for totalfiles in $TOTALFILES; do    
+  if [[ $TOTALFILES -lt "10" ]]; then
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Total files downloaded\n" 0$TOTALFILES "${line:${#TOTALFILES}}"
+  else
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Total files downloaded\n" $TOTALFILES "${line:${#TOTALFILES}}"
+  fi
+done
+
+
+for temails in $TEMAILS; do
+  if [[ $TEMAILS -lt "10" ]]; then
+     printf "%11s"; printf "[\e[1;32m%s\e[m] %s Mail addresses stored\n" 0$TEMAILS "${line:${#TEMAILS}}"
+  else
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Mail addresses stored\n" $TEMAILS "${line:${#TEMAILS}}"
+  fi
+done
+
+for tpasswords in $TPASSWORDS; do
+  if [[ $TPASSWORDS -lt "10" ]]; then
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Passwords stored\n" 0$TPASSWORDS "${line:${#TPASSWORDS}}"
+  else
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Passwords stored\n" $TPASSWORDS "${line:${#TPASSWORDS}}"
+  fi
+done
+
+for temailfiles in $TEMAILFILES; do
+  if [[ $TEMAILFILES -lt "10" ]]; then
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Files with at least one email address\n" 0$TEMAILFILES "${line:${#TEMAILFILES}}"
+else
+     printf "%11s";printf "[\e[1;32m%s\e[m] %s Files with at least one email address\n" $TEMAILFILES "${line:${#TEMAILFILES}}"
+  fi
+done
+
+for tpasswordsfiles in $TPASSWORDFILES; do
+  if [[ $TPASSWORDFILES -lt "10" ]]; then
+     printf "%11s[\e[1;32m%s\e[m] %s Files with at least one password\nn" 0$TPASSWORDFILES "${line:${#TPASSWORDFILES}}"
+  else
+     printf "%11s"; printf "[\e[1;32m%s\e[m] %s Files with at least one password\n" $TPASSWORDFILES "${line:${#TPASSWORDFILES}}"
+ fi
+done
+printf "\n%64s \n\n" | tr ' ' '='
+}
+
 ############################################### EMAGNET MAIN ################################################
 emagnet2() {
 if [[ $BROWSER = "elinks" ]]; then
@@ -1322,7 +1410,7 @@ dontstopwhenfound
   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 fi
 ;;
-"-bruteforce"|"--bruteforce")
+"-g"|"-bruteforce"|"--bruteforce")
 check4all
 sleep 0.5
 if [[ $2 = "gmail" ]]; then
@@ -1353,17 +1441,14 @@ elif [[ $2 = "ssh" ]]; then
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
         conf
-
-
-printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
+         printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
 read LIBSPOTIFY
 if ! [[ $LIBSPOTIFY = "YES" ]]; then
 echo "Can't continue until libspotify has been installed.."
 echo "Exiting.."
-exit 1
+#exit 1
 fi
-
-./sconsify &> /dev/null
+file ./sconsify &> /dev/null
 if [[ $? -ne "0" ]]; then
  if [[ ! -f "./sconsify" ]]; then
    echo "Sconsify is required to be installed before we attacking targets.."
@@ -1372,7 +1457,7 @@ if [[ $? -ne "0" ]]; then
    read -p "Download and install sconsify (y/N): " installsconsify
          if [[ $installsconsify -eq "y" ]]; then
                 wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
-                unzip linux-x86_64-sconsify-0.6.0-next.zip 1> /dev/null
+                unzip linux-x86_64-sconsify-0.6.0-next.zip
                 chmod +x sconsify
                 rm linux-x86_64-sconsify-0.6.0-next.zip
                 echo "Done.."
