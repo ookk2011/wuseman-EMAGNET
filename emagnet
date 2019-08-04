@@ -40,17 +40,6 @@
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
 
-
-
-R="$(tput setaf 1)"
-G="$(tput setaf 2)"
-Y="$(tput setaf 3)"
-B="$(tput setaf 4)"
-M="$(tput setaf 5)"
-C="$(tput setaf 6)"
-W="$(tput setaf 7)"
-E="$(tput sgr0)"
-
 banner() {
 cat << "EOF"
      _                      _______                      _
@@ -77,11 +66,10 @@ printf "%64s \n\n" | tr ' ' '='
 }
 
 mustberoot() {  (( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
-conf() { CONF="/etc/emagnet.conf"; . $"{CONF}"; }
+conf() {   CONF="/etc/emagnet.conf";. "${CONF}";}
 setupconf() { SETUPCONF=".emagnetconf/emagnet.conf"; . "${SETUPCONF}"; }
 
 alreadyconfigured() {
-mustberoot;setupconf;clear;banner
 cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf
 
 if [[ -f "/etc/emagnet.conf" ]]; then
@@ -99,7 +87,6 @@ fi
 }
 
 checkbrowser() {
-setupconf
                   if   [[ -f "$LYNX" && ! -f "$ELINKS" ]]; then
                         sed -i "181d" ${SETUPCONF}
                         sed -i '181 i BROWSER=lynx' ${SETUPCONF}
@@ -156,7 +143,8 @@ while true; do
             elif [[ "$DISTRO" = "ubuntu"  ]];then apt-get install elinks -qq -y
             elif [[ "$DISTRO" = "debian"  ]];then apt-get install elinks -qq -y
             elif [[ "$DISTRO" = "mint"    ]];then apt-get install elinks -y
-            else echo "Emagnet is not supported for ${DISTRO}, please install elinks manually.";exit 1
+            else echo "Emagnet is not supported for ${DISTRO}, please install elinks manually."
+          exit 1
           fi
              sed -i "181d" ${SETUPCONF}
              sed -i '181 i BROWSER=elinks' ${SETUPCONF}
@@ -168,7 +156,8 @@ while true; do
         elif [[ "$DISTRO" = "ubuntu"  ]];then apt-get install lynx -qq -y
         elif [[ "$DISTRO" = "debian"  ]];then apt-get install lynx -qq -y
         elif [[ "$DISTRO" = "mint"    ]];then apt-get install lynx -qq -y
-        else echo "Emagnet is not supported for ${DISTRO}, please install lynx manually.";exit 1
+        else echo "Emagnet is not supported for ${DISTRO}, please install lynx manually."
+        exit 1
       fi
          sed -i "181d" ${SETUPCONF}
          sed -i '181 i BROWSER=lynx' ${SETUPCONF}
@@ -192,7 +181,7 @@ fi
 }
 
 requirements() {
-setupconf
+  colors
 cat << "EOF"
 
 
@@ -258,7 +247,6 @@ missed4="$(cat /tmp/.emagnet-packages|awk -F"Detected:" '{print $2}'|cut -d"." -
 }
 
 wip() {
-setupconf
 myip="$(curl -s https://nr1.nu/i/)"
 cat << "EOF"
 
@@ -501,6 +489,36 @@ if [[ -z $1 ]]; then
 fi
 }
 
+author() {
+cat << "EOF"
+
+ Copyright (C) 2018-2019, wuseman
+
+ Emagnet was founded in 2015 and was released as open source
+ on github.com/wuseman/emagnet in January 2018 and is licensed
+ under GNU LESSER GENERAL PUBLIC LICENSE Version v3.1
+
+   - Author: wuseman <wuseman@nr1.nu>
+   - IRC   : wuseman <irc.freenode.com>
+
+ Please report bugs/issues on:
+
+   - https://github.com/wuseman/EMAGNET/issues
+
+EOF
+}
+
+colors() {
+R="$(tput setaf 1)"
+G="$(tput setaf 2)"
+Y="$(tput setaf 3)"
+B="$(tput setaf 4)"
+M="$(tput setaf 5)"
+C="$(tput setaf 6)"
+W="$(tput setaf 7)"
+E="$(tput sgr0)"
+}
+
 
 copyconf() { if [[ -f .emagnetconf/emagnet.conf ]]; then cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf;fi; }
 
@@ -554,19 +572,6 @@ conf
 conf
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 paths() {
   if [[ ! -d $EMAGNETHOME    ]];    then mkdir -p $EMAGNETHOME     &> /dev/null;  fi
   if [[ ! -d $EMAGNETDB      ]];    then mkdir -p $EMAGNETDB       &> /dev/null;  fi
@@ -577,14 +582,6 @@ paths() {
   if [[ ! -d $EMAGNETARCHIVE ]];    then mkdir -p $EMAGNETARCHIVE  &> /dev/null;  fi
   if [[ ! -d $EMAGNETLOGS    ]];    then mkdir -p $EMAGNETLOGS     &> /dev/null;  fi
 }
-
-
-
-
-
-
-
-
 
 heavyload() {
 $BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
@@ -601,19 +598,6 @@ $BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
         bash emagnet --emagnet
   fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Iwasbanned() {
 clear;banner
@@ -642,20 +626,6 @@ if [[ $? = "0" ]]; then
   fi
 fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 vpnsetup() {
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|sed '1d')
@@ -689,17 +659,6 @@ case $COUNTRY in
    united-states)  cd $VPNPROVIDER;openvpn --config $VPNCONFIG.us.ovpn      &> /dev/null & ;;
 esac
 }
-
-
-
-
-
-
-
-
-
-
-
 
 banned() {
 if [[ $VPN = "false" ]]; then
@@ -751,42 +710,6 @@ MYOLDIP="$(cat /tmp/.emagnet-ip)"
 fi
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 safety() {
 if [[ -z $MYIP ]]; then
     myyyyip="$(curl -s $WIP | sed -n '121p')"
@@ -796,22 +719,6 @@ if [[ -z $MYIP ]]; then
     echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
 fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 analyz() {
 clear
@@ -846,68 +753,6 @@ banner
     printf "\n\n"
 }
      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-check4all() {
-     conf
-     copyconf
-     iconnection
-     mustbefilled
-     paths
-     copyconf
-     safety
-     
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 analyzer() {
 wait_time=$TIME
 temp_cnt=${wait_time}
@@ -918,85 +763,37 @@ while [[ ${temp_cnt} -gt 0 ]]; do
 done
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 countdown() {
 if [[ $GBRUTEFORCE = "true" ]]; then
     clear
     banner
       printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
-      echo ""
+      echo
     analyzer
 elif [[ $PBRUTEFORCE = "true" ]]; then
     clear
     banner
       printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
-      echo ""
+      echo
     analyzer
 elif [[ $SBRUTEFORCE = "true" ]]; then
     clear
     banner
       printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
-      echo ""
+      echo
       analyzer
 else sed -i '118d' $CONF; sed -i '118 i GBRUTEFORCE=false' $CONF
 	 sed -i '119d' $CONF
          sed -i '119 i SBRUTEFORCE=false' $CONF
-	 source /etc/emagnet.conf
+	 conf
          analyzer
 fi
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-blocked() { source $CONF;if [[ ! -s /tmp/.emagnet ]]; then $BROWSER -dump $PASTEBIN > /tmp/.emagnet;fi }
-
-
-
-
-
-
-
-
-
-
-
-
+blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then $BROWSER -dump $PASTEBIN > /tmp/.emagnet;fi; }
 
 stats() {
 if ! [[ -d $EMAGNETARCHIVE/all-files ]]; then
@@ -1101,31 +898,6 @@ done
      printf "\n%64s \n\n" | tr ' ' '='
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 spotifybruter() {
 VERSION="0.6.0"
 WWWSOURCE="https://nr1.nu/archive/sconsify"
@@ -1174,24 +946,6 @@ SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
 
 done < /tmp/.emagnet-passwords.txt
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 sshbruter() {
 if [[ -z $SSHPASS ]]; then
@@ -1248,26 +1002,6 @@ fi
     sleep 4
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bruter() {
 if [[ eg=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '"'\|','\|'<' |grep -i gmail.com|wc -l) -gt "0" ]]; then
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> /tmp/.emagnet-passwords.txt 
@@ -1297,26 +1031,6 @@ else
     sleep 1
 fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 emagnetsyntax() {
 $BROWSER -dump $PASTEBIN/bash|grep -q "blocked your IP"
@@ -1367,26 +1081,6 @@ else
 fi
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 moveem() {
 clear
 banner
@@ -1395,22 +1089,6 @@ banner
               mkdir -p $EMAGNETARCHIVE/{all-files,email-files,password-files,logs}
           fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 copy_files() {
@@ -1440,25 +1118,6 @@ else
       echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]\n"
 fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 merge_logs() {
 paths
@@ -1515,27 +1174,8 @@ copy_files
 merge_logs
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 emagnetspammer() {
-clear
-banner
+clear;banner
 ssmtp &> /dev/null
 if [[ $? -gt "0" ]]; then
     printf "[\e[1;31m<<\e[0m] - Spammer require ssmtp to be installed and configured.\n\n"
@@ -1577,23 +1217,6 @@ NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETD
     esac
 fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 emagnet2() {
 if [[ $BROWSER = "elinks" ]]; then
@@ -1804,24 +1427,7 @@ done
 
 
 
-author() {
-cat << "EOF"
 
- Copyright (C) 2018-2019, wuseman
-
- Emagnet was founded in 2015 and was released as open source
- on github.com/wuseman/emagnet in January 2018 and is licensed
- under GNU LESSER GENERAL PUBLIC LICENSE Version v3.1
-
-   - Author: wuseman <wuseman@nr1.nu>
-   - IRC   : wuseman <irc.freenode.com>
-
- Please report bugs/issues on:
-
-   - https://github.com/wuseman/EMAGNET/issues
-
-EOF
-}
 
 
 
@@ -1874,6 +1480,17 @@ NOPE="[\e[1;31m<<\e[0m]"
 
 
 
+check4all() {
+     conf
+     copyconf
+     iconnection
+     mustbefilled
+     paths
+     copyconf
+     safety
+
+}
+
 
 
 case $1 in
@@ -1882,10 +1499,10 @@ author
 ;;
 
 "emagnet"|"-e"|"-emagnet"|"--emagnet")
+conf
 sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' $CONF
 sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' $CONF
 sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' $CONF
-	source $CONF
         clear
         banner
         check4all
@@ -1909,13 +1526,13 @@ fi
 ;;
 
 "-bruteforce"|"--bruteforce")
-source $CONF
+conf
 check4all
 sleep 0.5
 if [[ $2 = "gmail" ]]; then
-        source $CONF
+        conf
         sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' $CONF
-        source $CONF
+        conf
         if [[ $GBRUTEFORCE = "true" ]]; then
         clear
         banner
@@ -1926,9 +1543,9 @@ if [[ $2 = "gmail" ]]; then
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
         fi
 elif [[ $2 = "ssh" ]]; then
-        source $CONF
+        conf
         sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' $CONF
-        source $CONF
+        conf
         if [[ $SBRUTEFORCE = "true" ]]; then
         clear
         banner
@@ -1939,9 +1556,9 @@ elif [[ $2 = "ssh" ]]; then
         fi
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
-        source $CONF
+        conf
         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' $CONF
-        source $CONF
+        conf
         if [[ $PBRUTEFORCE = "true" ]]; then
         clear
         banner
@@ -1971,9 +1588,9 @@ fi
 
 
 "F"|"-find"|"--find")
-echo ""
+echo
 COLUMNS=1
-source /etc/emagnet.conf
+conf
 
 PS3='
 What are you looking for: '
@@ -2131,16 +1748,16 @@ fi
 ;;
 
 "-l"|"-license"|"--license") printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s https://nr1.nu/licenses/LICENSE.md|less;printf "%s\n" "Thank you.." ;;
-"-m"|"-move"|"--move") source $CONF;check4all;moveem                                                             ;;
-"-s"|"-spam"|"--spam") source $CONF;check4all;emagnetspammer                                                     ;;
-"-d"|"-stats"|"--stats") source $CONF;check4all;stats;exit 1                                                     ;;
-"-x"|"-syntax"|"--syntax") source $CONF;check4all;clear;banner;emagnetsyntax                                     ;;
-"-q"|"-quiet"|"--quiet") source $CONF;check4all;pid="$(ps aux |grep emagnet)";screen -dmS emagnet "emagnet --emagnet"
+"-m"|"-move"|"--move") conf;check4all;moveem                                                             ;;
+"-s"|"-spam"|"--spam") conf;check4all;emagnetspammer                                                     ;;
+"-d"|"-stats"|"--stats") conf;check4all;stats;exit 1                                                     ;;
+"-x"|"-syntax"|"--syntax") conf;check4all;clear;banner;emagnetsyntax                                     ;;
+"-q"|"-quiet"|"--quiet") conf;check4all;pid="$(ps aux |grep emagnet)";screen -dmS emagnet "emagnet --emagnet"
                          printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n" ;;
-"version"|"-version"|"--version"|"-V") source $CONF:printf "Emagnet Version: v$VERSION\n" 			 ;;
+"version"|"-version"|"--version"|"-V") conf:printf "Emagnet Version: v$VERSION\n" 			 ;;
 
 "-t"|"-time"|"--time")
-     source $CONF
+     conf
 
 if [[ -z $2 ]]; then
      echo "emagnet: internal error -- time require a number to be used"
@@ -2163,24 +1780,27 @@ fi
         echo -e "$basename$0: internal error -- notify-send is required for get notifications"
         exit 1
      fi
+
       if [[ -z $2 ]]; then
-       echo -e "$basename$0: internal error -- you forgot true or false?"
+       echo -e "$basename$0: internal error -- you must use true or false"
        exit 1
      fi
+conf
      if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
-        clear;banner;source $CONF;sed -i '137d' $CONF;sed -i "137 i NOTIFY=true" $CONF
-        printf "$basename$0: config file has been updated -- notifications is enable\n"
+        sed -i '137d' $CONF
+        sed -i "137 i NOTIFY=true" $CONF
+        printf "$basename$0: config file has been updated -- notifications has been enable\n"
      fi
 
      if [[ $? -eq "0" ]] && [[ $2 = "disable" ]]; then
-        source $CONF;clear;banner
-        sed -i '137d' $CONF;sed -i "137 i NOTIFY=false" $CONF
-        printf "$basename$0: config file has been updated -- notifications is disable\n"
+        sed -i '137d' $CONF
+        sed -i "137 i NOTIFY=false" $CONF
+        printf "$basename$0: config file has been updated -- notifications has beendisable\n"
      fi
 ;;
 
  "-v"|"-vpn"|"--vpn")
-source $CONF
+conf
 if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then 
     echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
 if [[ -z $2 ]]; then echo -e "emagnet: internal error -- you must include true or false";exit 1;fi
@@ -2193,7 +1813,7 @@ else echo -e "emagnet: internal error -- $2 is an unknown option -- valid option
 ;;
 
 "-b"|"-backup"|"--backup")
-    clear;banner;source $CONF
+    clear;banner;conf
 
 if [[ ! -d $EMAGNETBACKUP ]]; then
    mkdir -p $EMAGNETBACKUP
@@ -2284,7 +1904,9 @@ fi
 if [[ $1 = "--setup" ]]; then
  if [[ $? -eq "0" ]]; then
     mustberoot
+    clear; banner
     alreadyconfigured
+    setupconf
     checkbrowser
     requirements
     wip
@@ -2300,4 +1922,3 @@ fi
 	"\?")  usage 											     ;;
    	"*")   clear;banner;printf "emagnet: internal error -- use -help for available commands'\n\n";exit 1 ;;
 esac
-
