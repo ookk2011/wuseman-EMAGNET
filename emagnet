@@ -759,13 +759,29 @@ countdown() {
 if [[ $GBRUTEFORCE = "true" ]]; then
     clear
     banner
+      conf
+      sed -i '118d' $CONF
+      sed -i '118 i GBRUTEFORCE=true' $CONF
+      sed -i '119d' $CONF
+      sed -i '119 i SBRUTEFORCE=false' $CONF
+      sed -i '120d' $CONF
+      sed -i '120 i PBRUTEFORCE=false' $CONF
+      conf
       printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
-    analyzer
+      analyzer
 elif [[ $PBRUTEFORCE = "true" ]]; then
     clear
     banner
+      conf
+      sed -i '118d' $CONF
+      sed -i '118 i GBRUTEFORCE=false' $CONF
+      sed -i '119d' $CONF
+      sed -i '119 i SBRUTEFORCE=false' $CONF
+      sed -i '120d' $CONF
+      sed -i '120 i PBRUTEFORCE=true' $CONF
+      conf
       printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
@@ -773,15 +789,27 @@ elif [[ $PBRUTEFORCE = "true" ]]; then
 elif [[ $SBRUTEFORCE = "true" ]]; then
       clear
       banner
+      conf
+      sed -i '118d' $CONF
+      sed -i '118 i GBRUTEFORCE=false' $CONF
+      sed -i '119d' $CONF
+      sed -i '119 i SBRUTEFORCE=true' $CONF
+      sed -i '120d' $CONF
+      sed -i '120 i PBRUTEFORCE=false' $CONF
+      conf
       printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
       analyzer
-else sed -i '118d' $CONF; sed -i '118 i GBRUTEFORCE=false' $CONF
-	 sed -i '119d' $CONF
-         sed -i '119 i SBRUTEFORCE=false' $CONF
-	 conf
-         analyzer
+else
+      sed -i '118d' $CONF
+      sed -i '118 i GBRUTEFORCE=false' $CONF
+      sed -i '119d' $CONF
+      sed -i '119 i SBRUTEFORCE=false' $CONF
+      sed -i '120d' $CONF
+      sed -i '120 i PBRUTEFORCE=false' $CONF
+      conf
+      analyzer
 fi
 }
 
@@ -1366,14 +1394,18 @@ for (( ; ; )); do
        if [[ $GBRUTEFORCE = "true" ]]; then
          bruter
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+         rm /tmp/.emagnet*  &> /dev/null
        elif [[ $SBRUTEFORCE = "true" ]]; then
          sshbruter
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+         rm /tmp/.emagnet*  &> /dev/null
        elif [[ $PBRUTEFORCE = "true" ]]; then 
          spotifybruter
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+         rm /tmp/.emagnet*  &> /dev/null
        else
          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+         rm /tmp/.emagnet*  &> /dev/null
        fi
 done
 }
@@ -1461,11 +1493,15 @@ elif [[ $2 = "spotify" ]]; then
          fi
            read -p "Download and install sconsify (y/N): " installsconsify
              if [[ $installsconsify -eq "y" ]]; then
+                echo -e "Hold on, downloading sconsify.."
                 wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
-                unzip linux-x86_64-sconsify-0.6.0-next.zip
+                echo -e "Unzipping sconsify into current dir.."
+                unzip -q -o linux-x86_64-sconsify-0.6.0-next.zip
                 chmod +x sconsify
+                echo -e "Cleaning up."..
                 rm linux-x86_64-sconsify-0.6.0-next.zip
-                echo "Done.."
+                echo "All done, going to continue in 5 seconds.."
+                sleep 5
 #                       if [[ -d /usr/local/bin ]]; then
 #                                  mv "sconsify" "/usr/local/bin"
 #                                  chmod +x "/usr/local/bin"
