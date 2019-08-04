@@ -50,7 +50,7 @@ CONF="/etc/emagnet.conf"
 . "${CONF}" ;}
 
 setupconf() {
-ETUPCONF=".emagnetconf/emagnet.conf"
+SETUPCONF=".emagnetconf/emagnet.conf"
 . "${SETUPCONF}" ;}
 
 
