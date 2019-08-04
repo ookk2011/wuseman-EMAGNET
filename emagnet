@@ -222,11 +222,11 @@ fi
 
 checkbrowser() {
                   if   [[ -f "$LYNX" && ! -f "$ELINKS" ]]; then
-                        sed -i "181d" ${SETUPCONF}
-                        sed -i '181 i BROWSER=lynx' ${SETUPCONF}
+                        sed -i "182d" ${SETUPCONF}
+                        sed -i '182 i BROWSER=lynx' ${SETUPCONF}
                 elif [[ ! -f "$LYNX" && -f "$ELINKS" ]]; then
-                        sed -i "181d" ${SETUPCONF}
-                        sed -i '181 i BROWSER=elinks' ${SETUPCONF}
+                        sed -i "182d" ${SETUPCONF}
+                        sed -i '182 i BROWSER=elinks' ${SETUPCONF}
                 elif [[ -f $LYNX && -f $ELINKS ]]; then
 
 cat << "EOF"
@@ -246,15 +246,15 @@ read -p "Browser: (lynx/elinks): " browsertouse
           WBROWSER="$(echo -e 'elinks\nlynx' | shuf -n 1)"
           printf "\nYou must choose one, however i shuffled and ${WBROWSER} will be used\n"
           printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i '181d' ${SETUPCONF} ${SETUPCONF}
-          sed -i "181 i BROWSER=${WBROWSER}" ${SETUPCONF}
+          sed -i '182d' ${SETUPCONF} ${SETUPCONF}
+          sed -i "182 i BROWSER=${WBROWSER}" ${SETUPCONF}
        elif [[ "${browsertouse}" = "lynx" ]]; then
-          sed -i "181d" ${SETUPCONF}
-          sed -i '181 i BROWSER=lynx' ${SETUPCONF}
+          sed -i "182d" ${SETUPCONF}
+          sed -i '182 i BROWSER=lynx' ${SETUPCONF}
           printf "\nConfig file has been updated, lynx will be used for downloading files\n"
        else
-          sed -i "181d" ${SETUPCONF}
-          sed -i '181 i BROWSER=elinks' ${SETUPCONF}
+          sed -i "182d" ${SETUPCONF}
+          sed -i '182 i BROWSER=elinks' ${SETUPCONF}
           printf "\nConfig file has been updated, elinks will be used for downloading files\n"
       fi
     else
@@ -281,8 +281,8 @@ while true; do
             else echo -e "Emagnet is not supported for ${DISTRO}, please install elinks manually.\n"
           exit 1
           fi
-             sed -i "181d" ${SETUPCONF}
-             sed -i '181 i BROWSER=elinks' ${SETUPCONF}
+             sed -i "182d" ${SETUPCONF}
+             sed -i '182 i BROWSER=elinks' ${SETUPCONF}
              printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" "${SCRIPT}"
         ;;
      "lynx") printf "\nGoing to install ${browsertouse2}, setup will continue when ${browsertouse2} has been installed..\n"
@@ -295,21 +295,21 @@ while true; do
         else echo "Emagnet is not supported for ${DISTRO}, please install lynx manually.\n"
         exit 1
       fi
-         sed -i "181d" "${SETUPCONF}"
-         sed -i '181 i BROWSER=lynx' "${SETUPCONF}"
+         sed -i "182d" "${SETUPCONF}"
+         sed -i '182 i BROWSER=lynx' "${SETUPCONF}"
          printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" "${SCRIPT}"
          ;;
    "*")
           printf "\n${browsertouse2} is not a valid option, however i shuffled and ${WBROWSER} will be used\n"
           printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i "181d" "${SETUPCONF}"
-          sed -i "181 i BROWSER=$WBROWSER" "${SETUPCONF}"
+          sed -i "182d" "${SETUPCONF}"
+          sed -i "182 i BROWSER=$WBROWSER" "${SETUPCONF}"
           ;;
    "\?")
           printf "\n${browsertouse2} is not a valid option, however i shuffled and ${WBROWSER} will be used\n"
           printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i "181d" "${SETUPCONF}"
-          sed -i "181 i BROWSER=$WBROWSER" "${SETUPCONF}"
+          sed -i "182d" "${SETUPCONF}"
+          sed -i "182 i BROWSER=$WBROWSER" "${SETUPCONF}"
           ;;
  esac
 done
@@ -611,6 +611,7 @@ $BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
 }
 
 Iwasbanned() {
+conf
 clear;banner
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
@@ -671,6 +672,7 @@ case $COUNTRY in
    united-states)  cd $VPNPROVIDER;openvpn --config $VPNCONFIG.us.ovpn      &> /dev/null & ;;
 esac
 }
+
 
 banned() {
 if [[ $VPN = "false" ]]; then
@@ -798,23 +800,6 @@ WWWSOURCE="https://nr1.nu/archive/sconsify"
 SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
 SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
 
-hash sconsify &> /dev/null
-if [[ $? -ne "0" ]]; then
- if [[ ! -f "./sconsify" ]]; then
-   echo "Sconsify is required to be installed.."
- fi
-
-   read -p "Download and install scosnify (y/N): " installsconsify
-         if [[ $installsconsify -eq "y" ]]; then
-                wget -q "${WWWSOURCE/linux-x86_64-sconsify-${VERSION}.next.zip}"
-                unzip -o "linux-x86_64-sconsify-${VERSION}.next.zip"
-                echo "Done.."
-                       if [[ -d /usr/local/bin ]]; then
-                                  mv "sconsify" "/usr/local/bin"
-                                  chmod +x "/usr/local/bin"
-                       fi
-        fi
-fi
 
 grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP \
 |awk '{print $1}' \
@@ -1172,9 +1157,9 @@ tt="$(ls $EMAGNETTEMP | wc -l)";if [[ $tt -lt "10" ]]; then
 fi
 
 if [[ $tt = "00" ]]; then  $
-  BROWSER -dump $PASTEBIN|grep -q "blocked"
-    if [[ $? = "0" ]]; then 
-      Iwasbanned;
+  $BROWSER -dump $PASTEBIN|grep -q "blocked"
+    if [[ $? = "0" ]]; then
+      Iwasbanned
     fi
 
 printf "[\e[1;31m<<\e[0m] - No files has been downloaded, you may wanna rise time?\n\n";tt="\e[1;31m\e[5m00\e[0m";sleep 5
@@ -1309,7 +1294,11 @@ check4all() {
      paths
      copyconf
      safety
+     Iwasbanned
+
 }
+
+if [[ -z $1 ]]; then usage; fi
 
 case $1 in
      "-a"|"-author"|"--author")
@@ -1365,6 +1354,28 @@ elif [[ $2 = "ssh" ]]; then
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
         conf
+
+hash sconsify &> /dev/null
+if [[ $? -ne "0" ]]; then
+ if [[ ! -f "./sconsify" ]]; then
+   echo "Sconsify is required to be installed before we attacking targets.."
+ fi
+
+   read -p "Download and install scosnify (y/N): " installsconsify
+         if [[ $installsconsify -eq "y" ]]; then
+
+                wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
+                unzip linux-x86_64-sconsify-0.6.0-next.zip 1> /dev/null
+                chmod +x sconsify
+                rm linux-x86_64-sconsify-0.6.0-next.zip
+                echo "Done.."
+#                       if [[ -d /usr/local/bin ]]; then
+#                                  mv "sconsify" "/usr/local/bin"
+#                                  chmod +x "/usr/local/bin"
+ #                      fi
+        fi
+fi
+
         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' $CONF
         conf
         if [[ $PBRUTEFORCE = "true" ]]; then
@@ -1430,7 +1441,7 @@ if ! [[ $2 =~ $re ]] ; then
 fi
      sed -i '30d' $CONF
      sed -i "30 i TIME=$2" $CONF
-     printf "emagnet: config file has been updated -- refresh time has been set to: $2 seconds\n"
+     printf "emagnet: config file has been updated -- time has been set to: $2 s\n\n"
      exit 1
 ;;
 
