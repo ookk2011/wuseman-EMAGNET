@@ -11,18 +11,17 @@ r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      that has been re-added is now stable and not "half done" so they are here for stay.
 R = REBUILT
 
-# Version 3.3
+# Version 3.2
 
--    Removed fuzzer, and find
+-    Removed fuzzer, and find temporary
++    Spotify BRUTEFORCE has been added
 -    Removed requirements for netcat since we dont have any use for netcat anymore
 +    emagnet-setup.sh has now been moved to emagnet
 +    Notifications has been added, this require notify-send
 +    Toggle between true or false via --notify
 +    SSH bruteforce has been added
-+    FUZZER has been added
 +    Removed almost all comments since it toke alot of place
 +    General fixes
-+    Added --find, search for credit cards, images, urls and much more
 
 # Version 3.1
 
