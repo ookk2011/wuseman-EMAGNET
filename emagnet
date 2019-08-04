@@ -480,7 +480,7 @@ cat << "EOF"
 
 PATH SETUP:
 ----------------------
-Please specify in wich folder you to store all downloaded files from pastebin
+Please specify in wich folder you want to store all downloaded files from pastebin
 EOF
 
 read -p "Path (Default: /opt/emagnet): " ehomedir
