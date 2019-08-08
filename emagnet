@@ -993,6 +993,7 @@ fi
 ;;
 
 "-n"|"-notify"|"--notify")
+conf
      notify-send --help &> /dev/null
      if [[ $? -gt "0" ]]; then
         echo -e "$basename$0: internal error -- notify-send is required for get notifications"
@@ -1004,14 +1005,14 @@ fi
        exit 1
      fi
      if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
-        sed -i '137d' $CONF
-        sed -i "137 i NOTIFY=true" $CONF
+        sed -i '137d' ${CONF}
+        sed -i "137 i NOTIFY=true" ${CONF}
         printf "$basename$0: config file has been updated -- notifications has been enable\n"
      fi
 
      if [[ $? -eq "0" ]] && [[ $2 = "disable" ]]; then
         sed -i '137d' $CONF
-        sed -i "137 i NOTIFY=false" $CONF
+        sed -i "137 i NOTIFY=false" ${CONF}
         printf "$basename$0: config file has been updated -- notifications has beendisable\n"
      fi
 ;;
