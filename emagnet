@@ -146,7 +146,7 @@ colors() {
 iconnection() {
 ping -i "0.2" -c "1 1.1.1.1" &> /dev/null
 if [[ "$?" -gt "0" ]]; then
-     echo "It seems you're not connected to internet properly, aborted"
+     echo "It seems you're not connected to internet properly and this feature require internet, aborted"
      exit
 fi
 }
