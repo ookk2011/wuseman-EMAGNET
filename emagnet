@@ -834,7 +834,7 @@ else
                sleep 3.2
 fi
                pkill -9 notify-send &> /dev/null
-               rm "/tmp/.emagnet*"" &> /dev/null
+               rm "/tmp/.emagnet*" &> /dev/null
 }
 
 
