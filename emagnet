@@ -770,52 +770,6 @@ copy_files
 merge_logs
 }
 
-# SPAMMER
-emagnetspammer() {
-#clear;banner
-ssmtp &> /dev/null
-if [[ $? -gt "0" ]]; then
-    printf "[\e[1;31m<<\e[0m] - Spammer require ssmtp to be installed and configured.\n\n"
-    exit 1
-fi
-
-if [[ -z $EMAIL2SEND ]]; then
-    printf "[\e[1;31m<<\e[0m] - You must create a text file with the text you want to send\n"
-    printf "[\e[1;31m<<\e[0m] - to all targets, when text file has been created then you must\n"
-    printf "[\e[1;31m<<\e[0m] - set text file in /etc/emagnet.conf under EMAIL2SEND=/path/textfile\n\n"
-    exit 1
-fi
-
-if [[ ! -f $EMAIL2SEND ]]; then
-    printf "Can't find $EMAIL2SEND, aborted..\n\n"
-    exit 1
-fi
-
-if [[ $(ls $EMAGNETDB|wc -l) -eq "0" ]]; then
-    echo -e "[\e[0;33m<<\e[0m] - No email addresses has been found today.."
-    echo -e "[\e[0;33m<<\e[0m] - Let's run emagnet by hit [enter] or hit any other for stop.."
-    read  -s -n 1 key
-    if [[ -z $key ]]; then
-        bash emagnet --emagnet 
-    else
-        echo -e "[\e[1;31m<<\e[0m] - Let's spam some email addresses another day, aborted. :-(\n";exit 1; fi
-    exit 1
-else
-NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2|wc -l)"
-  printf "%24s \e[1;31mTargets: \e[1;32m$NRTARGETS\e[0m\e[0m\n\n"
-  read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
-    case $sendtoall in
-    yes) printf "%62s \n" | tr ' ' '='
-        grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > /tmp/.emagnet-spammer
-           while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.' 
-           done < /tmp/.emagnet-spammer
-        rm /tmp/.emagnet-spammer &> /dev/null ;;
-       *) echo -e "- Aborted..\n";exit 1 ;;
-    esac
-fi
-}
-
-
 emagnet2() {
 
 curl -Ls $PASTEBIN/archive \
