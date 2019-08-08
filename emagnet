@@ -295,7 +295,8 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
        setupconf
        alreadyconfigured
        requirements
-       timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null; [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
+       timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
+      [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
 fi
 
 heavyload() {
