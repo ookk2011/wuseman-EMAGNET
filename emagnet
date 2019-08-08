@@ -293,7 +293,6 @@ fi
 
 vpnsetup() {
 ( hash openvn &> /dev/null; [[ $? -ne "0" ]] && echo -e "$basename$0: internal error -- openvpn is required to be installed when enabling vpn"; exit )
-
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|sed '1d')
 VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|tail -1)
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -3|tail -1)
@@ -340,7 +339,7 @@ MYIP="$(curl -s https://nr1.nu/i/)"
 MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
 COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' /etc/emagnet.conf|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
 
-curl -s $WIP > /tmp/.emagnet-ip
+curl -s "$WIP" > "/tmp/.emagnet-ip"
 if [[ -n $OPENVPNRUNNING ]]; then 
   pkill -9 openvpn
 fi
@@ -381,7 +380,7 @@ analyz() {
     text="Analyzing..."
     delay="0.1"
       for i in $(seq 0 $(expr length "${text}"));do
-          echo -n "${text:$i:1}"
+         echo -n "${text:$i:1}"
          sleep ${delay}
       done
 }
@@ -597,9 +596,9 @@ curl -Ls $PASTEBIN/$SYNTAX2DL \
 grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
 
 if [[ "$?" = "0" ]]; then
-     printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) $SYNTAX2DL files.."
+     printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
-     parallel -j $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" {} < /tmp/.emagnet-syntaxes-urls &> /dev/null
+     cat /tmp/.emagnet-syntaxes-urls|xargs -n 1 -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL"
      printf "\nDone.\n\n" | tr ' ' '.'
      rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
 else
