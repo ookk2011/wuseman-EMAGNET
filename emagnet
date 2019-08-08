@@ -103,10 +103,6 @@ conf() {
   CONF="/etc/emagnet.conf"
 . "${CONF}" ;}
 
-setupconf() {
-SETUPCONF="emagnet.conf"
-. "${SETUPCONF}" ;}
-
 if ! [[ -f "/etc/emagnet.conf" ]]; then
     cp "./emagnet.conf" "/etc/"
 fi
@@ -227,9 +223,7 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
        colors
        clear
        banner
-       setupconf
        alreadyconfigured
-       requirements
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
       [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
 fi
