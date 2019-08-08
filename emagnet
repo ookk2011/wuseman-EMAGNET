@@ -904,6 +904,12 @@ done
 printf "\n%64s \n\n" | tr ' ' '='
 }
 
+
+
+
+
+
+
 emagnet2() {
 curl -Ls https://pastebin.com/archive \
 |awk -F'href="/' '{print $2}' \
@@ -911,16 +917,13 @@ curl -Ls https://pastebin.com/archive \
 |awk 'length($0)>6 && length($0)<9' \
 |grep -v 'archive\|contact\|settings\|messages\|signup\|index.html' \
 |awk '{print tolower($0)}' > /tmp/.emagnet1
-
-ls -1 $EMAGNETALL \
+ ls -1 $EMAGNETALL \
 |sort > 1
-
-cat /tmp/.emagnet1 \
+ cat /tmp/.emagnet1 \
 |sort \
 |cut -d/ -f5 > 2
-
-grep  -v -x -F -f 1 2  \
-| awk -F, '!seen[$1]++' \
+ grep  -v -x -F -f 1 2  \
+|awk -F, '!seen[$1]++' \
 |sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
 rm 1 2 &> /dev/null
 
@@ -937,29 +940,34 @@ if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
    banner
 fi
 
+# If we didn't grab anything, check if we have got banned?
 if [[ $(cat /tmp/.emagnet1|grep https) = "0" ]]; then 
   heavyload
   Iwasbanned
 fi
 
-cat /tmp/.emagnet|xargs -n 1 -P 10 wget -nc -P $EMAGNETTEMP &> /dev/null
+cat /tmp/.emagnet \
+|xargs -n 1 -P $THREADS wget -q -nc -P $EMAGNETTEMP
 
+# Cause bash is bash
 tt="$(cat /tmp/.emagnet| wc -l)"
   if [[ $tt -lt "10" ]]; then 
       tt="0$tt"
   fi
 
 if [[ $tt = "00" ]]; then 
-  $BROWSER -dump $PASTEBIN|grep -q "blocked"
+  curl -Ls $PASTEBIN|grep -q "blocked"
     if [[ $? = "0" ]]; then
       Iwasbanned
     fi
 
-printf "[\e[1;31m<<\e[0m] - No files has been downloaded, you may wanna rise time?\n\n";tt="\e[1;31m\e[5m00\e[0m";sleep 5
-     clear
-     banner
+printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time otherwise you will be banned in any second\n\n"
+      tt="\e[1;31m\e[5m00\e[0m"
+      sleep 5
+      clear
+      banner
 else 
-     echo -e "\nURLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n=================================" >> $EMAGNETLOGS/pastebin-urls.txt
+echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> $EMAGNETLOGS/pastebin-urls.txt
      cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
 fi
 
@@ -968,16 +976,23 @@ il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut 
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|wc -l|tr ' ' '\n')
 p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' |sed 's/|/:/g'|tr ' ' '\n')
-pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|wc -l)
+pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/'|wc -l)
 
     ((10#0$it > 00))
     ((10#0$pt > 00))
 
 if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
     echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}' |cut -d: -f2,3 |uniq | grep -v '/' | grep -v '"' | grep -v ','|grep -v '<' | grep -v '>' >> $EMAGNETLOGS/passwords-from-pastebin.txt 
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/'' >> $EMAGNETLOGS/passwords-from-pastebin.txt 
     grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
-    printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n";printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n";printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+    printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+    printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
+    printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+    #    printf "%19s[\e[1;32m$it\e[0m] - Upcomming\n\n"
+    #    printf "%19s[\e[1;32m$it\e[0m] - Upcomming\n\n"
+    #    printf "%19s[\e[1;32m$it\e[0m] - Upcomming\n\n"
+    #    printf "%19s[\e[1;32m$it\e[0m] - Upcomming\n\n"
+
 
 if [[ $NOTIFY = "true" ]]; then
     notify-send "Emagnet" "\n$tt - Files downloaded\n $pt - Passwords found\n$it - Email addresses found"
