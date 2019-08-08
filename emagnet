@@ -36,10 +36,9 @@
 ####          IRC: Freenode @ wuseman                                      #####
 ####          Mail: wuseman <wuseman@nr1.nu>                               #####
 ####                                                                       #####
-###############################################################################
+################################################################################
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
-
 
 banner() {
 cat << "EOF"
@@ -99,7 +98,6 @@ mustberoot() {
 (( ${EUID} > 0 )) && \
 printf "%s\n" "$basename$0: internal error -- root privileges is required" && \
 exit 1;  }
-
 
 conf() {
   CONF="/etc/emagnet.conf"
@@ -207,7 +205,7 @@ colors() {
 }
 
 iconnection() {
-ping -i "0.2" -c "1 1.1.1.1" &> /dev/null
+ping -i "0.2" -c 1 1.1.1.1 &> /dev/null
 if [[ "$?" -gt "0" ]]; then
      echo -e "This feature require a internet connection and you are offline..\nPlease fix your internet connection and try again..\n"
      exit
@@ -465,10 +463,10 @@ done
 }
 
 countdown() {
-if [[ ${GBRUTEFORCE} = "true" ]]; then
+    conf
     clear
     banner
-      conf
+if [[ ${GBRUTEFORCE} = "true" ]]; then
       sed -i '118d' $CONF
       sed -i '118 i GBRUTEFORCE=true' $CONF
       sed -i '119d' $CONF
@@ -481,9 +479,6 @@ if [[ ${GBRUTEFORCE} = "true" ]]; then
       echo
     analyzer
 elif [[ ${PBRUTEFORCE} = "true" ]]; then
-    clear
-    banner
-      conf
       sed -i '118d' $CONF
       sed -i '118 i GBRUTEFORCE=false' $CONF
       sed -i '119d' $CONF
@@ -494,11 +489,8 @@ elif [[ ${PBRUTEFORCE} = "true" ]]; then
       printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
-    analyzer
+      analyzer
 elif [[ ${SBRUTEFORCE} = "true" ]]; then
-    clear
-    banner
-      conf
       sed -i '118d' $CONF
       sed -i '118 i GBRUTEFORCE=false' $CONF
       sed -i '119d' $CONF
@@ -509,7 +501,7 @@ elif [[ ${SBRUTEFORCE} = "true" ]]; then
       printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
-    analyzer
+      analyzer
 else
       sed -i '118d' $CONF
       sed -i '118 i GBRUTEFORCE=false' $CONF
@@ -670,7 +662,7 @@ curl -Ls $PASTEBIN/$SYNTAX2DL \
 
 grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
 
-if [[ $? = "0" ]]; then
+if [[ "$?" = "0" ]]; then
      printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) $SYNTAX2DL files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
      parallel -j $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" {} < /tmp/.emagnet-syntaxes-urls &> /dev/null
@@ -914,7 +906,25 @@ printf "\n%64s \n\n" | tr ' ' '='
 
 ############################################### EMAGNET MAIN ################################################
 emagnet2() {
-curl -L https://pastebin.com/archive|awk -F'href="/' '{print $2}'|cut -d'"' -f1|awk 'length($0)>6 && length($0)<9'|grep -v 'archive\|contact\|settings\|messages'|awk '{print tolower($0)}'|xargs > /tmp/.emagnet
+curl -L https://pastebin.com/archive \
+|awk -F'href="/' '{print $2}' \
+|cut -d'"' -f1 \
+|awk 'length($0)>6 && length($0)<9' \
+|grep -v 'archive\|contact\|settings\|messages' \
+|awk '{print tolower($0)}' > /tmp/.emagnet1
+
+ls -1 $EMAGNETALL \
+|sort > 1
+
+cat /tmp/.emagnet1 \
+|sort \
+|cut -d/ -f5 > 2
+
+grep  -v -x -F -f 1 2  \
+| awk -F, '!seen[$1]++' \
+|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
+rm 1 2 &> /dev/null
+
 if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
    clear
    banner
@@ -971,22 +981,20 @@ if [[ $NOTIFY = "true" ]]; then
     notify-send "Emagnet" "\n$tt - Files downloaded\n $pt - Passwords found\n$it - Email addresses found"
 fi
 
-cp -rn $p $EMAGNETPW/ &> /dev/null
-cp -rn $i $EMAGNETDB/ &> /dev/null
-sleep 2
+      cp -rn $p $EMAGNETPW/ &> /dev/null
+      cp -rn $i $EMAGNETDB/ &> /dev/null
+      sleep 2
 
 if [[ $GBRUTEFORCE = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
    bruter
    sleep 2
-
 elif [[ $SBRUTEFORCE = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%14s";printf "BRUTE FORCING -- SSH ACCOUNTS\e[0m\n\n"
    sshbruter
    sleep 2
-
 elif [[ $PBRUTEFORCE = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%12s";printf "BRUTE FORCING -- SPOTIFY ACCOUNTS\e[0m\n\n"
@@ -1084,7 +1092,6 @@ check4all() {
      iconnection
      mustbefilled
      paths
-     safety
      Iwasbanned
 
 }
