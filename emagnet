@@ -640,7 +640,7 @@ fi
 }
 emagnetsyntax() {
   #### CHANGE THIS FOR CURL
-$BROWSER -dump $PASTEBIN/bash|grep -q "blocked your IP"
+curl -Ls $PASTEBIN/bash|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
       banned
