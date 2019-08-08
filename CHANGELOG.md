@@ -11,6 +11,18 @@ r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      that has been re-added is now stable and not "half done" so they are here for stay.
 R = REBUILT
 
+# Version 3.3
+
++    Removed spammer
++    Removed stats for rebuilding
++    Removed safety part that added to log if someone otherwise then root tried to run script (useless since long time ago)
++    Added requirements for vpn part (openvpn)
++    Removed setup script
++    Removed elinks and lynx requirements so we can use emagnet on more systems without install more tools then we really need
++    More elegant setup (much to cleanup still to write it more beauty)
++    Added curl instead of the elinks and lynx mention above, this is a big job and alot of strings need to be sorted so this has been done on major feature only
++    Remove temp files so they wont be stored in tmp folder 
+
 # Version 3.2
 
 -    Removed fuzzer, and find temporary
