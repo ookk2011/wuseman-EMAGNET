@@ -100,8 +100,9 @@ mustberoot() {
 printf "%s\n" "$basename$0: internal error -- root privileges is required" && \
 exit 1;  }
 
-CONF="/etc/emagnet.conf"
+
 conf() {
+  CONF="/etc/emagnet.conf"
 . "${CONF}" ;}
 
 setupconf() {
@@ -109,7 +110,12 @@ SETUPCONF="emagnet.conf"
 . "${SETUPCONF}" ;}
 
 if ! [[ -f "/etc/emagnet.conf" ]]; then
-    cp "./emagnet.conf" "/etc"
+    cp "./emagnet.conf" "/etc/"
+  else
+    if ! [[ -f "./emagnet.conf" ]]; then
+      echo -e "$basename$0: internal error -- configuration file is missed, can't continue.."
+      exit 1
+    fi
 fi
 
 mustbefilled() {
@@ -158,6 +164,7 @@ conf
 }
 
 paths() {
+  conf
   if [[ ! -d $EMAGNETHOME    ]];    then mkdir -p $EMAGNETHOME     &> /dev/null;  fi
   if [[ ! -d $EMAGNETDB      ]];    then mkdir -p $EMAGNETDB       &> /dev/null;  fi
   if [[ ! -d $EMAGNETPW      ]];    then mkdir -p $EMAGNETPW       &> /dev/null;  fi
@@ -166,6 +173,7 @@ paths() {
   if [[ ! -d $EMAGNETALL     ]];    then mkdir -p $EMAGNETALL      &> /dev/null;  fi
   if [[ ! -d $EMAGNETARCHIVE ]];    then mkdir -p $EMAGNETARCHIVE  &> /dev/null;  fi
   if [[ ! -d $EMAGNETLOGS    ]];    then mkdir -p $EMAGNETLOGS     &> /dev/null;  fi
+  conf
 }
 
 author() {
@@ -436,12 +444,19 @@ MYOLDIP="$(cat /tmp/.emagnet-ip)"
 fi
 }
 
-####### EMAGNET FEATURES
 analyz() {
+    text="Analyzing..."
+    delay="0.1"
+
+    for i in $(seq 0 $(expr length "${text}")) ; do
+        echo -n "${text:$i:1}"
+        sleep ${delay}
+    done
+}
+
 printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
 sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
 }
-
 
 analyzer() {
 wait_time=$TIME
@@ -452,7 +467,6 @@ while [[ ${temp_cnt} -gt 0 ]]; do
 ((temp_cnt--))
 done
 }
-
 
 countdown() {
 if [[ $GBRUTEFORCE = "true" ]]; then
