@@ -943,9 +943,11 @@ if [[ $(cat /tmp/.emagnet1|grep https) = "0" ]]; then
 fi
 
 cat /tmp/.emagnet|xargs -n 1 -P 10 wget -nc -P $EMAGNETTEMP &> /dev/null
-tt="$(ls $EMAGNETTEMP | wc -l)";if [[ $tt -lt "10" ]]; then 
-  tt="0$tt"
-fi
+
+tt="$(cat /tmp/.emagnet| wc -l)"
+  if [[ $tt -lt "10" ]]; then 
+      tt="0$tt"
+  fi
 
 if [[ $tt = "00" ]]; then 
   $BROWSER -dump $PASTEBIN|grep -q "blocked"
