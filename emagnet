@@ -227,7 +227,6 @@ if [[ -f "/etc/emagnet.conf" ]]; then
 fi
 }
 
-
 requirements() {
 clear; banner
 cat << "EOF"
@@ -355,7 +354,6 @@ if [[ $? = "0" ]]; then
 fi
 }
 
-
 vpnsetup() {
 ( hash openvn &> /dev/null; [[ $? -ne "0" ]] && echo -e "$basename$0: internal error -- openvpn is required to be installed when enabling vpn"; exit )
 
@@ -451,7 +449,6 @@ analyz() {
     done
 }
 
-
 analyzer() {
 wait_time=$TIME
 temp_cnt=${wait_time}
@@ -514,7 +511,7 @@ else
 fi
 }
 
-blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then $BROWSER -dump $PASTEBIN > /tmp/.emagnet;fi; }
+blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then curl -Ls $PASTEBIN > /tmp/.emagnet;fi; }
 
 spotifybruter() {
 VERSION="0.6.0"
@@ -676,102 +673,7 @@ else
 fi
 }
 
-moveem() {
-clear
-banner
-     createbdirs() {
-          if [[ ! -d $EMAGNETARCHIVE/emagnet ]]; then
-              mkdir -p $EMAGNETARCHIVE/{all-files,email-files,password-files,logs}
-          fi
-}
-
-copy_files() {
-paths
-AEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))" 
-EEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))" 
-PEXIST="$(echo $(ls /opt/emagnet/incoming/*/all-files/|wc -l))"
-
-if [[ $AEXIST -gt "0" ]]; then
-      echo -n "Copying 'all-files' into 'archive/all-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
-      cp -rn $EMAGNET/incoming/*/all-files/*  $EMAGNETARCHIVE/all-files &> /dev/null
-else
-      echo -n "Copying 'all-files' into 'archive/all-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
-fi
-
-if [[ $EEXIST -gt "0" ]]; then
-      echo -n "Copying 'email-files' into 'archive/email-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
-      cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files &> /dev/null
-else 
-      echo -n "Copying 'email-files' info 'archive/email-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
-fi
-
-if [[ $PEXIST -gt "0" ]]; then
-      echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]\n"
-      cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files &> /dev/null
-else
-      echo -n "Copying 'password-files' into 'archive/password-files' $(printf '\056%.0s' {1..55})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]\n"
-fi
-}
-
-
-# MERGE LOGS
-merge_logs() {
-paths
-YEAR=$(echo $(date +%Y))
-    cd $EMAGNET/incoming; for i in *; do touch $i/logs/emagnet.log; done
-    cd $EMAGNET/incoming; for i in *; do touch $i/logs/emails-from-pastebin.txt; done
-    cd $EMAGNET/incoming; for i in *; do touch $i/logs/passwords-from-pastebin.txt; done
-    cd $EMAGNET/incoming; for i in *; do touch $i/logs/pastebin-urls.txt; done
-
-if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/emagnet.log|wc -l) -gt "0" ]]; then
-    echo -n "Merging 'emagnet.log' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
-    awk -F, '!seen[$1]++' $EMAGNET/incoming/*/logs/emagnet.log  >> $EMAGNETARCHIVE/logs/emagnet.log &> /dev/null
-else
-    echo -n "Merging 'emagnet.log' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
-fi
-
-if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/emails-from-pastebin.txt|wc -l) -gt "0" ]]; then
- if [[ ! -f $EMAGNET/incoming/$YEAR-*-*/logs/emails-from-pastebin.txt ]]; then touch $EMAGNET/incoming/*/logs/emails-from-pastebin.txt; fi
-    echo -n "Merging 'emails-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
-    awk -F, '!seen[$1]++'  $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|tr ' ' '\n'|awk -F, '!seen[$1]++' $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|tr ' ' '\n' >> $EMAGNETARCHIVE/logs/emails-from-pastebin.txt  2> /dev/null 
- else
-    echo -n "Merging 'emails-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
- fi
-
-if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/passwords-from-pastebin.txt|wc -l) -gt "0" ]]; then
- if [[ ! -f $EMAGNET/incoming/$YEAR-*-*/logs/passwords-from-pastebin.txt ]]; then touch $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt; fi
-    echo -n "Merging 'passwords-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
-    awk -F, '!seen[$1]++' $EMAGNET/incoming/$YEAR-*-*/passwords-from-pastebin.txt >> $EMAGNETARCHIVE/logs/passwords-from-pastebin.txt  2> /dev/null
- else
-  echo -n "Merging 'passwords-from-pastebin.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
-fi
-
-if [[ $(cat $EMAGNET/incoming/$YEAR-*-*/logs/pastebin-urls.txt|wc -l) -gt "0" ]]; then
-    echo -n "Merging 'pastebin-urls.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;32mDONE\e[0m]"
-if [[ $INCLUDETIME = "true" ]]; then
-    cat $EMAGNET/incoming/*/logs/pastebin-urls.txt >> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
-else 
-    grep "https" $EMAGNET/incoming/*/logs/pastebin-urls.txt |>> $EMAGNETARCHIVE/logs/pastebin-urls.txt  2> /dev/null
-fi
-else
-    echo -n "Merging 'pastebin-urls.txt' $(printf '\056%.0s' {1..40})" | head -c 54 ; echo -e " [\e[1;31mFAILED\e[0m]"
-fi
-printf "\nAll data has been successfully merged into archive/logs\n\n"
-read -p "Do you want to wipe incoming directories (y/n): " cleanup
-if [[ $cleanup = "y" ]]; then
-    rm -rf $EMAGNET/incoming/
-    printf "\nSuccessfully \e[1;31mwiped\e[0m incoming directories..\n\n"
-else
-    printf "\nAborted.\n\n"
-fi
-}
-createbdirs
-copy_files
-merge_logs
-}
-
 emagnet2() {
-
 curl -Ls $PASTEBIN/archive \
 |awk -F'href="/' '{print $2}' \
 |cut -d'"' -f1 \
@@ -932,6 +834,7 @@ else
                sleep 3.2
 fi
                pkill -9 notify-send &> /dev/null
+               rm "/tmp/.emagnet*"" &> /dev/null
 }
 
 
