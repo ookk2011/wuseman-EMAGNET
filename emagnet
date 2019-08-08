@@ -209,7 +209,7 @@ colors() {
 iconnection() {
 ping -i "0.2" -c "1 1.1.1.1" &> /dev/null
 if [[ "$?" -gt "0" ]]; then
-     echo "It seems you're not connected to internet properly and this feature require internet, aborted"
+     echo -e "This feature require a internet connection and you are offline..\nPlease fix your internet connection and try again..\n"
      exit
 fi
 }
@@ -638,8 +638,8 @@ else
     sleep 1
 fi
 }
+
 emagnetsyntax() {
-  #### CHANGE THIS FOR CURL
 curl -Ls $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
