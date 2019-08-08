@@ -36,7 +36,7 @@
 ####          IRC: Freenode @ wuseman                                      #####
 ####          Mail: wuseman <wuseman@nr1.nu>                               #####
 ####                                                                       #####
-################################################################################
+###############################################################################
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
 
@@ -45,14 +45,17 @@ mustberoot() {
 printf "%s\n" "$basename$0: internal error -- root privileges is required" && \
 exit 1;  }
 
-conf() {
 CONF="/etc/emagnet.conf"
+conf() {
 . "${CONF}" ;}
 
 setupconf() {
-SETUPCONF=".emagnetconf/emagnet.conf"
+SETUPCONF="emagnet.conf"
 . "${SETUPCONF}" ;}
 
+if ! [[ -f "/etc/emagnet.conf" ]]; then
+    cp "./emagnet.conf" "/etc"
+fi
 
 mustbefilled() {
 conf
@@ -82,7 +85,7 @@ conf
   if [[ -z $SBRUTEFORCE    ]];   then sed -i '119d' $CONF;sed -i '119 i SBRUTEFORCE=false'                                                                                                       $CONF;fi
   if [[ -z $PBRUTEFORCE    ]];   then sed -i '120d' $CONF;sed -i '120 i PBRUTEFORCE=false'                                                                                                       $CONF;fi
   if [[ -z $EMAIL2SEND     ]];   then sed -i '129d' $CONF;sed -i '129 i EMAIL2SEND='                                                                                                             $CONF;fi
-  if [[ -z $NOTIFY         ]];   then sed -i '138d' $CONF;sed -i '138 i NOTIFY=false'                                                                                                            $CONF;fi
+  if [[ -z $NOTIFY         ]];   then sed -i '137d' $CONF;sed -i '137 i NOTIFY=false'                                                                                                            $CONF;fi
   if [[ -z $SSHUSER        ]];   then sed -i '169d' $CONF;sed -i '169 i SSHUSER="root"'                                                                                                          $CONF;fi
   if [[ -z $SSHPORT        ]];   then sed -i '170d' $CONF;sed -i '170 i SSHPORT="22"'                                                                                                            $CONF;fi
   if [[ -z $SSHPASS        ]];   then sed -i '171d' $CONF;sed -i '171 i SSHPASS=""'                                                                                                              $CONF;fi
@@ -96,7 +99,6 @@ conf
   if [[ -z $VPNCOUNTRYS    ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   $CONF;fi
   if [[ -z $VPNCOUNTRYS2   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
   if [[ -z $VPNCOUNTRYS3   ]];   then sed -i '157d' $CONF;sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
-
 conf
 }
 
@@ -118,7 +120,7 @@ cat << "EOF"
 
  Emagnet was founded in 2015 and was released as open source
  on github.com/wuseman/emagnet in January 2018 and is licensed
- under GNU LESSER GENERAL PUBLIC LICENSE Version v3.1
+ under GNU LESSER GENERAL PUBLIC LICENSE GPLv3
 
    - Author: wuseman <wuseman@nr1.nu>
    - IRC   : wuseman <irc.freenode.com>
@@ -131,22 +133,21 @@ EOF
 }
 
 colors() {
-R="$(tput setaf 1)"
-G="$(tput setaf 2)"
-Y="$(tput setaf 3)"
-B="$(tput setaf 4)"
-M="$(tput setaf 5)"
-C="$(tput setaf 6)"
-W="$(tput setaf 7)"
-E="$(tput sgr0)"
+  R="$(tput setaf 1)" # RED
+  G="$(tput setaf 2)" # GREEN
+  Y="$(tput setaf 3)" # YELLOW
+  B="$(tput setaf 4)" # BLUE
+  M="$(tput setaf 5)" # MAGENTA
+  C="$(tput setaf 6)" # CYAN
+  W="$(tput setaf 7)" # WHITE
+  E="$(tput sgr0)"    # END OF COLOR
 }
 
-
 iconnection() {
-ping -i 0.2 -c 1 1.1.1.1 &> /dev/null
-if [[ $? -gt "0" ]]; then
+ping -i "0.2" -c "1 1.1.1.1" &> /dev/null
+if [[ "$?" -gt "0" ]]; then
      echo "It seems you're not connected to internet properly, aborted"
-     exit 1
+     exit
 fi
 }
 
@@ -204,10 +205,6 @@ EOF
 printf "%64s \n\n" | tr ' ' '='
 }
 
-
-
-
-#### SETUP PART
 alreadyconfigured() {
 if [[ -f "/etc/emagnet.conf" ]]; then
         printf "%s\n" "It seems emagnet.conf has already been configured are you"
@@ -225,8 +222,8 @@ fi
 
 
 requirements() {
+clear; banner
 cat << "EOF"
-
 
 DEPENDENCIES SETUP:
 ----------------------
@@ -254,7 +251,7 @@ missed4="$(cat /tmp/.emagnet-packages|awk -F"Detected:" '{print $2}'|cut -d"." -
  		           printf "\nYou must have \e[1;37m$missed2\e[0m installed before emagnet can run \nInstall $missed2: (y/n): "
 		           read missedpackages
         fi
-		    
+
         if [[ -z "${missedpackages}" ]]; then
      			   printf "\nYou must have \e[1;37m$missed4\e[0m installed before you can run emagnet, exiting \n\n"
        	                   exit
@@ -289,63 +286,62 @@ missed4="$(cat /tmp/.emagnet-packages|awk -F"Detected:" '{print $2}'|cut -d"." -
                     fi
 }
 
-copyconf() { if [[ -f .emagnetconf/emagnet.conf ]]; then cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf;fi; }
-
 if [[ ! -f "/etc/emagnet.conf" ]]; then
        mustberoot
        colors
-       copyconf
        clear
        banner
        setupconf
        alreadyconfigured
-       timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null; [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' .emagnetconf/emagnet.conf || wip
+       requirements
+       timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null; [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
 fi
 
-####### END OF SETUP
-
-
-###### CHECK FOR PROBLEMS BEFORE WE RUNNING ANYTHING
-
 heavyload() {
-$BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
-  if [[ $? = "0" ]]; then
+curl -sL $PASTEBIN \
+|grep -q "is under heavy load right now"
+  if [[ "$?" = "0" ]]; then
    for (( ; ; )); do
    wait_time=60
-   temp_cnt=${wait_time}
-     while [[ ${temp_cnt} -gt 0 ]]; do
-        printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt};printf " seconds";sleep 1;((temp_cnt--))
+   temp_cnt="${wait_time}"
+     while [[ "${temp_cnt}" -gt 0 ]]; do
+        printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
+        printf " seconds"
+        sleep 1
+        ((temp_cnt--))
     done
-        echo ""
-        bash emagnet --emagnet
+        echo
+        bash "$basename$0" --emagnet
     done
-        bash emagnet --emagnet
+        bash "$basename$0" --emagnet
   fi
 }
 
 Iwasbanned() {
-conf
+. $CONF
 #clear;banner
 source /etc/emagnet.conf
-$BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
+curl -sL $PASTEBIN | grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
    for (( ; ; )); do
-      wait_time=$IDLETIME
+      wait_time=${IDLETIME}
       temp_cnt=${wait_time}
    while [[ ${temp_cnt} -gt 0 ]]; do
       printf "\rIP: [\e[1;31m$(curl -s $WIP)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt}
-      printf " seconds";sleep 1;((temp_cnt--))
+      printf " seconds"
+      sleep 1
+      ((temp_cnt--))
    done
         printf "\n"
         clear
         banner
-        bash emagnet --emagnet
+        bash $basename$0 --emagnet
         sleep 2
    done
         clear
         banner
-        bash emagnet --emagnet
+        bash $basename$0 --emagnet
        exit
    else
        banned
@@ -936,33 +932,7 @@ printf "\n%64s \n\n" | tr ' ' '='
 
 ############################################### EMAGNET MAIN ################################################
 emagnet2() {
-if [[ $BROWSER = "elinks" ]]; then
-elinks -dump $PASTEBIN | \
-grep https |\
-cut -c 6- |\
-sed 's/com/com\/raw/g' |\
-awk 'length($0)>31 && length($0)<35' |\
-grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings' > /tmp/.emagnet1
-
-ls -1 $EMAGNETALL |sort > 1
-cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
-grep  -v -x -F -f 1 2  | awk -F, '!seen[$1]++'|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
-rm 1 2 &> /dev/null
-
-else
-
-lynx -dump $PASTEBIN \
-|grep https \
-|cut -c 6- \
-|sed 's/com/com\/raw/g' \
-|awk 'length($0)>31 && length($0)<35' \
-|grep -v 'messages\|settings\|languages\|archive\|facebook\|scraping\|contact\|pastebin$\|settings\|signup\|raw\/$\|alerts' > /tmp/.emagnet1
-  ls -1 $EMAGNETALL |sort > 1
-  cat /tmp/.emagnet1|sort |cut -d/ -f5 > 2
-  grep -v -x  -F -f 1 2 | awk -F, '!seen[$1]++'|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
-  rm 1 2 &> /dev/null
-fi
-
+curl -L https://pastebin.com/archive|awk -F'href="/' '{print $2}'|cut -d'"' -f1|awk 'length($0)>6 && length($0)<9'|grep -v 'archive\|contact\|settings\|messages'|awk '{print tolower($0)}'|xargs > /tmp/.emagnet
 if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
    clear
    banner
@@ -1129,11 +1099,9 @@ done
 ### CHECK4ALL
 check4all() {
      conf
-     copyconf
      iconnection
      mustbefilled
      paths
-     copyconf
      safety
      Iwasbanned
 
@@ -1261,13 +1229,14 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 		fi
 
 if [[ $NRESESSIONS -lt "3" ]]; then
-     echo -e "[\e[0;33m<<\e[0m] - Duh! \e[4m0\e[0m emagnet sessions is currently running..\n"
+     echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running.."
 else 
-     echo -e "[\e[1;31m<<\e[0m] - Killed $(echo $NRESESSIONS-2|bc) emagnet sessions ... (#+_+)"
+     echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions ... (#+_+)"
      kill -SIGKILL $ESESSIONS &> /dev/null
 fi 
 ;;
 
+"-h"|"--help"|"-help"|"help") usage ;;
 "-l"|"-license"|"--license") printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s https://nr1.nu/licenses/LICENSE.md|less;printf "%s\n" "Thank you.." ;;
 "-m"|"-move"|"--move") conf;check4all;moveem                                                             ;;
 "-s"|"-spam"|"--spam") conf;check4all;emagnetspammer                                                     ;;
@@ -1275,7 +1244,7 @@ fi
 "-x"|"-syntax"|"--syntax") conf;check4all;clear;banner;emagnetsyntax                                     ;;
 "-q"|"-quiet"|"--quiet") conf;check4all;pid="$(ps aux |grep emagnet)" rm -rf /tmp/screen;screen -S emagnet -dm bash emagnet --emagnet
                          printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n" ;;
-"version"|"-version"|"--version"|"-V") conf:printf "Emagnet Version: v$VERSION\n" 			 ;;
+"version"|"-version"|"--version"|"-V") printf "Emagnet Version: v$VERSION\n\n" 			 ;;
 
 "-t"|"-time"|"--time")
      conf
@@ -1296,8 +1265,6 @@ fi
 ;;
 
 "-n"|"-notify"|"--notify")
-conf
-
      notify-send --help &> /dev/null
      if [[ $? -gt "0" ]]; then
         echo -e "$basename$0: internal error -- notify-send is required for get notifications"
@@ -1309,14 +1276,14 @@ conf
        exit 1
      fi
      if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
-        sed -i '138d' $CONF
-        sed -i "138 i NOTIFY=true" $CONF
+        sed -i '137d' $CONF
+        sed -i "137 i NOTIFY=true" $CONF
         printf "$basename$0: config file has been updated -- notifications has been enable\n"
      fi
 
      if [[ $? -eq "0" ]] && [[ $2 = "disable" ]]; then
-        sed -i '138d' $CONF
-        sed -i "138 i NOTIFY=false" $CONF
+        sed -i '137d' $CONF
+        sed -i "137 i NOTIFY=false" $CONF
         printf "$basename$0: config file has been updated -- notifications has beendisable\n"
      fi
 ;;
