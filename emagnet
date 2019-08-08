@@ -140,7 +140,7 @@ conf
   if [[ -z $EMAGNETBACKUP  ]];   then sed -i "81d"  $CONF;sed -i '81  i EMAGNETBACKUP=$EMAGNET/backup'                                                                                           $CONF;fi
   if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82  i EMAGNETSYNTAX=$EMAGNETHOME\/sorted-by-syntax'                                                                            $CONF;fi
   if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.2'                                                                                                             $CONF;fi
-  if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=${nproc}"                                                                                                        $CONF;fi
+  if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=$(( NUMCPUS + 1 ))"                                                                                                        $CONF;fi
   if [[ -z $IDLETIME       ]];   then sed -i '109d' $CONF;sed -i "109 i IDLETIME=3600"                                                                                                           $CONF;fi
   if [[ -z $GBRUTEFORCE    ]];   then sed -i '118d' $CONF;sed -i '118 i GBRUTEFORCE=false'                                                                                                       $CONF;fi
   if [[ -z $SBRUTEFORCE    ]];   then sed -i '119d' $CONF;sed -i '119 i SBRUTEFORCE=false'                                                                                                       $CONF;fi
@@ -640,7 +640,7 @@ fi
 }
 emagnetsyntax() {
   #### CHANGE THIS FOR CURL
-curl -Ls $PASTEBIN/bash|grep -q "blocked your IP"
+curl -Ls $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
       banned
@@ -651,30 +651,25 @@ if [[ $? = "0" ]]; then
       exit 1
  fi
 fi
-
       curl -Ls https://pastebin.com/languages \
       |grep -o 'href="/archive/............' \
       |cut -d'<' -f1 \
       |cut -d'/' -f3 \
       |cut -d'"' -f1 > /tmp/.emagnet-syntaxes
 
-
 read -p "Syntax (ex: python): " SYNTAX2DL
-
 if [[ -z $SYNTAX2DL ]]; then
       echo -e "$basename$0: internal error -- you must choose a syntax language to download, aborted.."
       exit 1
 fi
 
-if [[ $BROWSER = "elinks" ]]; then
-      elinks -dump $PASTEBIN/$SYNTAX2DL|grep https|cut -c 6-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'messages\|settings\|archive\|contact\|pastebin$\|languages' > /tmp/.emagnet-syntaxes-urls
-elif [[ $BROWSER = "lynx" ]]; then
-      lynx -dump $PASTEBIN/$SYNTAX2DL |grep https|cut -c 7-|sed 's/com/com\/raw/g'|awk 'length($0)>31 && length($0)<35'|grep -v 'language\|night_mode\|messages\|settings\|pastebin$\|archive\|contact'  > /tmp/.emagnet-syntaxes-urls
-else
-      choosebrowser
-fi
+curl -Ls $PASTEBIN/$SYNTAX2DL \
+|grep -o '<a href="/........' \
+|cut -d'/' -f2 \
+|grep -E '[0-9]{1,4}' > /tmp/.emagnet-syntaxes-urls
 
 grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
+
 if [[ $? = "0" ]]; then
      printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) $SYNTAX2DL files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
@@ -689,8 +684,6 @@ else
 fi
 }
 
-
-# MOVEEM
 moveem() {
 clear
 banner
