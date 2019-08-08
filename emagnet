@@ -763,7 +763,7 @@ if [[ ${pt} -gt "0" ]] && [[ ${it} -gt "0" ]]; then
     |grep -v '/' >> $EMAGNETLOGS/passwords-from-pastebin.txt 
     
     grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP \
-    |cut -d: -f2 \
+    |cut -d':' -f2 \
     |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
 
     printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
