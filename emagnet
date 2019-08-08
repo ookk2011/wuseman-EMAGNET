@@ -447,16 +447,12 @@ fi
 analyz() {
     text="Analyzing..."
     delay="0.1"
-
-    for i in $(seq 0 $(expr length "${text}")) ; do
+    for i in $(seq 0 $(expr length "${text}"));do
         echo -n "${text:$i:1}"
         sleep ${delay}
     done
 }
 
-printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
-sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
-}
 
 analyzer() {
 wait_time=$TIME
