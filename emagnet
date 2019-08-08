@@ -1037,15 +1037,11 @@ fi
 # When we found email addresses without any password then we only echo email files
 cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
     elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
-         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m emails from $EMAGNETDB/${i##*/}" \
-        |xargs >> $EMAGNETLOGS/emagnet.log
-        
-        grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP \
-        |cut -d':' -f2 \
-        |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
-
-        sleep 2
-        cp $i $EMAGNETDB/ &> /dev/null;
+         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m emails from $EMAGNETDB/${i##*/}"|xargs >> $EMAGNETLOGS/emagnet.log
+         grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d':' -f2 \|uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+         sleep 2
+         # Now copy them to email-files path
+         cp $i $EMAGNETDB/ &> /dev/null;
 
 if [[ $SBRUTEFORCE = "true" ]]; then
   cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
