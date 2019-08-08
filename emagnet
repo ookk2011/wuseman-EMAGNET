@@ -62,6 +62,9 @@ conf
   if [[ -z $WIP2           ]];   then sed -i '51d'  $CONF;sed -i '51  i WIP2='                                                                                                                   $CONF;fi
   if [[ -z $WIP3           ]];   then sed -i '52d'  $CONF;sed -i '52  i WIP3='                                                                                                                   $CONF;fi
   if [[ -z $WIP4           ]];   then sed -i '53d'  $CONF;sed -i '53  i WIP4='                                                                                                                   $CONF;fi
+  if [[ -z $MYIP           ]];   then sed -i '30d'  $CONF;sed -i "40  i MYIP=$(curl https://nr1.nu/wip)"                                                                                         $CONF;fi
+  if [[ -z $MYIP           ]];   then sed -i '30d'  $CONF;sed -i "30  i TIME=150"                                                                                                                $CONF;fi
+  if [[ -z $EMAGNET        ]];   then sed -i '72d'  $CONF;sed -i '72  i EMAGNET=/opt/emagnet'                                                                                                    $CONF;fi
   if [[ -z $EMAGNETHOME    ]];   then sed -i "73d"  $CONF;sed -i '73  i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'                                                                       $CONF;fi
   if [[ -z $EMAGNETLOGS    ]];   then sed -i "74d"  $CONF;sed -i '74  i EMAGNETLOGS=$EMAGNETHOME/logs'                                                                                           $CONF;fi
   if [[ -z $EMAGNETPW      ]];   then sed -i "75d"  $CONF;sed -i '75  i EMAGNETPW=$EMAGNETHOME\/password-files'                                                                                  $CONF;fi
@@ -73,7 +76,7 @@ conf
   if [[ -z $EMAGNETBACKUP  ]];   then sed -i "81d"  $CONF;sed -i '81  i EMAGNETBACKUP=$EMAGNET/backup'                                                                                           $CONF;fi
   if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82  i EMAGNETSYNTAX=$EMAGNETHOME\/sorted-by-syntax'                                                                            $CONF;fi
   if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.2'                                                                                                             $CONF;fi
-  if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=1"                                                                                                               $CONF;fi
+  if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=${nproc}"                                                                                                        $CONF;fi
   if [[ -z $IDLETIME       ]];   then sed -i '109d' $CONF;sed -i "109 i IDLETIME=3600"                                                                                                           $CONF;fi
   if [[ -z $GBRUTEFORCE    ]];   then sed -i '118d' $CONF;sed -i '118 i GBRUTEFORCE=false'                                                                                                       $CONF;fi
   if [[ -z $SBRUTEFORCE    ]];   then sed -i '119d' $CONF;sed -i '119 i SBRUTEFORCE=false'                                                                                                       $CONF;fi
@@ -93,6 +96,7 @@ conf
   if [[ -z $VPNCOUNTRYS    ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   $CONF;fi
   if [[ -z $VPNCOUNTRYS2   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
   if [[ -z $VPNCOUNTRYS3   ]];   then sed -i '157d' $CONF;sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
+
 conf
 }
 
@@ -220,102 +224,6 @@ fi
 }
 
 
-checkbrowser() {
-                  if   [[ -f "$LYNX" && ! -f "$ELINKS" ]]; then
-                        sed -i "182d" ${SETUPCONF}
-                        sed -i '182 i BROWSER=lynx' ${SETUPCONF}
-                elif [[ ! -f "$LYNX" && -f "$ELINKS" ]]; then
-                        sed -i "182d" ${SETUPCONF}
-                        sed -i '182 i BROWSER=elinks' ${SETUPCONF}
-                elif [[ -f $LYNX && -f $ELINKS ]]; then
-
-cat << "EOF"
-BROWSER SETUP:
-----------------------
-Choose wich browser you prefer to use when emagnet will visit
-pastebin.com, this setting exist since emagnet is also supported
-on elinks and then I added the option to this version too so you can
-choose if you dont care hit enter and i will choose one for you by
-random. Either let me choose one or you are required to choose one.
-
-It seems you have both lynx and elinks2 installed, you must choose one
-EOF
-
-read -p "Browser: (lynx/elinks): " browsertouse
-       if [[ -z "${browsertouse}" ]]; then
-          WBROWSER="$(echo -e 'elinks\nlynx' | shuf -n 1)"
-          printf "\nYou must choose one, however i shuffled and ${WBROWSER} will be used\n"
-          printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i '182d' ${SETUPCONF} ${SETUPCONF}
-          sed -i "182 i BROWSER=${WBROWSER}" ${SETUPCONF}
-       elif [[ "${browsertouse}" = "lynx" ]]; then
-          sed -i "182d" ${SETUPCONF}
-          sed -i '182 i BROWSER=lynx' ${SETUPCONF}
-          printf "\nConfig file has been updated, lynx will be used for downloading files\n"
-       else
-          sed -i "182d" ${SETUPCONF}
-          sed -i '182 i BROWSER=elinks' ${SETUPCONF}
-          printf "\nConfig file has been updated, elinks will be used for downloading files\n"
-      fi
-    else
-
-cat << "EOF"
-WEB BROWSER SETUP:
-----------------------
-Choose wich browser you prefer to use when emagnet will visit
-pastebin.com for the latest uploads urls on site. If you don't
-know which one you prefer it doesn't matter, just choose one.
-Emagnet require lynx or elinks to be installed, you must choose one
-EOF
-
-while true; do
-  read -p "Prefered browser to install: (lynx/elinks): " browsertouse2
-   case "${browsertouse2}" in #### FIX ---- ADD A BREAK HERE
-      "elinks") printf "\nGoing to install ${browsertouse2}, setup will continue when ${browsertouse2} has been installed..\n"
-          if     [[ "$DISTRO" = "gentoo"  ]];then emerge --ask elinks
-            elif [[ "$DISTRO" = "sabayon" ]];then emerge --ask elinks
-            elif [[ "$DISTRO" = "ubuntu"  ]];then apt-get install elinks -qq -y
-            elif [[ "$DISTRO" = "arch"    ]];then pacman -Syy elinks
-            elif [[ "$DISTRO" = "debian"  ]];then apt-get install elinks -qq -y
-            elif [[ "$DISTRO" = "mint"    ]];then apt-get install elinks -y
-            else echo -e "Emagnet is not supported for ${DISTRO}, please install elinks manually.\n"
-          exit 1
-          fi
-             sed -i "182d" ${SETUPCONF}
-             sed -i '182 i BROWSER=elinks' ${SETUPCONF}
-             printf "\nConfig file has been updated, elinks will be used when downloading files from pastebin" "${SCRIPT}"
-        ;;
-     "lynx") printf "\nGoing to install ${browsertouse2}, setup will continue when ${browsertouse2} has been installed..\n"
-      if     [[ "$DISTRO" = "gentoo"  ]];then emerge --ask    lynx
-        elif [[ "$DISTRO" = "sabayon" ]];then emerge --ask    lynx
-        elif [[ "$DISTRO" = "ubuntu"  ]];then apt-get install lynx -qq -y
-        elif [[ "$DISTRO" = "arch"    ]];then pacman -Syy elinks 
-        elif [[ "$DISTRO" = "debian"  ]];then apt-get install lynx -qq -y
-        elif [[ "$DISTRO" = "mint"    ]];then apt-get install lynx -qq -y
-        else echo "Emagnet is not supported for ${DISTRO}, please install lynx manually.\n"
-        exit 1
-      fi
-         sed -i "182d" "${SETUPCONF}"
-         sed -i '182 i BROWSER=lynx' "${SETUPCONF}"
-         printf "\nConfig file has been updated, lynx will be used when downloading files from pastebin" "${SCRIPT}"
-         ;;
-   "*")
-          printf "\n${browsertouse2} is not a valid option, however i shuffled and ${WBROWSER} will be used\n"
-          printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i "182d" "${SETUPCONF}"
-          sed -i "182 i BROWSER=$WBROWSER" "${SETUPCONF}"
-          ;;
-   "\?")
-          printf "\n${browsertouse2} is not a valid option, however i shuffled and ${WBROWSER} will be used\n"
-          printf "\nConfig file has been updated, ${WBROWSER} will be used for downloading files\n"
-          sed -i "182d" "${SETUPCONF}"
-          sed -i "182 i BROWSER=$WBROWSER" "${SETUPCONF}"
-          ;;
- esac
-done
-fi
-}
-
 requirements() {
 cat << "EOF"
 
@@ -381,210 +289,17 @@ missed4="$(cat /tmp/.emagnet-packages|awk -F"Detected:" '{print $2}'|cut -d"." -
                     fi
 }
 
-wip() {
-myip="$(curl -s https://nr1.nu/i/)"
-cat << "EOF"
-
-
-IP-ADDRESS SETUP:
-----------------------
-Set your private ip here if you don't wanna take a risk to get
-ip banned on pastebin.com for around ~3200seconds
-
-This will happen if you will set a refresh time to <150 seconds in next step
-
-According to pastebin's FAQ they using 120 seconds for premium users
-that is allowed to whitelist one ip for scrape pastebin.
-So since they have set 120 seconds and in avarage there is 1 upload every 
-3 econds and we are grabbing uploads from archive page (pastebin.com/archive)
-that have have 56 uploads listed. This mean you will be safe if you will set
-150> seconds since 56 uploads every 3 seconds is 168. if you have setup a VPN
-connection then you can set any time since you will change ip anyway so you don't 
-have to care, but I still recommending to set a value that is NOT to low. 
-
-It might be good to set refresh time to 1s if you want to be one of the first
-that will see the recently uploaded pastes if you wanna brute-force accounts.
-
-This setting have been added for get you informed about pastebin and if
-you scrape the website very often, you might risk a permanent ip ban.
-
-EOF
-
-printf "Is \e[1;1m$myip\e[0m your private IP-Address (yes/no): "
-read realip
-	case "$realip" in
-  		"YES"|"y"|"Yes"|"Y"|"yup")
-      	            		sed -i '40d' ${SETUPCONF}
-                        sed -i '40 i MYIP=' ${SETUPCONF}
-      		              sed -i "s/MYIP=/MYIP=$myip/g" ${SETUPCONF}
-    		                printf "\nConfig file has been updated, IP has been set to: \e[1;1m$myip\e[0m\n"
-      			;;
-     "no")
-                		  	read -p "Enter your private IP: " currentip
-          	   	        sed -i "s/MYIP=/MYIP=$currentip/g" ${SETUPCONF}
-                       	printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$currentip\e[0m\n"
-      			;;
-     "*")
- 		                    read -p "Enter your private IP: " currentip
-          	   	        sed -i "s/MYIP=/MYIP=$currentip/g" ${SETUPCONF}
-             	        	printf "\nConfig file has been updated, your IP has been set to: \e[1;1m$currentip\e[0m\n"
-            ;;
-	esac
-
-if [[ -z $realip ]]; then
-    sed -i '40d' ${SETUPCONF}
-    sed -i '40 i MYIP=' ${SETUPCONF}
-    sed -i "s/MYIP=/MYIP=127.0.0.1/g" ${SETUPCONF}
-    printf "\nConfig file has been updated, the current ip to: \e[1;1m127.0.0.1\e[0m\n"
-fi
-}
-
-cpusetup() {
-setupconf
-cat << "EOF"
-
-
-PROCESSOR SETUP
-----------------------
-This setting will increase the speed you will download files from
-pastebin dramatically, this wont affect how fast you will get banned
-EOF
-
-printf "Your\e[1;1m$(cat /proc/cpuinfo|grep 'model name'| awk -F: '{print $2}'|uniq)\e[0m processor has \e[1;1m$(nproc)\e[0m threads\n"
-printf "Do you want emagnet to use all \e[1;1m$(nproc)\e[0m threads when downloading: (y/N): "
-read threads
-if [[ "${threads}" = "y" ]]; then
-    sed -i '100d' ${SETUPCONF}
-    sed -i "100 i THREADS=" ${SETUPCONF}
-    sed -i "s/THREADS=/THREADS=$(nproc)/g" ${SETUPCONF}
-    printf "\nConfig file has been updated, cpu threads has been set to $(nproc) thread(s)\n"
-elif [[ "${threads}" = "n" ]]; then
-    read -p "How many threads do you want to use (Ex: 2): " threadstouse
-    sed -i '100d' ${SETUPCONF}
-    sed -i "100 i THREADS=" ${SETUPCONF}
-    sed -i "s/THREADS=/THREADS=$threadstouse/g" ${SETUPCONF}
-    printf "\nConfig file has been updated, cpu threads has been set to ${threadstouse} thread(s).\n"
-else
-    read -p "How many threads do you want to use (Ex: 2): " threadstouse
-    sed -i '100d' ${SETUPCONF}
-    sed -i "100 i THREADS=" ${SETUPCONF}
-    sed -i "s/THREADS=/THREADS=$threadstouse/g" ${SETUPCONF}
-    printf "\nConfig file has been updated, cpu threads has been set to ${threadstouse} thread(s).\n"
-fi
-}
-
-pathsetup() {
-setupconf
-cat << "EOF"
-
-
-PATH SETUP:
-----------------------
-Please specify in wich folder you want to store all downloaded files from pastebin
-EOF
-
-read -p "Path (Default: /opt/emagnet): " ehomedir
-
-if [[ -z "${ehomedir}" ]]; then
-  mkdir -p "/opt/emagnet"
-  sed -i '72d' ${SETUPCONF}
-  sed -i "72 i EMAGNET=\/opt\/emagnet" ${SETUPCONF}
-  printf "\nConfig file has been updated, using \e[1;1m/opt/emagnet\e[0m for emagnet."
-else
-  eehomedir="$(echo $ehomedir | sed 's/\/\///g')"
-  sed -i '72d' ${SETUPCONF}
-  sed -i "72 i EMAGNET=${ehomedir}" ${SETUPCONF}
-  printf "\nConfig file has been updated, home dir has been set to: ${eehomedir}/emagnet\n"
-fi
-}
-
-timesetup() {
-setupconf
-cat << "EOF"
-
-
-
-TIME SETUP:
-----------------------
-By updating emagnet in 150 seconds or less you will get ip banned
-by pastebin.com in ~1200 seconds, if you choose to set emagnet to refresh
-in 150 seconds or less anyway then do not leave emagnet running
-in background unless you have enable VPN so you will change IP if you 
-getting banned otherwise emagnet gonna sleep for 3200 seconds and
-you probably gonna miss alot of leaked accounts.
-
-If you want to run emagnet in background without being banned and
-capture files 24/7 then you MUST set emagnet to 150s>
-
-IT IS RECOMMENDED TO SET 150 SECONDS OR MORE
-
-EOF
-
-while true; do
-printf "%s\n" "Set refresh time in seconds for how often emagnet should download new files from pastebin"
-read -p "Time: (Default: 150 Seconds): " o
-
-  if [[ -z "${o}" ]]; then
-        sed -i '30d' ${SETUPCONF}
-        sed -i "30 i TIME=150" ${SETUPCONF}
-        printf "\nConfig file has been updated, refresh time has been set to 150 seconds\n"
-        echo -e "\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
-        printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-        printf "\nNow you're all set - Have phun - Get started by type: 'bash emagnet --help' :-)\n\n"
-        cp .emagnetconf/emagnet.conf  /etc/
-        exit 1
-        break
-  fi
-
-if [[ "${o}" -lt "150" ]]; then
-        read -p "Are you REALLY sure you want to set $o seconds (YES/no): " rlysure
-fi
-
- case "${rlysure}" in
-   "YES")
-          sed -i '30d' ${SETUPCONF}
-          sed -i "30 i TIME=${o}" ${SETUPCONF}
-          printf "\nConfig file has updated the refresh time to $o seconds\n"
-          printf "\n\e[1;31mYou have been warned, expect a ban within ~300 seconds!\n\e[0m\n"
-          echo -e "\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
-          printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-          printf "\nNow you're all set - Have phun - Get started by type: 'bash emagnet --help' :-)\n\n"
-          cp .emagnetconf/emagnet.conf /etc/;
-          exit 1
-          break ;;
-
-    "*")  printf "\nSet a number between 10 and 3600 is recommended..\n\n";
-          exit 1
-         continue ;;
- esac
-          sed -i "30d" ${SETUPCONF}
-          sed -i "30i TIME=${o}" ${SETUPCONF}
-          printf "\nRefresh time has been set to: ${o} seconds..\n\n"
-          echo -e "\033[1mSETUP FINISHED:\033[0m\n\033[1m----------------------\033[0m"
-          printf "Successfully generated /etc/emagnet.conf, have fun!\n\n"
-          printf "\nNow you're all set - Have phun - Get started by type: 'bash emagnet --help' :-)\n\n"
-          cp .emagnetconf/emagnet.conf  /etc/
-          exit 1
-	  break
-done
-}
-
 copyconf() { if [[ -f .emagnetconf/emagnet.conf ]]; then cp .emagnetconf/emagnet.conf.bak .emagnetconf/emagnet.conf;fi; }
 
 if [[ ! -f "/etc/emagnet.conf" ]]; then
        mustberoot
        colors
+       copyconf
        clear
        banner
-       copyconf
        setupconf
        alreadyconfigured
-       checkbrowser
-       requirements
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null; [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' .emagnetconf/emagnet.conf || wip
-       cpusetup
-       pathsetup
-       timesetup
 fi
 
 ####### END OF SETUP
@@ -610,7 +325,7 @@ $BROWSER -dump $PASTEBIN|grep -q "is under heavy load right now"
 
 Iwasbanned() {
 conf
-clear;banner
+#clear;banner
 source /etc/emagnet.conf
 $BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
@@ -726,11 +441,11 @@ fi
 
 safety() {
 if [[ -z $MYIP ]]; then
-    myyyyip="$(curl -s $WIP | sed -n '121p')"
+#    myyyyip="$(curl -s $WIP | sed -n '121p')"
     sed -i '40d' /etc/emagnet.conf
-    sed -i "40i MYIP=" /etc/emagnet.conf
-    sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
-    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
+#    sed -i "40i MYIP=" /etc/emagnet.conf
+#    sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
+#    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
 fi
 }
 
@@ -738,7 +453,6 @@ fi
 
 ####### EMAGNET FEATURES
 analyz() {
-clear;banner
 printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
 sleep 0.1;printf i;sleep 0.1;printf n;sleep 0.1;printf g;sleep 0.1;printf .;sleep 0.1;printf . ;printf .; sleep 0.1;printf "."; sleep 0.1;printf "\n\n"
 }
@@ -963,7 +677,7 @@ if [[ $BROWSER = "lynx" ]]; then
 read -p "Syntax (ex: python): " SYNTAX2DL
 
 if [[ -z $SYNTAX2DL ]]; then
-      echo -e "[\e[1;31m\e[1m<<\e[0m\e[0m] - Duh! You must choose a syntax language to download, aborted.."
+      echo -e "$basename$0: internal error -- you must choose a syntax language to download, aborted.."
       exit 1
 fi
 
@@ -983,7 +697,8 @@ if [[ $? = "0" ]]; then
      printf "\nDone.\n\n" | tr ' ' '.'
      rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
 else
-      echo -e "\n[\e[1;31m\e[1m<<\e[0m\e[0m] - Duh! That's \e[4mnot\e[0m a valid syntax language..\n"
+      echo -e "$basename$0: internal error -- $SYNTAX2DL is not a valid syntax language..\n"
+      echo -e "try 'cat /tmp/.emagnet-syntaxes' for find valid syntaxes"
       exit 1
       rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
 fi
@@ -1087,7 +802,7 @@ merge_logs
 
 # SPAMMER
 emagnetspammer() {
-clear;banner
+#clear;banner
 ssmtp &> /dev/null
 if [[ $? -gt "0" ]]; then
     printf "[\e[1;31m<<\e[0m] - Spammer require ssmtp to be installed and configured.\n\n"
@@ -1535,7 +1250,7 @@ ESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}')
 NRESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}'|wc -l)
 NRINSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g'|wc -l)"
 INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
-clear;banner
+#clear;banner
  		if [[ $INSCREEN -gt "0" ]]; then
    			for screens in $INSCREEN; do
       			screen -X -S $screens kill
@@ -1594,14 +1309,14 @@ conf
        exit 1
      fi
      if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
-        sed -i '137d' $CONF
-        sed -i "137 i NOTIFY=true" $CONF
+        sed -i '138d' $CONF
+        sed -i "138 i NOTIFY=true" $CONF
         printf "$basename$0: config file has been updated -- notifications has been enable\n"
      fi
 
      if [[ $? -eq "0" ]] && [[ $2 = "disable" ]]; then
-        sed -i '137d' $CONF
-        sed -i "137 i NOTIFY=false" $CONF
+        sed -i '138d' $CONF
+        sed -i "138 i NOTIFY=false" $CONF
         printf "$basename$0: config file has been updated -- notifications has beendisable\n"
      fi
 ;;
@@ -1657,7 +1372,7 @@ elif [[ $* = "incoming" ]]; then
          fi
 elif [[ $* = "archive" ]]; then
          echo -e "Removed old backup.."
-         echo -e "Compressing $EMAGNET, please wait.."
+        echo -e "Compressing $EMAGNET, please wait.."
          pigz -h &> /dev/null
          if [[ $? -eq "0" ]]; then
               tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
@@ -1705,26 +1420,6 @@ else
 fi
       printf "\nBackup has successfully been created..\n\n"
 
-;;
-
-"-S"|"-setup"|"--setup")
-if [[ $1 = "--setup" ]]; then
-  if [[ $? -eq "0" ]]; then
-    mustberoot
-    clear
-    banner
-    alreadyconfigured
-    setupconf
-    checkbrowser
-    requirements
-    wip
-    cpusetup
-    pathsetup
-    timesetup
- else
-	printf "emagnet: internal errror -- unknown error\n"
- fi
-fi
 ;;
 
 	"\?")       
