@@ -109,11 +109,6 @@ SETUPCONF="emagnet.conf"
 
 if ! [[ -f "/etc/emagnet.conf" ]]; then
     cp "./emagnet.conf" "/etc/"
-  else
-    if ! [[ -f "./emagnet.conf" ]]; then
-      echo -e "$basename$0: internal error -- configuration file is missed, can't continue.."
-      exit 1
-    fi
 fi
 
 mustbefilled() {
@@ -225,71 +220,6 @@ if [[ -f "/etc/emagnet.conf" ]]; then
                 printf "\n%s\n\n" "Created a backup file for you: /etc/emagnet.conf.bak"
                 sleep 1
 fi
-}
-
-requirements() {
-clear;banner
-cat << "EOF"
-
-DEPENDENCIES SETUP:
-----------------------
-EOF
-
-for REQUIREMENTS in hash curl wget screen parallel; do
-    if hash "$REQUIREMENTS" 2>/dev/null; then
-        printf '%s%-50s%s\n' "Detected:" "$REQUIREMENTS" "[.${G}ok${E}.]" | sed -e 's/ /./g'
-    else
-        printf '%s%-50s%s\n' "Detected:" "$REQUIREMENTS" "[.${R}no${E}.]" | sed -e 's/ /./g'
-        printf '%s%-50s%s\n' "Detected:" "$REQUIREMENTS" "[.${R}no${E}.]" | sed -e 's/ /./g' >> "/tmp/.emagnet-packages"
-    fi
-done
-
-if [[ -f "/tmp/.emagnet-packages" ]]; then
-missed="$(awk -F'\\[.1m' '{print $2}' /tmp/.emagnet-packages|sed 's/.\]//g')"
-missed2="$(awk -F"Detected:" '{print $2}' /tmp/.emagnet-packages|cut -d"." -f1)"
-missed3="$(awk -F"Detected:" '{print $2}' /tmp/.emagnet-packages|cut -d"." -f1|wc -l)"
-missed4="$(cat /tmp/.emagnet-packages|awk -F"Detected:" '{print $2}'|cut -d"." -f1|xargs|sed 's/ /\, /g'|awk 'BEGIN{FS=OFS=","}$NF=" and"$NF'|sed 's/, and/ and/g')"
-
-		    if [[ "${missed3}" -gt "1" ]]; then
-     			   printf "\nYou must have \e[1;37m$missed4\e[0m installed before emagnet can run \nInstall $missed4: (y/n): "
-		           read missedpackages
-                     else
- 		           printf "\nYou must have \e[1;37m$missed2\e[0m installed before emagnet can run \nInstall $missed2: (y/n): "
-		           read missedpackages
-        fi
-
-        if [[ -z "${missedpackages}" ]]; then
-     			   printf "\nYou must have \e[1;37m$missed4\e[0m installed before you can run emagnet, exiting \n\n"
-       	                   exit
-        fi
-
-           case "${missedpackages}" in
-                "y"|"yes"|"YES"|"Y")
-                   if   [[ "${DISTRO}" = "gentoo"  ]]; then emerge --ask    "${missed2}"    ;echo
-                   elif [[ "${DISTRO}" = "sabayon" ]]; then emerge --ask    "${missed2}"    ;echo
-                   elif [[ "${DISTRO}" = "arch"    ]]; then pacman -Syy     "${missed2}"    ;echo
-                   elif [[ "${DISTRO}" = "kali"    ]]; then apt-get install "${missed2}" -y ;echo
-                   elif [[ "${DISTRO}" = "debian"  ]]; then apt-get install "${missed2}" -y ;echo
-                   elif [[ "${DISTRO}" = "mint"    ]]; then apt-get install "${missed2}" -y ;echo
-                   elif [[ "${DISTRO}" = "ubuntu"  ]]; then apt-get install "${missed2}" -y ;echo
-                   else
-                        printf "\n%s\n\n" "Emagnet is not supported for ${DISTRO}, please install ${missed2} manually."
-                        exit
-                   fi
-                   ;;
-
-                 "*"|"no"|"nope"|"n"|"N"|"No")
-		                if [[ "${missed3}" -gt "1" ]]; then
-     		                	   printf "\nYou must have \e[1;37m$missed4\e[0m installed before you can run emagnet, exiting \n\n"
-       	                     exit
-                    else
- 		                           printf "\nYou must have \e[1;37m$missed2\e[0m installed before you can run emagnet, exiting\n\n"
-                        		   exit
-                    fi
-                    ;;
-                    "\?")  echo "Please enter a proper answer y=yes N=no"
-             esac
-                    fi
 }
 
 if [[ ! -f "/etc/emagnet.conf" ]]; then
@@ -810,13 +740,13 @@ cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
          cp $i $EMAGNETDB/ &> /dev/null;
 
 if [[ $SBRUTEFORCE = "true" ]]; then
-  cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+      cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 elif [[ $GBRUTEFORCE = "true" ]]; then
-  cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+      cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 elif [[ $PBRUTEFORCE = "true" ]]; then
-  cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+      cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 else
-  mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+      mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
 fi
 
         printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
@@ -903,10 +833,24 @@ check4all() {
      mustbefilled
      paths
      Iwasbanned
-
 }
 
 if [[ -z $1 ]]; then usage; fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 case $1 in
      "-a"|"-author"|"--author")
