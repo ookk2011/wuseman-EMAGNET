@@ -66,6 +66,35 @@ EOF
 printf "%64s \n\n" | tr ' ' '='
 }
 
+usage() {
+cat << "EOF"
+
+Usage: ./emagnet [--author] [--emagnet] [--option] .....
+
+  -a, --author        Show author information.
+  -l, --license       Show license information.
+  -h, --help          Display this very helpful text
+  -n, --notify        Set notifications on or off
+  -S, --setup         Run emagnet-setup.sh again
+  -t, --time          Set refresh time
+  -v, --vpn           Toggle VPN on or off (true/false)
+  -V, --version       Displays version information.
+
+  -b, --backup        Create a compressed archive
+  -d, --stats         Print stats from all folders
+  -e, --emagnet       Download latest uploads and store leaked dbs
+  -g, --bruteforce    Same as '-e' with brute-force mode on
+                      Available options: SPOTIFY/SSH/GMAIL
+  -i, --ip            Print you current WAN IPv4/IPv6
+  -k, --kill          Kill emagnet sessions
+  -m, --move          Move files to archive
+  -q, --quiet         Run in screen
+  -s, --spam          Spam email addresses we found today
+  -x, --syntax        Download uploads sorted by syntax
+
+EOF
+}
+
 mustberoot() {
 (( ${EUID} > 0 )) && \
 printf "%s\n" "$basename$0: internal error -- root privileges is required" && \
@@ -177,34 +206,6 @@ if [[ "$?" -gt "0" ]]; then
 fi
 }
 
-usage() {
-cat << "EOF"
-
-Usage: ./emagnet [--author] [--emagnet] [--option] .....
-
-  -a, --author        Show author information.
-  -l, --license       Show license information.
-  -h, --help          Display this very helpful text
-  -n, --notify        Set notifications on or off
-  -S, --setup         Run emagnet-setup.sh again
-  -t, --time          Set refresh time
-  -v, --vpn           Toggle VPN on or off (true/false)
-  -V, --version       Displays version information.
-
-  -b, --backup        Create a compressed archive
-  -d, --stats         Print stats from all folders
-  -e, --emagnet       Download latest uploads and store leaked dbs
-  -g, --bruteforce    Same as '-e' with brute-force mode on
-                      Available options: SPOTIFY/SSH/GMAIL
-  -i, --ip            Print you current WAN IPv4/IPv6
-  -k, --kill          Kill emagnet sessions
-  -m, --move          Move files to archive
-  -q, --quiet         Run in screen
-  -s, --spam          Spam email addresses we found today
-  -x, --syntax        Download uploads sorted by syntax
-
-EOF
-}
 
 
 
