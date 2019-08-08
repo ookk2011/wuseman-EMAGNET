@@ -645,19 +645,19 @@ if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
       banned
  else
+      clear; banner
       echo -e "[\e[1;31m<<\e[0m] - You have been blocked by pastebin"
       echo -e "[\e[1;31m<<\e[0m] - Enable a vpn or please try again later, aborted\n"
       exit 1
  fi
 fi
 
-if [[ $BROWSER = "lynx" ]]; then
-      lynx -dump https://pastebin.com/languages|grep archive|sed '$d'|cut -c 7-|sed '1d'|cut -d'/' -f5|xargs -L3|column -t > /tmp/.emagnet-syntaxes
- elif [[ $BROWSER = "elinks" ]]; then
-      elinks -dump https://pastebin.com/languages|grep archive|sed '$d'|cut -c 7-|sed '1d'|cut -d'/' -f5|xargs -L3|column -t > /tmp/.emagnet-syntaxes
- else
-      choosebrowser
- fi
+      curl -Ls https://pastebin.com/languages \
+      |grep -o 'href="/archive/............' \
+      |cut -d'<' -f1 \
+      |cut -d'/' -f3 \
+      |cut -d'"' -f1 > /tmp/.emagnet-syntaxes
+
 
 read -p "Syntax (ex: python): " SYNTAX2DL
 
