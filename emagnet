@@ -321,8 +321,6 @@ curl -sL $PASTEBIN \
 
 Iwasbanned() {
 . $CONF
-#clear;banner
-source /etc/emagnet.conf
 curl -sL $PASTEBIN | grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
@@ -353,6 +351,8 @@ fi
 
 
 vpnsetup() {
+( hash openvn &> /dev/null; [[ $? -ne "0" ]] && echo -e "$basename$0: internal error -- openvpn is required to be installed when enabling vpn"; exit )
+
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|sed '1d')
 VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -2|tail -1)
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -3|tail -1)
