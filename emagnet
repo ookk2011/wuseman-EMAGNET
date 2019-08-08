@@ -443,20 +443,20 @@ fi
 analyz() {
     text="Analyzing..."
     delay="0.1"
-    for i in $(seq 0 $(expr length "${text}"));do
-        echo -n "${text:$i:1}"
-        sleep ${delay}
-    done
+      for i in $(seq 0 $(expr length "${text}"));do
+          printf "%26s"; echo -n "${text:$i:1}"
+         sleep ${delay}
+      done
 }
 
 analyzer() {
 wait_time=$TIME
 temp_cnt=${wait_time}
-while [[ ${temp_cnt} -gt 0 ]]; do
-    printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
-    sleep 1
-((temp_cnt--))
-done
+  while [[ ${temp_cnt} -gt 0 ]]; do
+     printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
+     sleep 1
+  ((temp_cnt--))
+  done
 }
 
 countdown() {
@@ -704,7 +704,7 @@ if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
 fi
 
 # If we didn't grab anything, check if we have got banned?
-if [[ $(cat /tmp/.emagnet1|grep https) = "0" ]]; then 
+if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then 
   heavyload
   Iwasbanned
 fi
@@ -721,6 +721,7 @@ tt="$(cat /tmp/.emagnet| wc -l)"
 if [[ $tt = "00" ]]; then 
   curl -Ls $PASTEBIN|grep -q "blocked"
     if [[ $? = "0" ]]; then
+      heavyload
       Iwasbanned
     fi
 
