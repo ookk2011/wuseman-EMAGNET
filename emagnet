@@ -703,7 +703,7 @@ if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
    banner
 fi
 
-# If we didn't grab anything, check if we have got banned?
+# If we didn't grab anything, check for ban
 if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then 
   heavyload
   Iwasbanned
@@ -718,7 +718,7 @@ tt="$(cat /tmp/.emagnet| wc -l)"
       tt="0$tt"
   fi
 
-if [[ $tt = "00" ]]; then 
+if [[ ${tt} -eq "00" ]]; then 
   curl -Ls $PASTEBIN|grep -q "blocked"
     if [[ $? = "0" ]]; then
       heavyload
@@ -736,9 +736,9 @@ echo -e "\n======================================\nPastebin URLS from: $(date +%
 fi
 
 #### REGEX FOR MAIL ONLY
-i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n')
-il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n')
-it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|wc -l|tr ' ' '\n')
+i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n') # Email addresses
+il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n') # Email addresses we will send to logs without filename
+it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|wc -l|tr ' ' '\n')       # Amount email addresses
 
 # REGEX FOR MAIL + PASSWORD
 p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
@@ -748,7 +748,7 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
     ((10#0$it > 00))
     ((10#0$pt > 00))
 
-if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
+if [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
     echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP \
     |awk '{print $1}'\
