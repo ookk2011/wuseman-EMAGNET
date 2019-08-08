@@ -206,13 +206,10 @@ if [[ "$?" -gt "0" ]]; then
 fi
 }
 
-
-
-
 alreadyconfigured() {
 if [[ -f "/etc/emagnet.conf" ]]; then
         printf "%s\n" "It seems emagnet.conf has already been configured are you"
-        read -p "really sure you want to overwrite /etc/emagnet.conf (y/n): " yupiamsure
+        read -p "really sure you want to overwrite /etc/emagnet.conf and erase all settings (y/n): " yupiamsure
             if [[ "$yupiamsure" = "n" ]]; then
                 printf "\nAborted\n\n"
                 exit
