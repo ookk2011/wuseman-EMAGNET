@@ -718,7 +718,7 @@ tt="$(cat /tmp/.emagnet| wc -l)"
       tt="0$tt"
   fi
 
-if [[ ${tt} -eq "00" ]]; then 
+if [[ "${tt}" -eq "00" ]]; then 
   curl -Ls $PASTEBIN|grep -q "blocked"
     if [[ $? = "0" ]]; then
       heavyload
