@@ -436,19 +436,6 @@ MYOLDIP="$(cat /tmp/.emagnet-ip)"
 fi
 }
 
-
-safety() {
-if [[ -z $MYIP ]]; then
-#    myyyyip="$(curl -s $WIP | sed -n '121p')"
-    sed -i '40d' /etc/emagnet.conf
-#    sed -i "40i MYIP=" /etc/emagnet.conf
-#    sed -i "s/MYIP=/MYIP=$myyyyip/g" /etc/emagnet.conf
-#    echo "\[$(date +%d/%m/%Y\ -\ %H:%M)\]: $(whoami) - Aborted for safety, don't use your own IP!!" >> $EMAGNETLOGS/emagnet.log
-fi
-}
-
-
-
 ####### EMAGNET FEATURES
 analyz() {
 printf "%26s";printf A;sleep 0.1;printf n;sleep 0.1;printf a; sleep 0.1;printf l;sleep 0.1;printf y;sleep 0.1;printf z;
