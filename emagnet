@@ -74,21 +74,17 @@ Usage: ./emagnet [--author] [--emagnet] [--option] .....
   -l, --license       Show license information.
   -h, --help          Display this very helpful text
   -n, --notify        Set notifications on or off
-  -S, --setup         Run emagnet-setup.sh again
   -t, --time          Set refresh time
   -v, --vpn           Toggle VPN on or off (true/false)
   -V, --version       Displays version information.
 
   -b, --backup        Create a compressed archive
-  -d, --stats         Print stats from all folders
   -e, --emagnet       Download latest uploads and store leaked dbs
   -g, --bruteforce    Same as '-e' with brute-force mode on
                       Available options: SPOTIFY/SSH/GMAIL
   -i, --ip            Print you current WAN IPv4/IPv6
   -k, --kill          Kill emagnet sessions
-  -m, --move          Move files to archive
   -q, --quiet         Run in screen
-  -s, --spam          Spam email addresses we found today
   -x, --syntax        Download uploads sorted by syntax
 
 EOF
@@ -598,7 +594,7 @@ grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
 if [[ "$?" = "0" ]]; then
      printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
-     cat /tmp/.emagnet-syntaxes-urls|xargs -n 1 -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL"
+     cat /tmp/.emagnet-syntaxes-urls|xargs -n 1 -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
      printf "\nDone.\n\n" | tr ' ' '.'
      rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
 else
@@ -637,7 +633,7 @@ if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then
 fi
 
 cat /tmp/.emagnet \
-|xargs -n 1 -P $THREADS wget -q -nc -P $EMAGNETTEMP
+|xargs -n 1 -P $THREADS wget -q -nc -P $EMAGNETTEMP &> /dev/null
 
 # Cause bash is bash
 tt="$(cat /tmp/.emagnet| wc -l)"
@@ -652,7 +648,7 @@ if [[ "${tt}" -eq "00" ]]; then
       Iwasbanned
     fi
 
-printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time otherwise you will be banned in any second\n\n"
+printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or get banned within seconds..\n\n"
       tt="\e[1;31m\e[5m00\e[0m"
       sleep 5
       clear
@@ -712,7 +708,7 @@ elif [[ "$SBRUTEFORCE" = "true" ]]; then
    sleep 2
 elif [[ "$PBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
-   printf "%12s";printf "BRUTE FORCING -- SPOTIFY ACCOUNTS\e[0m\n\n"
+   printf "%17s";printf "BRUTE FORCING -- SPOTIFY ACCOUNTS\e[0m\n\n"
    spotifybruter
    sleep 2
 else
@@ -727,16 +723,16 @@ cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
          sleep 2
          # Now copy them to email-files path
          cp $i $EMAGNETDB/ &> /dev/null;
-
-if [[ $SBRUTEFORCE = "true" ]]; then
-      cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-elif [[ $GBRUTEFORCE = "true" ]]; then
-      cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-elif [[ $PBRUTEFORCE = "true" ]]; then
-      cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-else
-      mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-fi
+                    
+                    if [[ $SBRUTEFORCE = "true" ]]; then
+                          cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+                    elif [[ $GBRUTEFORCE = "true" ]]; then
+                          cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+                    elif [[ $PBRUTEFORCE = "true" ]]; then
+                          cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+                    else
+                          mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+                    fi
 
         printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
         printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
@@ -818,7 +814,6 @@ done
 ### CHECK4ALL
 check4all() {
      conf
-     iconnection
      mustbefilled
      paths
      Iwasbanned
@@ -894,18 +889,19 @@ elif [[ $2 = "ssh" ]]; then
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
         conf
+         if [[ -z $LIBSPOTIFY ]]; then
          printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
          read LIBSPOTIFY
          if ! [[ $LIBSPOTIFY = "YES" ]]; then
          echo "Can't continue until libspotify has been installed.."
          echo "Exiting.."
-         #exit 1
+         exit 1
+         fi
+         sed -i 's/LIBSPOTIFY=/LIBSPOTIFY=true/g' ${CONF}
          fi
          file ./sconsify &> /dev/null
-         if ! [[ $? -ne "0" ]]; then
-         if [[ ! -f "./sconsify" ]]; then
+         if [[ $? -eq "0" ]]; then
          echo "Sconsify is required to be installed before we attacking targets.."
-         fi
            read -p "Download and install sconsify (y/N): " installsconsify
              if [[ $installsconsify -eq "y" ]]; then
                 echo -e "Hold on, downloading sconsify.."
@@ -968,11 +964,11 @@ else
 fi 
 ;;
 
+"-i"|"--ip"|"-ip"|"ip") curl https://nr1.nu/i/ ;;
 "-h"|"--help"|"-help"|"help") usage ;;
 "-l"|"-license"|"--license") printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s https://nr1.nu/licenses/LICENSE.md|less;printf "%s\n" "Thank you.." ;;
 "-m"|"-move"|"--move") conf;check4all;moveem                                                             ;;
 "-s"|"-spam"|"--spam") conf;check4all;emagnetspammer                                                     ;;
-"-d"|"-stats"|"--stats") conf;check4all;stats;exit 1                                                     ;;
 "-x"|"-syntax"|"--syntax") conf;check4all;clear;banner;emagnetsyntax                                     ;;
 "-q"|"-quiet"|"--quiet") conf;check4all;pid="$(ps aux |grep emagnet)" rm -rf /tmp/screen;screen -S emagnet -dm bash emagnet --emagnet
                          printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n" ;;
