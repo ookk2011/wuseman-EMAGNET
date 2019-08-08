@@ -911,7 +911,8 @@ printf "\n%64s \n\n" | tr ' ' '='
 
 
 emagnet2() {
-curl -Ls https://pastebin.com/archive \
+
+curl -Ls $PASTEBIN/archive \
 |awk -F'href="/' '{print $2}' \
 |cut -d'"' -f1 \
 |awk 'length($0)>6 && length($0)<9' \
@@ -981,9 +982,6 @@ p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EM
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' |sed 's/|/:/g'|tr ' ' '\n')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/'|wc -l)
 
-
-
-
     ((10#0$it > 00))
     ((10#0$pt > 00))
 
@@ -997,7 +995,9 @@ if [[ $pt -gt "00" ]] && [[ $it -gt "00" ]]; then
     |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts' \
     |grep -v '/' >> $EMAGNETLOGS/passwords-from-pastebin.txt 
     
-    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP \
+    |cut -d: -f2 \
+    |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
 
     printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
     printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
@@ -1034,10 +1034,16 @@ else
    sleep 0
 fi
 
+# When we found email addresses without any password then we only echo email files
 cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
     elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
-        echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m  emails from $EMAGNETDB/${i##*/}"    | xargs >> $EMAGNETLOGS/emagnet.log
-        grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP| cut -d: -f2 |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m emails from $EMAGNETDB/${i##*/}" \
+        |xargs >> $EMAGNETLOGS/emagnet.log
+        
+        grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP \
+        |cut -d':' -f2 \
+        |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+
         sleep 2
         cp $i $EMAGNETDB/ &> /dev/null;
 
