@@ -228,7 +228,7 @@ fi
 }
 
 requirements() {
-clear; banner
+clear;banner
 cat << "EOF"
 
 DEPENDENCIES SETUP:
@@ -303,6 +303,19 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
       [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
 fi
+
+noticeaboutscraping() {
+   clear
+   banner
+   echo -e "                            \e[1;31mNOTICE\e[0m:\n"
+   echo -e "[\e[1;31m<<\e[0m] - You are scraping pastbin.com way too fast! \e[1;31mSlow Down\e[0m!"
+   echo -e "[\e[1;31m<<\e[0m] - Pastebin has blocked you from the archive page until you slow down."
+   echo -e "[\e[1;31m<<\e[0m] - You will only be able to download 8 files at time until you raise TIME"
+   echo -e "[\e[1;31m<<\e[0m] - The block from pastebin.com/archive will be lifted within 20 minutes.."
+   sleep 7
+   clear
+   banner
+ }
 
 heavyload() {
 curl -sL $PASTEBIN \
@@ -444,7 +457,7 @@ analyz() {
     text="Analyzing..."
     delay="0.1"
       for i in $(seq 0 $(expr length "${text}"));do
-          printf "%26s"; echo -n "${text:$i:1}"
+          echo -n "${text:$i:1}"
          sleep ${delay}
       done
 }
@@ -691,16 +704,7 @@ curl -Ls $PASTEBIN/archive \
 rm 1 2 &> /dev/null
 
 if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
-   clear
-   banner
-   echo -e "                            \e[1;31mNOTICE\e[0m:\n"
-   echo -e "[\e[1;31m<<\e[0m] - You are scraping pastbin.com way too fast! \e[1;31mSlow Down\e[0m!"
-   echo -e "[\e[1;31m<<\e[0m] - Pastebin has blocked you from the archive page until you slow down."
-   echo -e "[\e[1;31m<<\e[0m] - You will only be able to download 8 files at time until you raise TIME"
-   echo -e "[\e[1;31m<<\e[0m] - The block from pastebin.com/archive will be lifted within 20 minutes.."
-   sleep 7
-   clear
-   banner
+     noticeaboutscraping
 fi
 
 # If we didn't grab anything, check for ban
@@ -748,11 +752,11 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
     ((10#0$it > 00))
     ((10#0$pt > 00))
 
-if [[ $pt -gt "0" ]] && [[ $it -gt "0" ]]; then
-    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: \e[1;31m$(whoami)\e[0m - Found \e[1;32m$pt\e[0m password from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
+if [[ ${pt} -gt "0" ]] && [[ ${it} -gt "0" ]]; then
+    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found: ${pt} passwords from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP \
     |awk '{print $1}'\
-    |cut -d: -f2,3\
+    |cut -d':' -f2,3\
     |uniq \
     |uniq \
     |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts' \
