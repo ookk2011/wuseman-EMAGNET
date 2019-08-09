@@ -937,9 +937,9 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 		fi
 
 if [[ $NRESESSIONS -lt "3" ]]; then
-     echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running.."
+     echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running"
 else
-     echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions ... (#+_+)"
+     echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions"
      kill -SIGKILL $ESESSIONS &> /dev/null
 fi 
 ;;
