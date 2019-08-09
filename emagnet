@@ -127,7 +127,7 @@ conf
   if [[ -z $EMAGNETBACKUP  ]];   then sed -i "81d"  $CONF;sed -i '81  i EMAGNETBACKUP=$EMAGNET/backup'                                                                                           $CONF;fi
   if [[ -z $EMAGNETSYNTAX  ]];   then sed -i "82d"  $CONF;sed -i '82  i EMAGNETSYNTAX=$EMAGNETHOME\/sorted-by-syntax'                                                                            $CONF;fi
   if [[ -z $VERSION        ]];   then sed -i '91d'  $CONF;sed -i '91  i VERSION=3.2'                                                                                                             $CONF;fi
-  if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=$(( NUMCPUS + 1 ))"                                                                                                        $CONF;fi
+  if [[ -z $THREADS        ]];   then sed -i '100d' $CONF;sed -i "100 i THREADS=$(( NUMCPUS + 1 ))"                                                                                              $CONF;fi
   if [[ -z $IDLETIME       ]];   then sed -i '109d' $CONF;sed -i "109 i IDLETIME=3600"                                                                                                           $CONF;fi
   if [[ -z $GBRUTEFORCE    ]];   then sed -i '118d' $CONF;sed -i '118 i GBRUTEFORCE=false'                                                                                                       $CONF;fi
   if [[ -z $SBRUTEFORCE    ]];   then sed -i '119d' $CONF;sed -i '119 i SBRUTEFORCE=false'                                                                                                       $CONF;fi
@@ -147,6 +147,7 @@ conf
   if [[ -z $VPNCOUNTRYS    ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   $CONF;fi
   if [[ -z $VPNCOUNTRYS2   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
   if [[ -z $VPNCOUNTRYS3   ]];   then sed -i '157d' $CONF;sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
+  if [[ -z $USERAGENT      ]];   then sed -i '192d' $CONF;sed -i '192 i USERAGENT=Mosaic/0.9'                                                                                                    $CONF;fi
 conf
 }
 
@@ -244,6 +245,10 @@ noticeaboutscraping() {
  }
 
 heavyload() {
+			if [[ -z $USERAGENT ]]; then
+				echo -e "$basename$0: internal errror -- you must set a useragent in /etc/emagnet.conf"
+				exit
+         	fi
 curl -sL $PASTEBIN -H $USERAGENT \
 |grep -q "is under heavy load right now"
   if [[ "$?" = "0" ]]; then
@@ -265,6 +270,11 @@ curl -sL $PASTEBIN -H $USERAGENT \
 
 Iwasbanned() {
 . $CONF
+			if [[ -z $USERAGENT ]]; then
+				echo -e "$basename$0: internal errror -- you must set a useragent in /etc/emagnet.conf"
+				exit
+         	fi
+         	
 curl -sL $PASTEBIN -H $USERAGENT| grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
@@ -446,7 +456,16 @@ else
 fi
 }
 
-blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then curl -Ls $PASTEBIN -H $USERAGENT> /tmp/.emagnet;fi; }
+blocked() { 
+	conf
+	if [[ -z $USERAGENT ]]; then
+		echo -e "$basename$0: internal errror -- you must set a useragent"
+		exit
+	fi
+		if [[ ! -s /tmp/.emagnet ]]; then 
+		curl -h "$HEADER"-Ls $PASTEBIN -H $USERAGENT> /tmp/.emagnet
+fi; 
+}
 
 spotifybruter() {
 VERSION="0.6.0"
@@ -564,7 +583,12 @@ fi
 }
 
 emagnetsyntax() {
-curl -H $USERAGENT -Ls $PASTEBIN|grep -q "blocked your IP"
+		if [[ -z $USERAGENT ]]; then
+			echo -e "$basename$0: internal errror -- you must set a useragent in /etc/emagnet.conf"
+			exit
+     	fi
+
+curl -H "$USERAGENT" -Ls $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
       banned
@@ -609,7 +633,11 @@ fi
 }
 
 emagnet2() {
-curl -H $USERAGENT -Ls $PASTEBIN/archive \
+			if [[ -z $USERAGENT ]]; then
+				echo -e "$basename$0: internal errror -- you must set a useragent in /etc/emagnet.conf"
+				exit
+         	fi
+curl -H "$USERAGENT" -Ls $PASTEBIN/archive \
 |awk -F'href="/' '{print $2}' \
 |cut -d'"' -f1 \
 |awk 'length($0)>6 && length($0)<9' \
