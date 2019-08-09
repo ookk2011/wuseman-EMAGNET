@@ -65,6 +65,8 @@ EOF
 printf "%64s \n\n" | tr ' ' '='
 }
 
+( hash curl &> /dev/null; [[ $? -ne "0" ]] && echo -e "$basename: internal error -- curl is required to be installed."; exit)
+
 usage() {
 cat << "EOF"
 
@@ -106,7 +108,7 @@ fi
 mustbefilled() {
 conf
   if [[ -z $DEBUG          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                                                                                             $CONF;fi
-  if [[ -z $PASTEBIN       ]];   then sed -i '21d'  $CONF;sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com\/archive'                                                                            $CONF;fi
+  if [[ -z $PASTEBIN       ]];   then sed -i '21d'  $CONF;sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com'                                                                            $CONF;fi
   if [[ -z $WIP            ]];   then sed -i '50d'  $CONF;sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                                                                               $CONF;fi
   if [[ -z $WIP2           ]];   then sed -i '51d'  $CONF;sed -i '51  i WIP2='                                                                                                                   $CONF;fi
   if [[ -z $WIP3           ]];   then sed -i '52d'  $CONF;sed -i '52  i WIP3='                                                                                                                   $CONF;fi
@@ -220,6 +222,10 @@ if [[ ! -f "/etc/emagnet.conf" ]]; then
        clear
        banner
        alreadyconfigured
+       cp /etc/emagnet.conf
+       conf
+       mustbefilled
+       paths
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
       [[ $? -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
 fi
@@ -238,7 +244,7 @@ noticeaboutscraping() {
  }
 
 heavyload() {
-curl -sL $PASTEBIN \
+curl -sL $PASTEBIN -H $USERAGENT \
 |grep -q "is under heavy load right now"
   if [[ "$?" = "0" ]]; then
    for (( ; ; )); do
@@ -259,7 +265,7 @@ curl -sL $PASTEBIN \
 
 Iwasbanned() {
 . $CONF
-curl -sL $PASTEBIN | grep -q "blocked your IP"
+curl -sL $PASTEBIN -H $USERAGENT| grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
    for (( ; ; )); do
@@ -375,10 +381,7 @@ fi
 analyz() {
     text="Analyzing..."
     delay="0.1"
-      for i in $(seq 0 $(expr length "${text}"));do
-         echo -n "${text:$i:1}"
-         sleep ${delay}
-      done
+     printf "%26s"; for i in $(seq 0 $(expr length "${text}"));do echo -n "${text:$i:1}"; sleep ${delay};done
 }
 
 analyzer() {
@@ -443,7 +446,7 @@ else
 fi
 }
 
-blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then curl -Ls $PASTEBIN > /tmp/.emagnet;fi; }
+blocked() { conf;if [[ ! -s /tmp/.emagnet ]]; then curl -Ls $PASTEBIN -H $USERAGENT> /tmp/.emagnet;fi; }
 
 spotifybruter() {
 VERSION="0.6.0"
@@ -561,7 +564,7 @@ fi
 }
 
 emagnetsyntax() {
-curl -Ls $PASTEBIN|grep -q "blocked your IP"
+curl -H $USERAGENT -Ls $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ $VPN = "true" ]]; then
       banned
@@ -594,7 +597,7 @@ grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
 if [[ "$?" = "0" ]]; then
      printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
-     cat /tmp/.emagnet-syntaxes-urls|xargs -n 1 -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
+     cat /tmp/.emagnet-syntaxes-urls|xargs -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
      printf "\nDone.\n\n" | tr ' ' '.'
      rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
 else
@@ -606,7 +609,7 @@ fi
 }
 
 emagnet2() {
-curl -Ls $PASTEBIN/archive \
+curl -H $USERAGENT -Ls $PASTEBIN/archive \
 |awk -F'href="/' '{print $2}' \
 |cut -d'"' -f1 \
 |awk 'length($0)>6 && length($0)<9' \
@@ -633,7 +636,7 @@ if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then
 fi
 
 cat /tmp/.emagnet \
-|xargs -n 1 -P $THREADS wget -q -nc -P $EMAGNETTEMP &> /dev/null
+|xargs -P $THREADS wget -q -nc -P $EMAGNETTEMP &> /dev/null
 
 # Cause bash is bash
 tt="$(cat /tmp/.emagnet| wc -l)"
@@ -648,7 +651,7 @@ if [[ "${tt}" -eq "00" ]]; then
       Iwasbanned
     fi
 
-printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or get banned within seconds..\n\n"
+printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned within seconds..\n\n"
       tt="\e[1;31m\e[5m00\e[0m"
       sleep 5
       clear
@@ -756,22 +759,9 @@ fi
                rm "/tmp/.emagnet*" &> /dev/null
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 dontstopwhenfound() {
 conf
-$BROWSER -dump $PASTEBIN|grep -q "blocked your IP"
+curl -sL $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then 
    if [[ $VPN = "true" ]]; then 
        banned
@@ -822,25 +812,12 @@ check4all() {
 if [[ -z $1 ]]; then usage; fi
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 case $1 in
      "-a"|"-author"|"--author")
      author ;;
 "emagnet"|"-e"|"-emagnet"|"--emagnet")
 conf
+iconnection
 sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' $CONF
 sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' $CONF
 sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' $CONF
@@ -848,16 +825,17 @@ sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' $CONF
         banner
         check4all
         PWD="$(pwd)"
-if [[ $GBRUTEFORCE = "false" ]]; then 
-dontstopwhenfound
- elif [[ $sBRUTEFORCE = "false" ]]; then 
-  dontstopwhenfound
-  elif [[ $PBRUTEFORCE = "false" ]]; then 
-    dontstopwhenfound
- else
-  mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-fi
-;;
+		if [[ $GBRUTEFORCE = "false" ]]; then 
+			 dontstopwhenfound
+		elif [[ $sBRUTEFORCE = "false" ]]; then 
+ 			 dontstopwhenfound
+		elif [[ $PBRUTEFORCE = "false" ]]; then 
+  			 dontstopwhenfound
+ 		else
+ 			 mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+		fi
+		;;
+
 "-g"|"-bruteforce"|"--bruteforce")
 check4all
 sleep 0.5
@@ -888,15 +866,21 @@ elif [[ $2 = "ssh" ]]; then
         fi
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
-        conf
-         if [[ -z $LIBSPOTIFY ]]; then
-         printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
-         read LIBSPOTIFY
-         if ! [[ $LIBSPOTIFY = "YES" ]]; then
-         echo "Can't continue until libspotify has been installed.."
-         echo "Exiting.."
-         exit 1
+         conf
+         # Check for libspotify
+         find /usr/include -name '*libspotify*' &> /dev/null
+         if [[ "$?" -ne "0" ]]; then
+        	 if [[ -z $LIBSPOTIFY ]]; then
+	        	 printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
+         		 read LIBSPOTIFY
+        			 if ! [[ $LIBSPOTIFY = "YES" ]]; then
+        				 echo "Can't continue until libspotify has been installed.."
+      					 echo "Exiting.."
+       					 exit 1
+         			 fi
+         sed -i 's/LIBSPOTIFY=/LIBSPOTIFY=true/g' ${CONF}
          fi
+         else
          sed -i 's/LIBSPOTIFY=/LIBSPOTIFY=true/g' ${CONF}
          fi
          file ./sconsify &> /dev/null
@@ -913,10 +897,6 @@ elif [[ $2 = "spotify" ]]; then
                 rm linux-x86_64-sconsify-0.6.0-next.zip
                 echo "All done, going to continue in 5 seconds.."
                 sleep 5
-#                       if [[ -d /usr/local/bin ]]; then
-#                                  mv "sconsify" "/usr/local/bin"
-#                                  chmod +x "/usr/local/bin"
- #                      fi
         else
               echo "Cant bruteforce without sconsify, please choose another option.."
               exit 1
@@ -946,7 +926,7 @@ ESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}')
 NRESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}'|wc -l)
 NRINSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g'|wc -l)"
 INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
-#clear;banner
+
  		if [[ $INSCREEN -gt "0" ]]; then
    			for screens in $INSCREEN; do
       			screen -X -S $screens kill
@@ -958,7 +938,7 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 
 if [[ $NRESESSIONS -lt "3" ]]; then
      echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running.."
-else 
+else
      echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions ... (#+_+)"
      kill -SIGKILL $ESESSIONS &> /dev/null
 fi 
@@ -1051,7 +1031,7 @@ if [[ $* = "all" ]]; then
          echo -e "Removed old backup.."
          echo -e "Compressing $EMAGNET, please wait.."
          pigz -h &> /dev/null
-         if [[ $? -eq "0" ]]; then
+         if [[ $? -ne "0" ]]; then
              tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz"
          else
              tar -cjf "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" "$EMAGNET"
@@ -1088,7 +1068,7 @@ fi
 if [[ $2 = "all" ]]; then
        echo -e "Compressing $EMAGNET, please wait.."
          pigz -h &> /dev/null
-         if [[ $? -eq "0" ]]; then
+         if [[ "$?" = "0" ]]; then
             tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz"
          else
             tar -cjf "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" "$EMAGNET"
@@ -1096,7 +1076,8 @@ if [[ $2 = "all" ]]; then
 
 elif [[ $2 = "incoming" ]]; then
        echo -e "Compressing $EMAGNET, please wait.."
-         if [[ $? -eq "0" ]]; then
+         pigz -h &> /dev/null
+         if [[ "$?" = "0" ]]; then
             tar -cf - --absolute-names "$EMAGNET/incoming"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz"
          else
             tar -cjf "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" "$EMAGNET/incoming"
@@ -1104,7 +1085,7 @@ elif [[ $2 = "incoming" ]]; then
 
 elif [[ $2 = "archive" ]]; then
          pigz -h &> /dev/null
-         if [[ $? -eq "0" ]]; then
+         if [[ "$?" -eq "0" ]]; then
               tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
          else 
               tar -cjf "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" "$EMAGNETBACKUP"
@@ -1114,7 +1095,7 @@ else
          echo -e "emagnet: error -- please specify incoming, archive or all\n"
          exit 1
 fi
-      printf "\nBackup has successfully been created..\n\n"
+      printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz .\n\n"
 
 ;;
 
