@@ -153,14 +153,14 @@ conf
 
 paths() {
   conf
-  if [[ ! -d $EMAGNETHOME    ]];    then mkdir -p $EMAGNETHOME     &> /dev/null;  fi
-  if [[ ! -d $EMAGNETDB      ]];    then mkdir -p $EMAGNETDB       &> /dev/null;  fi
-  if [[ ! -d $EMAGNETPW      ]];    then mkdir -p $EMAGNETPW       &> /dev/null;  fi
-  if [[ ! -d $EMAGNETTEMP    ]];    then mkdir -p $EMAGNETTEMP     &> /dev/null;  fi
-  if [[ ! -d $EMAGNETCRAP    ]];    then mkdir -p $EMAGNETCRAP     &> /dev/null;  fi
-  if [[ ! -d $EMAGNETALL     ]];    then mkdir -p $EMAGNETALL      &> /dev/null;  fi
-  if [[ ! -d $EMAGNETARCHIVE ]];    then mkdir -p $EMAGNETARCHIVE  &> /dev/null;  fi
-  if [[ ! -d $EMAGNETLOGS    ]];    then mkdir -p $EMAGNETLOGS     &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETHOME"    ]];    then mkdir -p "$EMAGNETHOME"     &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETDB"      ]];    then mkdir -p "$EMAGNETDB"       &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETPW"      ]];    then mkdir -p "$EMAGNETPW"       &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETTEMP"    ]];    then mkdir -p "$EMAGNETTEMP"     &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETCRAP"    ]];    then mkdir -p "$EMAGNETCRAP"     &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETALL"     ]];    then mkdir -p "$EMAGNETALL"      &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETARCHIVE" ]];    then mkdir -p "$EMAGNETARCHIVE"  &> /dev/null;  fi
+  if [[ ! -d "$EMAGNETLOGS"    ]];    then mkdir -p "$EMAGNETLOGS"     &> /dev/null;  fi
   conf
 }
 
@@ -270,12 +270,12 @@ curl -sL $PASTEBIN -H $USERAGENT \
 
 Iwasbanned() {
 . $CONF
-			if [[ -z $USERAGENT ]]; then
-				echo -e "$basename$0: internal errror -- you must set a useragent in /etc/emagnet.conf"
-				exit
-         	fi
-         	
-curl -sL $PASTEBIN -H $USERAGENT| grep -q "blocked your IP"
+if [[ -z $USERAGENT ]]; then
+	echo -e "$basename$0: internal errror -- you must set a useragent in /etc/emagnet.conf"
+	exit
+fi
+
+curl -sL "$PASTEBIN" -H "$USERAGENT"| grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
    for (( ; ; )); do
@@ -290,12 +290,12 @@ if [[ $? = "0" ]]; then
         printf "\n"
         clear
         banner
-        bash $basename$0 --emagnet
+        bash "$basename$0" --emagnet
         sleep 2
    done
         clear
         banner
-        bash $basename$0 --emagnet
+        bash "$basename$0" --emagnet
        exit
    else
        banned
@@ -310,36 +310,36 @@ VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' /etc/emagnet.conf|cut -d'"' -f1|head -3|tail -1)
 
 case $COUNTRY in
-   belgium)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.be.ovpn      &> /dev/null & ;;
-   bulgaria)       cd $VPNPROVIDER;openvpn --config $VPNCONFIG.bg.ovpn      &> /dev/null & ;;
-   czech)          cd $VPNPROVIDER;openvpn --config $VPNCONFIG.cz.ovpn      &> /dev/null & ;;
-   denmark)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.dk.ovpn      &> /dev/null & ;;
-   spain)          cd $VPNPROVIDER;openvpn --config $VPNCONFIG.es.ovpn      &> /dev/null & ;;
-   finland)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.fi.ovpn      &> /dev/null & ;;
-   united-kingdom) cd $VPNPROVIDER;openvpn --config $VPNCONFIG.gb.ovpn      &> /dev/null & ;;
-   greece)         cd $VPNPROVIDER;openvpn --config $VPNCONFIG.gr.ovpn      &> /dev/null & ;;
-   hongkong)       cd $VPNPROVIDER;openvpn --config $VPNCONFIG.hk.ovpn      &> /dev/null & ;;
-   hungaria)       cd $VPNPROVIDER;openvpn --config $VPNCONFIG.hu.ovpn      &> /dev/null & ;;
-   italy)          cd $VPNPROVIDER;openvpn --config $VPNCONFIG.it.ovpn      &> /dev/null & ;;
-   moldavia)       cd $VPNPROVIDER;openvpn --config $VPNCONFIG.md.ovpn      &> /dev/null & ;;
-   netherlands)    cd $VPNPROVIDER;openvpn --config $VPNCONFIG.nl.ovpn      &> /dev/null & ;;
-   norway)         cd $VPNPROVIDER;openvpn --config $VPNCONFIG.no.ovpn      &> /dev/null & ;;
-   poland)         cd $VPNPROVIDER;openvpn --config $VPNCONFIG.pl.ovpn      &> /dev/null & ;;
-   portugal)       cd $VPNPROVIDER;openvpn --config $VPNCONFIG.pt.ovpn      &> /dev/null & ;;
-   romania)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.ro.ovpn      &> /dev/null & ;;
-   russia)         cd $VPNPROVIDER;openvpn --config $VPNCONFIG.rs.ovpn      &> /dev/null & ;;
-   sweden)         cd $VPNPROVIDER;openvpn --config $VPNCONFIG.se.ovpn      &> /dev/null & ;;
-   sweden1)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.se-got.ovpn  &> /dev/null & ;;
-   sweden2)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.se-hel.ovpn  &> /dev/null & ;;
-   sweden3)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.se-mma.ovpn  &> /dev/null & ;;
-   sweden4)        cd $VPNPROVIDER;openvpn --config $VPNCONFIG.se-sto.ovpn  &> /dev/null & ;;
-   united-states)  cd $VPNPROVIDER;openvpn --config $VPNCONFIG.us.ovpn      &> /dev/null & ;;
+   belgium)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn"      &> /dev/null & ;;
+   bulgaria)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn"      &> /dev/null & ;;
+   czech)          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn"      &> /dev/null & ;;
+   denmark)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn"      &> /dev/null & ;;
+   spain)          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn"      &> /dev/null & ;;
+   finland)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn"      &> /dev/null & ;;
+   united-kingdom) cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn"      &> /dev/null & ;;
+   greece)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn"      &> /dev/null & ;;
+   hongkong)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn"      &> /dev/null & ;;
+   hungaria)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn"      &> /dev/null & ;;
+   italy)          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn"      &> /dev/null & ;;
+   moldavia)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn"      &> /dev/null & ;;
+   netherlands)    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn"      &> /dev/null & ;;
+   norway)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn"      &> /dev/null & ;;
+   poland)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn"      &> /dev/null & ;;
+   portugal)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn"      &> /dev/null & ;;
+   romania)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn"      &> /dev/null & ;;
+   russia)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn"      &> /dev/null & ;;
+   sweden)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"      &> /dev/null & ;;
+   sweden1)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-got.ovpn"  &> /dev/null & ;;
+   sweden2)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-hel.ovpn"  &> /dev/null & ;;
+   sweden3)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-mma.ovpn"  &> /dev/null & ;;
+   sweden4)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-sto.ovpn"  &> /dev/null & ;;
+   united-states)  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn"      &> /dev/null & ;;
 esac
 }
 
 
 banned() {
-if [[ $VPN = "false" ]]; then
+if [[ "$VPN" = "false" ]]; then
    Iwasbanned
 else
 
@@ -352,7 +352,7 @@ MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print t
 COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' /etc/emagnet.conf|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
 
 curl -s "$WIP" > "/tmp/.emagnet-ip"
-if [[ -n $OPENVPNRUNNING ]]; then 
+if [[ -n "$OPENVPNRUNNING" ]]; then 
   pkill -9 openvpn
 fi
 
@@ -365,14 +365,14 @@ printf "\n"
        sleep 10
 MYIP="$(curl -s https://nr1.nu/i/)"
 MYOLDIP="$(cat /tmp/.emagnet-ip)"
-    if [[ $MYIP != "$MYOLDIP" ]]; then
+    if [[ "$MYIP" != "$MYOLDIP" ]]; then
          MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
          printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
          printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
          sleep 5
     fi
 
-     if [[ $MYIP = "$MYOLDIP" ]]; then
+     if [[ "$MYIP" = "$MYOLDIP" ]]; then
          echo -e "Still trying to establish a connection.....................[\e[1;3m\e[5mwait\e[0m\e[0m]"
          sleep 10
           if [[ ! $MYIP = "$MYOLDIP" ]]; then
@@ -409,48 +409,48 @@ countdown() {
     clear
     banner
 if [[ ${GBRUTEFORCE} = "true" ]]; then
-      sed -i '118d' $CONF
-      sed -i '118 i GBRUTEFORCE=true' $CONF
-      sed -i '119d' $CONF
-      sed -i '119 i SBRUTEFORCE=false' $CONF
-      sed -i '120d' $CONF
-      sed -i '120 i PBRUTEFORCE=false' $CONF
+      sed -i '118d' "$CONF"
+      sed -i '118 i GBRUTEFORCE=true' "$CONF"
+      sed -i '119d' "$CONF"
+      sed -i '119 i SBRUTEFORCE=false' "$CONF"
+      sed -i '120d' "$CONF"
+      sed -i '120 i PBRUTEFORCE=false' "$CONF"
       conf
       printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
     analyzer
 elif [[ ${PBRUTEFORCE} = "true" ]]; then
-      sed -i '118d' $CONF
-      sed -i '118 i GBRUTEFORCE=false' $CONF
-      sed -i '119d' $CONF
-      sed -i '119 i SBRUTEFORCE=false' $CONF
-      sed -i '120d' $CONF
-      sed -i '120 i PBRUTEFORCE=true' $CONF
+      sed -i '118d' "$CONF"
+      sed -i '118 i GBRUTEFORCE=false' "$CONF"
+      sed -i '119d' "$CONF"
+      sed -i '119 i SBRUTEFORCE=false' "$CONF"
+      sed -i '120d' "$CONF"
+      sed -i '120 i PBRUTEFORCE=true' "$CONF"
       conf
       printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
       analyzer
 elif [[ ${SBRUTEFORCE} = "true" ]]; then
-      sed -i '118d' $CONF
-      sed -i '118 i GBRUTEFORCE=false' $CONF
-      sed -i '119d' $CONF
-      sed -i '119 i SBRUTEFORCE=true' $CONF
-      sed -i '120d' $CONF
-      sed -i '120 i PBRUTEFORCE=false' $CONF
+      sed -i '118d' "$CONF"
+      sed -i '118 i GBRUTEFORCE=false' "$CONF"
+      sed -i '119d' "$CONF"
+      sed -i '119 i SBRUTEFORCE=true' "$CONF"
+      sed -i '120d' "$CONF"
+      sed -i '120 i PBRUTEFORCE=false' "$CONF"
       conf
       printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
       printf "\n%64s \n" | tr ' ' '='
       echo
       analyzer
 else
-      sed -i '118d' $CONF
-      sed -i '118 i GBRUTEFORCE=false' $CONF
-      sed -i '119d' $CONF
-      sed -i '119 i SBRUTEFORCE=false' $CONF
-      sed -i '120d' $CONF
-      sed -i '120 i PBRUTEFORCE=false' $CONF
+      sed -i '118d' "$CONF"
+      sed -i '118 i GBRUTEFORCE=false' "$CONF"	
+      sed -i '119d' "$CONF"
+      sed -i '119 i SBRUTEFORCE=false' "$CONF"
+      sed -i '120d' "$CONF"
+      sed -i '120 i PBRUTEFORCE=false' "$CONF"
       conf
     analyzer
 fi
@@ -707,9 +707,10 @@ if [[ ${pt} -gt "0" ]] && [[ ${it} -gt "0" ]]; then
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP \
     |awk '{print $1}'\
     |cut -d':' -f2,3\
+    |cut -d'|' -f1\
     |uniq \
     |uniq \
-    |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts' \
+    |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts'\| \
     |grep -v '/' >> $EMAGNETLOGS/passwords-from-pastebin.txt 
     
     grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP \
