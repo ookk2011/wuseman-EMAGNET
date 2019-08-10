@@ -474,7 +474,8 @@ SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
 SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
 grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP \
 |awk '{print $1}' \
-|cut -d: -f2,3 \
+|cut -d':' -f2,3 \
+|cut -d'|' -f1 \
 |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> /tmp/.emagnet-passwords.txt
 
 while read line; do
