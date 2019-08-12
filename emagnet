@@ -775,13 +775,13 @@ if [[ "$pt" -gt "0" ]] && [[ $"it" -gt "0" ]]; then
 
 if [[ "$GBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
-   printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
+   printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
    bruter
    sleep 2
 
 elif [[ "$SBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
-   printf "%14s";printf "BRUTE FORCING -- SSH ACCOUNTS\e[0m\n\n"
+   printf "%19s";printf "BRUTE FORCING -- SSH ACCOUNTS\e[0m\n\n"
    sshbruter
    sleep 2
 
@@ -800,7 +800,7 @@ fi
     elif [[ "$pt" = "00" ]] && [[ "$it" -gt "00" ]]; then
          echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found ${it} email addresses from $EMAGNETDB/${i##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
              grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d':' -f2 \|uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
-             sleep 2
+                sleep 2
              cp "$i" "$EMAGNETDB/" &> /dev/null; 
 
                     if [[ "$SBRUTEFORCE" = "true" ]]; then
