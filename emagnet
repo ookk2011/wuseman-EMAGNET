@@ -322,23 +322,21 @@ case $COUNTRY in
 esac
 }
 
-
 banned() {
 if [[ "$VPN" = "false" ]]; then
    Iwasbanned
 else
-
-line='...........................................................'
-line1='................................[ ok ]'
-line2='...............................................'
-OPENVPNRUNNING="$(ps aux |grep openvpn|sed '1d')"
-MYIP="$(curl -s https://nr1.nu/i/)"
-MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
-COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' $CONF|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
+  line='...........................................................'
+  line1='................................[ ok ]'
+  line2='...............................................'
+  OPENVPNRUNNING="$(ps aux |grep openvpn|sed '1d')"
+  MYIP="$(curl -s https://nr1.nu/i/)"
+  MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
+  COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' $CONF|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
 
 curl -s "$WIP" > "/tmp/.emagnet-ip"
 if [[ -n "$OPENVPNRUNNING" ]]; then 
-  pkill -9 openvpn
+      pkill -9 "openvpn"
 fi
 
 printf "\e[1;31m                You have been blocked by pastebin...\n\n\e[0m"
@@ -376,7 +374,10 @@ fi
 analyz() {
     text="Analyzing..."
     delay="0.1"
-     printf "%26s"; for i in $(seq 0 $(expr length "${text}"));do echo -n "${text:$i:1}"; sleep ${delay};done
+     printf "%26s"; for analyzing in $(seq 0 $(expr length "${text}")); do 
+      echo -n "${text:$analyzing:1}"; 
+      sleep "${delay}"
+    done
 }
 
 analyzer() {
