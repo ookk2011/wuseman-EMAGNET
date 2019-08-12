@@ -65,7 +65,7 @@ EOF
 printf "%64s \n\n" | tr ' ' '='
 }
 
-( hash curl &> /dev/null; [[ $? -ne "0" ]] && echo -e "$basename: internal error -- curl is required to be installed."; exit)
+( hash curl &> /dev/null; [[ $? -ne "0" ]] && echo -e "$basename: internal error -- curl is required to be installed."; exit 1 )
 
 usage() {
 cat << "EOF"
@@ -106,14 +106,13 @@ if ! [[ -f "/etc/emagnet.conf" ]]; then
 fi
 
 mustbefilled() {
-conf
   if [[ -z "$DEBUG"          ]];   then sed -i "12d"  $CONF;sed -i '12  i DEBUG=false'                                                                                                             $CONF;fi
   if [[ -z "$PASTEBIN"       ]];   then sed -i '21d'  $CONF;sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com'                                                                            $CONF;fi
   if [[ -z "$WIP"            ]];   then sed -i '50d'  $CONF;sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                                                                               $CONF;fi
   if [[ -z "$WIP2"           ]];   then sed -i '51d'  $CONF;sed -i '51  i WIP2='                                                                                                                   $CONF;fi
   if [[ -z "$WIP3"           ]];   then sed -i '52d'  $CONF;sed -i '52  i WIP3='                                                                                                                   $CONF;fi
   if [[ -z "$WIP4"           ]];   then sed -i '53d'  $CONF;sed -i '53  i WIP4='                                                                                                                   $CONF;fi
-  if [[ -z "$MYIP"           ]];   then sed -i '30d'  $CONF;sed -i "40  i MYIP=$(curl https://nr1.nu/wip)"                                                                                         $CONF;fi
+  if [[ -z "$MYIP"           ]];   then sed -i '40d'  $CONF;sed -i "40  i MYIP=$(curl -s https://nr1.nu/i/)"                                                                                         $CONF;fi
   if [[ -z "$MYIP"           ]];   then sed -i '30d'  $CONF;sed -i "30  i TIME=150"                                                                                                                $CONF;fi
   if [[ -z "$EMAGNET"        ]];   then sed -i '72d'  $CONF;sed -i '72  i EMAGNET=/opt/emagnet'                                                                                                    $CONF;fi
   if [[ -z "$EMAGNETHOME"    ]];   then sed -i "73d"  $CONF;sed -i '73  i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'                                                                       $CONF;fi
@@ -147,12 +146,11 @@ conf
   if [[ -z "$VPNCOUNTRYS"    ]];   then sed -i '155d' $CONF;sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   $CONF;fi
   if [[ -z "$VPNCOUNTRYS2"   ]];   then sed -i '156d' $CONF;sed -i '156 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
   if [[ -z "$VPNCOUNTRYS3"   ]];   then sed -i '157d' $CONF;sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  $CONF;fi
-  if [[ -z "$USERAGENT"      ]];   then sed -i '192d' $CONF;sed -i '192 i USERAGENT=Mosaic/0.9'                                                                                                    $CONF;fi
+  if [[ -z "$USERAGENT"      ]];   then sed -i '183d' $CONF;sed -i '183 i USERAGENT=Mosaic/0.9'                                                                                                    $CONF;fi
 conf
 }
 
 paths() {
-  conf
   if [[ ! -d "$EMAGNETHOME"    ]];    then mkdir -p "$EMAGNETHOME"     &> /dev/null;  fi
   if [[ ! -d "$EMAGNETDB"      ]];    then mkdir -p "$EMAGNETDB"       &> /dev/null;  fi
   if [[ ! -d "$EMAGNETPW"      ]];    then mkdir -p "$EMAGNETPW"       &> /dev/null;  fi
@@ -161,7 +159,6 @@ paths() {
   if [[ ! -d "$EMAGNETALL"     ]];    then mkdir -p "$EMAGNETALL"      &> /dev/null;  fi
   if [[ ! -d "$EMAGNETARCHIVE" ]];    then mkdir -p "$EMAGNETARCHIVE"  &> /dev/null;  fi
   if [[ ! -d "$EMAGNETLOGS"    ]];    then mkdir -p "$EMAGNETLOGS"     &> /dev/null;  fi
-  conf
 }
 
 author() {
@@ -795,12 +792,12 @@ curl -sL $PASTEBIN|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then 
    if [[ $VPN = "true" ]]; then 
        banned
-    else Iwasbanned
+    else
+       Iwasbanned
    fi
 fi
 
 for (( ; ; )); do 
-  conf
   clear
   banner
   countdown
@@ -897,7 +894,6 @@ elif [[ $2 = "ssh" ]]; then
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
          conf
-         # Check for libspotify
          find /usr/include -name '*libspotify*' &> /dev/null
          if [[ "$?" -ne "0" ]]; then
         	 if [[ -z $LIBSPOTIFY ]]; then
@@ -908,10 +904,12 @@ elif [[ $2 = "spotify" ]]; then
       					 echo "Exiting.."
        					 exit 1
          			 fi
-         sed -i 's/LIBSPOTIFY=/LIBSPOTIFY=true/g' ${CONF}
+        	 sed -i '210d' "$CONF"
+                 sed -i '210 i LIBSPOTIFY=true' "$CONF"
          fi
          else
-         sed -i 's/LIBSPOTIFY=/LIBSPOTIFY=true/g' ${CONF}
+        	 sed -i '210d' "$CONF"
+                 sed -i '210 i LIBSPOTIFY=true' "$CONF"
          fi
          ./sconsify -version &> /dev/null
          if [[ $? -ne "0" ]]; then
