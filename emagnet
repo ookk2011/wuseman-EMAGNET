@@ -842,8 +842,8 @@ fi
 else
 
                             printf "%17s[\e[1;32m${tt}\e[0m] - Files Downloaded\n\n"
-                            printf "%17s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n"
-                            printf "%17s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
+                            printf "%17s[\e[1;31m00\e[0m] - Passwords Was Found\n\n"
+                            printf "%17s[\e[1;31m00\e[0m] - Email Address Was Found\n\n"
 
                                 if [[ "$NOTIFY" = "true" ]]; then
                                    notify-send "Emagnet" "\n${tt} - Files downloaded\n00 - Passwords found\n00 - Email addresses found"
