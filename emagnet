@@ -265,7 +265,7 @@ banner
     curl -sL "$PASTEBIN" -H "$USERAGENT" \
     |grep -q "blocked your IP"
 
-if [[ $? = "0" ]]; then
+if [[ "$?" = "0" ]]; then
   if [[ $VPN = "false" ]]; then
    for (( ; ; )); do
       wait_time=${IDLETIME}
