@@ -878,7 +878,7 @@ elif [[ $2 = "spotify" ]]; then
          conf
          find /usr/include -type d |grep 'libspotify' &> /dev/null
          if [[ "$?" -ne "0" ]]; then
-        	 if [[ -z $LIBSPOTIFY ]]; then
+        	 if [[ -z "$LIBSPOTIFY" ]]; then
 	        	 printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
          		 read LIBSPOTIFY
         			 if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
@@ -897,24 +897,24 @@ elif [[ $2 = "spotify" ]]; then
          if [[ $? -ne "0" ]]; then
          echo "Sconsify is required to be installed before we attacking targets.."
            read -p "Download and install sconsify (y/N): " installsconsify
-             if [[ $installsconsify -eq "y" ]]; then
+             if [[ "$installsconsify" -eq "y" ]]; then
                 echo -e "Hold on, downloading sconsify.."
                 wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
                 echo -e "Unzipping sconsify into current dir.."
-                unzip -q -o linux-x86_64-sconsify-0.6.0-next.zip
-                chmod +x sconsify
+                unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
+                chmod +x ./sconsify
                 echo -e "Cleaning up."..
-                rm linux-x86_64-sconsify-0.6.0-next.zip
-                echo "All done, going to continue in 5 seconds.."
-                sleep 5
+                rm "linux-x86_64-sconsify-0.6.0-next.zip"
+                echo "All done, going to continue in 3 seconds.."
+                sleep 3
         else
-              echo "Cant bruteforce without sconsify, please choose another option.."
+              echo -e "$basename$0: internal error -- sconsify is required to be installed.."
               exit 1
         fi
 fi
         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
         conf
-        if [[ $PBRUTEFORCE = "true" ]]; then
+        if [[ "$PBRUTEFORCE" = "true" ]]; then
         clear
         banner
         printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
@@ -923,7 +923,7 @@ fi
         printf "\n%64s \n\n" | tr ' ' '='
         spotifybruter
         fi
-        mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+        mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
 else
        printf "emagnet: internal error -- you must include ssh, spotify or gmail\n"
        exit 1
