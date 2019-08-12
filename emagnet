@@ -841,24 +841,24 @@ fi
 
 dontstopwhenfound() {
 conf
-curl -sL "$PASTEBIN"|grep -q "blocked your IP"
-if [[ $? = "0" ]]; then 
-   if [[ "$VPN" = "true" ]]; then 
-       banned
-    else
-       Iwasbanned
-   fi
-fi
+  curl -sL "$PASTEBIN"|grep -q "blocked your IP"
+    if [[ "$?" = "0" ]]; then 
+      if [[ "$VPN" = "true" ]]; then 
+         banned
+     else
+         Iwasbanned
+      fi
+    fi
 
 for (( ; ; )); do 
   conf
-  countdown
-    clear
-    banner
-  analyz
-    clear
-  banner
-  emagnet2
+    countdown
+      clear
+      banner
+    analyz
+      clear
+      banner
+    emagnet2
   conf
        if [[ "$GBRUTEFORCE" = "true" ]]; then
          bruter
