@@ -209,6 +209,13 @@ if [[ ! -f "$CONF" ]]; then
        conf
 fi
 
+emagnet_license() {
+  printf "%s\n" "Printing LICENSE - Use 'q' to quit"
+  sleep 2
+  curl -s "https://nr1.nu/licenses/LICENSE.md"|less
+  printf "%s\n" "Thank you.."
+}
+
 noticeaboutscraping() {
    clear
    banner
@@ -226,7 +233,7 @@ heavyload() {
 			if [[ -z "$USERAGENT" ]]; then
 				echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
 				exit
-         	fi
+      fi
 curl -sL "$PASTEBIN" -H "$USERAGENT" \
 |grep -q "is under heavy load right now"
   if [[ "$?" = "0" ]]; then
@@ -937,26 +944,26 @@ NRESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}'|wc -l)
 NRINSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g'|wc -l)"
 INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 
- 		if [[ $INSCREEN -gt "0" ]]; then
-   			for screens in $INSCREEN; do
-      			screen -X -S $screens kill
-   		   		if [[ $? = "0" ]]; then
+ 		if [[ "$INSCREEN" -gt "0" ]]; then
+   			for screens in "$INSCREEN"; do
+      			screen -X -S "$screens" kill
+   		   		if [[ "$?" = "0" ]]; then
  			       		echo -e "[\e[1;31m<<\e[0m] - $NRINSCREEN emagnet screens has been killed\n"
       			fi
    			done
 		fi
 
-if [[ $NRESESSIONS -lt "3" ]]; then
+if [[ "$NRESESSIONS" -lt "3" ]]; then
      echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running"
 else
      echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions"
-     kill -SIGKILL $ESESSIONS &> /dev/null
+     kill -SIGKILL "$ESESSIONS" &> /dev/null
 fi 
 ;;
 
 "-i"|"--ip"|"-ip"|"ip") curl https://nr1.nu/i/ ;;
 "-h"|"--help"|"-help"|"help") usage ;;
-"-l"|"-license"|"--license") printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s https://nr1.nu/licenses/LICENSE.md|less;printf "%s\n" "Thank you.." ;;
+"-l"|"-license"|"--license") emagnet_license ;;
 "-m"|"-move"|"--move") conf;check4all;moveem                                                             ;;
 "-s"|"-spam"|"--spam") conf;check4all;emagnetspammer                                                     ;;
 "-x"|"-syntax"|"--syntax") conf;check4all;clear;banner;emagnetsyntax                                     ;;
