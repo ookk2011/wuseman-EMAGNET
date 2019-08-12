@@ -642,7 +642,7 @@ if [[ $? = "0" ]]; then
       exit 1
  fi
 fi
-     curl -Ls https://pastebin.com/languages \
+     curl -Ls "$PASTEBIN/languages" \
     |grep -o 'href="/archive/............' \
     |cut -d'<' -f1 \
     |cut -d'/' -f3 \
@@ -663,15 +663,15 @@ grep -q "$SYNTAX2DL" "/tmp/.emagnet-syntaxes"
 
 if [[ "$?" = "0" ]]; then
      printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
-     mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
-     cat /tmp/.emagnet-syntaxes-urls|xargs -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
+       mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
+       cat /tmp/.emagnet-syntaxes-urls|xargs -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
      printf "\nDone.\n\n" | tr ' ' '.'
-     rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
+       rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
 else
       echo -e "$basename$0: internal error -- $SYNTAX2DL is not a valid syntax language..\n"
       echo -e "try 'cat /tmp/.emagnet-syntaxes' for find valid syntaxes"
       exit 1
-      rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
+        rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
 fi
 }
 
@@ -679,7 +679,8 @@ emagnet2() {
 			if [[ -z $USERAGENT ]]; then
 				echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
 				exit
-         	fi
+      fi
+
 curl -H "$USERAGENT" -Ls "$PASTEBIN/archive" \
 |awk -F'href="/' '{print $2}' \
 |cut -d'"' -f1 \
@@ -687,13 +688,13 @@ curl -H "$USERAGENT" -Ls "$PASTEBIN/archive" \
 |grep -v 'archive\|contact\|settings\|messages\|signup\|index.html' \
 |awk '{print tolower($0)}' > /tmp/.emagnet1
  ls -1 "$EMAGNETALL" \
-|sort > 1
+|sort > "./1"
  cat "/tmp/.emagnet1" \
 |sort \
-|cut -d/ -f5 > 2
- grep  -v -x -F -f 1 2  \
+|cut -d/ -f5 > "./2"
+ grep  -v -x -F -f "1" "2"  \
 |awk -F, '!seen[$1]++' \
-|sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
+|sed "s/^/https:\/\/pastebin.com\/raw\//g" > "/tmp/.emagnet"
 rm "./1" "./2" &> /dev/null
 
 if [[ "$(cat /tmp/.emagnet1|wc -l)" = "8" ]]; then
@@ -724,30 +725,30 @@ if [[ "${tt}" -eq "00" ]]; then
 
 printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned within seconds..\n\n"
       tt="\e[1;31m\e[5m00\e[0m"
-      sleep 5
+        sleep 5
       clear
       banner
 else 
-echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> "$EMAGNETLOGS/pastebin-urls.txt"
+     echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> "$EMAGNETLOGS/pastebin-urls.txt"
      cat "/tmp/.emagnet" >> "$EMAGNETLOGS/pastebin-urls.txt"
 fi
 
 #### REGEX FOR MAIL ONLY
-i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n') # Email addresses
-il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n') # Email addresses we will send to logs without filename
-it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|wc -l|tr ' ' '\n')       # Amount email addresses
+i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n')               # Email addresses
+il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n')               # Email addresses we will send to logs without filename
+it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|wc -l|tr ' ' '\n')                     # Amount email addresses
 
 # REGEX FOR MAIL + PASSWORD
-p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
-pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' |sed 's/|/:/g'|tr ' ' '\n')
-pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/'|wc -l)
+p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$"  $EMAGNETTEMP|grep '\S'       |sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
+pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'       |sed 's/|/:/g'|tr ' ' '\n')
+pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*"  $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/'|wc -l)
 
     ((10#0$it > 00))
     ((10#0$pt > 00))
 
 if [[ "$pt" -gt "0" ]] && [[ $"it" -gt "0" ]]; then
     echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found: ${pt} passwords from: $EMAGNETPW/${i##*/}" | xargs >> "$EMAGNETLOGS/emagnet.log"
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP" \
+     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP" \
     |awk '{print $1}'\
     |cut -d':' -f2,3\
     |cut -d'|' -f1\
@@ -756,17 +757,18 @@ if [[ "$pt" -gt "0" ]] && [[ $"it" -gt "0" ]]; then
     |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts'\| \
     |grep -v '/' >> "$EMAGNETLOGS/passwords-from-pastebin.txt" 
     
-    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP" \
+     grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP" \
     |cut -d':' -f2 \
     |uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
 
-    printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-    printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-    printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+    printf "%19s[\e[1;32m${tt}\e[0m] - Files Downloaded\n\n"
+    printf "%19s[\e[1;32m${pt}\e[0m] - Passwords Found\n\n"
+    printf "%19s[\e[1;32m${it}\e[0m] - Email Addresses Found\n\n"
 
-if [[ $NOTIFY = "true" ]]; then
-    notify-send "Emagnet" "\n$tt - Files downloaded\n $pt - Passwords found\n$it - Email addresses found"
-fi
+        if [[ $NOTIFY = "true" ]]; then
+            notify-send "Emagnet" "\n${tt} - Files downloaded\n ${pt} - Passwords found\n${it} - Email addresses found"
+        fi
+
       cp -rn "$p" "$EMAGNETPW/" &> /dev/null
       cp -rn "$i" "$EMAGNETDB/" &> /dev/null
       sleep 2
@@ -776,54 +778,60 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
    printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mO\e[1;33mO\e[1;34mG\e[0;32mL\E[1;31mE\e[0m") ACCOUNTS\e[0m\n\n"
    bruter
    sleep 2
+
 elif [[ "$SBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%14s";printf "BRUTE FORCING -- SSH ACCOUNTS\e[0m\n\n"
    sshbruter
    sleep 2
+
 elif [[ "$PBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%17s";printf "BRUTE FORCING -- SPOTIFY ACCOUNTS\e[0m\n\n"
    spotifybruter
    sleep 2
+
 else
    sleep 0
 fi
 
-# When we found email addresses without any password then we only echo email files
-cp -rn "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+  cp -rn "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+
     elif [[ "$pt" = "00" ]] && [[ "$it" -gt "00" ]]; then
-         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m emails from $EMAGNETDB/${i##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
-         grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d':' -f2 \|uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
-         sleep 2
-         # Now copy them to email-files path
-         cp "$i" "$EMAGNETDB/" &> /dev/null;
-                    
+         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found ${it} email addresses from $EMAGNETDB/${i##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
+             grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d':' -f2 \|uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
+             sleep 2
+             cp "$i" "$EMAGNETDB/" &> /dev/null; 
+
                     if [[ "$SBRUTEFORCE" = "true" ]]; then
                           cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+
                     elif [[ "$GBRUTEFORCE" = "true" ]]; then
                           cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+
                     elif [[ "$PBRUTEFORCE" = "true" ]]; then
                           cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+
                     else
-                          mv "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+                          mv "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null   
                     fi
 
-        printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+        printf "%19s[\e[1;32m${tt}\e[0m] - Files Downloaded\n\n"
         printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
-        printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+        printf "%19s[\e[1;32m${it}\e[0m] - Email Addresses Found\n\n"
 
             if [[ "$NOTIFY" = "true" ]]; then
-                   notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n$it - Email addresses found"
+                   notify-send "Emagnet" "\n${tt} - Files downloaded\n 00 - Passwords found\n${it} - Email addresses found"
             fi
-                   sleep 5
+                   sleep 3.2
 else
-        printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+
+        printf "%17s[\e[1;32m${tt}\e[0m] - Files Downloaded\n\n"
         printf "%17s[\e[1;31m00\e[0m] - No Passwords Was Found\n\n"
         printf "%17s[\e[1;31m00\e[0m] - No Email Address Was Found\n\n"
 
             if [[ "$NOTIFY" = "true" ]]; then
-               notify-send "Emagnet" "\n$tt - Files downloaded\n00 - Passwords found\n00 - Email addresses found"
+               notify-send "Emagnet" "\n${tt} - Files downloaded\n00 - Passwords found\n00 - Email addresses found"
             fi
                sleep 3.2
 fi
