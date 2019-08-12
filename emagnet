@@ -913,8 +913,8 @@ elif [[ $2 = "spotify" ]]; then
          else
          sed -i 's/LIBSPOTIFY=/LIBSPOTIFY=true/g' ${CONF}
          fi
-         file ./sconsify &> /dev/null
-         if [[ $? -eq "0" ]]; then
+         ./sconsify -version &> /dev/null
+         if [[ $? -ne "0" ]]; then
          echo "Sconsify is required to be installed before we attacking targets.."
            read -p "Download and install sconsify (y/N): " installsconsify
              if [[ $installsconsify -eq "y" ]]; then
