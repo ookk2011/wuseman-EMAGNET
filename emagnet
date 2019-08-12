@@ -257,13 +257,13 @@ Iwasbanned() {
 . "$CONF"
 clear
 banner
-if [[ -z "$USERAGENT" ]]; then
-	echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
-	exit
-fi
+  if [[ -z "$USERAGENT" ]]; then
+	   echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
+	   exit
+  fi
 
- curl -sL "$PASTEBIN" -H "$USERAGENT" \
-|grep -q "blocked your IP"
+    curl -sL "$PASTEBIN" -H "$USERAGENT" \
+    |grep -q "blocked your IP"
 
 if [[ $? = "0" ]]; then
   if [[ $VPN = "false" ]]; then
