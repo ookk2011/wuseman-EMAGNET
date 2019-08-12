@@ -788,21 +788,21 @@ for (( ; ; )); do
   banner
   emagnet2
   conf
-       if [[ $GBRUTEFORCE = "true" ]]; then
+       if [[ "$GBRUTEFORCE" = "true" ]]; then
          bruter
-         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-         rm /tmp/.emagnet*  &> /dev/null
-       elif [[ $SBRUTEFORCE = "true" ]]; then
+         mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+         rm "/tmp/.emagnet*"  &> /dev/null
+       elif [[ "$SBRUTEFORCE" = "true" ]]; then
          sshbruter
-         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-         rm /tmp/.emagnet*  &> /dev/null
-       elif [[ $PBRUTEFORCE = "true" ]]; then 
+         mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+         rm "/tmp/.emagnet*"  &> /dev/null
+       elif [[ "$PBRUTEFORCE" = "true" ]]; then 
          spotifybruter
-         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-         rm /tmp/.emagnet*  &> /dev/null
+         mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+         rm "/tmp/.emagnet*" &> /dev/null
        else
-         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-         rm /tmp/.emagnet*  &> /dev/null
+         mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+         rm "/tmp/.emagnet*"  &> /dev/null
        fi
 done
 }
@@ -822,17 +822,18 @@ check4all() {
 
 case $1 in
      "-a"|"-author"|"--author")
-     author ;;
+          author
+     ;;
 "emagnet"|"-e"|"-emagnet"|"--emagnet")
 conf
 iconnection
-sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
-sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
-sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
-        clear
-        banner
-        check4all
-        PWD="$(pwd)"
+        sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
+        sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
+        sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
+                clear
+                banner
+                check4all
+       PWD="$(pwd)"
 		if [[ $GBRUTEFORCE = "false" ]]; then 
 			 dontstopwhenfound
 		elif [[ $sBRUTEFORCE = "false" ]]; then 
@@ -840,7 +841,7 @@ sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
 		elif [[ $PBRUTEFORCE = "false" ]]; then 
   			 dontstopwhenfound
  		else
- 			 mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+ 			 mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
 		fi
 		;;
 
@@ -875,12 +876,12 @@ elif [[ $2 = "ssh" ]]; then
         mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 elif [[ $2 = "spotify" ]]; then
          conf
-         find /usr/include -name '*libspotify*' &> /dev/null
+         find /usr/include -type d |grep 'libspotify' &> /dev/null
          if [[ "$?" -ne "0" ]]; then
         	 if [[ -z $LIBSPOTIFY ]]; then
 	        	 printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
          		 read LIBSPOTIFY
-        			 if ! [[ $LIBSPOTIFY = "YES" ]]; then
+        			 if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
         				 echo "Can't continue until libspotify has been installed.."
       					 echo "Exiting.."
        					 exit 1
