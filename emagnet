@@ -622,7 +622,7 @@ else
                           echo -e "- Aborted..\n"
                           exit 1 
                           ;;
-    esac
+             esac
 fi
 }
 emagnet_syntax() {
