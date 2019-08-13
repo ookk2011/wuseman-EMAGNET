@@ -116,7 +116,7 @@ if ! [[ -f "/etc/emagnet.conf" ]]; then
     cp "./emagnet.conf" /etc/
 fi
 
-mustbefilled() {
+emagnet_mustbefilled() {
   if [[ -z "$DEBUG"          ]];   then sed -i "12d"  "$CONF";sed -i '12  i DEBUG=false'                                                                                                             "$CONF";fi
   if [[ -z "$PASTEBIN"       ]];   then sed -i '21d'  "$CONF";sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com'                                                                            "$CONF";fi
   if [[ -z "$WIP"            ]];   then sed -i '50d'  "$CONF";sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                                                                               "$CONF";fi
@@ -160,7 +160,7 @@ mustbefilled() {
   if [[ -z "$USERAGENT"      ]];   then sed -i '183d' "$CONF";sed -i '183 i USERAGENT=Mosaic/0.9'                                                                                                    "$CONF";fi
 }
 
-paths() {
+emagnet_paths() {
   if [[ ! -d "$EMAGNETHOME"    ]];    then mkdir -p "$EMAGNETHOME"     &> /dev/null;  fi
   if [[ ! -d "$EMAGNETDB"      ]];    then mkdir -p "$EMAGNETDB"       &> /dev/null;  fi
   if [[ ! -d "$EMAGNETPW"      ]];    then mkdir -p "$EMAGNETPW"       &> /dev/null;  fi
@@ -190,7 +190,7 @@ cat << "EOF"
 EOF
 }
 
-colors() {
+emagnet_colors() {
   R="$(tput setaf 1)" # RED
   G="$(tput setaf 2)" # GREEN
   Y="$(tput setaf 3)" # YELLOW
@@ -201,7 +201,7 @@ colors() {
   E="$(tput sgr0)"    # END OF COLOR
 }
 
-iconnection() {
+emagnet_iconnection() {
 ping -i "0.2" -c 1 1.1.1.1 &> /dev/null
 if [[ "$?" -gt "0" ]]; then
      echo -e "This feature require a internet connection and you are offline..\nPlease fix your internet connection and try again..\n"
@@ -211,10 +211,10 @@ fi
 
 if ! [[ -f "/etc/emagnet.conf" ]]; then
        emagnet_mustberoot
-       colors
+       emagnet_colors
        emagnet_conf
-       mustbefilled
-       paths
+       emagnet_mustbefilled
+       emagnet_paths
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
       [[ "$?" -gt "0" ]] && sed -i 's/MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
        emagnet_conf
@@ -875,8 +875,8 @@ done
 ### CHECK4ALL
 emagnet_check4all() {
      emagnet_conf
-      mustbefilled
-       paths
+      emagnet_mustbefilled
+       emagnet_paths
       emagnet_I_was_banned
      emagnet_conf
 }
@@ -891,7 +891,7 @@ case $1 in
 
      "emagnet"|"-e"|"-emagnet"|"--emagnet")
           emagnet_check4all
-          iconnection
+          emagnet_iconnection
 
            emagnet_clear
            emagnet_banner
