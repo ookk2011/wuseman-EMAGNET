@@ -221,27 +221,50 @@ emagnet_notice_about_scraping() {
    emagnet_banner
  }
 
+emagnet_kill() {
+ESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}')
+NRESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}'|wc -l)
+NRINSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g'|wc -l)"
+INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
+
+    if [[ "$INSCREEN" -gt "0" ]]; then
+        for screens in "$INSCREEN"; do
+            screen -X -S "$screens" kill
+            if [[ "$?" = "0" ]]; then
+                echo -e "[\e[1;31m<<\e[0m] - $NRINSCREEN emagnet screens has been killed\n"
+            fi
+        done
+    fi
+
+if [[ "$NRESESSIONS" -lt "3" ]]; then
+     echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running"
+else
+     echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions"
+     kill -SIGKILL "$ESESSIONS" &> /dev/null
+fi
+}
+
 emagnet_heavyload() {
-     if [[ -z "$USERAGENT" ]]; then
-	echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
-	exit
-      fi
-curl -sL "$PASTEBIN" -H "$USERAGENT" \
-|grep -q "is under heavy load right now"
-  if [[ "$?" = "0" ]]; then
-    for (( ; ; )); do
-    wait_time=60
-    temp_cnt="${wait_time}"
-       while [[ "${temp_cnt}" -gt 0 ]]; do
-          printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
-          printf " seconds"
-          sleep 1
-          ((temp_cnt--))
-      done
+ if [[ -z "$USERAGENT" ]]; then
+  echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
+  exit
+ fi
+	curl -sL "$PASTEBIN" -H "$USERAGENT" \
+	|grep -q "is under heavy load right now"
+	  if [[ "$?" = "0" ]]; then
+  	  for (( ; ; )); do
+   	    wait_time=60
+   	    temp_cnt="${wait_time}"
+      		 while [[ "${temp_cnt}" -gt 0 ]]; do
+          		printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
+         		printf " seconds"
+         		sleep 1
+      		       ((temp_cnt--))
+         done
      echo
-     bash "$basename$0" --emagnet
-    done
-        bash "$basename$0" --emagnet
+       bash "$basename$0" --emagnet
+        done
+       bash "$basename$0" --emagnet
   fi
 }
 
@@ -249,6 +272,7 @@ emagnet_I_was_banned() {
 . "$CONF"
 emagnet_clear
 emagnet_banner
+
   if [[ -z "$USERAGENT" ]]; then
 	   echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
 	   exit
@@ -484,12 +508,12 @@ elif [[ "$PBRUTEFORCE" = "true" ]]; then
                 echo
         emagnet_analyzer
 else
-      sed -i '118d' "$CONF"
-      sed -i '118 i GBRUTEFORCE=false' "$CONF"
-      sed -i '120d' "$CONF"
-      sed -i '120 i PBRUTEFORCE=false' "$CONF"
-        emagnet_conf
-        emagnet_analyzer
+          sed -i '118d' "$CONF"
+          sed -i '118 i GBRUTEFORCE=false' "$CONF"
+          sed -i '120d' "$CONF"
+          sed -i '120 i PBRUTEFORCE=false' "$CONF"
+    emagnet_conf
+    emagnet_analyzer
 fi
 }
 
@@ -718,9 +742,10 @@ if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
     |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts' \
     |grep -v '/' >> "$EMAGNETLOGS/passwords-from-pastebin.txt"
      grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP" |cut -d':' -f2 |uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
-     printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-     printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-     printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+     
+  printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+  printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
+  printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
 
    if [[ "$NOTIFY" = "true" ]]; then notify-send "Emagnet" "\n${tt} - Files downloaded\n ${pt} - Passwords found\n${it} - Email addresses found";fi
     cp -rn "${p}" "$EMAGNETPW/" &> /dev/null
@@ -845,7 +870,6 @@ if ! [[ -f "/etc/emagnet.conf" ]]; then
 fi
 }
 
-
 ( [[ -z $1 ]] && emagnet_usage; exit 1 )
 
 case $1 in
@@ -886,11 +910,12 @@ case $1 in
                           emagnet_gmail_bruter
                           mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
                        fi
-	elif [[ $2 = "ssh" ]]; then
-        	emagnet_conf
-       		sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
-      		emagnet_conf
-      		  if [[ $SBRUTEFORCE = "true" ]]; then
+	                           elif [[ $2 = "ssh" ]]; then
+                              	emagnet_conf
+       		                      sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
+                            		emagnet_conf
+      		  
+            if [[ $SBRUTEFORCE = "true" ]]; then
                		 emagnet_run4ever
               		 emagnet_ssh_bruter
         	  fi
@@ -958,26 +983,7 @@ fi
 
 
 "-k"|"-kill"|"--kill")
-ESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}')
-NRESESSIONS=$(ps aux|grep -i "emagnet"|sed '$d'|awk '{print $2}'|wc -l)
-NRINSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g'|wc -l)"
-INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
-
- 		if [[ "$INSCREEN" -gt "0" ]]; then
-   			for screens in "$INSCREEN"; do
-      			screen -X -S "$screens" kill
-   		   		if [[ "$?" = "0" ]]; then
- 			       		echo -e "[\e[1;31m<<\e[0m] - $NRINSCREEN emagnet screens has been killed\n"
-      			fi
-   			done
-		fi
-
-if [[ "$NRESESSIONS" -lt "3" ]]; then
-     echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running"
-else
-     echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions"
-     kill -SIGKILL "$ESESSIONS" &> /dev/null
-fi
+emagnet_kill
 ;;
 
 "-i"|"--ip"|"-ip"|"ip") emagnet_iconnection; echo -e "iPV4: $(curl -s https://nr1.nu/i/)"                                     ;;
