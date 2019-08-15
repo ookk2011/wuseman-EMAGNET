@@ -336,22 +336,6 @@ fi
   fi
 }
 
-emagnet_time() {
-
-                  if [[ -z "$2" ]]; then
-                       echo "emagnet: internal error -- time require a number to be used"
-                       exit 1
-                  fi
-
-                        re='^[0-9]+$'
-                        if ! [[ $2 =~ $re ]] ; then
-                               echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1
-                        fi
-                                   sed -i '30d' "$CONF"
-                                   sed -i "30 i TIME=$2" "$CONF"
-                                   printf "emagnet: config file has been updated -- time has been set to: $2 seconds\n"
-                                   exit 1
-}
 
 emagnet_heavyload() {
 emagnet_conf
@@ -1167,12 +1151,12 @@ case $1 in
                 emagnet_merge
                 ;;
 
-      "-M"|"-move"|"--move") 
+      "-M"|"-move"|"--move")
                 emagnet_conf
                 emagnet_move_files
                 ;;
 
-      "-s"|"-spam"|"--spam") 
+      "-s"|"-spam"|"--spam")
                 emagnet_conf
                 emagnet_check4all
                 emagnet_spammer
@@ -1183,77 +1167,45 @@ case $1 in
                 emagnet_syntax
                 ;;
 
-      "-q"|"-quiet"|"--quiet") 
-                emagnet_quiet 
+      "-q"|"-quiet"|"--quiet")
+                emagnet_quiet
                 ;;
 
-      "version"|"-version"|"--version"|"-V")  
+      "version"|"-version"|"--version"|"-V")
                 VERSION="$(cat /etc/emagnet.conf|grep "^VERSION"|cut -d= -f2)"
                 printf "Emagnet Version: $VERSION\n"
                 ;;
 
       "-t"|"-time"|"--time")
-                 emagnet_conf
-                 emagnet_time
-                  ;;
+                emagnet_conf
+                if [[ -z "$2" ]]; then echo "emagnet: internal error -- time require a number to be used"; exit 1;fi
+                re='^[0-9]+$';if ! [[ $2 =~ $re ]] ; then echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1;fi
+                sed -i '30d' "$CONF";sed -i "30 i TIME=$2" "$CONF"
+                printf "%s\n" "$basename$0: config file has been updated -- time has been set to: $2 seconds"
+                exit 1
+                ;;
 
         "-n"|"-notify"|"--notify")
-   	              emagnet_conf
-     	            notify-send --help &> /dev/null
-
-    		             if [[ $? -gt "0" ]]; then
-       			             echo -e "$basename$0: internal error -- notify-send is required for get notifications"
-       			             exit 1
-     		             fi
-
-			                  if [[ "$2" != "true" && "$2" != "false" || -z "$2" ]]; then
- 				                  echo -e "$basename$0: internal error -- you must use true or false"
-      				            exit 1
-			                  fi
-
-                                                if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
-                                              	  sed -i '137d' "$CONF"
-      		                               	  sed -i "137 i NOTIFY=true" "$CONF"
-        				       	  printf "$basename$0: config file has been updated -- notifications has been enable\n"
-     				                fi
-
-				                             if [[ $? -eq "0" ]] && [[ $2 = "false" ]]; then
-      					                            sed -i '137d' "$CONF"
-       					                            sed -i "137 i NOTIFY=false" "$CONF"
-        				                            printf "$basename$0: config file has been updated -- notifications has been disable\n"
-     				                             fi
-                  ;;
+   	        emagnet_conf
+     	        notify-send --help &> /dev/null
+                if [[ $? -gt "0" ]]; then echo -e "$basename$0: internal error -- notify-send is required for get notifications";exit 1; fi
+                if [[ "$2" != "true" && "$2" != "false" || -z "$2" ]]; then echo -e "$basename$0: internal error -- you must use true or false";exit 1;fi
+                if [[ $? -eq "0" ]] && [[ $2 = "true" ]];  then sed -i '137d' "$CONF";sed -i "137 i NOTIFY=true"  "$CONF";printf "$basename$0: config file has been updated -- notifications has been enable\n"; fi
+                if [[ $? -eq "0" ]] && [[ $2 = "false" ]]; then sed -i '137d' "$CONF";sed -i "137 i NOTIFY=false" "$CONF";printf "$basename$0: config file has been updated -- notifications has been disable\n";fi
+                ;;
 
         "-v"|"-vpn"|"--vpn")
                 emagnet_conf
-                if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then 
-                  echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn"
-                  exit 1
-                fi
-
-                        if [[ -z "$2" ]]; then 
-                          echo -e "emagnet: internal error -- set to true or false?"
-                          exit 1
-                        fi
-
-                                if [[ "$2" = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
-                                     sed -i '150d' "$CONF";sed -i "150i VPN=true" "$CONF"
-                                     echo -e "emagnet: config file has been updated -- vpn has been enabled"
-                                     exit 1
-                                   elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then
-                                     sed -i '150d' "$CONF";sed -i "150i VPN=false" "$CONF"
-                                     echo -e "emagnet: config file has been updated -- vpn has been disabled"
-                                     exit 1
-                                   else 
-                                     echo -e "emagnet: internal error -- $2 is an unknown option -- valid options is true or false"
-                                     exit 1
-                                fi
+                if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
+                if [[ -z "$2" ]]; then echo -e "$basename$0: internal error -- you must include true or false";exit 1;fi
+                if [[ "$2" = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then    sed -i '150d' "$CONF";sed -i "150i VPN=true" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
+                elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then sed -i '150d' "$CONF";sed -i "150i VPN=false" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
+                else echo -e "emagnet: internal error -- $2 is an unknown option -- valid options is true or false"; exit 1; fi
                 ;;
 
-            "-b"|"-backup"|"--backup")
+        "-b"|"-backup"|"--backup")
                 emagnet_backup
                 ;;
-
 	"\?")
               emagnet_clear
               emagnet_banner
@@ -1267,3 +1219,15 @@ case $1 in
 esac
 
 ( [[ -z $1 ]] && emagnet_usage; exit 1 )
+
+######################################################
+#                                                    #
+# Hey, nice that you going through the code :)       #
+#                                                    #
+# - Support emagnet by report issues and bugs on:    #
+#   https://github.com/wuseman/emagnet/issues        #
+#                                                    #
+#                                                    #
+######################################################
+# END                                                #
+######################################################
