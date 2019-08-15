@@ -803,9 +803,8 @@ fi
 }
 
 emagnet_main() {
-emagnet_conf
 
- if [[ -z "$USERAGENT" ]]; then 
+ if [[ -z "$USERAGENT" ]]; then
   echo -e "$basename$0: internal errror -- you must set a valid useragent in $CONF"
   exit
  fi
@@ -850,8 +849,8 @@ if [[ "${tt}" -eq "00" && "${tt}" -eq "0" ]]; then
     fi
 
 	 grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n'
-	 printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned anytime now..\n\n"
-   tt="\e[1;31m\e[5m00\e[0m"
+	 printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned in anytime now..\n\n"
+         tt="\e[1;31m\e[5m00\e[0m"
       	 sleep 5
          emagnet_clear
          emagnet_banner
@@ -1032,15 +1031,14 @@ case $1 in
 
      "emagnet"|"-e"|"-emagnet"|"--emagnet")
         emagnet_iconnection
+        emagnet_check4all
          emagnet_first_run
-          emagnet_check4all
-           emagnet_clear
-            emagnet_banner
            sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
-          sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
-         sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
-        emagnet_conf
-       emagnet_run4ever
+            sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
+            sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
+           emagnet_clear
+          emagnet_banner
+        emagnet_run4ever
 
 		  ;;
 
@@ -1054,7 +1052,7 @@ case $1 in
                    emagnet_gmail_bruter
                    mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
                  fi
- 
+
 	    elif [[ $2 = "ssh" ]]; then
               hash "parallel" &> /dev/null
                  if [[ "$?" -ne "0" ]]; then
@@ -1229,5 +1227,5 @@ esac
 #                                                    #
 #                                                    #
 ######################################################
-# END                                                #
+# - END -                                            #
 ######################################################
