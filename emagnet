@@ -94,21 +94,20 @@ EOF
 }
 
 emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
-
-emagnet_conf() {
-  CONF="/etc/emagnet.conf"
-. "$CONF" ;}
-
+emagnet_conf() { CONF="/etc/emagnet.conf";. "$CONF" ;}
 emagnet_clear() { clear ; }
+emagnet_iconnection() { ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
+emagnet_license() { printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
+
 
 emagnet_mustbefilled() {
   if [[ -z "$DEBUG"          ]];   then sed -i "12d"  "$CONF";sed -i '12  i DEBUG=false'                                                                                                             "$CONF";fi
-  if [[ -z "$PASTEBIN"       ]];   then sed -i '21d'  "$CONF";sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com'                                                                            "$CONF";fi
+  if [[ -z "$PASTEBIN"       ]];   then sed -i '21d'  "$CONF";sed -i '21  i PASTEBIN=https:\/\/www.pastebin.com'                                                                                     "$CONF";fi
   if [[ -z "$WIP"            ]];   then sed -i '50d'  "$CONF";sed -i '50  i WIP=https:\/\/nr1.nu\/i\/'                                                                                               "$CONF";fi
   if [[ -z "$WIP2"           ]];   then sed -i '51d'  "$CONF";sed -i '51  i WIP2='                                                                                                                   "$CONF";fi
   if [[ -z "$WIP3"           ]];   then sed -i '52d'  "$CONF";sed -i '52  i WIP3='                                                                                                                   "$CONF";fi
   if [[ -z "$WIP4"           ]];   then sed -i '53d'  "$CONF";sed -i '53  i WIP4='                                                                                                                   "$CONF";fi
-  if [[ -z "$MYIP"           ]];   then sed -i '40d'  "$CONF";sed -i "40  i MYIP=$(curl -s https://nr1.nu/i/)"                                                                                         "$CONF";fi
+  if [[ -z "$MYIP"           ]];   then sed -i '40d'  "$CONF";sed -i "40  i MYIP=$(curl -s https://nr1.nu/i/)"                                                                                       "$CONF";fi
   if [[ -z "$MYIP"           ]];   then sed -i '30d'  "$CONF";sed -i "30  i TIME=150"                                                                                                                "$CONF";fi
   if [[ -z "$EMAGNET"        ]];   then sed -i '72d'  "$CONF";sed -i '72  i EMAGNET=/opt/emagnet'                                                                                                    "$CONF";fi
   if [[ -z "$EMAGNETHOME"    ]];   then sed -i "73d"  "$CONF";sed -i '73  i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'                                                                       "$CONF";fi
@@ -131,7 +130,7 @@ emagnet_mustbefilled() {
   if [[ -z "$NOTIFY"         ]];   then sed -i '138d' "$CONF";sed -i '138 i NOTIFY=false'                                                                                                            "$CONF";fi
   if [[ -z "$SSHUSER"        ]];   then sed -i '169d' "$CONF";sed -i '169 i SSHUSER="root"'                                                                                                          "$CONF";fi
   if [[ -z "$SSHPORT"        ]];   then sed -i '170d' "$CONF";sed -i '170 i SSHPORT="22"'                                                                                                            "$CONF";fi
-  if [[ -z "$SSHPASS"        ]];   then sed -i '171d' "$CONF";sed -i '171 i SSHPASS='                                                                                                              "$CONF";fi
+  if [[ -z "$SSHPASS"        ]];   then sed -i '171d' "$CONF";sed -i '171 i SSHPASS='                                                                                                                "$CONF";fi
   if [[ -z "$SSHTARGETS"     ]];   then sed -i '172d' "$CONF";sed -i '172 i SSHTARGETS="/tmp/.emagnet-sshbruter.txt"'                                                                                "$CONF";fi
   if [[ -z "$SSHPORTSCAN"    ]];   then sed -i '173d' "$CONF";sed -i '173 i SSHPORTSCAN="/tmp/.emagnet-portscan"'                                                                                    "$CONF";fi
   if [[ -z "$VPN"            ]];   then sed -i '150d' "$CONF";sed -i '150 i VPN=false'                                                                                                               "$CONF";fi
@@ -186,20 +185,6 @@ emagnet_colors() {
   E="$(tput sgr0)"    # END OF COLOR
 }
 
-emagnet_iconnection() {
-ping -i "0.2" -c 1 1.1.1.1 &> /dev/null
-  if [[ "$?" -gt "0" ]]; then
-     echo -e "$basename$0: internal error -- no internet connection, can't continue"
-     exit
-  fi
-}
-
-emagnet_license() {
-  printf "%s\n" "Printing LICENSE - Use 'q' to quit"
-  sleep 2
-  curl -s "https://nr1.nu/licenses/LICENSE.md"|less
-  printf "%s\n" "Thank you.."
-}
 
 emagnet_quiet() {
   emagnet_conf
@@ -244,6 +229,113 @@ else
 fi
 }
 
+emagnet_backup() {
+emagnet_conf
+emagnet_clear
+emagnet_banner    
+ if ! [[ -d "$EMAGNETBACKUP" ]]; then
+   mkdir -p "$EMAGNETBACKUP"
+ fi
+
+  if [[ ! -d "$EMAGNET" ]]; then
+    echo -e "$basename$0: internal error -- nothing to backup"
+    exit 1
+  fi
+
+  if [[ -f "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" ]] && [[ -f "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" ]] && -f "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" ]]; then
+         echo "You have already created a backup today.."
+         read -p "Do you want to overwrite the old backup (yes/no) " overwriteoldbackup
+    if [[ "$overwriteoldbackup" = "yes" ]]; then
+
+  if [[ "$*" = "all" ]]; then
+           rm "$EMAGNETBACKUP/emagnet-$(date +%d%m%Y).tar.gz"
+           echo -e "Removed old backup.."
+           echo -e "Compressing $EMAGNET, please wait.."
+
+         pigz -h &> /dev/null
+          if [[ "$?" -ne "0" ]]; then
+             tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz"
+          else
+             tar -cjf "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" "$EMAGNET"
+          fi
+
+   elif [[ "$*" = "incoming" ]]; then
+           rm "$EMAGNETBACKUP/emagnet-$(date +%d%m%Y).tar.gz"
+                 echo -e "Removed old backup.."
+                 echo -e "Compressing $EMAGNET/incoming, please wait.."
+
+        pigz -h &> /dev/null
+         if [[ "$?" -eq "0" ]]; then
+            tar -cf - --absolute-names "$EMAGNET/incoming"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz"
+         else
+            tar -cjf "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" "$EMAGNET/incoming"
+         fi
+
+elif [[ "$*" = "archive" ]]; then
+          echo -e "Removed old backup.."
+          echo -e "Compressing $EMAGNET, please wait.."
+
+        pigz -h &> /dev/null
+         if [[ "$?" -eq "0" ]]; then
+              tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
+         else
+              tar -cjf "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" "$EMAGNETBACKUP"
+         fi
+else
+         printf "emagnet: error -- please specify incoming, archive or all\n\n"
+         exit 1
+fi
+    else
+         printf "Aborted..\n"
+fi
+    exit 1
+fi
+
+if [[ "$2" = "all" ]]; then
+       pigz -h &> /dev/null
+         if [[ "$?" = "0" ]]; then
+            echo -e "Compressing $EMAGNET, please wait.."
+            tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz"
+         else
+            echo -e "Compressing $EMAGNET, please wait..\n- Install pigz for compress archive much faster with all $(nproc) cores"
+            tar -cjf "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" "$EMAGNET"
+         fi
+
+elif [[ $2 = "incoming" ]]; then
+         echo -e "Compressing $EMAGNET/incoming, please wait.."
+       pigz -h &> /dev/null
+         if [[ "$?" = "0" ]]; then
+            echo -e "Compressing $EMAGNET, please wait.."
+            tar -cf - --absolute-names "$EMAGNET/incoming"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz"
+         else
+            echo -e "Compressing $EMAGNET/incoming, please wait..\n- Install pigz for compress archive much faster with all $(nproc) cores"
+            tar -cjf "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" "$EMAGNET/incoming"
+         fi
+
+elif [[ $2 = "archive" ]]; then
+       pigz -h &> /dev/null
+         if [[ "$?" -eq "0" ]]; then
+              tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
+         else
+              echo -e "Compressing $EMAGNETBACKUP, please wait..\n- Install pigz for compress archive much faster with all $(nproc) cores"
+              tar -cjf "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" "$EMAGNETBACKUP"
+         fi
+
+else
+         echo -e "$basename$0: internal error -- usage: incoming, archive or all\n"
+         exit 1
+fi
+
+  if [[ "$2" = "archive" ]]; then
+           printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz .\n\n"
+  elif [[ "$2" = "incoming" ]]; then
+           printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz .\n\n"
+  elif [[ "$2" = "all" ]]; then
+           printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz .\n\n"
+  else
+       sleep 0
+  fi
+}
 emagnet_heavyload() {
  if [[ -z "$USERAGENT" ]]; then
   echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
@@ -659,10 +751,11 @@ fi
       exit 1
   fi
 
-curl -Ls "$PASTEBIN/$SYNTAX2DL" \
+curl -Ls "$PASTEBIN/archive/$SYNTAX2DL" \
 |grep -o '<a href="/........' \
 |cut -d'/' -f2 \
-|grep -E '[0-9]{1,4}' > "/tmp/.emagnet-syntaxes-urls"
+|grep -E '[0-9]{1,4}' \
+|sed 's/^/https:\/\/pastebin.com\/raw\//g' > "/tmp/.emagnet-syntaxes-urls"
   grep -q "$SYNTAX2DL" "/tmp/.emagnet-syntaxes"
 
 if [[ "$?" = "0" ]]; then
@@ -921,7 +1014,7 @@ case $1 in
         	  fi
                 	mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 
-elif [[ $2 = "spotify" ]]; then
+   elif [[ $2 = "spotify" ]]; then
          emagnet_conf
          find /usr/include -type d |grep 'libspotify' &> /dev/null
                   if [[ "$?" -ne "0" ]]; then
@@ -961,7 +1054,6 @@ if [[ $? -ne "0" ]]; then
                exit 1
             fi
 fi
-
         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
         emagnet_conf
 
@@ -981,17 +1073,10 @@ else
 fi
 ;;
 
-
-"-k"|"-kill"|"--kill")
-emagnet_kill
-;;
-
+"-k"|"-kill"|"--kill") emagnet_kill ;;
 "-i"|"--ip"|"-ip"|"ip") emagnet_iconnection; echo -e "iPV4: $(curl -s https://nr1.nu/i/)"                                     ;;
-
 "-h"|"--help"|"-help"|"help") emagnet_usage                                                                      ;;
-
 "-l"|"-license"|"--license") emagnet_license                                                             ;;
-
 "-m"|"-merge"|"--merge")
    emagnet_conf
    emagnet_merge
@@ -1003,21 +1088,23 @@ emagnet_kill
 
 "-s"|"-spam"|"--spam") 
    emagnet_conf
-   emagnet_check4all
+    emagnet_check4all
    emagnet_spammer
    ;;
 
 "-x"|"-syntax"|"--syntax")
    emagnet_conf
-   emagnet_check4all
-   emagnet_clear
-   emagnet_banner
+    emagnet_check4all
+     emagnet_clear
+    emagnet_banner
    emagnet_syntax
    ;;
 
 "-q"|"-quiet"|"--quiet") emagnet_quiet ;;
 
-"version"|"-version"|"--version"|"-V") printf "Emagnet Version: v$VERSION\n\n" 			 ;;
+"version"|"-version"|"--version"|"-V")  
+     VERSION="$(cat /etc/emagnet.conf|grep "^VERSION"|cut -d= -f2)"
+     printf "Emagnet Version: $VERSION\n" 			 ;;
 
 "-t"|"-time"|"--time")
      emagnet_conf
@@ -1064,123 +1151,19 @@ fi
 
  "-v"|"-vpn"|"--vpn")
 emagnet_conf
-if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then 
-    echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
-if [[ -z $2 ]]; then echo -e "emagnet: internal error -- you must include true or false";exit 1;fi
-if [[ $2 = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
+if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
+if [[ -z "$2" ]]; then echo -e "emagnet: internal error -- you must include true or false";exit 1;fi
+if [[ "$2" = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
      sed -i '150d' "$CONF";sed -i "150i VPN=true" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
 elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then
      sed -i '150d' "$CONF";sed -i "150i VPN=false" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
 else echo -e "emagnet: internal error -- $2 is an unknown option -- valid options is true or false"
-     exit 1;fi
+     exit 1
+fi
 ;;
 
 "-b"|"-backup"|"--backup")
-    emagnet_clear
-    emagnet_banner
-    emagnet_conf
-
-if ! [[ -d "$EMAGNETBACKUP" ]]; then
-   mkdir -p "$EMAGNETBACKUP"
-fi
-
-if [[ ! -d "$EMAGNET" ]]; then
-    echo -e "$basename$0: internal error -- nothing to backup"
-exit 1
-fi
-
-if [[ -f "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" ]] && [[ -f "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" ]] && -f "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" ]]; then
-         echo "You have already created a backup today.."
-         read -p "Do you want to overwrite the old backup (yes/no) " overwriteoldbackup
-    if [[ "$overwriteoldbackup" = "yes" ]]; then
-
-	if [[ "$*" = "all" ]]; then
-        	 rm "$EMAGNETBACKUP/emagnet-$(date +%d%m%Y).tar.gz"
-         	 echo -e "Removed old backup.."
-         	 echo -e "Compressing $EMAGNET, please wait.."
-
-       	 pigz -h &> /dev/null
-       	  if [[ "$?" -ne "0" ]]; then
-             tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz"
-          else
-             tar -cjf "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" "$EMAGNET"
-          fi
-
-elif [[ "$*" = "incoming" ]]; then
-	         rm "$EMAGNETBACKUP/emagnet-$(date +%d%m%Y).tar.gz"
-      	         echo -e "Removed old backup.."
-      	         echo -e "Compressing $EMAGNET/incoming, please wait.."
-
-        pigz -h &> /dev/null
-         if [[ "$?" -eq "0" ]]; then
-            tar -cf - --absolute-names "$EMAGNET/incoming"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz"
-         else
-            tar -cjf "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" "$EMAGNET/incoming"
-         fi
-
-elif [[ "$*" = "archive" ]]; then
-         	echo -e "Removed old backup.."
-        	echo -e "Compressing $EMAGNET, please wait.."
-
-        pigz -h &> /dev/null
-         if [[ "$?" -eq "0" ]]; then
-              tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
-         else
-              tar -cjf "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" "$EMAGNETBACKUP"
-         fi
-else
-         printf "emagnet: error -- please specify incoming, archive or all\n\n"
-         exit 1
-fi
-    else
-         printf "Aborted..\n"
-fi
-    exit 1
-fi
-
-if [[ "$2" = "all" ]]; then
-       pigz -h &> /dev/null
-         if [[ "$?" = "0" ]]; then
-            echo -e "Compressing $EMAGNET, please wait.."
-            tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz"
-         else
-            echo -e "Compressing $EMAGNET, please wait..\n- Install pigz for compress archive much faster with all $(nproc) cores"
-            tar -cjf "$EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz" "$EMAGNET"
-         fi
-
-elif [[ $2 = "incoming" ]]; then
-         echo -e "Compressing $EMAGNET/incoming, please wait.."
-       pigz -h &> /dev/null
-         if [[ "$?" = "0" ]]; then
-            echo -e "Compressing $EMAGNET, please wait.."
-            tar -cf - --absolute-names "$EMAGNET/incoming"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz"
-         else
-            echo -e "Compressing $EMAGNET/incoming, please wait..\n- Install pigz for compress archive much faster with all $(nproc) cores"
-            tar -cjf "$EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz" "$EMAGNET/incoming"
-         fi
-
-elif [[ $2 = "archive" ]]; then
-       pigz -h &> /dev/null
-         if [[ "$?" -eq "0" ]]; then
-              tar -cf - --absolute-names "$EMAGNETBACKUP"| pigz -0 -p "$THREADS" --fast > "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz"
-         else
-              echo -e "Compressing $EMAGNETBACKUP, please wait..\n- Install pigz for compress archive much faster with all $(nproc) cores"
-              tar -cjf "$EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz" "$EMAGNETBACKUP"
-         fi
-
-else
-         echo -e "$basename$0: internal error -- available options: incoming, archive or all\n"
-         exit 1
-fi
-	if [[ "$2" = "archive" ]]; then
-        	 printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-archive-$(date +%d%m%Y).tar.gz .\n\n"
-	elif [[ "$2" = "incoming" ]]; then
-	         printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-incoming-$(date +%d%m%Y).tar.gz .\n\n"
-	elif [[ "$2" = "all" ]]; then
-	         printf "\nBackup has successfully been compressed..\nBackup: $EMAGNETBACKUP/emagnet-all-$(date +%d%m%Y).tar.gz .\n\n"
-	else
-	     sleep 0
-	fi
+emagnet_backup
 ;;
 
 	"\?")
