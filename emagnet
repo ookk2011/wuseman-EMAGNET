@@ -796,7 +796,7 @@ emagnet_conf
    if [[ "$(cat /tmp/.emagnet1|wc -l)" = "8" ]]; then emagnet_notice_about_scraping;fi
    if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]]; then emagnet_heavyload;emagnet_I_was_banned;fi
 
-	xargs -P "${THREADS}" -n 1 wget -q -nc -P "$EMAGNETTEMP" < /tmp/.emanget &> /dev/null
+	xargs -P "${THREADS}" -n 1 wget -q -nc -P "$EMAGNETTEMP" < /tmp/.emagnet
 	tt="$(cat /tmp/.emagnet| wc -l)";if [[ "$tt" -lt "10" ]]; then tt="0$tt";fi
 
 if [[ "${tt}" -eq "0" ]]; then
@@ -864,6 +864,7 @@ if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
     else
      sleep 0
   fi
+     mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
      sleep 2
 
   cp -rn "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
@@ -881,6 +882,7 @@ if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
                     else
                           mv "$EMAGNETTEMP/*" "$EMAGNETALL" &> /dev/null  
                     fi
+		          mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
     printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
     printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
     printf "%19s[\e[1;32m$it\e[0m] - Email Addresses Found\n\n"
@@ -891,11 +893,12 @@ else
     printf "%17s[\e[1;31m00\e[0m] - Passwords Was Found\n\n"
     printf "%17s[\e[1;31m00\e[0m] - Email Address Was Found\n\n"
      if [[ "$NOTIFY" = "true" ]]; then notify-send "Emagnet" "\n${tt} - Files downloaded\n00 - Passwords found\n00 - Email addresses found";fi
-   sleep 3.2
+    sleep 3.2
 fi
     pkill -9 "notify-send" &> /dev/null
     mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
     rm /tmp/.emagnet*  &> /dev/null
+
 }
 
 emagnet_run4ever() {
