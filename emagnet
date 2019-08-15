@@ -127,7 +127,7 @@ emagnet_mustbefilled() {
   if [[ -z "$SBRUTEFORCE"    ]];   then sed -i '119d' "$CONF";sed -i '119 i SBRUTEFORCE=false'                                                                                                       "$CONF";fi
   if [[ -z "$PBRUTEFORCE"    ]];   then sed -i '120d' "$CONF";sed -i '120 i PBRUTEFORCE=false'                                                                                                       "$CONF";fi
   if [[ -z "$EMAIL2SEND"     ]];   then sed -i '129d' "$CONF";sed -i '129 i EMAIL2SEND='                                                                                                             "$CONF";fi
-  if [[ -z "$NOTIFY"         ]];   then sed -i '138d' "$CONF";sed -i '138 i NOTIFY=false'                                                                                                            "$CONF";fi
+  if [[ -z "$NOTIFY"         ]];   then sed -i '139d' "$CONF";sed -i '139 i NOTIFY=false'                                                                                                            "$CONF";fi
   if [[ -z "$SSHUSER"        ]];   then sed -i '169d' "$CONF";sed -i '169 i SSHUSER="root"'                                                                                                          "$CONF";fi
   if [[ -z "$SSHPORT"        ]];   then sed -i '170d' "$CONF";sed -i '170 i SSHPORT="22"'                                                                                                            "$CONF";fi
   if [[ -z "$SSHPASS"        ]];   then sed -i '171d' "$CONF";sed -i '171 i SSHPASS='                                                                                                                "$CONF";fi
@@ -844,7 +844,6 @@ if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
    if [[ "$NOTIFY" = "true" ]]; then notify-send "Emagnet" "\n${tt} - Files downloaded\n ${pt} - Passwords found\n${it} - Email addresses found";fi
     cp -rn "${p}" "$EMAGNETPW/" &> /dev/null
     cp -rn "${i}" "$EMAGNETDB/" &> /dev/null
-    mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
     rm "/tmp/.emagnet*"  &> /dev/null
     sleep 2
 
@@ -864,9 +863,7 @@ if [[ "$it" -gt "0" ]] && [[ "$pt" -gt "0" ]]; then
     else
      sleep 0
   fi
-     mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
-     sleep 2
-
+     sleep 1
   cp -rn "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
     elif [[ "$pt" = "0" ]] && [[ "$it" -gt "0" ]]; then
        cp -rn "${i}" "$EMAGNETDB/" &> /dev/null
