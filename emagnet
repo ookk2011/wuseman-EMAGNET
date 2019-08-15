@@ -107,8 +107,8 @@ emagnet_mustbefilled() {
   if [[ -z "$WIP2"           ]];then sed -i '51d'  "$CONF";sed -i '51  i WIP2='                                                                                                                   "$CONF";fi
   if [[ -z "$WIP3"           ]];then sed -i '52d'  "$CONF";sed -i '52  i WIP3='                                                                                                                   "$CONF";fi
   if [[ -z "$WIP4"           ]];then sed -i '53d'  "$CONF";sed -i '53  i WIP4='                                                                                                                   "$CONF";fi
+  if [[ -z "$TIME"           ]];then sed -i '30d'  "$CONF";sed -i "30  i TIME=150"                                                                                                                "$CONF";fi
   if [[ -z "$MYIP"           ]];then sed -i '40d'  "$CONF";sed -i "40  i MYIP=$(curl -s https://nr1.nu/i/)"                                                                                       "$CONF";fi
-  if [[ -z "$MYIP"           ]];then sed -i '30d'  "$CONF";sed -i "30  i TIME=150"                                                                                                                "$CONF";fi
   if [[ -z "$EMAGNET"        ]];then sed -i '72d'  "$CONF";sed -i '72  i EMAGNET=/opt/emagnet'                                                                                                    "$CONF";fi
   if [[ -z "$EMAGNETHOME"    ]];then sed -i "73d"  "$CONF";sed -i '73  i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'                                                                       "$CONF";fi
   if [[ -z "$EMAGNETLOGS"    ]];then sed -i "74d"  "$CONF";sed -i '74  i EMAGNETLOGS=$EMAGNETHOME/logs'                                                                                           "$CONF";fi
@@ -231,7 +231,7 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 emagnet_backup() {
 emagnet_conf
 emagnet_clear
-emagnet_banner    
+emagnet_banner
  if ! [[ -d "$EMAGNETBACKUP" ]]; then
    mkdir -p "$EMAGNETBACKUP"
  fi
@@ -1025,7 +1025,6 @@ fi
 
 case $1 in
      "-a"|"-author"|"--author")
-          emagnet_conf
           emagnet_author
      ;;
 
@@ -1184,10 +1183,10 @@ case $1 in
                 ;;
 
         "-n"|"-notify"|"--notify")
-   	        emagnet_conf
      	        notify-send --help &> /dev/null
                 if [[ $? -gt "0" ]]; then echo -e "$basename$0: internal error -- notify-send is required for get notifications";exit 1; fi
                 if [[ "$2" != "true" && "$2" != "false" || -z "$2" ]]; then echo -e "$basename$0: internal error -- you must use true or false";exit 1;fi
+   	        emagnet_conf
                 if [[ $? -eq "0" ]] && [[ $2 = "true" ]];  then sed -i '137d' "$CONF";sed -i "137 i NOTIFY=true"  "$CONF";printf "$basename$0: config file has been updated -- notifications has been enable\n"; fi
                 if [[ $? -eq "0" ]] && [[ $2 = "false" ]]; then sed -i '137d' "$CONF";sed -i "137 i NOTIFY=false" "$CONF";printf "$basename$0: config file has been updated -- notifications has been disable\n";fi
                 ;;
