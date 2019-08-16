@@ -546,50 +546,6 @@ emagnet_analyzer() {
 emagnet_clear
 emagnet_banner
 
-if [[ "$GBRUTEFORCE" = "true" ]]; then
-       	    sed -i '118d' "$CONF"
-      	    sed -i '118 i GBRUTEFORCE=true' "$CONF"
-      	    sed -i '119d' "$CONF"
-      	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
-            sed -i '120d' "$CONF"
-      	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
-             emagnet_conf
-              printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-              printf "\n%64s \n\n" | tr ' ' '='
-             emagnet_analyzer
-	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
-      	    sed -i '118d' "$CONF"
-     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
-      	    sed -i '119d' "$CONF"
-	    sed -i '119 i SBRUTEFORCE=true' I"$CONF"
-	    sed -i '120d' "$CONF"
-     	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
-            emagnet_conf
-            printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-            printf "\n%64s \n\n" | tr ' ' '='
-             emagnet_analyzer
-	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
-	    sed -i '118d' "$CONF"
-     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
-      	    sed -i '119d' "$CONF"
-     	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
-            sed -i '120d' "$CONF"
-     	    sed -i '120 i PBRUTEFORCE=true' "$CONF"
-            emagnet_conf
-            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
-            printf "\n%64s \n\n" | tr ' ' '='
-            emagnet_analyzer
-	  else
-            sed -i '118d' "$CONF"
-            sed -i '118 i GBRUTEFORCE=false' "$CONF"
-            sed -i '118d' "$CONF"
-            sed -i '118 i SBRUTEFORCE=false' "$CONF"
-            sed -i '120d' "$CONF"
-            sed -i '120 i PBRUTEFORCE=false' "$CONF"
-            emagnet_analyzer
-fi
-
-
 wait_time=$TIME
 temp_cnt=${wait_time}
 
@@ -636,6 +592,50 @@ read -p "Do you want to wipe incoming directories (y/n): " cleanup
 
 emagnet_count_down() {
 emagnet_paths
+emagnet_conf
+if [[ "$GBRUTEFORCE" = "true" ]]; then
+       	    sed -i '118d' "$CONF"
+      	    sed -i '118 i GBRUTEFORCE=true' "$CONF"
+      	    sed -i '119d' "$CONF"
+      	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
+            sed -i '120d' "$CONF"
+      	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
+             emagnet_conf
+              printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+              printf "\n%64s \n\n" | tr ' ' '='
+             emagnet_analyzer
+	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
+      	    sed -i '118d' "$CONF"
+     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '119d' "$CONF"
+	    sed -i '119 i SBRUTEFORCE=true' I"$CONF"
+	    sed -i '120d' "$CONF"
+     	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
+            emagnet_conf
+            printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "\n%64s \n\n" | tr ' ' '='
+             emagnet_analyzer
+	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
+	    sed -i '118d' "$CONF"
+     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '119d' "$CONF"
+     	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
+            sed -i '120d' "$CONF"
+     	    sed -i '120 i PBRUTEFORCE=true' "$CONF"
+            emagnet_conf
+            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "\n%64s \n\n" | tr ' ' '='
+            emagnet_analyzer
+	  else
+            sed -i '118d' "$CONF"
+            sed -i '118 i GBRUTEFORCE=false' "$CONF"
+            sed -i '118d' "$CONF"
+            sed -i '118 i SBRUTEFORCE=false' "$CONF"
+            sed -i '120d' "$CONF"
+            sed -i '120 i PBRUTEFORCE=false' "$CONF"
+            emagnet_analyzer
+fi
+
 }
 
 blocked() {
@@ -1013,24 +1013,7 @@ emagnet_run4ever() {
                emagnet_clear
               emagnet_banner
              emagnet_main
-
-              if [[ "$GBRUTEFORCE" = "true" ]]; then
-                       emagnet_gmail_bruter
-                       mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files &> /dev/null
-                       rm "/tmp/.emagnet*"  &> /dev/null
-               elif [[ "$SBRUTEFORCE" = "true" ]]; then
-                       emagnet_ssh_bruter
-                       mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files &> /dev/null
-                       rm "/tmp/.emagnet*"  &> /dev/null
-               elif [[ "$PBRUTEFORCE" = "true" ]]; then 
-                       emagnet_spotify_bruter
-                       mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files &> /dev/null
-                       rm "/tmp/.emagnet*" &> /dev/null
-               else
-                       mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files &> /dev/null
-                       rm "/tmp/.emagnet*"  &> /dev/null
-              fi
-         done
+      done
 }
 
 emagnet_check4all() {
@@ -1206,7 +1189,7 @@ case $1 in
                 ;;
 
       "-t"|"-time"|"--time")
-                emagnet_conf
+                . $CONF
                 if [[ -z "$2" ]]; then echo "emagnet: internal error -- time require a number to be used"; exit 1;fi
                 re='^[0-9]+$';if ! [[ $2 =~ $re ]] ; then echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1;fi
                 sed -i '30d' "$CONF";sed -i "30 i TIME=$2" "$CONF"

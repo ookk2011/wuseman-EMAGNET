@@ -13,15 +13,28 @@ R = REBUILT
 
 # Version 3.3
 
-+    Removed spammer
-+    Removed stats for rebuilding
-+    Removed safety part that added to log if someone otherwise then root tried to run script (useless since long time ago)
++    Small and general fixes for a better setup
++    Better regex and added it easier to read how we grab stuff
++    Better quoting
++    Renamed all functions to emagnet_functionname
++    Added a more elegant way to write analyzing.
++    Added HEADER to emagnet.conf, default is Mosaic (first header ever made)
++    Added LIBSPOITFY to emagnet.conf
++    Added emagnet.conf into root dir
++    Added support for merge logs in to archive
 +    Added requirements for vpn part (openvpn)
-+    Removed setup script
-+    Removed elinks and lynx requirements so we can use emagnet on more systems without install more tools then we really need
-+    More elegant setup (much to cleanup still to write it more beauty)
-+    Added curl instead of the elinks and lynx mention above, this is a big job and alot of strings need to be sorted so this has been done on major feature only
-+    Remove temp files so they wont be stored in tmp folder 
++    Edited how we read LICENSE
++    Added a function for colors so we can use a more elegant way to print stuff
+
+-    Removed .emagnetconf/emagnet.conf and .emagnetconf/emagnet.conf.bak
+-    Removed requirements for a browser to be installed
+-    Remove temp files so they wont be stored in tmp folder 
+-    Removed spammer
+-    Removed stats for rebuilding
+-    Removed safety part that added to log if someone otherwise then root tried to run script (useless since long time ago)
+-    Removed setup script
+-    Removed elinks and lynx requirements so we can use emagnet on more systems without install more tools then we really need
+-    Removed requirements part as default, it will be used when you using stuff that may need requirements like smtp/parallel for spammer & ssh bruteforce
 
 # Version 3.2
 

@@ -1,8 +1,5 @@
 ## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
 
-## <p align="center"> _"I'll will find you, it's just a matter of time"_
-<p align="center">
-
 <a href="https://github.com/wuseman/EMAGNET">
 <img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell"></a>
 
@@ -22,29 +19,18 @@
 
 | Current Version    |  Released      | News                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.2`              |  2019-08-04    |  Spotify brute-forcer was added    | Linux                               |
+| `3.4`              |  2019-08-04    |  Spotify brute-forcer was added    | Linux                               |
 
-![Screenshot](s.gif)
-#### Removed all email addresses.
-![Screenshot](https://nr1.nu/f/ucdb.png)
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
-
-#### Previews for all Emagnet features can be found [here](https://github.com/wuseman/EMAGNET/wiki/Previews)
-
-#### BBC NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) 
-- Emagnet is your best friend for get the leaks, you will be the first viewer on every paste but it of course matters of  the time you have set ;-)
 
 ### Get Started On Linux/MacOSX
 
     git clone https://github.com/wuseman/emagnet
     cd emagnet
     chmod +x emagnet*
-    bash ./emagnet --setup
-    bash emagnet --help
-
-
-      ./emagnet --emagnet
+    .
+    ./emagnet --emagnet
 
 ###  Get Started On Windows 10
 
@@ -54,6 +40,9 @@ Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Inst
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
 _How everything started._
+
+- [Previews](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
+_Previews for all Emagnet features can be found here._
 
 - [Faq](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
 _How to grab your visa card if it has been leaked. Also get answers why we not using TOR._
@@ -67,12 +56,11 @@ _How To Find your facebook credenticals, if it has been leaked._
 ### System requirements
 
 - Bash     - Find more info about _bash_ [here](https://www.gnu.org/software/bash/)
-- Parallel - Find more info about _parallel_ [here](https://www.gnu.org/software/parallel/)
 - Wget     - Find more info about _wget_ [here](https://www.gnu.org/software/wget/)
 - Curl     - Find more info about _curl_ [here](https://github.com/curl/curl)
-- Lynx     - Find more info about _lynx_ [here](https://lynx.browser.org/)
-- Elinks   - Find more info about _elinks_ [here](http://elinks.or.cz/)
 
+#### BBC NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) 
+- Emagnet is your best friend for get the leaks, you will be the first viewer on every paste but it of course matters of  the time you have set ;-)
 
 ## Changelog
 
@@ -107,3 +95,4 @@ Feel free to read the history about emagnet [here](https://github.com/wuseman/EM
 #### Development of emagnet is active and is updated frequently, please use the latest version if you report issues/bugs.
 
 ### Emagnet is a private project since 2015 and was released in June @ 2018, to be continued. 
+
