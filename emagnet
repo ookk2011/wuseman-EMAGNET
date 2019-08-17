@@ -1030,7 +1030,7 @@ if ! [[ -f "/etc/emagnet.conf" ]]; then
         emagnet_paths
       emagnet_I_was_banned
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
-     [[ "$?" -gt "0" ]] && sed '40d' $CONF;sed -i '40 i MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
+     [[ "$?" -gt "0" ]] && sed -i '40d' $CONF;sed -i '40 i MYIP=/MYIP=127.0.0.1/g' $CONF || wip
     emagnet_conf
 
 fi
