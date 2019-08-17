@@ -369,14 +369,13 @@ emagnet_I_was_banned() {
 	   echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
 	   exit
   fi
-
-emagnet_clear
-emagnet_banner
     curl -sL "$PASTEBIN" -H "$USERAGENT" \
     |grep -q "blocked your IP"
 
 	if [[ "$?" = "0" ]]; then
   		if [[ $VPN = "false" ]]; then
+                     emagnet_clear
+                      emagnet_banner
    			for (( ; ; )); do
      			   wait_time=${IDLETIME}
       		           temp_cnt=${wait_time}
