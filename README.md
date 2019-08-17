@@ -29,7 +29,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 ### Filtered email addresses:
 ![Screenshot](.preview/emagnet-log.png)
-
+* This video has been made of an unknown user so don't blame me, got it in my inbox. Thanks for the video!
 
 ### Get Started On Linux/MacOSX
 
