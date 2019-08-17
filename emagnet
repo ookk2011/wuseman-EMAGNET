@@ -984,7 +984,7 @@ sleep 2
 
 fi
     mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-    rm "/tmp/.emagnet*"  &> /dev/null
+    rm "/tmp/.emagnet" "/tmp/.emagnet1"  &> /dev/null
     sleep 2
     pkill -9 "notify-send" &> /dev/null
 }
