@@ -990,6 +990,7 @@ fi
 }
 
 emagnet_run4ever() {
+emagnet_conf
  if [[ -z "$USERAGENT" ]]; then
   echo -e "$basename$0: internal errror -- you must set a valid useragent in $CONF"
   exit
@@ -1015,14 +1016,6 @@ emagnet_run4ever() {
       done
 }
 
-emagnet_check4all() {
-     cp "./emagnet.conf" /etc/
-      emagnet_mustbefilled
-       emagnet_conf
-       emagnet_paths
-      emagnet_I_was_banned
-}
-
 emagnet_first_run() {
 if ! [[ -f "/etc/emagnet.conf" ]]; then
        emagnet_mustberoot
@@ -1031,9 +1024,11 @@ if ! [[ -f "/etc/emagnet.conf" ]]; then
           emagnet_conf
          emagnet_mustbefilled
         emagnet_paths
+      emagnet_I_was_banned
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
      [[ "$?" -gt "0" ]] && sed '40d' $CONF;sed -i '40 i MYIP=/MYIP=127.0.0.1/g' ./emagnet.conf || wip
     emagnet_conf
+
 fi
 }
 
@@ -1044,7 +1039,6 @@ case $1 in
 
      "emagnet"|"-e"|"-emagnet"|"--emagnet")
         emagnet_iconnection
-        emagnet_check4all
          emagnet_first_run
            sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
             sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
@@ -1169,7 +1163,6 @@ case $1 in
 
       "-s"|"-spam"|"--spam")
                 emagnet_conf
-                emagnet_check4all
                 emagnet_spammer
                 ;;
 
@@ -1189,9 +1182,19 @@ case $1 in
 
       "-t"|"-time"|"--time")
                 . $CONF
-                if [[ -z "$2" ]]; then echo "emagnet: internal error -- time require a number to be used"; exit 1;fi
-                re='^[0-9]+$';if ! [[ $2 =~ $re ]] ; then echo -e "emagnet: internal error -- that's not a valid number" >&2; exit 1;fi
-                sed -i '30d' "$CONF";sed -i "30 i TIME=$2" "$CONF"
+                if [[ -z "$2" ]]; then
+                              echo "emagnet: internal error -- time require a number to be used"; 
+                              exit 1
+                fi
+                re='^[0-9]+$'
+                  if ! [[ $2 =~ $re ]]; then
+                     echo -e "emagnet: internal error -- that's not a valid number" >&2
+                     exit 1;
+         	  fi
+
+                sed -i '30d' "$CONF"
+                sed -i "30 i TIME=$2" "$CONF"
+
                 printf "%s\n" "$basename$0: config file has been updated -- time has been set to: $2 seconds"
                 exit 1
                 ;;
