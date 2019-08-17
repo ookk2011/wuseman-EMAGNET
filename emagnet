@@ -582,7 +582,7 @@ fi
 
 read -p "Do you want to wipe incoming directories (y/n): " cleanup
    if [[ $cleanup = "y" ]]; then
-      rm -rf $EMAGNET/incoming/
+      rm -rf "$EMAGNET/incoming/"
       printf "\e[1;31mWiping\e[0m $EMAGNET/incoming..\nDone\n\n"
      else
       printf "\nAborted.\n\n"
@@ -925,7 +925,7 @@ if [[ "pt" -gt "0" ]] && [[ "$et" -gt "0" ]]; then
  	  echo -e "${el}" >> $EMAGNETLOGS/emails-from-pastebin.txt
 
                 cp -rn ${ef} $EMAGNETDB/ &> /dev/null
- 	 	cp -rn ${pt} $EMAGNETPW/ &> /dev/null
+ 	 	cp -rn ${pf} $EMAGNETPW/ &> /dev/null
 
  	            printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
  		    printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
@@ -1110,7 +1110,7 @@ case $1 in
                                 echo -e "Unzipping sconsify into current dir.."
                                 unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
                                 chmod +x ./sconsify
-                                echo -e "Cleaning up."..
+                                echo -e "Cleaning up."
                                 rm "linux-x86_64-sconsify-0.6.0-next.zip"
                                 echo "All done.."
                                 sleep 2
