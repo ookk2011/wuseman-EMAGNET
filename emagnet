@@ -1047,8 +1047,6 @@ case $1 in
            sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
             sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
             sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
-           emagnet_clear
-          emagnet_banner
         emagnet_run4ever
 
 		  ;;
