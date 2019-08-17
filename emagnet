@@ -231,15 +231,19 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 }
 
 emagnet_backup() {
-emagnet_conf
- if ! [[ -d "$EMAGNETBACKUP" ]]; then
-   mkdir -p "$EMAGNETBACKUP"
- fi
-
+if ! [[ -f "/etc/emagnet.conf" ]]; then
+echo -e "$basename$0: -- internal error -- you can't backup anything before you downloaded some files"
+exit 1
+fi
   if [[ ! -d "$EMAGNET" ]]; then
     echo -e "$basename$0: internal error -- nothing to backup"
     exit 1
   fi
+
+ if ! [[ -d "$EMAGNETBACKUP" ]]; then
+   mkdir -p "$EMAGNETBACKUP"
+ fi
+
 emagnet_clear
 emagnet_banner
 
