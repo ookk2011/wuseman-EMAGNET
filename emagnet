@@ -177,17 +177,6 @@ cat << "EOF"
 EOF
 }
 
-emagnet_colors() {
-  R="$(tput setaf 1)" # RED
-  G="$(tput setaf 2)" # GREEN
-  Y="$(tput setaf 3)" # YELLOW
-  B="$(tput setaf 4)" # BLUE
-  M="$(tput setaf 5)" # MAGENTA
-  C="$(tput setaf 6)" # CYAN
-  W="$(tput setaf 7)" # WHITE
-  E="$(tput sgr0)"    # END OF COLOR
-}
-
 emagnet_quiet() {
   emagnet_conf
   pid="$(ps aux |grep emagnet)"
@@ -1024,7 +1013,6 @@ emagnet_conf
 emagnet_first_run() {
 if ! [[ -f "$CONF" ]]; then
         cp "./emagnet.conf" $HOME/.config/emagnet/
-         emagnet_colors
           emagnet_conf
          emagnet_mustbefilled
         emagnet_paths
