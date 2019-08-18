@@ -43,6 +43,17 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
 
+### Get started on Android via Termux
+
+    Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
+    
+    Open termux and run:
+    pkg update; pkg upgrade -y; pkg install wget curl git -y
+    git clone https://github.com/wuseman/emagnet
+
+    cd emagnet
+    bash emagnet --emagnet
+
 ### How to get VPN running with emagnet..
 
 * Create a folder in /etc/openvpn with your providers name, for example hidemyass:
