@@ -19,7 +19,7 @@
 
 | Current Version    |  Released      | News                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.4`              |  2019-08-04    |  Spotify brute-forcer was added    | Linux                               |
+| `3.4`              |  2019-08-04    |  Full support on android devices, no root required    | Linux                               |
 
 
 Emagnet is a very powerful tool for it's purpose wich is to capture email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
