@@ -45,9 +45,10 @@ Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Inst
 
 ### Get started on Android via Termux
 
-    Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
+* Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
     
-    Open termux and run:
+* When termux has been installed open termux and run below commands:
+
     pkg update; pkg upgrade -y; pkg install wget curl git -y
     git clone https://github.com/wuseman/emagnet
 
