@@ -510,25 +510,25 @@ EMPTY="$(ls $EMAGNET/incoming/*/logs/|wc -l)"
    		exit 1
 	fi
 
-DAYDIRS="$(ls /opt/emagnet/incoming/|wc -l)"
-LOGFILES="$(ls /opt/emagnet/incoming/*/logs/*|wc -l)"
-TOTM="$(cat /opt/emagnet/incoming/*/logs/emails-from-pastebin.txt|wc -l)"         # Total Mail Addresses
-TOTP="$(cat /opt/emagnet/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
-TOTU="$(cat /opt/emagnet/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
+DAYDIRS="$(ls $EMAGNET/incoming/|wc -l)"
+LOGFILES="$(ls $EMAGNET/incoming/*/logs/*|wc -l)"
+TOTM="$(cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|wc -l)"         # Total Mail Addresses
+TOTP="$(cat $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
+TOTU="$(cat $EMAGNET/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
 
 	  emagnet_clear
           emagnet_banner
           printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
 	  printf "%64s \n\n" | tr ' ' '='
 
-             for LOGDATE in "$(ls /opt/emagnet/incoming/)"; do
+             for LOGDATE in "$(ls $EMAGNET/incoming/)"; do
                 echo -e ",-> Merging logs from: $LOGDATE \n|"
                   for logfiles in cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt; do
                     for files in "$logfiles"; do
-                      touch "/opt/emagnet/archive/logs/$logfiles" &> /dev/null
+                      touch "$EMAGNETARCHIVE/logs/$logfiles" &> /dev/null
                     done
 
-                       cat "/opt/emagnet/incoming/$LOGDATE/logs/$logfiles" >> "/opt/emagnet/archive/logs/$logfiles" &> /dev/null
+                       cat "$EMAGNET/incoming/$LOGDATE/logs/$logfiles" >> "$EMAGNETARCHIVE/logs/$logfiles" &> /dev/null
 
                             if [[ "$?" -eq "0" ]]; then
                                  printf "| %2d) [MERGED] %.31s %s" "$(( ++cnt ))" "$logfiles ............................. "
