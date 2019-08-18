@@ -75,8 +75,18 @@ If you have two providers or even three as I do, just do exactly as above then b
 
 * Now you are ready to brute force spotify accounts:
 
-      bsah emagnet --bruteforce spotify
+      bash emagnet --bruteforce spotify
 
+* On Ubuntu/Kali/Debian:
+
+      wget -q -O - https://apt.mopidy.com/mopidy.gpg | sudo apt-key add -
+      wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/stretch.list
+      sudo apt-get update
+      sudo apt-get install libspotify12 libspotify-dev 
+
+* Now you are ready to brute force spotify accounts:
+
+      bash emagnet --bruteforce spotify
 
 ### Wiki Sections:
 
