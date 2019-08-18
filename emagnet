@@ -41,8 +41,11 @@
 ################################################################################
 
 CONF="$HOME/.config/emagnet/emagnet.conf"
-mkdir -p "$HOME/.config/emagnet/"
-mkdir -p "$HOME/.config/emagnet/tmp"
+
+if ! [[ -d "$HOME/.config/emagnet/" ]]; then
+	mkdir -p "$HOME/.config/emagnet/"
+	mkdir -p "$HOME/.config/emagnet/tmp"
+fi
 
 emagnet_banner() {
 cat << "EOF"
