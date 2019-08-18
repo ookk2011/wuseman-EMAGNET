@@ -43,6 +43,27 @@ Emagnet is a very powerful tool for it's purpose wich is to capture email addres
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
 
+### How to get VPN running with emagnet..
+
+* Create a folder in /etc/openvpn with your providers name, for example hidemyass:
+
+        mkdir -p /etc/openvpn/hidemyass
+
+* Download the configuration files from the providers homepage and unzip them in above folder. 
+
+Now name vpn files as below: 
+
+       /etc/openvpn/hidemyass/hidemyass-newzealand.ovpn 
+       /etc/openvpn/hidemyass/hidemyass-norway.ovpn
+       /etc/openvpn/hidemyass/hidemyass-sweden.ovpn
+       /etc/openvpn/hidemyass/hidemyass-netherlands.ovpn
+       ..... And so on..
+
+See VPNCOUNTRYS in emagnet.conf for what countries is available as default and how emagnet reading the files. 
+You can of course edit the countrys to anything else but feel free to get it working on your own then.
+
+If you have two providers or even three as I do, just do exactly as above then but edit VPNPROVIDER2 and 3 for your other provider and same with countries name them after VPNCOUNTRYS2 and 3
+
 ### Wiki Sections:
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
