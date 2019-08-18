@@ -41,12 +41,7 @@
 ################################################################################
 
 CONF="$HOME/.config/emagnet/emagnet.conf"
-
-if [[ -d "$HOME/.config/emagnet" ]]; then
-      mkdir -p "$HOME/.config/emagnet/"
-elif ! [[ -d "$HOME/.config" ]]; then
-       mustberoot
-fi
+mkdir -p "$HOME/.config/emagnet/"
 
 emagnet_banner() {
 cat << "EOF"
