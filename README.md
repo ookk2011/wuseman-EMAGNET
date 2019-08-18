@@ -71,7 +71,8 @@ If you have two providers or even three as I do, just do exactly as above then b
       emerge --ask eselect-repository
       eselect repository enable palmer
       eix-sync;eix-update
-      emerge =dev-libs/libspotify-12.1.51
+      emerge --ask =dev-libs/libspotify-12.1.51
+      emerge --ask media-libs/portaudio
 
 * Now you are ready to brute force spotify accounts:
 
@@ -82,7 +83,7 @@ If you have two providers or even three as I do, just do exactly as above then b
       wget -q -O - https://apt.mopidy.com/mopidy.gpg | sudo apt-key add -
       wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/stretch.list
       sudo apt-get update
-      sudo apt-get install libspotify12 libspotify-dev 
+      sudo apt-get install libspotify12 libspotify-dev libportaudio
 
 * Now you are ready to brute force spotify accounts:
 
