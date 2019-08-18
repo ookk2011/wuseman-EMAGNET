@@ -47,13 +47,15 @@ Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Inst
 
 * Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
     
-* When termux has been installed open termux and run below commands:
+When termux has been installed open termux and run below commands, you can copy and paste:
 
-    pkg update; pkg upgrade -y; pkg install wget curl git -y
-    git clone https://github.com/wuseman/emagnet
+     pkg update
+     pkg upgrade -y
+     pkg install wget curl git -y
+     git clone https://github.com/wuseman/emagnet
 
-    cd emagnet
-    bash emagnet --emagnet
+     cd emagnet
+     bash emagnet --emagnet
 
 ### How to get VPN running with emagnet..
 
