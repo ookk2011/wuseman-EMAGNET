@@ -68,14 +68,14 @@ If you have two providers or even three as I do, just do exactly as above then b
 
 * On GNU/Linux Gentoo wich is the supported distro for emagnet, just do as following:
 
-    emerge --ask eselect-repository
-    eselect repository enable palmer
-    eix-sync;eix-update
-    emerge =dev-libs/libspotify-12.1.51
+      emerge --ask eselect-repository
+      eselect repository enable palmer
+      eix-sync;eix-update
+      emerge =dev-libs/libspotify-12.1.51
 
 * Now you are ready to brute force spotify accounts:
 
-    bsah emagnet --bruteforce spotify
+      bsah emagnet --bruteforce spotify
 
 
 ### Wiki Sections:
