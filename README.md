@@ -47,11 +47,11 @@ Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Inst
 
 * Create a folder in /etc/openvpn with your providers name, for example hidemyass:
 
-        mkdir -p /etc/openvpn/hidemyass
+       mkdir -p /etc/openvpn/hidemyass
 
 * Download the configuration files from the providers homepage and unzip them in above folder. 
 
-Now name vpn files as below: 
+* Now name vpn files as below: 
 
        /etc/openvpn/hidemyass/hidemyass-newzealand.ovpn 
        /etc/openvpn/hidemyass/hidemyass-norway.ovpn
@@ -63,6 +63,19 @@ See VPNCOUNTRYS in emagnet.conf for what countries is available as default and h
 You can of course edit the countrys to anything else but feel free to get it working on your own then.
 
 If you have two providers or even three as I do, just do exactly as above then but edit VPNPROVIDER2 and 3 for your other provider and same with countries name them after VPNCOUNTRYS2 and 3. Now you can scrape pastebin every second if you want since you will change ip asap you have been banned but please don't do that. Use it with common sense.
+
+### How to get started with brute forcer for spotify:
+
+* On GNU/Linux Gentoo wich is the supported distro for emagnet, just do as following:
+
+    emerge --ask eselect-repository
+    eselect repository enable palmer
+    eix-sync;eix-update
+    emerge =dev-libs/libspotify-12.1.51
+
+* Now you are ready to brute force spotify accounts:
+
+    bsah emagnet --bruteforce spotify
 
 
 ### Wiki Sections:
