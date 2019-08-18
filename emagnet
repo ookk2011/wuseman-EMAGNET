@@ -40,8 +40,14 @@
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
 
-CONF="$HOME/.config/emagnet.conf"
-mkdir -p "$HOME/.config/emagnet/"
+CONF="$HOME/.config/emagnet/emagnet.conf"
+
+if [[ -d "$HOME/.config/emagnet" ]]; then
+      mkdir -p "$HOME/.config/emagnet/"
+elif ! [[ -d "$HOME/.config" ]]; then
+       mustberoot
+fi
+
 emagnet_banner() {
 cat << "EOF"
      _                      _______                      _
@@ -96,7 +102,7 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
 EOF
 }
 
-#emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
+emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
 emagnet_conf() { CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
 emagnet_clear() { clear ; }
 emagnet_iconnection() { ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
