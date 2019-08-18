@@ -40,8 +40,8 @@
 ######## The Nr1 tool for find latest leaked databases online @ 2o18 ###########
 ################################################################################
 
-CONF="/etc/emagnet.conf"
-
+CONF="$HOME/.config/emagnet.conf"
+mkdir -p "$HOME/.config/emagnet/"
 emagnet_banner() {
 cat << "EOF"
      _                      _______                      _
@@ -96,8 +96,8 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
 EOF
 }
 
-emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
-emagnet_conf() { CONF="/etc/emagnet.conf";. "$CONF" ;}
+#emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
+emagnet_conf() { CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
 emagnet_clear() { clear ; }
 emagnet_iconnection() { ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
 emagnet_license() { printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
@@ -111,7 +111,7 @@ emagnet_mustbefilled() {
   if [[ -z "$WIP4"           ]];then sed -i '53d'  "$CONF";sed -i '53  i WIP4='                                                                                                                   "$CONF";fi
   if [[ -z "$TIME"           ]];then sed -i '30d'  "$CONF";sed -i "30  i TIME=150"                                                                                                                "$CONF";fi
   if [[ -z "$MYIP"           ]];then sed -i '40d'  "$CONF";sed -i "40  i MYIP=$(curl -s https://nr1.nu/i/)"                                                                                       "$CONF";fi
-  if [[ -z "$EMAGNET"        ]];then sed -i '72d'  "$CONF";sed -i '72  i EMAGNET=/opt/emagnet'                                                                                                    "$CONF";fi
+  if [[ -z "$EMAGNET"        ]];then sed -i '72d'  "$CONF";sed -i '72  i EMAGNET=$HOME/emagnet'                                                                                                   "$CONF";fi
   if [[ -z "$EMAGNETHOME"    ]];then sed -i "73d"  "$CONF";sed -i '73  i EMAGNETHOME=$EMAGNET\/incoming\/$(date +%Y-%m-%d)'                                                                       "$CONF";fi
   if [[ -z "$EMAGNETLOGS"    ]];then sed -i "74d"  "$CONF";sed -i '74  i EMAGNETLOGS=$EMAGNETHOME/logs'                                                                                           "$CONF";fi
   if [[ -z "$EMAGNETPW"      ]];then sed -i "75d"  "$CONF";sed -i '75  i EMAGNETPW=$EMAGNETHOME\/password-files'                                                                                  "$CONF";fi
@@ -231,7 +231,7 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 }
 
 emagnet_backup() {
-if ! [[ -f "/etc/emagnet.conf" ]]; then
+if ! [[ -f "$CONF" ]]; then
 echo -e "$basename$0: -- internal error -- you can't backup anything before you downloaded some files"
 exit 1
 fi
@@ -1021,9 +1021,8 @@ emagnet_conf
 }
 
 emagnet_first_run() {
-if ! [[ -f "/etc/emagnet.conf" ]]; then
-       emagnet_mustberoot
-        cp "./emagnet.conf" /etc/
+if ! [[ -f "$CONF" ]]; then
+        cp "./emagnet.conf" $HOME/.config/emagnet/
          emagnet_colors
           emagnet_conf
          emagnet_mustbefilled
@@ -1178,7 +1177,7 @@ case $1 in
                 ;;
 
       "version"|"-version"|"--version"|"-V")
-                VERSION="$(cat /etc/emagnet.conf|grep "^VERSION"|cut -d= -f2)"
+                VERSION="$(cat $CONF|grep "^VERSION"|cut -d= -f2)"
                 printf "Emagnet Version: $VERSION\n"
                 ;;
 
