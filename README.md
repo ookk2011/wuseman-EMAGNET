@@ -19,7 +19,7 @@
 
 | Current Version    |  Released      | News                            | Tested On                          |
 | :----------------- | :------------- | :-------------------------------- | :----------------------------------|
-| `3.4`              |  2019-08-04    |  Support for auto bruteforcing instagram acccounts (SAMPLE/TESTING ONLY) | Linux
+| `3.4`              |  2019-08-04    |  Support for auto bruteforcing instagram acccounts (TESTING ONLY) | Linux
 | `3.4`              |      -:-       |  Full support on android devices, no root required    | Linux                               |
 
 
