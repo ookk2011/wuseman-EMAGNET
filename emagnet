@@ -503,6 +503,19 @@ emagnet_analyzing_message() {
     text="Analyzing..."
     delay="0.1"
 
+if [[ "$GBRUTEFORCE" = "true" ]]; then
+           printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
+           printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
+           printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  else
+            sleep 0
+fi
+
         printf "%26s"; for analyzing in $(seq 0 $(expr length "${text}"))
 		         do
                  	     echo -n "${text:$analyzing:1}"
@@ -556,7 +569,19 @@ TOTU="$(cat $EMAGNET/incoming/*/logs/pastebin-urls.txt|wc -l)"                # 
 emagnet_analyzer() {
 emagnet_clear
 emagnet_banner
-
+if [[ "$GBRUTEFORCE" = "true" ]]; then
+           printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
+           printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
+           printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  else
+            sleep 0
+fi
+ 
 wait_time=$TIME
 temp_cnt=${wait_time}
 
@@ -930,7 +955,7 @@ if [[ "$et" -lt 10 ]]; then et="0$et";fi
 if [[ "$pt" -lt 10 ]]; then pt="0$pt";fi
 
 
-if [[ "pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
+if [[ "$pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${pt} passwords from: $EMAGNETPW/${pf##*/}"      | xargs >> "$EMAGNETLOGS/emagnet.log"
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${et} email addresses from: $EMAGNETDB/${ef##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
 
@@ -1019,9 +1044,9 @@ emagnet_conf
     fi
 
        for (( ; ; )); do
-             emagnet_count_down
-              emagnet_clear
-               emagnet_banner
+            emagnet_count_down
+             emagnet_clear
+              emagnet_banner
                 emagnet_analyzing_message
                emagnet_clear
               emagnet_banner
