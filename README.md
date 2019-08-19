@@ -67,10 +67,10 @@ When termux has been installed open termux and run below commands, you can copy 
 
 * Now name vpn files as below: 
 
-       /etc/openvpn/hidemyass/hidemyass-newzealand.ovpn 
-       /etc/openvpn/hidemyass/hidemyass-norway.ovpn
-       /etc/openvpn/hidemyass/hidemyass-sweden.ovpn
-       /etc/openvpn/hidemyass/hidemyass-netherlands.ovpn
+       /etc/openvpn/hidemyass/hidemyass-nz.ovpn 
+       /etc/openvpn/hidemyass/hidemyass-no.ovpn
+       /etc/openvpn/hidemyass/hidemyass-se.ovpn
+       /etc/openvpn/hidemyass/hidemyass-nl.ovpn
        ..... And so on..
 
 See VPNCOUNTRYS in emagnet.conf for what countries is available as default and how emagnet reading the files. 
