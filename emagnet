@@ -146,7 +146,7 @@ emagnet_mustbefilled() {
   if [[ -z "$VPNPROVIDER2"   ]];then sed -i '153d' "$CONF";sed -i '153 i VPNPROVIDER2=$VPNROOT/'                                                                                                  "$CONF";fi
   if [[ -z "$VPNPROVIDER3"   ]];then sed -i '154d' "$CONF";sed -i '154 i VPNPROVIDER3=$VPNROOT/'                                                                                                  "$CONF";fi
   if [[ -z "$VPNCOUNTRYS"    ]];then sed -i '155d' "$CONF";sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   "$CONF";fi
-  if [[ -z "$VPNCOUNTRYS2"   ]];then sed -i '156d' "$CONF";sed -i '156 i VPNCOUNTRYS2="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  "$CONF";fi
+  if [[ -z "$VPNCOUNTRYS2"   ]];then sed -i '156d' "$CONF";sed -i '156 i VPNCOUNTRYS2="argentina australia brazil denmark finland france germany hong iceland india ireland israel italy japan korea luxembourg malaysia mexico netherlands new_zealand norway panama poland portugal russia singapore spain sweden switzerland unitedkingdom"'  "$CONF";fi
   if [[ -z "$VPNCOUNTRYS3"   ]];then sed -i '157d' "$CONF";sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  "$CONF";fi
   if [[ -z "$USERAGENT"      ]];then sed -i '183d' "$CONF";sed -i '183 i USERAGENT=Mosaic/0.9'                                                                                                    "$CONF";fi
 }
@@ -425,10 +425,10 @@ VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -3|ta
      "romania")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn"      &> /dev/null & ;;
      "russia")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn"      &> /dev/null & ;;
      "sweden")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"      &> /dev/null & ;;
-     "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-got.ovpn"  &> /dev/null & ;;
-     "sweden2")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-hel.ovpn"  &> /dev/null & ;;
-     "sweden3")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-mma.ovpn"  &> /dev/null & ;;
-     "sweden4")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se-sto.ovpn"  &> /dev/null & ;;
+     "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"  &> /dev/null & ;;
+     "sweden2")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se2.ovpn"  &> /dev/null & ;;
+     "sweden3")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se3.ovpn"  &> /dev/null & ;;
+     "sweden4")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se4.ovpn"  &> /dev/null & ;;
      "united-states")  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn"      &> /dev/null & ;;
   esac
 }
@@ -1205,7 +1205,7 @@ case $1 in
 
         "-v"|"-vpn"|"--vpn")
                 emagnet_conf
-                if [[ $VPNPROVIDER = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
+                if [[ $VPNPROVIDER = "$VPNROOT/" && $VPNPROVIDER2 = "$VPNROOT/" && $VPNPROVIDER3 = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
                 if [[ -z "$2" ]]; then echo -e "$basename$0: internal error -- you must include true or false";exit 1;fi
                 if [[ "$2" = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then    sed -i '150d' "$CONF";sed -i "150i VPN=true" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
                 elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then sed -i '150d' "$CONF";sed -i "150i VPN=false" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
