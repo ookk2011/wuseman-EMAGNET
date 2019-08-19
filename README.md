@@ -76,7 +76,7 @@ When termux has been installed open termux and run below commands, you can copy 
 
 * Don't forget to add your login file if necessary: 
 
-      for files in /etc/openvpn/provider; do echo "auth-user-pass login.txt" >> $files; done
+     for files in ./etc/openvpn/proivder/*; do sed -i 's/auth-user-pass/auth-user-pass login.txt/g' $files; done
 
 
 See VPNCOUNTRYS in emagnet.conf for what countries is available as default and how emagnet reading the files. 
