@@ -400,36 +400,48 @@ fi
 }
 
 emagnet_vpnsetup() {
+emagnet_mustberoot
 ( hash openvn &> /dev/null; [[ $? -eq "0" ]] && echo -e "$basename$0: internal error -- openvpn is required to be installed when enabling vpn"; exit )
 VPNCONFIG=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF |cut -d'"' -f1|head -2|sed '1d')
 VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -2|tail -1)
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -3|tail -1)
 
+if [[ -z "$VPNPROVIDER" || -n "$VPNPROVIDER2" ]]; then
+	export VPNCONFIG="$VPNCONFIG2"
+        export VPNCOUNTRYS="$VPNCOUNTRYS2"
+ elif [[ -z "$VPNPROVIDER" || -z "$VPNPROVIDER2" || -n "$VPNPROVIDER3" ]]; then
+	export VPNCONFIG="$VPNCONFIG3"
+        export VPNCOUNTRYS="$VPNCOUNTRYS3"
+ else
+     	export VPNCONFIG="$VPNCONFIG"
+        export VPNCOUNTRYS="$VPNCOUNTRYS"
+fi
+
   case "$COUNTRY" in
-     "belgium")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn"      &> /dev/null & ;;
-     "bulgaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn"      &> /dev/null & ;;
-     "czech")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn"      &> /dev/null & ;;
-     "denmark")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn"      &> /dev/null & ;;
-     "spain")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn"      &> /dev/null & ;;
-     "finland")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn"      &> /dev/null & ;;
-     "united-kingdom") cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn"      &> /dev/null & ;;
-     "greece")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn"      &> /dev/null & ;;
-     "hongkong")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn"      &> /dev/null & ;;
-     "hungaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn"      &> /dev/null & ;;
-     "italy")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn"      &> /dev/null & ;;
-     "moldavia")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn"      &> /dev/null & ;;
-     "netherlands")    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn"      &> /dev/null & ;;
-     "norway")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn"      &> /dev/null & ;;
-     "poland")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn"      &> /dev/null & ;;
-     "portugal")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn"      &> /dev/null & ;;
-     "romania")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn"      &> /dev/null & ;;
-     "russia")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn"      &> /dev/null & ;;
-     "sweden")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"      &> /dev/null & ;;
-     "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"  &> /dev/null & ;;
-     "sweden2")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se2.ovpn"  &> /dev/null & ;;
-     "sweden3")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se3.ovpn"  &> /dev/null & ;;
-     "sweden4")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se4.ovpn"  &> /dev/null & ;;
-     "united-states")  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn"      &> /dev/null & ;;
+     "belgium")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn" &> /dev/null & ;;
+     "bulgaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn" &> /dev/null & ;;
+     "czech")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn" &> /dev/null & ;;
+     "denmark")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn" &> /dev/null & ;;
+     "spain")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn" &> /dev/null & ;;
+     "finland")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn" &> /dev/null & ;;
+     "united-kingdom") cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn" &> /dev/null & ;;
+     "greece")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn" &> /dev/null & ;;
+     "hongkong")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn" &> /dev/null & ;;
+     "hungaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn" &> /dev/null & ;;
+     "italy")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn" &> /dev/null & ;;
+     "moldavia")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn" &> /dev/null & ;;
+     "netherlands")    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn" &> /dev/null & ;;
+     "norway")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn" &> /dev/null & ;;
+     "poland")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn" &> /dev/null & ;;
+     "portugal")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn" &> /dev/null & ;;
+     "romania")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn" &> /dev/null & ;;
+     "russia")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn" &> /dev/null & ;;
+     "sweden")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn" &> /dev/null & ;;
+     "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn" &> /dev/null & ;;
+     "sweden2")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se2.ovpn" &> /dev/null & ;;
+     "sweden3")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se3.ovpn" &> /dev/null & ;;
+     "sweden4")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se4.ovpn" &> /dev/null & ;;
+     "united-states")  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn" &> /dev/null & ;;
   esac
 }
 
@@ -445,12 +457,14 @@ else
   MYCOUNTRY="$(curl -s https://nr1.nu/i/|xargs whois|grep -i COUNTRY|awk '{print tolower($2)}')"
   COUNTRY=$(awk -F'="' '/VPNCOUNTRYS="/ {print $2}' $CONF|sed 's/"//g'|tr ' ' '\n'|shuf -n1)
 
-  curl -H "$USERAGENT" -Ls "$WIP" > "$HOME/.config/emagnet/tmp/emagnet-ip"
+  curl -H "$USERAGENT" -Ls "$WIP" > "$HOME/.config/emagnet/tmp/.emagnet-ip"
 
       if [[ -n "$OPENVPNRUNNING" ]]; then
          pkill -9 "openvpn"
       fi
 
+emagnet_clear
+emagnet_banner
 printf "\e[1;31m                You have been blocked by pastebin...\n\n\e[0m"
 printf "%s${line2:${#MYIP}}[ ok ]\n" "Current IP: $MYIP"
 printf "Connecting to "
@@ -915,7 +929,7 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
 
 ((10#0$et > 00));((10#0$pt > 00))
 
-if [[ "pt" -gt "0" ]] && [[ "$et" -gt "0" ]]; then
+if [[ "pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${pt} passwords from: $EMAGNETPW/${pf##*/}"      | xargs >> "$EMAGNETLOGS/emagnet.log"
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${et} email addresses from: $EMAGNETDB/${ef##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
 
@@ -951,7 +965,7 @@ sleep 2
                              else
                                sleep 0
                             fi
- elif [[ "$pt" = "0" ]] && [[ "$et" -gt "0" ]]; then
+ elif [[ "$pt" = "00" ]] && [[ "$et" -gt "00" ]]; then
         cp -rn ${ef} $EMAGNETDB/ &> /dev/null
         echo -e "${el}" >> "$EMAGNETLOGS/emails-from-pastebin.txt"
         echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${et} email addresses from $EMAGNETDB/${e##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
@@ -1010,7 +1024,8 @@ emagnet_conf
                 emagnet_analyzing_message
                emagnet_clear
               emagnet_banner
-             emagnet_main
+             emagnet_I_was_banned
+            emagnet_main
       done
 }
 
