@@ -595,12 +595,12 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
 	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
-           printf "%18s \e[0;33mwiNSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%18s \e[0;33miNSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
 	  else
             sleep 0
 fi
- 
+
 wait_time=$TIME
 temp_cnt=${wait_time}
 
@@ -726,7 +726,7 @@ grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNET
 			fi
 	done < /tmp/.emagnet-instagram-targets.txt
 
-rm /tmp/lol &> /dev/null
+rm /tmp/.emagnet-instagram-targets.txt &> /dev/null
 }
 
 emagnet_sshbruter() {
