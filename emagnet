@@ -899,8 +899,8 @@ emagnet_main() {
 	                     printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned in anytime now..\n\n"
                              tt="\e[1;31m\e[5m00\e[0m"
       	                     sleep 5
-# needed?                     emagnet_clear
-# -:-                         emagnet_banner
+                             emagnet_clear
+                             emagnet_banner
                         else
                              echo -e "\n======================================\nPastebin URLS from: $(date +%d/%m/%Y\ -\ %H:%M)\n======================================"  >> "$EMAGNETLOGS/pastebin-urls.txt"
                              cat "$HOME/.config/emagnet/tmp/.emagnet" >> "$EMAGNETLOGS/pastebin-urls.txt"
