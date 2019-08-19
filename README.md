@@ -73,6 +73,12 @@ When termux has been installed open termux and run below commands, you can copy 
        /etc/openvpn/hidemyass/hidemyass-nl.ovpn
        ..... And so on..
 
+
+* Don't forget to add your login file if necessary: 
+
+      for files in /etc/openvpn/provider; do echo "auth-user-pass login.txt" >> $files; done
+
+
 See VPNCOUNTRYS in emagnet.conf for what countries is available as default and how emagnet reading the files. 
 You can of course edit the countrys to anything else but feel free to get it working on your own then.
 
