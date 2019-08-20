@@ -11,6 +11,10 @@ r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      that has been re-added is now stable and not "half done" so they are here for stay.
 R = REBUILT
 
+# Version 3.4
+
+-    Removed color funciton again since it wont work on android devices
+
 # Version 3.3
 
 +    Small and general fixes for a better setup

@@ -1056,7 +1056,7 @@ sleep 2
                                 emagnet_spotify_bruter
                              elif [[ "$IBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
-                                printf "%17s";printf "BRUTE FORCING -- \e[0;33miNSTAGRAM\e[0m ACCOUNTS\e[0m\n\n"
+                                printf "%14s";printf "BRUTE FORCING -- \e[0;33miNSTAGRAM\e[0m ACCOUNTS\e[0m\n\n"
                                 emagnet_instagram_bruter
                              else
                                sleep 0
