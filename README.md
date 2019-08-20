@@ -115,8 +115,8 @@ If you have two providers or even three as I do, just do exactly as above then b
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
 _How everything started._
 
-- [Previews](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
-_Previews for all Emagnet features can be found here._
+- [Previews](https://github.com/wuseman/EMAGNET/wiki/PREVIEWS) - 
+_Previews can be found here._
 
 - [Faq](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
 _How to grab your visa card if it has been leaked. Also get answers why we not using TOR._
