@@ -27,7 +27,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 
 ### Demo - How it works
 #### Left side is how you see it - Right side is what actually happening in the background
-![Screenshot](.preview/emagnet-spotify-debug.gif)
+![Screenshot](.preview/emagnet2-debug.gif)
 
 ### Of course everything getting stored to log dir (Filtered email addresses)
 ![Screenshot](.preview/emagnet-log.png)
