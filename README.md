@@ -121,7 +121,7 @@ If you have two providers or even three as I do, just do exactly as above then b
     # inotify-tools is required for this sample
     
     # Where emagnet.conf is stored so you can read folders
-    source /path/to/emagnet.conf                          
+    . /path/to/emagnet.conf                          
 
     # Where to place email + passwords we have found wich will be our target
     HYDRA_TARGETS="/tmp/.emagnet-hydra-targets.txt"          
@@ -129,13 +129,13 @@ If you have two providers or even three as I do, just do exactly as above then b
     # When something happens in emagnet's temp folder  
     # then search for email+password combos and if something is found
     # then your command will be triggered and attack the targets.
-    while inotifywait -e modify $EMAGNETTEMP; do
-    PASTEBIN_TARGETS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'| \
-         cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/' > $HYDRA_TARGETS)
+    while inotifywait -e modify "${EMAGNETTEMP}"; do
+    PASTEBIN_TARGETS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "${EMAGNETTEMP}"|awk '{print $1}'| \
+         cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/' > "${HYDRA_TARGETS}")
 
         # If the target file is empty, then we monitor the dir again
         # until emagnet download new files otherwise use the prefered tool and attack your targets 
-          if [[ -s $HYDRA_TARGETS -gt "0" ]]; then
+          if [[ -s "${HYDRA_TARGETS}" -gt "0" ]]; then
              <add your hydra or prefered tool here>
           fi
      done
@@ -143,8 +143,12 @@ If you have two providers or even three as I do, just do exactly as above then b
  
     chmod +x my-bruteforce-tool.sh
     ./my-bruteforce-tool.sh
-
-### Now just run emagnet and your patience is the key to success! :-)
+    
+    And in another window:
+    
+    ./emagnet --emagnet
+    
+### Now your patience is the key to success! :-)
  
 ### Wiki Sections:
 
