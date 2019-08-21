@@ -135,7 +135,7 @@ If you have two providers or even three as I do, just do exactly as above then b
 
         # If the target file is empty, then we monitor the dir again
         # until emagnet download new files otherwise use the prefered tool and attack your targets 
-          if [[ -s "${HYDRA_TARGETS}" -gt "0" ]]; then
+          if [[ -s "${HYDRA_TARGETS}" ]]; then
              <add your hydra or prefered tool here>
           fi
      done
