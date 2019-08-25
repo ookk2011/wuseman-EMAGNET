@@ -34,6 +34,16 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 
 * This video has been made of an unknown user so don't blame me, got it in my inbox. Thanks for the video!
 
+### How it works when using SSH instead (scanning 2622 ipv4 addresses in 2.3 seconds) ;-)
+### Have not found this brute method anywhere else, so hopefully someone will enjoy it.
+
+![Screenshot](https://nr1.nu/emagnet/previews/emagnet-ssh.gif)
+
+### Is this for real? Sure, since it's illegal to bruteforce real targets let me add a local host so we can see if we succeeding!
+
+![Screenshot](.preview/e.gif)
+
+
 ### Get Started On Linux/MacOSX
 
     git clone https://github.com/wuseman/emagnet
@@ -150,14 +160,6 @@ If you have two providers or even three as I do, just do exactly as above then b
     
 ##### Now your patience is the key to success! :-)
  
-### How it works when using SSH instead (scanning 2622 ipv4 addresses in 2.3 seconds) ;-):
-
-![Screenshot](https://nr1.nu/emagnet/previews/emagnet-ssh.gif)
-
-### Is this for real? Sure, since it's illegal to bruteforce real targets let me add a local host so we can see if we succeeding!
-
-![Screenshot](.preview/e.gif)
-
 ### Wiki Sections:
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
