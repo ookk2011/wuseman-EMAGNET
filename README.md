@@ -148,8 +148,16 @@ If you have two providers or even three as I do, just do exactly as above then b
     
     ./emagnet --emagnet
     
-### Now your patience is the key to success! :-)
+##### Now your patience is the key to success! :-)
  
+### How it works when using SSH instead (scanning 2622 ipv4 addresses in 2.3 seconds) ;-):
+
+![Screenshot](https://nr1.nu/emagnet/previews/emagnet-ssh.gif)
+
+### Is this for real? Sure, since it's illegal to bruteforce real targets let me add a local host so we can see if we succeeding!
+
+![Screenshot](.previews/e.gif)
+
 ### Wiki Sections:
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
