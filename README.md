@@ -156,7 +156,7 @@ If you have two providers or even three as I do, just do exactly as above then b
 
 ### Is this for real? Sure, since it's illegal to bruteforce real targets let me add a local host so we can see if we succeeding!
 
-![Screenshot](.previews/e.gif)
+![Screenshot](.preview/e.gif)
 
 ### Wiki Sections:
 
