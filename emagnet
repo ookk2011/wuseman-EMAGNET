@@ -736,7 +736,6 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
 if [[ $(cat "$HOME/.config/emagnet/tmp/.emagnet-portscanning.txt"|wc -l) -eq "0" ]]; then
     printf "%17s[\e[1;31m\e[5m00\e[0m\e[0m] - Ipv4 Addresses found\n"
     sleep 2
-    echo hiiiiiiiiiiiii			
 else
     clear
     banner
