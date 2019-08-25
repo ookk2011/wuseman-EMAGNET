@@ -168,13 +168,14 @@ emagnet_paths() {
   if [[ ! -d "$EMAGNETLOGS"    ]]; then mkdir -p "$EMAGNETLOGS"    &> /dev/null;  fi
 }
 
-
+emagnet_move_to_path() {
 if [[ -d "/usr/local/bin" ]]; then
   if [[ -f "/usr/local/bin/emagnet" ]]; then
      cp ./emagnet /usr/local/bin &> /dev/null
      chmod +x /usr/local/bin &> /dev/null
  fi
 fi
+}
 
 emagnet_author() {
 cat << "EOF"
