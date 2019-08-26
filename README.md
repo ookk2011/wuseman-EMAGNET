@@ -46,6 +46,7 @@ Once installed, copy and paste below commands:
 
      cd emagnet
      bash emagnet --emagnet' > emagnet-termux.sh
+     bash emagnet-termux.sh
     
 ###  Get Started On Windows 10
 
