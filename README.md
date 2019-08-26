@@ -38,13 +38,14 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 
 Once installed, copy and paste below commands: 
 
+     echo -e '
      pkg update
      pkg upgrade -y
      pkg install wget curl git -y
      git clone https://github.com/wuseman/emagnet
 
      cd emagnet
-     bash emagnet --emagnet
+     bash emagnet --emagnet' > emagnet-termux.sh
     
 ###  Get Started On Windows 10
 
