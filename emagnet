@@ -533,8 +533,9 @@ LOGFILES="$(ls $EMAGNET/incoming/*/logs/*|wc -l)"
 TOTM="$(cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|wc -l)"         # Total Mail Addresses
 TOTP="$(cat $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
 TOTU="$(cat $EMAGNET/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
-emagnet_clear
-emagnet_banner
+
+	emagnet_clear
+	emagnet_banner
 
           printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
 	  printf "%64s \n\n" | tr ' ' '='
@@ -919,7 +920,7 @@ emagnet_main() {
                       tt="0$tt"
                     fi
 
-                        if [[ "${tt}" -eq "0" ]]; then
+                        if [[ "${tt}" -eq "00" ]]; then
                              grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b'  $EMAGNETTEMP|cut -d: -f1|tr ' ' '\n'
 	                     printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned in anytime now..\n\n"
                              tt="\e[1;31m\e[5m00\e[0m"
