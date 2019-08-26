@@ -15,11 +15,6 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture  email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
 
-### Demo - Running on a android device via termux 
-#### Works fine without termux but then you must have wget+curl installed)
-
-![](.preview/android-emagnet.gif)
-
 ### Demo - How it works
 #### Left side is how you see it - Right side is what actually happening in the background
 ![Screenshot](.preview/emagnet2-debug.gif)
@@ -38,6 +33,9 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
     ./emagnet --emagnet
     
 ### Get started on Android via Termux
+#### Works fine without termux but then you must have wget+curl installed)
+
+![](.preview/android-emagnet.gif)
 
 * Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
 
