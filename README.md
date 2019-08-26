@@ -88,7 +88,7 @@ _Get started with spotify brute forcing - How emagnet will work with your openvp
 - Curl     - Find more info about _curl_ [here](https://github.com/curl/curl)
 
 #### BBC NEWS: ["Pastebin: Running the site where hackers publicise their attacks"](https://www.bbc.com/news/technology-17524822) 
-- Emagnet is your best friend for get the leaks, you will be the first viewer on every paste but it of course matters of  the time you have set ;-)
+- Emagnet is your best friend for get the leaks
 
 ## Changelog
 
