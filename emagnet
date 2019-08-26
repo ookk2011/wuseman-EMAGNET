@@ -166,6 +166,7 @@ emagnet_paths() {
   if [[ ! -d "$EMAGNETLOGS"    ]]; then mkdir -p "$EMAGNETLOGS"    &> /dev/null;fi
 }
 
+# - NOT IN USE
 emagnet_move_to_path() {
 if [[ -d "/usr/local/bin" ]]; then
   if [[ -f "/usr/local/bin/emagnet" ]]; then
@@ -352,38 +353,28 @@ fi
 
 
 emagnet_heavyload() {
- if [[ -z "$USERAGENT" ]]; then
-  echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
-  exit
- fi
-	curl -sL "$PASTEBIN" -H "$USERAGENT" \
-	|grep -q "is under heavy load right now"
-	  if [[ "$?" = "0" ]]; then
-  	  for (( ; ; )); do
-   	    wait_time=60
-   	    temp_cnt="${wait_time}"
-      		 while [[ "${temp_cnt}" -gt 0 ]]; do
-          		printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
-         		printf " seconds"
-         		sleep 1
-      		       ((temp_cnt--))
-         done
-       echo
-       bash "$basename$0" --emagnet
-        done
-       bash "$basename$0" --emagnet
-    fi
+curl -sL "$PASTEBIN" -H "$USERAGENT" \
+|grep -q "is under heavy load right now"
+if [[ "$?" = "0" ]]; then
+  for (( ; ; )); do
+   wait_time=60
+   temp_cnt="${wait_time}"
+     while [[ "${temp_cnt}" -gt 0 ]]; do
+        printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
+        printf " seconds"
+        sleep 1
+        ((temp_cnt--))
+     done
+        echo
+ bash "$basename$0" --emagnet
+ done
+ bash "$basename$0" --emagnet
+fi
 }
 
 emagnet_I_was_banned() {
-
-  if [[ -z "$USERAGENT" ]]; then
-	   echo -e "$basename$0: internal errror -- you must set a useragent in $CONF"
-	   exit
-  fi
     curl -sL "$PASTEBIN" -H "$USERAGENT" \
     |grep -q "blocked your IP"
-
 	if [[ "$?" = "0" ]]; then
   		if [[ "$VPN" = "false" ]]; then
                       emagnet_clear
@@ -402,12 +393,12 @@ emagnet_I_was_banned() {
                                    emagnet_banner
                                    bash "$basename$0" --emagnet
                                    sleep 2
-                          done
+                        done
                                    emagnet_clear
                                    emagnet_banner
          			   bash "$basename$0" --emagnet
          			   exit 1
-      else
+                else
          			   emagnet_banned
   fi
 fi
@@ -432,30 +423,30 @@ if [[ -z "$VPNPROVIDER" || -n "$VPNPROVIDER2" ]]; then
 fi
 
   case "$COUNTRY" in
-     "belgium")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn" &> /dev/null & ;;
-     "bulgaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn" &> /dev/null & ;;
-     "czech")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn" &> /dev/null & ;;
-     "denmark")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn" &> /dev/null & ;;
-     "spain")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn" &> /dev/null & ;;
-     "finland")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn" &> /dev/null & ;;
-     "united-kingdom") cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn" &> /dev/null & ;;
-     "greece")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn" &> /dev/null & ;;
-     "hongkong")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn" &> /dev/null & ;;
-     "hungaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn" &> /dev/null & ;;
-     "italy")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn" &> /dev/null & ;;
-     "moldavia")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn" &> /dev/null & ;;
-     "netherlands")    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn" &> /dev/null & ;;
-     "norway")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn" &> /dev/null & ;;
-     "poland")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn" &> /dev/null & ;;
-     "portugal")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn" &> /dev/null & ;;
-     "romania")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn" &> /dev/null & ;;
-     "russia")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn" &> /dev/null & ;;
-     "sweden")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn" &> /dev/null & ;;
-     "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn" &> /dev/null & ;;
+     "belgium")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.be.ovpn"  &> /dev/null & ;;
+     "bulgaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.bg.ovpn"  &> /dev/null & ;;
+     "czech")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.cz.ovpn"  &> /dev/null & ;;
+     "denmark")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.dk.ovpn"  &> /dev/null & ;;
+     "spain")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.es.ovpn"  &> /dev/null & ;;
+     "finland")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.fi.ovpn"  &> /dev/null & ;;
+     "united-kingdom") cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gb.ovpn"  &> /dev/null & ;;
+     "greece")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.gr.ovpn"  &> /dev/null & ;;
+     "hongkong")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hk.ovpn"  &> /dev/null & ;;
+     "hungaria")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.hu.ovpn"  &> /dev/null & ;;
+     "italy")          cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.it.ovpn"  &> /dev/null & ;;
+     "moldavia")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.md.ovpn"  &> /dev/null & ;;
+     "netherlands")    cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.nl.ovpn"  &> /dev/null & ;;
+     "norway")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.no.ovpn"  &> /dev/null & ;;
+     "poland")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pl.ovpn"  &> /dev/null & ;;
+     "portugal")       cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.pt.ovpn"  &> /dev/null & ;;
+     "romania")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.ro.ovpn"  &> /dev/null & ;;
+     "russia")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.rs.ovpn"  &> /dev/null & ;;
+     "sweden")         cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"  &> /dev/null & ;;
+     "sweden1")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se.ovpn"  &> /dev/null & ;;
      "sweden2")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se2.ovpn" &> /dev/null & ;;
      "sweden3")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se3.ovpn" &> /dev/null & ;;
      "sweden4")        cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.se4.ovpn" &> /dev/null & ;;
-     "united-states")  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn" &> /dev/null & ;;
+     "united-states")  cd "$VPNPROVIDER";openvpn --config "$VPNCONFIG.us.ovpn"  &> /dev/null & ;;
   esac
 }
 
@@ -523,7 +514,7 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
            printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
-           printf "%20s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
 	  else
           sleep 0
@@ -540,9 +531,9 @@ LOGFILES="$(ls $EMAGNET/incoming/*/logs/*|wc -l)"
 TOTM="$(cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|wc -l)"         # Total Mail Addresses
 TOTP="$(cat $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
 TOTU="$(cat $EMAGNET/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
+emagnet_clear
+emagnet_banner
 
-	  emagnet_clear
-          emagnet_banner
           printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
 	  printf "%64s \n\n" | tr ' ' '='
 
@@ -615,11 +606,10 @@ fi
     emagnet_banner
 
         printf "%s\n" "Copying files to archive.."
-     	  cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
-     	  cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
-    	  cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
+        cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
+     	cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
+    	cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
         printf "%s\n\n" "All files has been copied to archive.."
-
 
 read -p "Do you want to wipe incoming directories (y/n): " cleanup
    if [[ $cleanup = "y" ]]; then
@@ -646,24 +636,24 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
             emagnet_analyzer
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
       	    sed -i '125d' "$CONF"
-     	      sed -i '125 i GBRUTEFORCE=false' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
       	    sed -i '126d' "$CONF"
-	          sed -i '126 i SBRUTEFORCE=true' "$CONF"
-	          sed -i '127d' "$CONF"
-     	      sed -i '127 i PBRUTEFORCE=false' "$CONF"
+	    sed -i '126 i SBRUTEFORCE=true' "$CONF"
+	    sed -i '127d' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
             emagnet_conf
             printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
-	          sed -i '125d' "$CONF"
-     	      sed -i '125 i GBRUTEFORCE=false' "$CONF"
+	    sed -i '125d' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
       	    sed -i '126d' "$CONF"
-     	      sed -i '126 i SBRUTEFORCE=false' "$CONF"
+     	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
             sed -i '127d' "$CONF"
-     	      sed -i '127 i PBRUTEFORCE=true' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=true' "$CONF"
             emagnet_conf
-            printf "%20s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  else
@@ -857,13 +847,6 @@ fi
 }
 
 emagnet_syntax() {
-emagnet_conf
-
-if [[ -z "$USERAGENT" ]]; then
-  echo -e "$basename$0: internal errror -- you must set a valid useragent in $CONF"
-  exit 1
-fi
-
 curl -H "$USERAGENT" -Ls "$PASTEBIN"|grep -q "blocked your IP"
 if [[ $? = "0" ]]; then
  if [[ "$VPN" = "true" ]]; then
@@ -874,14 +857,9 @@ if [[ $? = "0" ]]; then
       exit 1
  fi
 fi
-     curl -Ls "$PASTEBIN/languages" \
-    |grep -o 'href="/archive/............' \
-    |cut -d'<' -f1 \
-    |cut -d'/' -f3 \
-    |cut -d'"' -f1 > $HOME/.config/emagnet/tmp/.emagnet-syntaxes
 
   if [[ -z "$SYNTAX2DL" ]]; then
-      echo -e "$basename$0: internal error -- you must choose a syntax language to download, aborted.."
+      echo -e "$basename$0: internal error -- you must include a syntax language (ex: bash)."
       exit 1
   fi
 
@@ -893,22 +871,23 @@ fi
  grep -q "$SYNTAX2DL" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes"
 
 if [[ "$?" = "0" ]]; then
-     emagnet_clear
-     emagnet_banner
      printf "Downloading $(cat $HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls|wc -l) ${SYNTAX2DL} files.."
      mkdir -p "$EMAGNETSYNTAX/$SYNTAX2DL"
-       xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -nc -q < $HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
+     xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -nc -q < $HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls -P "$EMAGNETSYNTAX/$SYNTAX2DL" &> /dev/null
      printf "\n%s\n\n" "Done.."
      rm "$HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes" &> /dev/null
  else
-     echo -e "$basename$0: internal error -- $SYNTAX2DL is not a valid syntax language.."
-     echo -e "try 'cat $HOME/.config/emagnet/tmp/.emagnet-syntaxes' for find valid syntaxes"
-       rm "$HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes" &> /dev/null
+      curl -Ls "$PASTEBIN/languages" \
+     |grep -o 'href="/archive/............' \
+     |cut -d'<' -f1 \
+     |cut -d'/' -f3 \
+     |cut -d'"' -f1 > $HOME/.config/emagnet/tmp/.emagnet-syntaxes
+      echo -e "$basename$0: internal error -- $SYNTAX2DL is not a valid syntax language.."
+      echo -e "try 'cat $HOME/.config/emagnet/tmp/.emagnet-syntaxes' for find valid syntaxes"
 fi
 }
 
 emagnet_main() {
-
     curl -H "$USERAGENT" -Ls "$PASTEBIN/archive" \
    |awk -F'href="/' '{print $2}' \
    |cut -d'"' -f1 \
@@ -965,26 +944,23 @@ if [[ "$pt" -lt 10 ]]; then pt="0$pt";fi
 if [[ "$pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${pt} passwords from: $EMAGNETPW/${pf##*/}"      | xargs >> "$EMAGNETLOGS/emagnet.log"
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${et} email addresses from: $EMAGNETDB/${ef##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
-
-	  echo -e "${pl}" >> $EMAGNETLOGS/passwords-from-pastebin.txt
- 	  echo -e "${el}" >> $EMAGNETLOGS/emails-from-pastebin.txt
-
-                cp -rn ${ef} $EMAGNETDB/ &> /dev/null
- 	 	cp -rn ${pf} $EMAGNETPW/ &> /dev/null
-
- 	            printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
- 		    printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
-  		    printf "%19s[\e[1;32m$et\e[0m] - Email Addresses Found\n\n"
-
-                      if [[ "$NOTIFY" = "true" ]]; then
+  echo -e "${pl}" >> $EMAGNETLOGS/passwords-from-pastebin.txt
+  echo -e "${el}" >> $EMAGNETLOGS/emails-from-pastebin.txt
+  cp -rn ${ef} $EMAGNETDB/ &> /dev/null
+  cp -rn ${pf} $EMAGNETPW/ &> /dev/null
+                     	if [[ "$NOTIFY" = "true" ]]; then
                            notify-send "Emagnet" "\n
-                           ${tt} - Files downloaded\n
-                           ${pt} - Passwords found\n
-                           ${et} - Email addresses found"
-                      fi
-                           sleep 2
+                           "${tt}" - Files downloaded\n
+                           "${pt}" - Passwords found\n
+                           "${et}" - Email addresses found"
+                        fi
 
-                            if [[ "$GBRUTEFORCE" = "true" ]]; then
+                            printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+                            printf "%19s[\e[1;32m$pt\e[0m] - Passwords Found\n\n"
+                            printf "%19s[\e[1;32m$et\e[0m] - Email Addresses Found\n\n"
+                            sleep 2
+
+                             if [[ "$GBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%17s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
                                 emagnet_gmail_bruter
@@ -1011,28 +987,31 @@ if [[ "$pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
                            00 - Passwords found\n
                            ${et} - Email addresses found"
                         fi
-
                            printf "%19s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
                            printf "%19s[\e[1;31m00\e[0m] - Passwords Found\n\n"
                            printf "%19s[\e[1;32m$et\e[0m] - Email Addresses Found\n\n"
-sleep 2
+                           sleep 2
   else
-                           printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
-                           printf "%17s[\e[1;31m00\e[0m] - Passwords Was Found\n\n"
-                           printf "%17s[\e[1;31m00\e[0m] - Email Address Was Found\n\n"
-
                         if [[ "$NOTIFY" = "true" ]]; then
                             notify-send "Emagnet" "\n
                             ${tt} - Files downloaded\n
                             00 - Passwords found\n
                             00 - Email addresses found"
                         fi
-sleep 2
+
+                          printf "%17s[\e[1;32m$tt\e[0m] - Files Downloaded\n\n"
+                          printf "%17s[\e[1;31m00\e[0m] - Passwords Was Found\n\n"
+                          printf "%17s[\e[1;31m00\e[0m] - Email Address Was Found\n\n"
+                          sleep 2
 
 fi
-    mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+
+# No matter what we found, move incoming files to archive and remove temp files
+   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
     rm "$HOME/.config/emagnet/tmp/.emagnet" "$HOME/.config/emagnet/tmp/.emagnet1"  &> /dev/null
     sleep 2
+# No need to announce notify-send forever, will be conflicts when time set to a low value
+# but I dont bother to care about this, we kill it no matter what time is set due to freezes on some crap distros.
     pkill -9 "notify-send" &> /dev/null
 }
 
@@ -1089,20 +1068,19 @@ case $1 in
         sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
         sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
         emagnet_run4ever
-
 		  ;;
 
       "-g"|"-bruteforce"|"--bruteforce")
+          emagnet_iconnection
+          emagnet_first_run
           if [[ "$2" = "gmail" ]]; then
              sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
              emagnet_conf
-
                 if [[ "$GBRUTEFORCE" = "true" ]]; then
                    emagnet_run4ever
                    emagnet_gmail_bruter
                    mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
                  fi
-
            elif [[ "$2" = "ssh" ]]; then
               emagnet_conf
               sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
@@ -1156,8 +1134,6 @@ case $1 in
                         sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
                         emagnet_conf
 
-
-
                  if [[ "$PBRUTEFORCE" = "true" ]]; then
                                 emagnet_clear
                                 emagnet_banner
@@ -1188,6 +1164,7 @@ case $1 in
                 ;;
 
       "-l"|"-license"|"--license")
+                emagnet_iconnection
                 emagnet_license
                 ;;
 
@@ -1202,11 +1179,15 @@ case $1 in
                 ;;
 
       "-s"|"-spam"|"--spam")
+                emagnet_iconnection
+                emagnet_first_run
                 emagnet_conf
                 emagnet_spammer
                 ;;
 
       "-x"|"-syntax"|"--syntax")
+                emagnet_conf
+                emagnet_iconnection
                 SYNTAX2DL="${2}"
                 emagnet_syntax
                 ;;
