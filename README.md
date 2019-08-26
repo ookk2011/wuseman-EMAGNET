@@ -18,7 +18,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 ### Demo - Running on a android device via termux 
 #### Works fine without termux but then you must have wget+curl installed)
 
-![](https://nr1.nu/emagnet/pictures/android-emagnet.gif)
+![](.preview/android-emagnet.gif)
 
 ### Demo - How it works
 #### Left side is how you see it - Right side is what actually happening in the background
