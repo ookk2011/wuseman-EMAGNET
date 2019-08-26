@@ -11,11 +11,8 @@ r = RE-ADDED FEATURE FROM AN EARLIER VERSION
      that has been re-added is now stable and not "half done" so they are here for stay.
 R = REBUILT
 
+
 # Version 3.4
-
--    Removed color funciton again since it wont work on android devices
-
-# Version 3.3
 
 +    Small and general fixes for a better setup
 +    Better regex and added it easier to read how we grab stuff
@@ -30,6 +27,7 @@ R = REBUILT
 +    Edited how we read LICENSE
 +    Added a function for colors so we can use a more elegant way to print stuff
 
+-    Removed color function again since it wont work on android devices
 -    Removed .emagnetconf/emagnet.conf and .emagnetconf/emagnet.conf.bak
 -    Removed requirements for a browser to be installed
 -    Remove temp files so they wont be stored in tmp folder 
