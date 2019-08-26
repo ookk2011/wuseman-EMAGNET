@@ -105,6 +105,7 @@ emagnet_clear() { clear ; }
 emagnet_iconnection() { ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
 emagnet_license() { printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
 emagnet_required_stuff() { cp "./emagnet.conf" $HOME/.config/emagnet/; if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p "$HOME/.config/emagnet/";mkdir -p "$HOME/.config/emagnet/tmp";fi;}
+emagnet_is_this_android() { adb shell getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF" ;}
 
 emagnet_mustbefilled() {
   if [[ -z "$DEBUG"          ]];then sed -i "12d"  "$CONF";sed -i '12  i DEBUG=false'                                                                                                             "$CONF";fi
@@ -153,6 +154,7 @@ emagnet_mustbefilled() {
   if [[ -z "$SSHTARGETS"     ]];then sed -i '184d' "$CONF";sed -i '184 i SSHTARGETS="$HOME/.config/emagnet/tmp/.emagnet-sshbruter.txt"'                                                           "$CONF";fi
   if [[ -z "$SSHPORTSCAN"    ]];then sed -i '185d' "$CONF";sed -i '185 i SSHPORTSCAN="$HOME/.config/emagnet/tmp/.emagnet-portscan"'                                                               "$CONF";fi
   if [[ -z "$USERAGENT"      ]];then sed -i '195d' "$CONF";sed -i '195 i USERAGENT=Mosaic/0.9'                                                                                                    "$CONF";fi
+  if [[ -z "$ANDROID"        ]];then sed -i '204d' "$CONF";sed -i '204 i ANDROID=false'                                                                                                    "$CONF";fi
 }
 
 emagnet_paths() {
@@ -665,11 +667,9 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
             sed -i '127 i PBRUTEFORCE=false' "$CONF"
             emagnet_analyzer
 fi
-
 }
 
 blocked() {
- if [[ -z "$USERAGENT" ]]; then echo -e "$basename$0: internal errror -- you must set a useragent in $CONF";exit 1;fi
  if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi
 }
 
@@ -1049,6 +1049,7 @@ if ! [[ -f "$CONF" ]]; then
         emagnet_conf
         emagnet_mustbefilled
         emagnet_paths
+        emagnet_is_this_android
         emagnet_I_was_banned
         timeout 2 ping -t 1 -c 1 nr1.nu &> /dev/null
         [[ "$?" -gt "0" ]] && sed -i '40d' $CONF;sed -i '40 i MYIP=127.0.0.1' $CONF || wip
@@ -1145,7 +1146,7 @@ case $1 in
                  fi
                                 mv "$EMAGNETTEMP/*" "$EMAGNETHOME/all-files" &> /dev/null
                 else
-                       printf "%s\n" "$basename$0: internal error -- unknown option"
+                       printf "%s\n" "$basename$0: internal error -- not a valid option, try gmail, spotify or ssh"
                        exit 1
                 fi
                 ;;
