@@ -15,6 +15,11 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture  email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
 
+### Demo - Running on a android device via termux 
+#### Works fine without termux but then you must have wget+curl installed)
+
+![](https://nr1.nu/emagnet/pictures/android-emagnet.gif)
+
 ### Demo - How it works
 #### Left side is how you see it - Right side is what actually happening in the background
 ![Screenshot](.preview/emagnet2-debug.gif)
@@ -116,6 +121,14 @@ If you are one of these who dislikes _EMAGNET_ and believe the program has been 
 Feel free to read the history about emagnet [here](https://github.com/wuseman/EMAGNET/wiki/About) and how everything started about this project.
 
 #### Development of emagnet is active and is updated frequently, please use the latest version if you report issues/bugs.
+
+# Greetings: 
+
+_m1st_ that deliver legit leaks for us daily.
+
+And to all ppl that is trying to sell public leaks and steal the real hackers job, f*ck you! This is one reason why I started this project, I hope this project will get widely spreaded so you will earn 0.00$ on your re-edited malware shit!
+
+Cheers!
 
 ### Emagnet is a private project since 2015 and was released in June @ 2018, to be continued. 
 
