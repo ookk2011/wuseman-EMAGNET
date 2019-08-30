@@ -97,17 +97,17 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
 EOF
 }
 
-CONF="$HOME/.config/emagnet/emagnet.conf"
-emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
+emagnet_required_stuff() { if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p "$HOME/.config/emagnet/";mkdir -p "$HOME/.config/emagnet/tmp";fi;cp "./emagnet.conf" $HOME/.config/emagnet/;}
 emagnet_conf() { CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
-emagnet_clear() { clear ; }
+emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
+emagnet_clear() { clear;}
 emagnet_iconnection() { ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
 emagnet_license() { printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
-emagnet_required_stuff() { cp "./emagnet.conf" $HOME/.config/emagnet/; if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p "$HOME/.config/emagnet/";mkdir -p "$HOME/.config/emagnet/tmp";fi;}
-emagnet_is_this_android() { getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF" ;}
-emagnet_requirements() { for cmd in wget curl; do hash $cmd; if [[ "$?" -gt 0 ]]; then echo "$cmd is required to be installed, exiting."; exit 1;fi;done; }
-emagnet_optional() { sleep 0 ;}
-blocked() { if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi;}
+emagnet_is_this_android() { getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF";}
+emagnet_requirements() { for cmd in wget curl; do hash $cmd; if [[ "$?" -gt 0 ]]; then echo "$cmd is required to be installed, exiting."; exit 1;fi;done;}
+emagnet_optional() { sleep 0;}
+emagnet_blocked() { if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi;} # 2FIX - Do we need this?
+CONF="$HOME/.config/emagnet/emagnet.conf"
 
 emagnet_mustbefilled() {
   if [[ -z "$DEBUG"          ]];then sed -i "12d"  "$CONF";sed -i '12  i DEBUG=false'                                                                                                             "$CONF";fi
@@ -838,9 +838,8 @@ fi
 }
 
 emagnet_run4ever() {
- emagnet_conf
- curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "blocked your IP"; if [[ "$?" = "0" ]]; then if [[ "$VPN" = "true" ]]; then emagnet_banned; else emagnet_I_was_banned;fi;fi
-
+       emagnet_conf
+        curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "blocked your IP"; if [[ "$?" = "0" ]]; then if [[ "$VPN" = "true" ]]; then emagnet_banned; else emagnet_I_was_banned;fi;fi
       for (( ; ; )); do
         emagnet_count_down
         emagnet_clear
