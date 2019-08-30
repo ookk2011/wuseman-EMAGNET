@@ -660,6 +660,7 @@ if [[ "$(ls $EMAGNETDB|wc -l)" -eq "0" ]]; then
     echo -e "$basename$0: internal error -- no email addresses has been found, nothing to do, exiting.."
     exit 1
 else
+emagnet_clear;emagnet_banner
     NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2|wc -l)"
         printf "%24s \e[1;31mTargets: \e[1;32m$NRTARGETS\e[0m\e[0m\n\n"
         read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
@@ -667,7 +668,7 @@ else
                   "yes")
                      printf "%62s \n" | tr ' ' '='
                      grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > $HOME/.config/emagnet/tmp/.emagnet-spam
-                      while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]" | tr ' ' '.';done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
+                      while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]";done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
                      rm "$HOME/.config/emagnet/tmp/.emagnet-spam" &> /dev/null
                    ;;
                   "*")
