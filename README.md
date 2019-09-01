@@ -53,7 +53,7 @@ Once installed, copy and paste below commands:
     
 ###  Get Started On Windows 10
 
-Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
+Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Configurations-&-Installation) for more info (includes a video)
 
 ### Wiki Sections:
 
