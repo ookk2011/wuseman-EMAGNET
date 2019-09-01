@@ -25,11 +25,6 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 #### Left side is how you see it - Right side is what actually happening in the background
 ![Screenshot](.preview/emagnet2-debug.gif)
 
-### And a real example (video has been sent to my mailbox, has not been recorded by myself)
-![Screenshot](.preview/emagnet-real.gif)
-
-
-
 ### Get Started On Linux/MacOSX
 
     git clone https://github.com/wuseman/emagnet
