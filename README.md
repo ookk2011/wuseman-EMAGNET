@@ -15,6 +15,12 @@
 
 Emagnet is a very powerful tool for it's purpose wich is to capture  email addresses and passwords from leaked databases uploaded on pastebin. It's almost impossible to find leaked passwords when they are out of list on pastebin.com. Either they have been deleted by pastebin's techs or the uploads is just one in the crowd. To be honest it's easier to find a needle in a haystack then find outdated uploads on pastebin with the data we want to collect. 
 
+### Known Issues That Will Be Fixed In Next Push!
+
+- [ ] SSH Bruterforcer isn't completely working anymore 
+- [ ] Requirements packages for android devices when using termux app isnt working with brute force tools + screen
+- [ ] Sending wrong data into emagnet.log for wich files that contains correct data 
+
 ### Demo - How it works
 #### Left side is how you see it - Right side is what actually happening in the background
 ![Screenshot](.preview/emagnet2-debug.gif)
@@ -22,7 +28,8 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 ### Of course everything getting stored to log dir (Filtered email addresses)
 ![Screenshot](.preview/emagnet-log.png)
 
-* This video has been made of an unknown user so don't blame me, got it in my inbox. Thanks for the video!
+## Here's how it works in reality.
+![Screenshot](https://nr1.nu/f/trwsk.png)
 
 ### Get Started On Linux/MacOSX
 
