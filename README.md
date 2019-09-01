@@ -25,11 +25,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 #### Left side is how you see it - Right side is what actually happening in the background
 ![Screenshot](.preview/emagnet2-debug.gif)
 
-### Of course everything getting stored to log dir (Filtered email addresses)
-![Screenshot](.preview/emagnet-log.png)
+### And a real example (video has been sent to my mailbox, has not been recorded by myself)
+![Screenshot](.preview/emagnet-real.gif)
 
-## Here's how it works in reality.
-![Screenshot](https://nr1.nu/f/trwsk.png)
+
 
 ### Get Started On Linux/MacOSX
 
