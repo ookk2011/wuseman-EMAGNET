@@ -55,10 +55,6 @@ Once installed, copy and paste below commands:
 
 Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
 
-
-    
-##### Now your patience is the key to success! :-)
- 
 ### Wiki Sections:
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
@@ -70,14 +66,14 @@ _Previews can be found here._
 - [Faq](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
 _How to grab your visa card if it has been leaked. Also get answers why we not using TOR._
 
-- [Installation](https://github.com/wuseman/EMAGNET/wiki/INSTALLATION) - 
+- [Configurations-&-Installation](https://github.com/wuseman/EMAGNET/wiki/) - 
 _Video preview for how to get started on windows_
 
 - [Wiki](https://github.com/wuseman/EMAGNET/wiki) - 
-_How To Find your facebook credenticals, if it has been leaked._
-
-- [Tips & Tricks](https://github.com/wuseman/EMAGNET/wiki/Tips-&-Tricks) - 
 _Get started with spotify brute forcing - How emagnet will work with your openvpn files._
+
+- [Regex - Tips For Search](https://github.com/wuseman/EMAGNET/wiki/Searching-&-Regex)
+_How To Find your facebook credenticals, if it has been leaked._
 
 ### System requirements
 
