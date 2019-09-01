@@ -35,7 +35,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
     
 ### Get started on Android via Termux
 
-See video [here](nr1.nu/android-emagnet.gif)
+See video [here](https://nr1.nu/android-emagnet.gif)
 
 * Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
 
