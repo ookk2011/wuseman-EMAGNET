@@ -35,7 +35,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
     
 ### Get started on Android via Termux
 
-See video [here](nr1.nu/android-emagnet.gif)
+See video [here](https://nr1.nu/android-emagnet.gif)
 
 * Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
 
@@ -53,12 +53,8 @@ Once installed, copy and paste below commands:
     
 ###  Get Started On Windows 10
 
-Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Installation) for more info (includes a video)
+Please visit my installation [wiki](https://github.com/wuseman/EMAGNET/wiki/Configurations-&-Installation) for more info (includes a video)
 
-
-    
-##### Now your patience is the key to success! :-)
- 
 ### Wiki Sections:
 
 - [About](https://github.com/wuseman/EMAGNET/wiki/ABOUT) - 
@@ -70,14 +66,10 @@ _Previews can be found here._
 - [Faq](https://github.com/wuseman/EMAGNET/wiki/FAQ) - 
 _How to grab your visa card if it has been leaked. Also get answers why we not using TOR._
 
-- [Installation](https://github.com/wuseman/EMAGNET/wiki/INSTALLATION) - 
-_Video preview for how to get started on windows_
-
-- [Wiki](https://github.com/wuseman/EMAGNET/wiki) - 
-_How To Find your facebook credenticals, if it has been leaked._
-
-- [Tips & Tricks](https://github.com/wuseman/EMAGNET/wiki/Tips-&-Tricks) - 
+- [Configurations-&-Installation](https://github.com/wuseman/EMAGNET/wiki/Configurations-&-Installation) - 
 _Get started with spotify brute forcing - How emagnet will work with your openvpn files._
+
+- [Regex - Tips For Search](https://github.com/wuseman/EMAGNET/wiki/Searching-&-Regex) - How To Find your facebook credenticals, if it has been leaked._
 
 ### System requirements
 
