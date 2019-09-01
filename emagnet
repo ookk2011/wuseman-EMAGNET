@@ -556,7 +556,7 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
         # statuses = manager.run()
 
 #     while read sshtargets; do
-         sshpass -p "odemnn" pssh  -O "StrictHostKeyChecking=no" -I -A -h $SSHTARGETS -i "uptime" < $SSHTARGETS |grep --color -i 'success\|failure' 
+         sshpass -p "$SSHPASS" pssh  -O "StrictHostKeyChecking=no" -I -A -h $SSHTARGETS -i "uptime" < $SSHTARGETS |grep --color -i 'success\|failure' 
 #		if [[ $? -eq "0" ]]; then
 #		    	echo -e "[\e[1;32m>>\e[0m] - Cracked $sshtargets: $SSHUSER:$SSHPASS"
 #    			echo -e "================================================================"        >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
@@ -786,9 +786,9 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                            "${et}" - Email Addresses Found"
                         fi
 
-                            echo -e "                      - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
-                            echo -e "                      - Passwords Found \r             [\e[1;32m$pt\e[0m] "
-                            echo -e "                      - Email Addresses Found \r             [\e[1;32m$et\e[0m]\n "
+                            echo -e "                       - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
+                            echo -e "                       - Passwords Found \r             [\e[1;32m$pt\e[0m] "
+                            echo -e "                       - Email Addresses Found \r             [\e[1;32m$et\e[0m]\n "
 
                             sleep 2
                              if [[ "$GBRUTEFORCE" = "true" ]]; then
@@ -814,9 +814,9 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                                00 - Passwords found\n
                                ${et} - Email addresses found"
                         fi
-                            echo -e "                 - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
-                            echo -e "                 - Passwords Found \r             [\e[1;32m00\e[0m] "
-                            echo -e "                 - Email Addresses Found \r             [\e[1;32m$et\e[0m] \n"
+                            echo -e "                       - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
+                            echo -e "                       - Passwords Found \r             [\e[1;31m00\e[0m] "
+                            echo -e "                       - Email Addresses Found \r             [\e[1;32m$et\e[0m] \n"
 
                                sleep 2
                       else
@@ -826,9 +826,9 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                               00 - Passwords found\n
                               00 - Email addresses found"
                       fi
-                            echo -e "                 - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
-                            echo -e "                 - Passwords found \r             [\e[1;32m00\e[0m] "
-                            echo -e "                 - Email Addresses Found \r             [\e[1;32m00\e[0m] \n"
+                            echo -e "                       - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
+                            echo -e "                       - Passwords found \r             [\e[1;31m00\e[0m] "
+                            echo -e "                       - Email Addresses Found \r             [\e[1;31m00\e[0m] \n"
 
                              sleep 2
 
