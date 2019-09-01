@@ -34,9 +34,8 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
     ./emagnet --emagnet
     
 ### Get started on Android via Termux
-#### Works fine without termux but then you must have wget+curl installed)
 
-![](.preview/android-emagnet.gif)
+See video [here](nr1.nu/android-emagnet.gif)
 
 * Download termux from play store [here](https://play.google.com/store/apps/details?id=com.termux&hl=en_US)
 
