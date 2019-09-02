@@ -21,6 +21,10 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 - [ ] Requirements packages for android devices when using termux app isnt working with brute force tools + screen
 - [ ] Sending wrong data into emagnet.log for wich files that contains correct data 
 
+### TIPS:
+
+For people that like things sorted. If you have some some large archive with leaked databases stored (or small) on your harddrive but you are to lazy to figure out how to try if they work on spotify or gmail for example, then just create a a rnadom text file in "$HOME/.config/emagnet/tmp/some-random-file" - Add all logins as: mail:password one per line - Now just run emagnet as usual and you will bruteforce all accounts you added to the file and all cracked accounts will be stored in log dirs! Once done, you will have a good list for accounts that actually works for real or at least you know wich accounts you can put at top of your text file that you know is legit.
+
 ### Demo - How it works
 #### Left side is how you see it - Right side is what actually happening in the background
 ![Screenshot](.preview/emagnet2-debug.gif)
