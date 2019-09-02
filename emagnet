@@ -40,6 +40,9 @@
 ####### The Nr1 tool for find latest leaked databases online since 2015 ########
 ################################################################################
 
+
+### Want your own banner?
+### Cool, just replace the ascii below
 emagnet_banner() {
 cat << "EOF"
      _                      _______                      _
@@ -60,7 +63,6 @@ cat << "EOF"
    `Mb.           `YMMMb`OOOI,,,,,IOOOO'dMMMP'           ,dM'
      `'                  `OObNNNNNdOO'                   `'
                            `~OOOOO~'
-
 EOF
 printf "%64s \n\n" | tr ' ' '='
 }
