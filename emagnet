@@ -548,9 +548,11 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
         printf "\n%15s";printf "BRUTE FORCING \e[1;34mSSH\e[0m TARGETS\e[0m\n\n"
         sleep 2
         # We can't send to log files due to pssh will crash with
-        # the message below, for now bruter works but every user must
-        # check the screen for success and failures until this bug has been fixed
-        # ------------------------------------------------------------------------ 
+        # the message below when sending to stderr, we can use tee of course
+        # but it wont get perfect then, let us use the method below  for now
+        # If you are still not happy, then see my sample on
+        # github for using another tools while reading files
+        # ------------------------------------------------------------------------
         # Traceback (most recent call last):
         # File "/usr/bin/pssh", line 118, in <module>
         # do_pssh(hosts, cmdline, opts)
@@ -562,14 +564,14 @@ grep -Ewro '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$EMAGNETHOME/.temp" \
 #		if [[ $? -eq "0" ]]; then
 #		    	echo -e "[\e[1;32m>>\e[0m] - Cracked $sshtargets: $SSHUSER:$SSHPASS"
 #    			echo -e "================================================================"        >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-#          echo -e "[+] Login Details For SSH - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-#	        echo -e "[+]------------------------------------------------------------"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
-#			    echo -e "[+] Username: $SSHUSER"                                                  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+#                       echo -e "[+] Login Details For SSH - Cracked $(date +%d/%m/%Y\ -\ %H:%M)"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+#	                echo -e "[+]------------------------------------------------------------"         >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
+#			echo -e "[+] Username: $SSHUSER"                                                  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
 #    			echo -e "[+] Password: $SSHPASS"                                                  >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
 #    			echo -e "================================================================\n\n"    >>    $EMAGNETLOGS/cracked-ssh-passwords.txt
 #		  else
-#                echo -e "[\e[1;31m<<\e[0m] - Wrong Password For $sshtargets: $SSHUSER:$SSHPASS"
-#                echo -e "[\e[\e[1;31m<<\e[0m] - failed to crack $SSHUSER:$SSHPASS " >> $EMAGNETLOGS/failed-2-crack.txt
+#                       echo -e "[\e[1;31m<<\e[0m] - Wrong Password For $sshtargets: $SSHUSER:$SSHPASS"
+#                       echo -e "[\e[\e[1;31m<<\e[0m] - failed to crack $SSHUSER:$SSHPASS " >> $EMAGNETLOGS/failed-2-crack.txt
 #		fi
 	#    done < $SSHTARGETS
 fi
