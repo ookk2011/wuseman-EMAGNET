@@ -1145,12 +1145,28 @@ case "${1}" in
                 ;;
 
         "-n"|"-notify"|"--notify")
-     	        notify-send --help &> /dev/null
-                if [[ $? -gt "0" ]]; then echo -e "$basename$0: internal error -- notify-send is required for get notifications";exit 1; fi
-                if [[ "$2" != "true" && "$2" != "false" || -z "$2" ]]; then echo -e "$basename$0: internal error -- you must use true or false";exit 1;fi
    	        emagnet_conf
-                if [[ $? -eq "0" ]] && [[ $2 = "true" ]];  then sed -i '137d' "$CONF";sed -i "137 i NOTIFY=true"  "$CONF";printf "$basename$0: config file has been updated -- notifications has been enable\n"; fi
-                if [[ $? -eq "0" ]] && [[ $2 = "false" ]]; then sed -i '137d' "$CONF";sed -i "137 i NOTIFY=false" "$CONF";printf "$basename$0: config file has been updated -- notifications has been disable\n";fi
+                if [[ "$?" -gt "0" ]]; then echo -e "$basename$0: internal error -- notify-send is required to be installed";exit 1; fi # Is notify-send installed?
+                if [[ "$2" != "true" && "$2" != "false" || -z "$2" ]]; then echo -e "$basename$0: internal error -- you must use true or false";exit 1;fi # Is you using a value?
+                # Is notification exported on the right display? Let us ask the user! ;-)
+                # If it set to truee instead of true, then we dont asking again!
+                # and using the the earlier way to set notifications to enable
+                if ! [[ "$NOTIFY" -eq "truee" ]]; then
+                   notify-send "Emagnet" '\n[00] - This is a test\n[00] - If you see this\n[00] - Press Any Key'
+                    echo -e "\rIf you see the notification, hit any key.\c"
+                     read -t 5 notifyworks
+                       if [[ ! -z "$yepitworks" ]] ; then
+                          echo -e "\nOk, seems not, you probably must export your display then.."
+                          exit 1
+                       else
+                          echo -e "\n$basename$0: config file has been udpated -- notifications has been enable"
+                          sed -i '150d' "$CONF";sed -i "150 i NOTIFY=truee"  "$CONF";printf "$basename$0: config file has been updated -- notifications has been enable\n"
+                          exit 1
+                       fi
+                  fi
+                # Since user already has answered if notifications works once, we set notify to truee instead of true so we know
+                if [[ $2 = "true" ]];  then sed -i '150d' "$CONF";sed -i "150 i NOTIFY=truee"  "$CONF";printf "$basename$0: config file has been updated -- notifications has been enable\n"; fi
+                if [[ $2 = "false" ]]; then sed -i '150d' "$CONF";sed -i "150 i NOTIFY=false" "$CONF";printf "$basename$0: config file has been updated -- notifications has been disable\n";fi
                 ;;
 
         "-v"|"-vpn"|"--vpn")
