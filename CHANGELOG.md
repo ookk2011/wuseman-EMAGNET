@@ -14,6 +14,7 @@ R = REBUILT
 
 # Version 3.4
 
++    Support for instagram brute forcing
 +    Changed layout, removed spaces between everything we found
 +    Re-added ssh bruteforcer, nothing wont be stored to log, read script description for why we don't 
 +    Small and general fixes for a better setup

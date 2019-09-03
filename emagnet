@@ -390,14 +390,14 @@ fi
 
 emagnet_merge() {
 EMPTY="$(ls $EMAGNET/incoming/*/logs/|wc -l)"
-if [[ "$EMPTY" -lt "1" ]]; then echo -e "$basename$0: internal error -- nothing to merge";exit 1;fi
+if [[ "$EMPTY" = "0" ]]; then echo -e "$basename$0: internal error -- nothing to merge";exit 1;fi
 DAYDIRS="$(ls $EMAGNET/incoming/|wc -l)"
 DAYDIRS2="$(ls $EMAGNET/incoming/)"
 LOGFILES="$(ls $EMAGNET/incoming/*/logs/*|wc -l)"
 TOTM="$(cat $EMAGNET/incoming/*/logs/emails-from-pastebin.txt|wc -l)"         # Total Mail Addresses
 TOTP="$(cat $EMAGNET/incoming/*/logs/passwords-from-pastebin.txt|wc -l)"      # Total passwords
 TOTU="$(cat $EMAGNET/incoming/*/logs/pastebin-urls.txt|wc -l)"                # Total Urls
-emagnet_clear;emagnet_banner
+          emagnet_clear;emagnet_banner
           printf "%10s Merging \e[1;36m${LOGFILES}\e[0m log files from \e[1;36m${DAYDIRS}\e[0m day directories\n\n"
 	  printf "%64s \n\n" | tr ' ' '='
 	  LOGDATE="$(ls $EMAGNET/incoming/|xargs|sed 's/ /, /g')"
@@ -463,11 +463,11 @@ fi
     mkdir -p "$EMAGNETARCHIVE/password-files"
     mkdir -p "$EMAGNETARCHIVE/logs"
   fi
-        printf "%s\n" "Copying all files from incoming/ dirs to archive/"
-	      cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
+        printf "%s\n" "Copying all incoming files to archive"
+                cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
      		cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
     		cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
-        printf "%s\n\n" "Done.."
+        printf "%s\n" "Done.."
 
       read -p "Wipe incoming directories (y/n): " cleanup
    if [[ "$cleanup" = "y" ]]; then
