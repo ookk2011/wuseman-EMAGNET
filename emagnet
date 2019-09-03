@@ -5,7 +5,7 @@
 ### If you will copy any developers work and claim you are the dev/founder  ###
 ### it wont make you a hacker - The only person you're fooling is yourself  ###
 ### so please respect all developers and GPL Licenses no matter if it's my  ###
-### script, tool or project or if its anyone else, thank you!       	    ###
+### script, tool or project or if it's anyone else, thank you!      	    ###
 ###                                                                         ###
 ###############################################################################
 ###################### EMAGNET WAS FOUNDED BY WUSEMAN #########################
@@ -107,17 +107,19 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
 EOF
 }
 
-emagnet_required_stuff() { if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p "$HOME/.config/emagnet/";mkdir -p "$HOME/.config/emagnet/tmp";fi;cp "./emagnet.conf" $HOME/.config/emagnet/;}
-emagnet_conf() { CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
-emagnet_mustberoot() {(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
-emagnet_clear() { clear;}
-emagnet_iconnection() { ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
-emagnet_license() { printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
-emagnet_is_this_android() { getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF";}
-emagnet_requirements() { for cmd in wget curl; do hash $cmd; if [[ "$?" -gt 0 ]]; then echo "$cmd is required to be installed, exiting."; exit 1;fi;done;}
-emagnet_optional() { sleep 0;}
-emagnet_blocked() { if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi;} # 2FIX - Do we need this?
-emagnet_paths() { PATHS="${EMAGNETHOME} ${EMAGNETDB} ${EMAGNETPW} ${EMAGNETTEMP} ${EMAGNETCRAP} ${EMAGNETALL} ${EMAGNETARCHIVE} ${EMAGNETLOGS}";for DIRS in ${PATHS}; do ! [[ -d "${DIRS}" ]] && mkdir -p "${DIRS}" &> /dev/null; done ;}
+emagnet_required_stuff(){ if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p "$HOME/.config/emagnet/";mkdir -p "$HOME/.config/emagnet/tmp";fi;cp "./emagnet.conf" $HOME/.config/emagnet/;}
+emagnet_conf(){ CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
+emagnet_mustberoot(){(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
+emagnet_clear(){ clear;}
+emagnet_iconnection(){ ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
+emagnet_license(){ printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
+emagnet_is_this_android(){ getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF";}
+emagnet_not_available_on_android(){ echo "This feature is not supported on your $(getprop ro.model.name)" device;exit 1;}
+emagnet_requirements_android(){ for android_tools in curl wget; do hash "${android_tools}";done;[[ "$?" -ne "0" ]] && echo "You must install ${android_tools} on your device";exit 1;}
+emagnet_requirements(){ for cmd in wget curl; do hash $cmd; if [[ "$?" -gt 0 ]]; then echo "$cmd is required to be installed, exiting."; exit 1;fi;done;}
+emagnet_optional(){ sleep 0;}
+emagnet_blocked(){ if ! [[ -s "$HOME/.config/emagnet/tmp/.emagnet" ]]; then curl -h "$HEADER"-Ls "$PASTEBIN" -H "$USERAGENT" > $HOME/.config/emagnet/tmp/.emagnet;fi;} # 2FIX - Do we need this?
+emagnet_paths(){ PATHS="${EMAGNETHOME} ${EMAGNETDB} ${EMAGNETPW} ${EMAGNETTEMP} ${EMAGNETCRAP} ${EMAGNETALL} ${EMAGNETARCHIVE} ${EMAGNETLOGS}";for DIRS in ${PATHS}; do ! [[ -d "${DIRS}" ]] && mkdir -p "${DIRS}" &> /dev/null; done ;}
 CONF="$HOME/.config/emagnet/emagnet.conf"
 
 emagnet_mustbefilled() {
@@ -839,11 +841,11 @@ emagnet_main() {
           if [[ "$(cat $HOME/.config/emagnet/tmp/.emagnet1|grep https)" = "0" ]];  then emagnet_heavyload;emagnet_I_was_banned;fi
           xargs -P "${THREADS}" -n 1 wget --user-agent="${USERAGENT}" -q -nc -P "$EMAGNETTEMP" < $HOME/.config/emagnet/tmp/.emagnet &> /dev/null
           tt="$(cat $HOME/.config/emagnet/tmp/.emagnet| wc -l)"
-          [[ "$tt" -lt "10" ]] && tt="0$tt" 
+          [[ "$tt" -lt "10" ]] && tt="0$tt"
 
                         if [[ "${tt}" -eq "0" ]]; then
                              grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d: -f1|tr ' ' '\n'
-	                         printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned anytime now..\n\n"
+	                     printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned anytime now..\n\n"
                              tt="\e[1;31m\e[5m00\e[0m"
       	                     sleep 5 # Sleep here for make some room, this will not cause any problems with missing files
                              emagnet_clear
@@ -887,7 +889,9 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                                 printf "%17s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
                                 emagnet_gmail_bruter
                              elif [[ "$SBRUTEFORCE" = "true" ]]; then
-                                emagnet_sshbruter
+                              emagnet_is_this_android;if [[ "$ANDROID" -eq "true" ]]; then
+                              emagnet_not_available_on_android;exit 1;fi
+                              emagnet_sshbruter
                              elif [[ "$PBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
                                 printf "%15s";printf "BRUTE FORCING -- \e[0;32mSPOTIFY\e[0m ACCOUNTS\e[0m\n\n"
@@ -1186,13 +1190,23 @@ case "${1}" in
         "-b"|"-backup"|"--backup")
 	        emagnet_conf
 		[[ -d "$EMAGNETBACKUP" ]] && mkdir -p "$EMAGNETBACKUP"
-		pigz -h &> /dev/null;[[ "$?" -ne "0" ]] && TAR=" tar cf - . " || TAR="tar -cf - --absolute-names "$EMAGNET"| pigz -0 -p "$THREADS" --fast "
-                if [[ "$2" = "all" || "$2" = "archive"  || "$2" = "incoming" ]]; then
-                [[ "$2" = "all" ]] &&  printf "%s" "Creating a tar archive of $EMAGNET" || printf '%s' "Creating a tar archive of $EMAGNET/${2}"
-                $TAR > "$EMAGNETBACKUP/emagnet-${2}-$(date +%d%m%Y).tar.gz";printf "..Done..\nBackup: $EMAGNETBACKUP/emagnet-${2}-$(date +%d%m%Y).tar.gz\n"
-		else
-              	echo -e "$basename$0: internal error -- you must choose one of: incoming, archive or all";exit 1
-               fi
+                if [[ "$2" = "all" ]]; then
+                   printf "%s" "Creating a tar archive of $EMAGNET"
+                   pigz -h &> /dev/null;[[ "$?" -ne "0" ]] && TAR="tar cf - --absolute-names $EMAGNET" || TAR="tar -cf - --absolute-names $EMAGNET | pigz -0 -p $THREADS --fast"
+                   $TAR > "$EMAGNETBACKUP/emagnet-${2}-$(date +%d%m%Y).tar.gz"
+                   printf "..Done..\nBackup: $EMAGNETBACKUP/emagnet-${2}-$(date +%d%m%Y).tar.gz\n"
+                   exit 1
+                 elif [[ "$2" = "archive" || "$2" = "incoming" ]]; then
+                   printf '%s' "Creating a tar archive of $EMAGNET/${2}"
+                   pigz -h &> /dev/null
+                   [[ "$?" -ne "0" ]] && TAR="tar cf - --absolute-names $EMAGNET/$2" || TAR="tar -cf --absolute-names - $EMAGNET/$2 | pigz -0 -p $THREADS --fast"
+                   $TAR > "$EMAGNETBACKUP/emagnet-${2}-$(date +%d%m%Y).tar.gz"
+                   printf "..Done..\nBackup: $EMAGNETBACKUP/emagnet-${2}-$(date +%d%m%Y).tar.gz\n"
+                   exit 1
+                 else
+                  echo -e "$basename$0: internal error -- you must choose one of: incoming, archive or all"
+                  exit 1
+                fi
                 ;;
 	  "\?")
               printf "emagnet: internal error -- use --help for available commands'\n\n"
