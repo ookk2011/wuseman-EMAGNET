@@ -86,7 +86,7 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
   -t, --time          Set refresh time in seconds
   -v, --vpn           Toggle VPN on or off (Linux Only)
                       - Available options: true/false
-                      - -v -p <provider> for set provider
+                      Use: -v -p <provider> for set provider
   -V, --version       Displays version information.
   -i, --ip            Print you current WAN IPv4/IPv6
   -e, --emagnet       Download latest uploaded files on pastebin
