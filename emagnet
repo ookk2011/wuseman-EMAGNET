@@ -98,8 +98,8 @@ Usage: ./$basename$0 [--author] [--emagnet] [--option] .....
   -m, --merge         Merge all log files from incoming to archive
   -M, --move          Move all downloaded files to archive
   -s, --spam          Send email to all targets 
-                      - Send email to targets in logs/emails-from-patebin.txt 
-                      - This is not meant to be used while emagnet is running
+                      - Send email to targets in logs/emails-from-patebin.txt
+                      - Choose and set file by ./$basename$0 -s /text/to/send.txt
   -q, --quiet         Run emagnet in a screen
   -x, --syntax        Download uploads sorted by syntax
                        - Valid syntaxes available on pastebin.com/languages
@@ -758,30 +758,35 @@ ssmtp &> /dev/null
 if [[ "$?" -gt "0" ]]; then printf "%s\n" "$basename$0: internal error -- ssmtp is required to be installed";exit 1;fi
 
 if [[ -z "$EMAIL2SEND" ]]; then
-    printf "%s\n" " - You must create a text file with the text you want to send"
-    printf "%s\n" " - to all targets, when text file has been created then you must"
-    printf "%s\n" " - set ~/textfile file in $CONF under EMAIL2SEND"
+    printf "%s\n" " - You must create a text file wich contains the message"
+    printf "%s\n" " - you want to send when text file has been created then run:"
+    printf "%s\n" " - Usage: ./$basename$0 -s /path/to/text-file.txt"
     exit 1
 fi
 
 if ! [[ -f "$EMAIL2SEND" ]]; then
-    printf "%s\n\n" "$basename$0: internal error -- can't find $EMAIL2SEND, aborted..\n\n"
+    printf "%s\n\n" "$basename$0: internal error -- not a valid file\n\n"
     exit 1
 fi
 
+
+
 if [[ "$(ls $EMAGNETDB|wc -l)" -eq "0" ]]; then
-    echo -e "$basename$0: internal error -- no email addresses has been found, nothing to do, exiting.."
+    echo -e "$basename$0: internal error -- no email addresses has been found."
     exit 1
 else
-emagnet_clear;emagnet_banner
-    NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2|wc -l)"
-        printf "%24s \e[1;31mTargets: \e[1;32m$NRTARGETS\e[0m\e[0m\n\n"
-        read -p "- Do you want to send an email to all targets (yes/NO): " sendtoall
+        emagnet_clear;emagnet_banner
+        NRTARGETS="$(grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2|wc -l)"
+        printf "%17s[\e[1;32m$NRTARGETS\e[0m] - EMAIL ADDRESSES\e[0m\n"
+        printf "\n%64s \n\n" | tr ' ' '='
+        read -p "- Are you really sure you want to send your mail (yes/NO): " sendtoall
              case $sendtoall in
                   "yes")
-                     printf "\n%62s \n" | tr ' ' '='
+                     printf "\n%64s \n" | tr ' ' '='
                      grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' $EMAGNETDB|cut -d: -f2 > $HOME/.config/emagnet/tmp/.emagnet-spam
-                     while read e1; do printf "%-57s%s\n" "[+] Sending email to $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[DONE]";done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
+                     while read e1; do printf "%-57s%s\n" "- Sending email to: $e1 $(ssmtp $e1 < "$EMAIL2SEND")" "[.sent.]";done < "$HOME/.config/emagnet/tmp/.emagnet-spam"
+                     printf "\n%64s \n\n" | tr ' ' '='
+                     echo -e "- Successfully sent to all $TARGETS"
                      rm "$HOME/.config/emagnet/tmp/.emagnet-spam" &> /dev/null
                    ;;
                   "*")
@@ -820,7 +825,7 @@ if [[ "$?" = "0" ]]; then
      printf "\n%s\n" "Done.."
      rm "$HOME/.config/emagnet/tmp/.emagnet-syntaxes-urls" "$HOME/.config/emagnet/tmp/.emagnet-syntaxes" &> /dev/null
  else
-      curl -Ls "$PASTEBIN/languages" \
+     curl -Ls "$PASTEBIN/languages" \
      |grep -o 'href="/archive/............' \
      |cut -d'<' -f1 \
      |cut -d'/' -f3 \
@@ -1126,10 +1131,22 @@ case "${1}" in
                 ;;
 
       "-s"|"-spam"|"--spam")
+               emagnet_conf 
+               if [[ -z "$EMAIL2SEND" ]]; then
+                 if ! [[ -f "$2" ]]; then
+                   echo -e "$basename$0: internal error -- no such file found"
+                   exit 1
+                 fi
+                fi
+
+                if [[ -n "$2" ]]; then
+                    sed -i '141d' "${CONF}"; sed -i "141 i EMAIL2SEND=$2" "${CONF}"
+                    echo -e "$basename$0: config file has been updated -- text file has been set to: $2"
+                    exit 1
+                fi
                 emagnet_requirements
                 emagnet_iconnection
                 emagnet_first_run
-                emagnet_conf
                 emagnet_spammer
                 ;;
 
