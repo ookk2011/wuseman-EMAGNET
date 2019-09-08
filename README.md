@@ -1,5 +1,5 @@
 
-## <p align="center">![Screenshot](https://nr1.nu/emagnet/previews/emagnet_oldmovi.gif)
+## <p align="center">![Screenshot](https://nr1.nu/f/sqqmu.gif)
 
 <a href="https://github.com/wuseman/EMAGNET"><img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell"></a><a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
 <img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues"></a>
