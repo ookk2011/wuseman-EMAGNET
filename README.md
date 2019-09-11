@@ -2,9 +2,9 @@
 ## <p align="center">![Screenshot](https://nr1.nu/f/sqqmu.gif)
 
 ##### Latest leak that has been added on HaveIBeenPwned is 'Void To' 
-##### But I doubt they really have the leaked db since I search for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing.. All creds goes to Srkr ТЫ С4АСТЛN:
+##### But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing.. All creds goes to Srkr ТЫ С4АСТЛN:
 
-Go grab the leaked void to leaked db if you are interested: https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
+Go grab the leaked void to leaked db if you are interested before they will remove it (probably): https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
 
 <a href="https://github.com/wuseman/EMAGNET"><img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell"></a><a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
 <img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues"></a>
