@@ -23,7 +23,7 @@
 ####  but WITHOUT ANY WARRANTY; without even the implied warranty of       ####
 ####  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        ####
 ####  GNU General Public License for more details.                         ####
-####                                                           +            ####
+####                                                                       ####
 ####  You must obey the GNU General Public License. If you will modify     ####
 ####  emagnet file(s), you may extend this exception to your version       ####
 ####  of the file(s), but you are not obligated to do so.  If you do not   ####
@@ -112,10 +112,10 @@ emagnet_required_stuff(){ if ! [[ -d "$HOME/.config/emagnet/" ]]; then mkdir -p 
 emagnet_conf(){ CONF="$HOME/.config/emagnet/emagnet.conf";. "$CONF" ;}
 emagnet_mustberoot(){(( ${EUID} > 0 )) && printf "%s\n" "$basename$0: internal error -- root privileges is required" && exit 1;  }
 emagnet_clear(){ clear;}
-emagnet_iconnection(){ ping -i "1" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't continue"; exit 1;fi; }
+emagnet_iconnection(){ ping -i "1" -c 1 1.1.1.1 &> /dev/null;if [[ "$?" -gt "0" ]];then echo -e "$basename$0: internal error -- no internet connection, can't connect to pastebin"; exit 1;fi; }
 emagnet_license(){ printf "%s\n" "Printing LICENSE - Use 'q' to quit";sleep 2;curl -s "https://nr1.nu/licenses/LICENSE.md"|less;printf "%s\n" "Thank you.." ;}
 emagnet_is_this_android(){ getprop &> /dev/null; [[ "$?" -eq "0" ]] && sed -i '204d' "$CONF"; sed -i '204 i ANDROID=true' "$CONF";}
-emagnet_not_available_on_android(){ echo "This feature is not supported on your $(getprop ro.model.name)" device;exit 1;}
+#emagnet_not_available_on_android(){ echo "This feature is not supported on your $(getprop ro.model.name)" device;exit 1;}
 emagnet_requirements_android(){ for android_tools in curl wget; do hash "${android_tools}";done;[[ "$?" -ne "0" ]] && echo "You must install ${android_tools} on your device";exit 1;}
 emagnet_requirements(){ for cmd in wget curl; do hash $cmd; if [[ "$?" -gt 0 ]]; then echo "$cmd is required to be installed, exiting."; exit 1;fi;done;}
 emagnet_optional(){ sleep 0;}
@@ -243,10 +243,10 @@ fi
 }
 
 emagnet_captcha() {
- curl -sL $PASTEBIN|grep -q captcha-bypass
+ curl -sL "$PASTEBIN"|grep -q "captcha-bypass"
   if [[ "$?" -eq "0" ]]; then
    echo -e "[\e[1;31m<<\e[0m] - Busted! Pastebin asking for fill captcha"
-   echo -e "[\e[1;31m<<\e[0m] - Change IP or wait for a few huors.."
+   echo -e "[\e[1;31m<<\e[0m] - Change IP or wait for a few hours.."
    exit 1
   fi
 }
@@ -474,11 +474,11 @@ fi
     mkdir -p "$EMAGNETARCHIVE/password-files"
     mkdir -p "$EMAGNETARCHIVE/logs"
   fi
-        printf "%s\n" "Copying all incoming files to archive"
+        printf "%s" "Moving all incoming files to archive"
                 cp -rn $EMAGNET/incoming/*/all-files/* $EMAGNETARCHIVE/all-files/
      		cp -rn $EMAGNET/incoming/*/email-files/* $EMAGNETARCHIVE/email-files/
     		cp -rn $EMAGNET/incoming/*/password-files/* $EMAGNETARCHIVE/password-files/
-        printf "%s\n" "Done.."
+        printf "%s\n" "...done."
 
       read -p "Wipe incoming directories (y/n): " cleanup
    if [[ "$cleanup" = "y" ]]; then
@@ -906,7 +906,7 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
 
                             echo -e "                       - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
                             echo -e "                       - Passwords Found \r             [\e[1;32m$pt\e[0m] "
-                            echo -e "                       - Email Addresses Found \r             [\e[1;32m$et\e[0m]\n "
+                            echo -e "                       - Email Addresses Found \r       [\e[1;32m$et\e[0m]\n "
 
                             sleep 2
                              if [[ "$GBRUTEFORCE" = "true" ]]; then
@@ -914,8 +914,8 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                                 printf "%17s";printf "BRUTE FORCING -- $(echo -e "\e[1;34mG\e[1;31mM\e[1;33mA\e[1;34mI\e[0;32mL\E[1;31m\e[0m") ACCOUNTS\e[0m\n\n"
                                 emagnet_gmail_bruter
                              elif [[ "$SBRUTEFORCE" = "true" ]]; then
-                              emagnet_is_this_android;if [[ "$ANDROID" -eq "true" ]]; then
-                              emagnet_not_available_on_android;exit 1;fi
+                                #printf "%64s \n\n" | tr ' ' '='
+                                #printf "%15s";printf "BRUTE FORCING -- \e[0;34mSSH\e[0m ACCOUNTS\e[0m\n\n"
                               emagnet_sshbruter
                              elif [[ "$PBRUTEFORCE" = "true" ]]; then
                                 printf "%64s \n\n" | tr ' ' '='
