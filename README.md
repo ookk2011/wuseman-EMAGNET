@@ -2,7 +2,7 @@
 ## <p align="center">![Screenshot](https://nr1.nu/f/sqqmu.gif)
 
 ##### Latest leak that has been added on HaveIBeenPwned is 'Void To' 
-##### But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing.. All creds goes to Srkr ТЫ С4АСТЛN:
+##### But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing but he take all creds, urgh! Just saying ;).. All creds goes to Srkr ТЫ С4АСТЛN:
 
 Go grab the leaked void to leaked db if you are interested before they will remove it (probably): https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
 
