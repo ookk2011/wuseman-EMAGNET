@@ -2,9 +2,9 @@
 ## <p align="center">![Screenshot](https://nr1.nu/f/sqqmu.gif)
 
 ##### Latest leak that has been added on HaveIBeenPwned is 'Void To' 
-##### Who cares if they can bring proofs that they actually have the leak? Idiots.
+##### Who cares if they have no proof that they actually have the leak, however. 
 
-Go grab the hidden leak here: https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
+Go grab the leaked db if you are interested: https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
 
 <a href="https://github.com/wuseman/EMAGNET"><img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell"></a><a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
 <img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues"></a>
