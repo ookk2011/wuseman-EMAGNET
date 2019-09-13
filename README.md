@@ -3,13 +3,17 @@
 
 
 ### News 1: 
-### Notice for all who store leaked databases, keep emagnet running 24/7 and you will get the leaked accounts, sooner or later they will popup on pastebin. Emagnet will get them all for you with 100% _guarantee_!
+
+- XKCD has been hacked, over 500 000 accounts is exposed.
+
+Keep emagnet running 24/7 and you will get the leaked accounts, sooner or later they will popup on pastebin. Emagnet will get them all for you with 100% _guarantee_!
 ![Screenshot](https://1.bp.blogspot.com/-ko993L8-Opo/XW6HHkV3k1I/AAAAAAAA07U/VNWUNRHXZbwEnb1S6ewJ6JYxPCgiy4qiQCLcBGAs/s728-e100/xkcd-hacked.png)
 ![Screenshot](https://i.imgur.com/mTsuqNZ.png)
 
 ## News 2:
-##### Latest leak that has been added on HaveIBeenPwned is 'Void To' 
-##### But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing but he take all creds, urgh! Just saying ;).. All creds goes to Srkr ТЫ С4АСТЛN:
+
+ Latest leak that has been added on HaveIBeenPwned is 'Void To' 
+ But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing but he take all creds, urgh! Just saying ;).. All creds goes to Srkr ТЫ С4АСТЛN:
 
 Go grab the leaked void to leaked db if you are interested before they will remove it (probably): https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
 
