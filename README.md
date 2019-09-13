@@ -2,10 +2,14 @@
 ## <p align="center">![Screenshot](https://nr1.nu/f/sqqmu.gif)
 
 
+### News 1: 
+![Screenshot](https://1.bp.blogspot.com/-ko993L8-Opo/XW6HHkV3k1I/AAAAAAAA07U/VNWUNRHXZbwEnb1S6ewJ6JYxPCgiy4qiQCLcBGAs/s728-e100/xkcd-hacked.png)
 ### Notice for all who store leaked databases, keep emagnet running 24/7 and you wont miss them, cause sooner or later they will popup on pastebin:
-XKCD forum goes offline after discovery of data leak affecting 562K members
-Site is still down, read their message here: https://forums.xkcd.com/
 
+"XKCD forum goes offline after discovery of data leak affecting 562K members"
+"Site is still down, read their message here: https://forums.xkcd.com/"
+
+## News 2:
 ##### Latest leak that has been added on HaveIBeenPwned is 'Void To' 
 ##### But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing but he take all creds, urgh! Just saying ;).. All creds goes to Srkr ТЫ С4АСТЛN:
 
