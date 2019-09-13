@@ -249,25 +249,25 @@ if [[ "$?" = "0" ]]; then
   		if [[ "$VPN" = "false" ]]; then
                    emagnet_clear
                    emagnet_banner
-   	   	   for (( ; ; )); do
-     		   wait_time=${IDLETIME}
-      		   temp_cnt=${wait_time}
-   		   while [[ "${temp_cnt}" -gt "0" ]]; do
-                    echo -e  "\rIP: [\e[1;31m$$WIP\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt}
-                    printf " seconds"
-      		    sleep 1
-      		    ((temp_cnt--))
-  	            done
-                    printf "\n"
+   	   	       for (( ; ; )); do
+     		         wait_time=${IDLETIME}
+      		         temp_cnt=${wait_time}
+   		           while [[ "${temp_cnt}" -gt "0" ]]; do
+                              echo -e  "\rIP: [\e[1;31m$$WIP\e[0m] has been blocked, continues in \e[1;1m%1d\e[0m" ${temp_cnt}
+                              printf " seconds"
+      		              sleep 1
+      		              ((temp_cnt--))
+  	                   done
+                         printf "\n"
+                         emagnet_clear
+                         emagnet_banner
+                         bash "$basename$0" --emagnet
+                         sleep 2
+                       done
                     emagnet_clear
                     emagnet_banner
-                    bash "$basename$0" --emagnet
-                    sleep 2
-           done
-                    emagnet_clear
-                    emagnet_banner
-         	        bash "$basename$0" --emagnet
-        	    exit 1
+         	    bash "$basename$0" --emagnet
+        	 exit 1
       else
                     emagnet_banned
       fi
@@ -354,8 +354,8 @@ else
                      if [[ "$MYIP" = "$MYOLDIP" ]]; then
                          echo -e "Still trying to establish a connection.....................[\e[1;3m\e[5mwait\e[0m\e[0m]"
                          sleep 10
-
-		          if [[ ! $MYIP = "$MYOLDIP" ]]; then
+                                MYIP="$(curl -s https://nr1.nu/i/)"
+		          if [[ ! "$MYIP" = "$MYOLDIP" ]]; then
                                 rm "$HOME/.config/emagnet/tmp/.emagnet-ip" &> /dev/null
                                 MYNEWIP=$(echo -e "Successfully connected to $(curl -s https://nr1.nu/i/)")
                                 printf "%s%s[ ok ]\n" "$MYNEWIP" "${line:${#MYNEWIP}}"
