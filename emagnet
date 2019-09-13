@@ -242,14 +242,6 @@ curl -sL -H "$USERAGENT" "$PASTEBIN" \
 fi
 }
 
-emagnet_captcha() {
- curl -sL "$PASTEBIN"|grep -q "captcha-bypass"
-  if [[ "$?" -eq "0" ]]; then
-   echo -e "[\e[1;31m<<\e[0m] - Busted! Pastebin asking for fill captcha you must change ip"|sed '1d'
-   exit 1
-  fi
-}
-
 emagnet_I_was_banned() {
 curl -sL -H "$USERAGENT" "$PASTEBIN" \
 |grep -q "blocked your IP"
@@ -969,12 +961,36 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
 
 emagnet_run4ever() {
        emagnet_conf
-       emagnet_captcha
-       curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "blocked your IP"; if [[ "$?" = "0" ]]; then if [[ "$VPN" = "true" ]]; then emagnet_banned; else emagnet_I_was_banned;fi;fi
+
+       curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "blocked your IP"
+       if [[ "$?" = "0" ]]; then
+         if [[ "$VPN" = "true" ]]; then
+           emagnet_banned
+       else
+           emagnet_I_was_banned;
+         fi
+       fi
+
+       curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "captcha"
+       if [[ "$?" = "0" ]]; then
+         if [[ "$VPN" = "true" ]]; then
+          emagnet_banned
+         else
+           curl -s -H "$USERAGENT" "$PASTEBIN"|grep 'g-recaptcha'  &> /dev/null
+            if [[ $? = "0" ]]; then
+                echo -e "[\e[1;31m<<\e[0m] - Busted! I told you, \e[1;31mDON'T\e[0m scrape pastebin to often."
+                echo -e "[\e[1;31m<<\e[0m] - and set time to <150 seconds. This block wont be lifted until ~1 week"
+                echo -e "[\e[1;31m<<\e[0m] - There is one solution. Change IP OR wait one week and run emagnet again"
+                echo -e "[\e[1;31m<<\e[0m] - I saying it once again, don't set TIME to <150 seconds.."
+                exit 1
+            fi
+          fi
+         fi
        for (( ; ; )); do
         emagnet_count_down
         emagnet_clear
         emagnet_banner
+        
         emagnet_analyzing_message
         emagnet_clear
         emagnet_banner
