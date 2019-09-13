@@ -3,7 +3,7 @@
 
 
 ### News 1: 
-### Notice for all who store leaked databases, keep emagnet running 24/7 and you wont miss them, cause sooner or later they will popup on pastebin. You wont miss them, emagnet will get them all for you!
+### Notice for all who store leaked databases, keep emagnet running 24/7 and you will get the leaked accounts, sooner or later they will popup on pastebin. Emagnet will get them all for you with 100% _guarantee_!
 ![Screenshot](https://1.bp.blogspot.com/-ko993L8-Opo/XW6HHkV3k1I/AAAAAAAA07U/VNWUNRHXZbwEnb1S6ewJ6JYxPCgiy4qiQCLcBGAs/s728-e100/xkcd-hacked.png)
 ![Screenshot](https://i.imgur.com/mTsuqNZ.png)
 
@@ -142,5 +142,6 @@ And to all ppl that is trying to sell public leaks and steal the real hackers jo
 Cheers!
 
 ### Emagnet is a private project since 2015 and was released in June @ 2018, to be continued. 
+
 
 
