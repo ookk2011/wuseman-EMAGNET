@@ -37,6 +37,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 - [ ] Requirements packages for android devices when using termux app isnt working with brute force tools + screen
 - [ ] Sending wrong data into emagnet.log for wich files that contains correct data 
 - [ ] Re-add the feature that bypassing captcha when pastebin asking for accept captcha
+- [ ] Prio 1. Fix so we don't need visit pastebin more then once for check for bans and captcha..
 
 ### TIPS:
 
