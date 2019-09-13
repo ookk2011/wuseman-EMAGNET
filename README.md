@@ -1,6 +1,11 @@
 
 ## <p align="center">![Screenshot](https://nr1.nu/f/sqqmu.gif)
 
+##### Latest leak that has been added on HaveIBeenPwned is 'Void To' 
+##### But I doubt they really have the leaked db since I searched for several email addresses from the link below and they was not reported as leaked on haveibeenpwned, troy hunt sucks, he have done nothing, really nothing but he take all creds, urgh! Just saying ;).. All creds goes to Srkr ТЫ С4АСТЛN:
+
+Go grab the leaked void to leaked db if you are interested before they will remove it (probably): https://mega.nz/#F!EnxggCiY!btfevmu3fO4AQrWe-81z6A!hm50kRBJ
+
 <a href="https://github.com/wuseman/EMAGNET"><img src="https://img.shields.io/github/languages/top/wuseman/emagnet.svg?color=magenta&label=Bash%2FShell"></a><a href="https://github.com/wuseman/EMAGNET/issues?q=is%3Aissue+is%3Aclosed">
 <img src="https://img.shields.io/github/issues-closed/wuseman/emagnet.svg?color=light&label=Closed%20Issues"></a>
  <a href="https://github.com/wuseman/EMAGNET/issues"><img src="https://img.shields.io/github/issues-raw/wuseman/emagnet.svg?color=orange&label=Open%20Issues"></a><img src="https://img.shields.io/github/last-commit/wuseman/emagnet.svg?color=darkmagenta&label=Latest%20Commit"><a href="https://twitter.com/wuseman1">
@@ -25,7 +30,7 @@ Emagnet is a very powerful tool for it's purpose wich is to capture  email addre
 
 ##### Bruteforce on your own risk.
 
-For people that like things sorted. If you have some some archive with leaked databases stored (or small) on your harddrive but you are to lazy to figure out how to try if they work on spotify or gmail for example, then just create a a random text file in "$HOME/.config/emagnet/tmp/some-random-file" - Add all logins as: mail:password one per line - Now just run emagnet as usual and you will bruteforce all accounts you added to the file and all cracked accounts will be stored in log dirs! Once done, you will have a good list for accounts that actually works for real or at least you know wich accounts you can put at top of your text file that you know is legit.
+For people that like things sorted. If you have some big archives with leaked databases stored (or small) on your harddrive but you are to lazy to figure out wich works and not on sites like spotify or gmail for example, then just create a a random text file in "$HOME/.config/emagnet/tmp/some-random-file" - Add all logins as: mail:password one per line - Now just run emagnet as usual and you will bruteforce all accounts you added to the file and all cracked accounts will be stored in log dirs! Once done, you will have a good list for accounts that actually works for real or at least you know wich accounts you can put at top of your text file that you know is legit.
 
 Don't forget to use vpn, tor or just edit curl command if you want to use a socks5 proxy / ssh tunnel: For a socks5 proxy use: curl --socks5-hostname localhost:port ...... and for tor use curl --socks5 127.0.0.1:9150 ......
 
