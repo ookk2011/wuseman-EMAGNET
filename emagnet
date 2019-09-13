@@ -971,21 +971,21 @@ emagnet_run4ever() {
          fi
        fi
 
-#       curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "captcha"
-#       if [[ "$?" = "0" ]]; then
-#         if [[ "$VPN" = "true" ]]; then
-#          emagnet_banned
-#         else
-#           curl -s -H "$USERAGENT" "$PASTEBIN"|grep -q 'recaptcha'
-#            if [[ $? = "0" ]]; then
-#                echo -e "[\e[1;31m<<\e[0m] - Busted! I told you, \e[1;31mDON'T\e[0m scrape pastebin to often."
-#                echo -e "[\e[1;31m<<\e[0m] - and set time to <150 seconds. This block wont be lifted until ~1 week"
-#                echo -e "[\e[1;31m<<\e[0m] - There is one solution. Change IP OR wait one week and run emagnet again"
-#                echo -e "[\e[1;31m<<\e[0m] - I saying it once again, don't set TIME to <150 seconds.."
-#                exit 1
-#            fi
-#          fi
-#         fi
+       curl -H "$USERAGENT" -sL "$PASTEBIN"|grep -q "captcha"
+       if [[ "$?" = "0" ]]; then
+         if [[ "$VPN" = "true" ]]; then
+          emagnet_banned
+         else
+           curl -s -H "$USERAGENT" "$PASTEBIN"|grep -q 'recaptcha'
+            if [[ $? = "0" ]]; then
+                echo -e "[\e[1;31m<<\e[0m] - Busted! I told you, \e[1;31mDON'T\e[0m scrape pastebin to often."
+                echo -e "[\e[1;31m<<\e[0m] - and set time to <150 seconds. This block wont be lifted until ~1 week"
+                echo -e "[\e[1;31m<<\e[0m] - There is one solution. Change IP OR wait one week and run emagnet again"
+                echo -e "[\e[1;31m<<\e[0m] - I saying it once again, don't set TIME to <150 seconds.."
+                exit 1
+            fi
+          fi
+         fi
        for (( ; ; )); do
         emagnet_count_down
         emagnet_clear
