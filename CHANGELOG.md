@@ -15,6 +15,7 @@ R = REBUILT
 # Version 3.4
 
 +    Fixed so if we are busted and being asked for captcha then we changing IP
++    Set wich file you want to send to all email addresses by: -s /path/to/textfile.txt
 +    Set vpn provider by: -v -p <provider>
 +    Support for instagram brute forcing
 +    Changed layout, removed spaces between everything we found
