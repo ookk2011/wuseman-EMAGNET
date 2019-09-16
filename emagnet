@@ -894,10 +894,9 @@ pt=$(grep -rEiEio "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b:...*" $EM
                            "${pt}" - Passwords Found\n
                            "${et}" - Email Addresses Found"
                         fi
-
                             echo -e "                       - Files Downloaded\r             [\e[1;32m$tt\e[0m] "
                             echo -e "                       - Passwords Found \r             [\e[1;32m$pt\e[0m] "
-                            echo -e "                       - Email Addresses Found \r       [\e[1;32m$et\e[0m]\n "
+                            echo -e "                       - Email Addresses Found \r             [\e[1;32m$et\e[0m] \n"
 
                             sleep 2
                              if [[ "$GBRUTEFORCE" = "true" ]]; then
